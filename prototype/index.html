@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>라인 디펜스 프로토타입</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: #1b1d26; color: #eee;
+    font-family: "Malgun Gothic", system-ui, sans-serif;
+    display: flex; flex-direction: column; align-items: center;
+    user-select: none; -webkit-user-select: none; touch-action: manipulation;
+  }
+  #wrap { width: 100%; max-width: 960px; padding: 8px; }
+  canvas {
+    width: 100%; aspect-ratio: 16 / 9; display: block;
+    background: #87ceeb; border-radius: 8px;
+  }
+  #controls {
+    display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; justify-content: space-between;
+  }
+  .group { display: flex; gap: 8px; }
+  button {
+    position: relative; overflow: hidden;
+    border: 2px solid #444a60; background: #2b2f3f; color: #fff;
+    border-radius: 8px; padding: 8px 12px; font: inherit; font-size: 14px;
+    min-width: 72px; min-height: 56px; cursor: pointer;
+  }
+  button:disabled { opacity: .45; cursor: default; }
+  button .cost { display: block; font-size: 12px; color: #ffd166; }
+  button .cd {
+    position: absolute; left: 0; bottom: 0; width: 100%;
+    background: rgba(0,0,0,.55); pointer-events: none;
+  }
+  .move { min-width: 64px; font-size: 22px; }
+  #help { font-size: 12px; color: #9aa; margin-top: 6px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game" width="960" height="540"></canvas>
+  <div id="controls">
+    <div class="group">
+      <button class="move" id="btnLeft">◀</button>
+      <button class="move" id="btnRight">▶</button>
+    </div>
+    <div class="group" id="summonBtns"></div>
+    <div class="group">
+      <button id="btnUpgrade">식량 증가<span class="cost" id="upCost"></span></button>
+      <button id="btnSkill">충격파<span class="cost">마나 50</span><div class="cd" id="skillCd"></div></button>
+    </div>
+  </div>
+  <div id="help">
+    이동: A/D 또는 ←/→ · 소환: 1/2/3 · 스킬: K 또는 Space · 식량 증가: U · 일시정지: P<br>
+    영웅은 가까운 적을 자동으로 공격합니다. 적 기지를 부수면 승리합니다.
+  </div>
+</div>
+
+<script>
+// ===== 기본 설정 =====
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const W = 960, H = 540;
+const WORLD = 2400;
+const GROUND = 450;
+
+const PLAYER_UNITS = [
+  { id: 'soldier', name: '창병',   key: '1', cost: 30, cd: 1.5, hp: 120, dmg: 15, range: 20,  speed: 60, atkCd: 0.8, w: 22, h: 34, color: '#4a90e2' },
+  { id: 'archer',  name: '궁수',   key: '2', cost: 50, cd: 3.0, hp: 70,  dmg: 12, range: 180, speed: 50, atkCd: 1.2, w: 20, h: 32, color: '#3cb371', ranged: true },
+  { id: 'golem',   name: '골렘',   key: '3', cost: 90, cd: 6.0, hp: 420, dmg: 25, range: 22,  speed: 38, atkCd: 1.3, w: 32, h: 44, color: '#8e6bbf' },
+];
+const ENEMY_UNITS = [
+  { id: 'imp',    hp: 80,  dmg: 10, range: 18,  speed: 70, atkCd: 0.7, w: 20, h: 30, color: '#d9534f', weight: 5 },
+  { id: 'thrower',hp: 60,  dmg: 10, range: 160, speed: 45, atkCd: 1.4, w: 20, h: 32, color: '#e67e22', ranged: true, weight: 3 },
+  { id: 'brute',  hp: 350, dmg: 30, range: 24,  speed: 34, atkCd: 1.5, w: 36, h: 50, color: '#7b2d26', weight: 1 },
+];
+
+// ===== 게임 상태 =====
+let S;
+function reset() {
+  S = {
+    state: 'play', time: 0, paused: false,
+    food: 50, foodMax: 200, foodRate: 8, upLevel: 0,
+    mana: 50, manaMax: 100,
+    level: 1, spawnTimer: 2,
+    units: [], projectiles: [], floaters: [], effects: [],
+    summonCd: {},
+    skillCd: 0,
+    camX: 0,
+    hero: { team: 0, x: 200, w: 30, h: 48, hp: 300, maxHp: 300, dmg: 25, range: 50, atkCd: 0.6, atkTimer: 0, speed: 160, dead: false, respawn: 0, face: 1, anim: 0, isHero: true },
+    bases: [
+      { team: 0, x: 80, w: 90, h: 140, hp: 1000, maxHp: 1000, isBase: true },
+      { team: 1, x: WORLD - 80, w: 90, h: 140, hp: 1500, maxHp: 1500, isBase: true },
+    ],
+  };
+  PLAYER_UNITS.forEach(u => S.summonCd[u.id] = 0);
+}
+
+// ===== 유닛 생성 =====
+function makeUnit(def, team, scale = 1) {
+  return {
+    ...def, team,
+    x: team === 0 ? S.bases[0].x + 50 : S.bases[1].x - 50,
+    hp: def.hp * scale, maxHp: def.hp * scale, dmg: def.dmg * (1 + (scale - 1) * 0.5),
+    atkTimer: 0, dead: false, anim: 0, bob: Math.random() * 6,
+  };
+}
+
+function summon(i) {
+  const def = PLAYER_UNITS[i];
+  if (!def || S.state !== 'play' || S.paused) return;
+  if (S.food < def.cost || S.summonCd[def.id] > 0) return;
+  S.food -= def.cost;
+  S.summonCd[def.id] = def.cd;
+  S.units.push(makeUnit(def, 0));
+}
+
+function upgradeCost() { return 60 + S.upLevel * 50; }
+function upgrade() {
+  if (S.state !== 'play' || S.paused || S.upLevel >= 5) return;
+  const c = upgradeCost();
+  if (S.food < c) return;
+  S.food -= c; S.upLevel++;
+  S.foodRate += 3; S.foodMax += 60;
+  floater(S.hero.x, GROUND - 80, '식량 증가!', '#ffd166');
+}
+
+function useSkill() {
+  const h = S.hero;
+  if (S.state !== 'play' || S.paused || h.dead || S.mana < 50 || S.skillCd > 0) return;
+  S.mana -= 50; S.skillCd = 2;
+  S.effects.push({ x: h.x, r: 0, maxR: 220, t: 0 });
+  for (const u of S.units) {
+    if (u.team === 1 && !u.dead && Math.abs(u.x - h.x) < 220) {
+      damage(u, 70);
+      u.x += Math.sign(u.x - h.x || 1) * 40; // 넉백
+    }
+  }
+}
+
+// ===== 전투 =====
+function damage(t, amount) {
+  if (t.dead) return;
+  t.hp -= amount;
+  floater(t.x, GROUND - t.h - 10, Math.round(amount), t.team === 0 ? '#ff8080' : '#fff');
+  if (t.hp <= 0) {
+    t.hp = 0;
+    if (t.isHero) { t.dead = true; t.respawn = 5; }
+    else if (t.isBase) { S.state = t.team === 0 ? 'lose' : 'win'; }
+    else {
+      t.dead = true;
+      if (t.team === 1) { S.food = Math.min(S.foodMax, S.food + 5); S.mana = Math.min(S.manaMax, S.mana + 4); }
+    }
+  }
+}
+
+function floater(x, y, text, color) {
+  S.floaters.push({ x, y, text: String(text), color, t: 0 });
+}
+
+function opponents(team) {
+  const list = [];
+  for (const u of S.units) if (u.team !== team && !u.dead) list.push(u);
+  if (team === 1 && !S.hero.dead) list.push(S.hero);
+  list.push(S.bases[team === 0 ? 1 : 0]);
+  return list;
+}
+
+function findTarget(e, range, foes) {
+  let best = null, bd = Infinity;
+  for (const o of foes) {
+    const d = Math.abs(o.x - e.x) - (o.w + e.w) / 2;
+    if (d <= range && d < bd) { bd = d; best = o; }
+  }
+  return best;
+}
+
+function attack(e, target) {
+  e.anim = 0.2;
+  if (e.ranged) {
+    S.projectiles.push({ x: e.x, y: GROUND - e.h * 0.7, target, dmg: e.dmg, team: e.team, sx: e.x });
+  } else {
+    damage(target, e.dmg);
+  }
+}
+
+// ===== 업데이트 =====
+function update(dt) {
+  S.time += dt;
+  S.food = Math.min(S.foodMax, S.food + S.foodRate * dt);
+  S.mana = Math.min(S.manaMax, S.mana + 5 * dt);
+  S.skillCd = Math.max(0, S.skillCd - dt);
+  for (const k in S.summonCd) S.summonCd[k] = Math.max(0, S.summonCd[k] - dt);
+
+  // 난이도 상승
+  S.level = 1 + Math.floor(S.time / 30);
+
+  // 적 소환
+  S.spawnTimer -= dt;
+  if (S.spawnTimer <= 0) {
+    const total = ENEMY_UNITS.reduce((a, d) => a + d.weight + (d.id === 'brute' ? S.level - 1 : 0), 0);
+    let r = Math.random() * total, def = ENEMY_UNITS[0];
+    for (const d of ENEMY_UNITS) {
+      r -= d.weight + (d.id === 'brute' ? S.level - 1 : 0);
+      if (r <= 0) { def = d; break; }
+    }
+    S.units.push(makeUnit(def, 1, 1 + 0.15 * (S.level - 1)));
+    S.spawnTimer = Math.max(1.2, 4 - S.level * 0.3) * (0.7 + Math.random() * 0.6);
+  }
+
+  // 영웅
+  const h = S.hero;
+  if (h.dead) {
+    h.respawn -= dt;
+    if (h.respawn <= 0) { h.dead = false; h.hp = h.maxHp; h.x = S.bases[0].x + 80; }
+  } else {
+    let dir = 0;
+    if (keys.left) dir -= 1;
+    if (keys.right) dir += 1;
+    if (dir) h.face = dir;
+    h.x = Math.max(S.bases[0].x + 40, Math.min(S.bases[1].x - 70, h.x + dir * h.speed * dt));
+    h.atkTimer -= dt; h.anim = Math.max(0, h.anim - dt);
+    h.hp = Math.min(h.maxHp, h.hp + 3 * dt);
+    if (h.atkTimer <= 0) {
+      const t = findTarget(h, h.range, opponents(0));
+      if (t) { attack(h, t); h.atkTimer = h.atkCd; h.face = Math.sign(t.x - h.x) || h.face; }
+    }
+  }
+
+  // 유닛
+  const foes0 = opponents(0), foes1 = opponents(1);
+  for (const u of S.units) {
+    if (u.dead) continue;
+    u.atkTimer -= dt; u.anim = Math.max(0, u.anim - dt);
+    const t = findTarget(u, u.range, u.team === 0 ? foes0 : foes1);
+    if (t) {
+      if (u.atkTimer <= 0) { attack(u, t); u.atkTimer = u.atkCd; }
+    } else {
+      u.x += (u.team === 0 ? 1 : -1) * u.speed * dt;
+    }
+  }
+  S.units = S.units.filter(u => !u.dead);
+
+  // 투사체
+  for (const p of S.projectiles) {
+    const dx = p.target.x - p.x;
+    const step = 420 * dt;
+    if (p.target.dead || Math.abs(dx) <= step) {
+      if (!p.target.dead) damage(p.target, p.dmg);
+      p.done = true;
+    } else {
+      p.x += Math.sign(dx) * step;
+    }
+  }
+  S.projectiles = S.projectiles.filter(p => !p.done);
+
+  for (const f of S.floaters) { f.t += dt; f.y -= 30 * dt; }
+  S.floaters = S.floaters.filter(f => f.t < 0.9);
+  for (const e of S.effects) { e.t += dt; e.r = e.maxR * Math.min(1, e.t / 0.3); }
+  S.effects = S.effects.filter(e => e.t < 0.45);
+
+  S.camX = Math.max(0, Math.min(WORLD - W, h.x - W * 0.4));
+}
+
+// ===== 그리기 =====
+function draw() {
+  // 하늘
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, '#6db3f2'); g.addColorStop(1, '#cfe9ff');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  // 원경 언덕 (패럴랙스)
+  ctx.fillStyle = '#9cc98a';
+  for (let i = -1; i < 8; i++) {
+    const x = i * 300 - (S.camX * 0.3) % 300;
+    ctx.beginPath(); ctx.ellipse(x + 150, GROUND + 10, 220, 110, 0, Math.PI, 0); ctx.fill();
+  }
+  ctx.fillStyle = '#7fb36b';
+  for (let i = -1; i < 10; i++) {
+    const x = i * 200 - (S.camX * 0.6) % 200;
+    ctx.beginPath(); ctx.ellipse(x + 100, GROUND + 10, 130, 60, 0, Math.PI, 0); ctx.fill();
+  }
+  // 땅
+  ctx.fillStyle = '#6b8e3d'; ctx.fillRect(0, GROUND, W, 12);
+  ctx.fillStyle = '#8b6b43'; ctx.fillRect(0, GROUND + 12, W, H - GROUND);
+
+  ctx.save();
+  ctx.translate(-S.camX, 0);
+
+  for (const b of S.bases) drawBase(b);
+  for (const u of S.units) drawUnit(u);
+  if (!S.hero.dead) drawHero(S.hero);
+
+  // 투사체
+  for (const p of S.projectiles) {
+    const total = Math.abs(p.target.x - p.sx) + 1;
+    const prog = Math.abs(p.x - p.sx) / total;
+    const y = p.y - Math.sin(prog * Math.PI) * 30;
+    ctx.fillStyle = p.team === 0 ? '#2d6a2d' : '#8a3b00';
+    ctx.fillRect(p.x - 6, y - 1.5, 12, 3);
+  }
+  // 스킬 이펙트
+  for (const e of S.effects) {
+    ctx.strokeStyle = `rgba(255,230,120,${1 - e.t / 0.45})`;
+    ctx.lineWidth = 6;
+    ctx.beginPath(); ctx.ellipse(e.x, GROUND - 10, e.r, e.r * 0.25, 0, 0, Math.PI * 2); ctx.stroke();
+  }
+  // 데미지 숫자
+  ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'center';
+  for (const f of S.floaters) {
+    ctx.globalAlpha = 1 - f.t / 0.9;
+    ctx.fillStyle = '#000'; ctx.fillText(f.text, f.x + 1, f.y + 1);
+    ctx.fillStyle = f.color; ctx.fillText(f.text, f.x, f.y);
+  }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+
+  drawHUD();
+}
+
+function hpBar(x, y, w, ratio, color) {
+  ctx.fillStyle = '#222'; ctx.fillRect(x - w / 2 - 1, y - 1, w + 2, 6);
+  ctx.fillStyle = color; ctx.fillRect(x - w / 2, y, w * ratio, 4);
+}
+
+function drawBase(b) {
+  const left = b.x - b.w / 2, top = GROUND - b.h;
+  ctx.fillStyle = b.team === 0 ? '#5a6f9e' : '#6e3b3b';
+  ctx.fillRect(left, top, b.w, b.h);
+  // 성벽 톱니
+  for (let i = 0; i < 5; i++) ctx.fillRect(left + i * (b.w / 4.5), top - 14, b.w / 9, 14);
+  ctx.fillStyle = '#2a2a2a';
+  ctx.beginPath(); ctx.arc(b.x, GROUND, 20, Math.PI, 0); ctx.fill();
+  // 깃발
+  ctx.fillStyle = '#444'; ctx.fillRect(b.x - 2, top - 60, 4, 46);
+  ctx.fillStyle = b.team === 0 ? '#4a90e2' : '#d9534f';
+  const f = b.team === 0 ? 1 : -1;
+  ctx.beginPath(); ctx.moveTo(b.x, top - 60); ctx.lineTo(b.x + 30 * f, top - 50); ctx.lineTo(b.x, top - 40); ctx.fill();
+  hpBar(b.x, top - 75, 90, b.hp / b.maxHp, b.team === 0 ? '#4caf50' : '#e74c3c');
+}
+
+function drawUnit(u) {
+  const dir = u.team === 0 ? 1 : -1;
+  const lunge = u.anim > 0 && !u.ranged ? dir * 6 : 0;
+  const bob = Math.sin(S.time * 10 + u.bob) * 1.5;
+  const x = u.x + lunge, bottom = GROUND + bob * 0;
+  const bodyH = u.h * 0.65, headR = u.w * 0.38;
+  // 그림자
+  ctx.fillStyle = 'rgba(0,0,0,.2)';
+  ctx.beginPath(); ctx.ellipse(u.x, GROUND + 2, u.w * 0.6, 4, 0, 0, Math.PI * 2); ctx.fill();
+  // 몸
+  ctx.fillStyle = u.color;
+  ctx.fillRect(x - u.w / 2, bottom - bodyH + bob, u.w, bodyH - bob);
+  // 머리
+  ctx.beginPath(); ctx.arc(x, bottom - bodyH - headR + 2 + bob, headR, 0, Math.PI * 2); ctx.fill();
+  // 눈
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(x + dir * headR * 0.3 - 2, bottom - bodyH - headR + bob, 4, 4);
+  // 무기
+  ctx.strokeStyle = u.ranged ? '#5a3d1e' : '#ccc'; ctx.lineWidth = 3;
+  ctx.beginPath();
+  if (u.ranged) {
+    ctx.arc(x + dir * u.w * 0.6, bottom - bodyH * 0.6, 9, -Math.PI / 2, Math.PI / 2, dir < 0);
+  } else {
+    const a = u.anim > 0 ? 0.2 : -0.6;
+    ctx.moveTo(x + dir * u.w * 0.4, bottom - bodyH * 0.5);
+    ctx.lineTo(x + dir * (u.w * 0.4 + Math.cos(a) * 18), bottom - bodyH * 0.5 + Math.sin(a) * 18);
+  }
+  ctx.stroke();
+  hpBar(u.x, GROUND - u.h - 12, u.w + 6, u.hp / u.maxHp, u.team === 0 ? '#4caf50' : '#e74c3c');
+}
+
+function drawHero(h) {
+  const x = h.x, d = h.face;
+  ctx.fillStyle = 'rgba(0,0,0,.25)';
+  ctx.beginPath(); ctx.ellipse(x, GROUND + 2, 22, 5, 0, 0, Math.PI * 2); ctx.fill();
+  // 망토
+  ctx.fillStyle = '#c0392b';
+  ctx.beginPath(); ctx.moveTo(x - d * 4, GROUND - 40); ctx.lineTo(x - d * 22, GROUND - 4); ctx.lineTo(x - d * 4, GROUND - 6); ctx.fill();
+  // 몸
+  ctx.fillStyle = '#f1c40f'; ctx.fillRect(x - 13, GROUND - 34, 26, 34);
+  ctx.fillStyle = '#d4a20c'; ctx.fillRect(x - 13, GROUND - 14, 26, 4);
+  // 머리 + 투구
+  ctx.fillStyle = '#ffe0b3'; ctx.beginPath(); ctx.arc(x, GROUND - 42, 11, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#b0b8c4'; ctx.beginPath(); ctx.arc(x, GROUND - 45, 12, Math.PI, 0); ctx.fill();
+  ctx.fillStyle = '#333'; ctx.fillRect(x + d * 4 - 2, GROUND - 44, 4, 4);
+  // 검
+  const a = h.anim > 0 ? 0.3 : -1.0;
+  ctx.strokeStyle = '#e8eef5'; ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(x + d * 12, GROUND - 22);
+  ctx.lineTo(x + d * (12 + Math.cos(a) * 30), GROUND - 22 + Math.sin(a) * 30);
+  ctx.stroke();
+  hpBar(x, GROUND - 68, 44, h.hp / h.maxHp, '#4caf50');
+}
+
+function bar(x, y, w, h, ratio, color, label) {
+  ctx.fillStyle = 'rgba(0,0,0,.5)'; ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = color; ctx.fillRect(x + 2, y + 2, (w - 4) * ratio, h - 4);
+  ctx.fillStyle = '#fff'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText(label, x + 6, y + h - 5);
+}
+
+function drawHUD() {
+  bar(12, 12, 200, 22, S.food / S.foodMax, '#e0a526', `식량 ${Math.floor(S.food)} / ${S.foodMax}`);
+  bar(12, 40, 200, 22, S.mana / S.manaMax, '#3d7be0', `마나 ${Math.floor(S.mana)} / ${S.manaMax}`);
+
+  ctx.textAlign = 'right'; ctx.font = 'bold 16px sans-serif';
+  ctx.fillStyle = '#000'; ctx.fillText(`위협 단계 ${S.level}  ·  ${Math.floor(S.time)}초`, W - 11, 29);
+  ctx.fillStyle = '#fff'; ctx.fillText(`위협 단계 ${S.level}  ·  ${Math.floor(S.time)}초`, W - 12, 28);
+
+  // 미니맵
+  const mx = W / 2 - 180, my = 14, mw = 360, mh = 14;
+  ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.fillRect(mx, my, mw, mh);
+  ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.lineWidth = 1;
+  ctx.strokeRect(mx + (S.camX / WORLD) * mw, my, (W / WORLD) * mw, mh);
+  for (const u of S.units) {
+    ctx.fillStyle = u.team === 0 ? '#6cf' : '#f66';
+    ctx.fillRect(mx + (u.x / WORLD) * mw - 1, my + 4, 3, 6);
+  }
+  if (!S.hero.dead) { ctx.fillStyle = '#ffd400'; ctx.fillRect(mx + (S.hero.x / WORLD) * mw - 2, my + 2, 5, 10); }
+
+  if (S.hero.dead) center(`영웅 부활까지 ${Math.ceil(S.hero.respawn)}초`, 22, H / 2 - 120);
+  if (S.paused) overlay('일시정지', 'P 키로 계속');
+  if (S.state === 'win') overlay('승리!', `${Math.floor(S.time)}초 만에 적 기지를 함락했습니다 · R 키 또는 클릭으로 재시작`);
+  if (S.state === 'lose') overlay('패배…', '기지가 무너졌습니다 · R 키 또는 클릭으로 재시작');
+}
+
+function center(text, size, y) {
+  ctx.textAlign = 'center'; ctx.font = `bold ${size}px sans-serif`;
+  ctx.fillStyle = '#000'; ctx.fillText(text, W / 2 + 2, y + 2);
+  ctx.fillStyle = '#fff'; ctx.fillText(text, W / 2, y);
+}
+function overlay(title, sub) {
+  ctx.fillStyle = 'rgba(0,0,0,.5)'; ctx.fillRect(0, 0, W, H);
+  center(title, 56, H / 2 - 10);
+  center(sub, 18, H / 2 + 30);
+}
+
+// ===== 입력 =====
+const keys = { left: false, right: false };
+addEventListener('keydown', e => {
+  const k = e.key.toLowerCase();
+  if (k === 'a' || k === 'arrowleft') keys.left = true;
+  if (k === 'd' || k === 'arrowright') keys.right = true;
+  if (k === '1' || k === '2' || k === '3') summon(+k - 1);
+  if (k === 'k' || k === ' ') { useSkill(); e.preventDefault(); }
+  if (k === 'u') upgrade();
+  if (k === 'p' && S.state === 'play') S.paused = !S.paused;
+  if (k === 'r' && S.state !== 'play') reset();
+});
+addEventListener('keyup', e => {
+  const k = e.key.toLowerCase();
+  if (k === 'a' || k === 'arrowleft') keys.left = false;
+  if (k === 'd' || k === 'arrowright') keys.right = false;
+});
+addEventListener('blur', () => { keys.left = keys.right = false; });
+canvas.addEventListener('pointerdown', () => { if (S.state !== 'play') reset(); });
+
+function hold(btn, prop) {
+  const on = e => { e.preventDefault(); keys[prop] = true; };
+  const off = () => { keys[prop] = false; };
+  btn.addEventListener('pointerdown', on);
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => btn.addEventListener(ev, off));
+}
+hold(document.getElementById('btnLeft'), 'left');
+hold(document.getElementById('btnRight'), 'right');
+
+const summonWrap = document.getElementById('summonBtns');
+const summonEls = PLAYER_UNITS.map((def, i) => {
+  const b = document.createElement('button');
+  b.innerHTML = `${def.name}<span class="cost">식량 ${def.cost}</span><div class="cd"></div>`;
+  b.style.borderColor = def.color;
+  b.addEventListener('click', () => summon(i));
+  summonWrap.appendChild(b);
+  return b;
+});
+const btnSkill = document.getElementById('btnSkill');
+const btnUpgrade = document.getElementById('btnUpgrade');
+btnSkill.addEventListener('click', useSkill);
+btnUpgrade.addEventListener('click', upgrade);
+
+function updateButtons() {
+  PLAYER_UNITS.forEach((def, i) => {
+    const b = summonEls[i];
+    b.disabled = S.food < def.cost || S.summonCd[def.id] > 0 || S.state !== 'play';
+    b.querySelector('.cd').style.height = (S.summonCd[def.id] / def.cd * 100) + '%';
+  });
+  btnSkill.disabled = S.mana < 50 || S.skillCd > 0 || S.hero.dead || S.state !== 'play';
+  document.getElementById('skillCd').style.height = (S.skillCd / 2 * 100) + '%';
+  const maxed = S.upLevel >= 5;
+  document.getElementById('upCost').textContent = maxed ? '최대' : `식량 ${upgradeCost()}`;
+  btnUpgrade.disabled = maxed || S.food < upgradeCost() || S.state !== 'play';
+}
+
+// ===== 루프 =====
+let last = performance.now();
+function loop(now) {
+  const dt = Math.min(0.05, (now - last) / 1000);
+  last = now;
+  if (S.state === 'play' && !S.paused) update(dt);
+  draw();
+  updateButtons();
+  requestAnimationFrame(loop);
+}
+reset();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
