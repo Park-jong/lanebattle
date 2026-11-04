@@ -22,6 +22,9 @@ export interface HudButtonHandlers {
   onPress: () => void;
   /** 손가락·마우스를 떼거나 버튼 밖으로 나갔을 때 (누르고 있는 동안 동작하는 버튼용) */
   onRelease?: () => void;
+  /** 마우스를 올렸을 때 / 벗어났을 때 (툴팁용) */
+  onHover?: () => void;
+  onHoverOut?: () => void;
 }
 
 /** HUD 버튼: 도형 한 장 + 글자 두 줄 + 쿨타임 덮개. 눌림 영역은 항상 rect 전체 */
@@ -73,6 +76,8 @@ export class HudButton {
       this.redraw();
       this.handlers.onPress();
     });
+    this.zone.on('pointerover', () => { if (this.visible) this.handlers.onHover?.(); });
+    this.zone.on('pointerout', () => this.handlers.onHoverOut?.());
     for (const ev of ['pointerup', 'pointerout', 'pointerupoutside']) this.zone.on(ev, () => this.release());
     this.layout();
     this.redraw();

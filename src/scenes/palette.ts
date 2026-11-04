@@ -63,3 +63,13 @@ export const SKILL_COLORS: Record<SkillId, number> = {
   blessing: TAG_COLORS.divine,
   bladeDance: TAG_COLORS.fire,
 };
+
+/** 툴팁 색: 어두운 패널, 상태 줄은 가능 초록·불가 빨강 */
+export const TOOLTIP_COLORS = {
+  fill: HUD_STRIP,
+  border: 0xd9cba6,
+  title: '#f3ead4',
+  body: '#cfd6ee',
+  ok: '#7ddc8a',
+  blocked: '#ff7a7a',
+} as const;

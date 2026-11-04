@@ -227,3 +227,17 @@ export function nodeCells(tree: TreeId): { nodeId: string; rect: Rect }[] {
   }
   return out;
 }
+
+// ----- 툴팁 (마우스를 올렸을 때 뜨는 설명 상자) -----
+export const TOOLTIP_LAYOUT = {
+  width: 280,
+  padding: 8,
+  /** 버튼과 상자 사이 간격 */
+  gap: 6,
+  /** 화면 가장자리 여백 */
+  margin: 4,
+  titleSize: 15,
+  bodySize: 12,
+  /** HUD(90~100)·일시정지·결과 덮개(180~195)·팝업 버튼(210) 위 */
+  depth: 220,
+} as const;

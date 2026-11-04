@@ -28,6 +28,9 @@ import { DamageFloaters } from './DamageFloaters';
 import { floaterStyle } from './floaterStyle';
 import { HudButton } from './HudButton';
 import { KEY_MAP, KeyInput, skillIndexOf, summonIndexOf } from './input';
+import { describeSkill, skillStatus } from '../game/skillText';
+import { describeUnit, summonStatus } from '../game/unitText';
+import { Tooltip } from './Tooltip';
 import { addArtImage, CharacterRenderer } from '../render/CharacterRenderer';
 
 /** 보스 등장 연출 길이(초): 화면이 어두워지고 이름이 나타났다 사라진다 */
@@ -59,6 +62,11 @@ export class BattleScene extends Phaser.Scene {
   /** 소환 버튼(키) 번호 -> ALLIES 인덱스. 저장된 소환 순서를 따른다 */
   private slotAlly: number[] = [];
   private castFx: CastFx[] = [];
+  private tooltip!: Tooltip;
+  /** 마우스가 올라가 있는 버튼 (없으면 null) */
+  private hover: { kind: 'skill' | 'summon'; index: number } | null = null;
+  /** 지금 열려 있는 툴팁의 대상 (내용을 다시 만들지 않으려는 표시) */
+  private tooltipShown: string | null = null;
   private gatherButton!: HudButton;
   private moveLeftButton!: HudButton;
   private moveRightButton!: HudButton;
@@ -130,6 +138,8 @@ export class BattleScene extends Phaser.Scene {
     this.skillButtons = [];
     this.slotAlly = ALLIES.map((_, slot) => summonOrder.allyIndexAt(slot));
     this.castFx = [];
+    this.hover = null;
+    this.tooltipShown = null;
   }
 
   create(): void {
@@ -146,6 +156,7 @@ export class BattleScene extends Phaser.Scene {
     this.createPauseUi();
     this.createResultUi();
     this.setupInput();
+    this.tooltip = new Tooltip(this);
   }
 
   /** HUD 글자: 바 안의 숫자, 오른쪽 정보 3줄, 아래 한 줄 */
@@ -260,7 +271,46 @@ export class BattleScene extends Phaser.Scene {
     this.drawWorld();
     this.drawHud();
     this.updateButtons();
+    this.updateTooltip();
     this.updateOverlay();
+  }
+
+  // ----- 툴팁 -----
+
+  /** 버튼에 마우스가 있으면 설명을 열고 상태 줄을 매 프레임 갱신한다. 일시정지·결과 화면에서는 닫는다 */
+  private updateTooltip(): void {
+    const hover = this.hover;
+    // 일시정지·결과 덮개는 입력을 막지만, 이미 열려 있던 툴팁은 여기서 닫는다
+    if (!hover || this.paused || this.battle.result !== 'playing') {
+      this.tooltip.hide();
+      this.tooltipShown = null;
+      return;
+    }
+    const b = this.battle;
+    const key = `${hover.kind}:${hover.index}`;
+    if (hover.kind === 'skill') {
+      const def = SKILLS[hover.index];
+      const status = skillStatus({
+        heroAlive: b.hero.alive, stunned: !!b.hero.status?.stunned, cooldown: b.skillCooldown(def.id),
+        spirit: b.resources.spirit, spiritCost: def.spiritCost,
+      });
+      if (this.tooltipShown !== key) {
+        this.tooltip.show(L.skills[hover.index], describeSkill(def.id, this.modifiers), status);
+        this.tooltipShown = key;
+      } else this.tooltip.setStatus(status);
+      return;
+    }
+    const allyIndex = this.slotAlly[hover.index];
+    const def = b.allyDef(allyIndex);
+    const status = summonStatus({
+      allyCount: b.allies.length, maxAllies: COMBAT.maxAllies, cooldown: b.summonCooldown(allyIndex),
+      talisman: b.resources.talisman, cost: def.cost,
+    });
+    if (this.tooltipShown !== key) {
+      const keyLabel = String((hover.index + 1) % 10);
+      this.tooltip.show(L.summon[hover.index], describeUnit(def.id, this.modifiers, keyLabel), status);
+      this.tooltipShown = key;
+    } else this.tooltip.setStatus(status);
   }
 
   /** 키보드와 화면 ◀ ▶ 버튼을 합친 이동 방향 (-1, 0, 1) */
@@ -460,7 +510,11 @@ export class BattleScene extends Phaser.Scene {
       const def = ALLIES[allyIndex];
       const btn = new HudButton(
         this, L.summon[i], { fill: BUTTON_FILL, border: colorForTags(def.tags), borderWidth: 4 },
-        { onPress: () => { if (!this.paused) this.battle.summon(allyIndex); } },
+        {
+          onPress: () => { if (!this.paused) this.battle.summon(allyIndex); },
+          onHover: () => { this.hover = { kind: 'summon', index: i }; },
+          onHoverOut: () => { if (this.hover?.kind === 'summon' && this.hover.index === i) this.hover = null; },
+        },
       );
       btn.setTexts(`${(i + 1) % 10} ${def.name}`, `${this.battle.allyDef(allyIndex).cost}`);
       btn.setPortrait(`ally:${def.id}`);
@@ -469,7 +523,11 @@ export class BattleScene extends Phaser.Scene {
     SKILLS.forEach((def, i) => {
       const btn = new HudButton(
         this, L.skills[i], { shape: 'round', center: true, fill: BUTTON_FILL_ACTION, border: SKILL_COLORS[def.id], borderWidth: 3 },
-        { onPress: () => { if (!this.paused) this.battle.castSkill(def.id); } },
+        {
+          onPress: () => { if (!this.paused) this.battle.castSkill(def.id); },
+          onHover: () => { this.hover = { kind: 'skill', index: i }; },
+          onHoverOut: () => { if (this.hover?.kind === 'skill' && this.hover.index === i) this.hover = null; },
+        },
       );
       btn.setTexts(`${KEY_MAP.skills[i].slice(3)} ${def.name}`, `신력 ${def.spiritCost}`);
       this.skillButtons.push(btn);
