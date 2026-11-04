@@ -241,7 +241,7 @@ def make_preview(results):
     cards = []
     for index, result in enumerate(results):
         directory = ROOT / result["directory"]
-        doc = ROOT / f"docs/art/{result['group']}/{result['id']}.md"
+        doc = ROOT / f"docs/art/default/{result['group']}/{result['id']}.md"
         name = doc.read_text(encoding="utf-8").splitlines()[0].removeprefix("# ").split(" ")[0]
         title = doc.read_text(encoding="utf-8").splitlines()[0].removeprefix("# ")
         title = title[:title.index(" 이미지")]
