@@ -8,6 +8,8 @@ export interface SkillCastEvent {
   x: number;
   /** 영웅이 바라본 방향 */
   facing: 1 | -1;
+  /** 실제 범위 (업그레이드 반영). 부채 바람은 길이, 나머지는 반경 */
+  range: number;
 }
 
 /** 스킬별 남은 쿨타임. 전투 시간(step)으로만 줄어든다 */

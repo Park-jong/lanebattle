@@ -50,6 +50,8 @@ export interface AllyDef extends CombatStats {
   burnPerSec?: number;
   /** 마법 공격의 범위 반경 */
   areaRadius?: number;
+  /** 한 번 소환에 나오는 마리 수 (기본 1, 까치 떼 ② 핵심은 2) */
+  summonCount?: number;
 }
 
 export interface EnemyDef extends CombatStats {

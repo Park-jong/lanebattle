@@ -1,7 +1,7 @@
 import { STAGES } from '../data/stages';
 import { STAR_RULES } from '../data/rewards';
 
-/** 진행 기록 저장소 인터페이스 (8단계에서 localStorage 구현으로 교체) */
+/** 진행 기록 저장소 인터페이스 (영구 저장 구현은 save.ts) */
 export interface ProgressStore {
   /** 스테이지 최고 별 0~3. 범위 밖 스테이지는 0 */
   getBestStars(stage: number): number;
@@ -35,4 +35,3 @@ export class MemoryProgress implements ProgressStore {
   }
 }
 
-export const progress: ProgressStore = new MemoryProgress();

@@ -15,6 +15,8 @@ export const COMBAT = {
   elite: { hpMultiplier: 4, attackMultiplier: 1.5, sizeMultiplier: 1.5 },
   /** 소환 위치: 아군은 서낭당 앞, 적은 원귀의 성 앞 */
   allySpawnX: 130,
+  /** 한 번에 여러 마리가 나올 때(까치 2무리) 마리 사이 간격 */
+  summonSpread: 12,
   enemySpawnOffset: 40,
   projectileSpeed: 420,
   /** 시뮬레이션 1틱 최대 시간 */

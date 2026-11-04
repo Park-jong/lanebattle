@@ -3,7 +3,7 @@ import { STAGES } from '../data/stages';
 import { getBossById } from '../data/bosses';
 import { STAR_RULES } from '../data/rewards';
 import { MAP_ROWS, gridPosition, moveSelection, stageAt } from '../game/mapGrid';
-import { progress } from '../game/progress';
+import { builds, progress, wallet } from '../game/session';
 import { drawNightSky } from './background';
 import { bossChipSpecs } from './bossChips';
 import { HUD_FONT, MAP_LAYOUT } from './layout';
@@ -14,7 +14,6 @@ import { isBlockedByOverlay, openSettings } from './openSettings';
 
 const L = MAP_LAYOUT;
 const BOSS_RED = 0xd9473b;
-const PAPER_DISABLED = 0xcdbf9a;
 
 interface CellView {
   rect: Phaser.GameObjects.Rectangle;
@@ -119,9 +118,9 @@ export class MapScene extends Phaser.Scene {
     this.add.rectangle(L.infoX, L.infoY, L.infoW, L.infoH, PAPER).setOrigin(0).setStrokeStyle(3, INK);
     const cx = L.infoX + L.infoW / 2;
     const bottom = L.infoY + L.infoH;
-    new MenuButton(this, cx, bottom - 118, L.infoW - 32, 66, '빌드 바꾸기 (8단계 예정)', () => {}, {
-      fontSize: 15, fill: PAPER_DISABLED,
-    }).setEnabled(false);
+    new MenuButton(this, cx, bottom - 118, L.infoW - 32, 66, `빌드 바꾸기 (${KEY_MAP.openBuild.slice(3)})`, () => this.openBuild(), {
+      fontSize: 18,
+    });
     new MenuButton(this, cx, bottom - 40, L.infoW - 32, 66, '출전', () => this.launch(), {
       fontSize: 22, fill: 0xe0b52e,
     });
@@ -157,6 +156,14 @@ export class MapScene extends Phaser.Scene {
       ),
     );
     y += 84;
+
+    add(
+      this.add.text(
+        x, L.infoY + L.infoH - 178,
+        `엽전 ${wallet.yeopjeon}  신명 ${builds.availableSinmyeong()}/${wallet.totalSinmyeong()}`,
+        { ...font, fontSize: '13px', color: '#6b5a3a' },
+      ),
+    );
 
     if (def.bossId) {
       const boss = getBossById(def.bossId);
@@ -198,13 +205,17 @@ export class MapScene extends Phaser.Scene {
   private createBottomButtons(): void {
     new MenuButton(this, 104, 490, 160, 66, '타이틀로 (Esc)', () => this.scene.start('Title'), { fontSize: 15 });
     new MenuButton(this, 284, 490, 160, 66, `설정 (${KEY_MAP.openSettings.slice(3)})`, () => openSettings(this), { fontSize: 15 });
-    this.add.text(380, 480, '방향키 이동  ·  Enter 출전', { fontFamily: HUD_FONT, fontSize: '14px', color: '#9aa5c0' });
+    this.add.text(380, 480, '방향키 이동  ·  Enter 출전  ·  B 빌드', { fontFamily: HUD_FONT, fontSize: '14px', color: '#9aa5c0' });
   }
 
   // ----- 동작 -----
 
   private launch(): void {
     this.scene.start('Battle', { stage: this.selected });
+  }
+
+  private openBuild(): void {
+    this.scene.start('Build', { stage: this.selected });
   }
 
   private onKeyDown(code: string): void {
@@ -217,6 +228,8 @@ export class MapScene extends Phaser.Scene {
       this.launch();
     } else if (code === KEY_MAP.back) {
       this.scene.start('Title');
+    } else if (code === KEY_MAP.openBuild) {
+      this.openBuild();
     } else if (code === KEY_MAP.openSettings) {
       openSettings(this);
     }

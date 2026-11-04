@@ -10,8 +10,9 @@ export class Hero extends Body {
   /** 바라보는 방향: 마지막으로 움직인 쪽 (처음엔 오른쪽) */
   facing: 1 | -1 = 1;
 
-  constructor() {
-    super('hero', 'ally', HERO.respawnX, HERO.maxHp, HERO.width / 2);
+  /** maxHp: 단단한 몸 반영 최대 체력. reviveReduction: 빠른 부활로 줄어드는 부활 시간(초) */
+  constructor(maxHp: number = HERO.maxHp, private readonly reviveReduction = 0) {
+    super('hero', 'ally', HERO.respawnX, maxHp, HERO.width / 2);
   }
 
   /** moveDir: -1 왼쪽, 0 정지, 1 오른쪽 */
@@ -29,9 +30,10 @@ export class Hero extends Body {
     this.x = Math.min(COMBAT.castle.x, Math.max(COMBAT.shrine.x, next));
   }
 
-  /** 사망 처리 시작. 부활 시간 = 4 + 위협 단계 (최대 10초) */
+  /** 사망 처리 시작. 부활 시간 = 4 + 위협 단계 (최대 10초) - 부활 단축 (최소 1초) */
   beginRespawn(threatLevel: number): void {
-    this.respawnTimer = Math.min(HERO.respawn.max, HERO.respawn.base + threatLevel);
+    const base = Math.min(HERO.respawn.max, HERO.respawn.base + threatLevel);
+    this.respawnTimer = Math.max(HERO.respawn.min, base - this.reviveReduction);
   }
 
   get attackReady(): boolean {

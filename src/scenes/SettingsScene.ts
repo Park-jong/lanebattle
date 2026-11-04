@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { settings } from '../game/settings';
+import { settings } from '../game/session';
 import { GAME_HEIGHT, GAME_WIDTH, HUD_FONT } from './layout';
 import { KEY_MAP, KeyInput } from './input';
 import { MenuButton } from './MenuButton';

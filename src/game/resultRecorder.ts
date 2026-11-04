@@ -1,11 +1,15 @@
 import type { StageResult } from '../battle/result';
 import type { ProgressStore } from './progress';
+import type { Wallet } from './wallet';
 
 /** 한 번의 전투 결과를 계산하고 기록은 딱 한 번만 하는 래퍼 */
 export class ResultRecorder {
   private settled: StageResult | null = null;
 
-  constructor(private readonly store: ProgressStore) {}
+  constructor(
+    private readonly store: ProgressStore,
+    private readonly wallet?: Wallet,
+  ) {}
 
   /**
    * 결과가 났으면(evaluate가 null이 아니면) 이전 최고 별로 계산해 기록하고 캐시한다.
@@ -16,6 +20,8 @@ export class ResultRecorder {
     const result = evaluate(this.store.getBestStars(stage));
     if (!result) return null;
     this.store.recordResult(stage, result.stars);
+    // 엽전은 반복 클리어도 지급한다 (패배는 0이라 변화 없음)
+    this.wallet?.addYeopjeon(result.yeopjeon);
     this.settled = result;
     return result;
   }

@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { MAX_TIER, TREE_IDS, nodesOfTree } from '../data/upgrades';
 import {
   battleButtons, battleDisplays, BATTLE_LAYOUT, centeredRow, GAME_HEIGHT, GAME_WIDTH, GROUND_Y, MAP_LAYOUT,
-  MIN_TOUCH, minimapX, PAUSE_BUTTON, RESULT_LAYOUT, type Rect,
+  MIN_TOUCH, minimapX, BUILD_LAYOUT, dialogButtons, nodeCells, tierLabelRect, PAUSE_BUTTON, RESULT_LAYOUT, type Rect,
 } from './layout';
 
 const overlaps = (a: Rect, b: Rect) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
@@ -117,5 +118,106 @@ describe('미니맵 좌표', () => {
     expect(minimapX(1200, 2400, map)).toBe(map.x + map.w / 2);
     expect(minimapX(-50, 2400, map)).toBe(map.x);
     expect(minimapX(9999, 2400, map)).toBe(map.x + map.w);
+  });
+});
+
+describe('빌드 화면 배치', () => {
+  const B = BUILD_LAYOUT;
+  /** 탭과 상관없이 늘 보이는 버튼 */
+  const fixedButtons = [
+    { name: 'back', rect: B.back },
+    { name: 'buy', rect: B.buy },
+    ...B.slotTabs.map((rect, i) => ({ name: `slot${i}`, rect })),
+    { name: 'copy', rect: B.copy },
+    { name: 'reset', rect: B.reset },
+    ...B.treeTabs.map((rect, i) => ({ name: `tab${i}`, rect })),
+    { name: 'allocate', rect: B.allocate },
+    { name: 'deallocate', rect: B.deallocate },
+  ];
+  const fixedDisplays = [
+    { name: 'wallet', rect: B.wallet },
+    { name: 'boss', rect: B.boss },
+    { name: 'detailText', rect: B.detailText },
+    { name: 'message', rect: B.message },
+  ];
+
+  it('고정 버튼은 66x66 이상, 화면 안, 서로·표시와 겹치지 않는다', () => {
+    for (const { name, rect } of fixedButtons) {
+      expect(rect.w, name).toBeGreaterThanOrEqual(MIN_TOUCH);
+      expect(rect.h, name).toBeGreaterThanOrEqual(MIN_TOUCH);
+      expect(inside(rect, screen), name).toBe(true);
+    }
+    for (const { name, rect } of fixedDisplays) expect(inside(rect, screen), name).toBe(true);
+    expect(overlapPairs([...fixedButtons, ...fixedDisplays])).toEqual([]);
+  });
+
+  it('위쪽 띠 버튼은 띠 안, 보스 줄과 탭은 띠 아래, 노드 영역은 탭 아래', () => {
+    for (const r of [B.back, B.buy, ...B.slotTabs, B.copy, B.reset, B.wallet]) expect(inside(r, B.strip)).toBe(true);
+    expect(B.boss.y).toBeGreaterThanOrEqual(B.strip.h);
+    expect(B.treeTabs[0].y).toBeGreaterThanOrEqual(B.boss.y + B.boss.h);
+    expect(B.nodeArea.y).toBeGreaterThanOrEqual(B.treeTabs[0].y + B.treeTabs[0].h);
+    expect(inside(B.nodeArea, screen)).toBe(true);
+    expect(overlaps(B.nodeArea, B.detail)).toBe(false);
+    for (const r of [...B.treeTabs, B.detailText, B.allocate, B.deallocate, B.message]) expect(r.x + r.w).toBeLessThanOrEqual(screen.w);
+    for (const r of [B.detailText, B.allocate, B.deallocate, B.message]) expect(inside(r, B.detail)).toBe(true);
+  });
+
+  it('트리 탭마다 노드 칸이 66x66 이상, 화면·노드 영역 안, 겹치지 않는다', () => {
+    for (const tree of TREE_IDS) {
+      const cells = nodeCells(tree);
+      expect(cells.map((c) => c.nodeId).sort()).toEqual(nodesOfTree(tree).map((n) => n.id).sort());
+      const items = cells.map((c) => ({ name: c.nodeId, rect: c.rect }));
+      const labels =
+        tree === 'yogoe'
+          ? []
+          : Array.from({ length: MAX_TIER }, (_, i) => ({ name: `tier${i + 1}`, rect: tierLabelRect(i + 1) }));
+      for (const { name, rect } of [...items, ...labels]) {
+        expect(rect.w, name).toBeGreaterThanOrEqual(MIN_TOUCH);
+        expect(rect.h, name).toBeGreaterThanOrEqual(MIN_TOUCH);
+        expect(inside(rect, screen), `${tree}/${name}`).toBe(true);
+        expect(inside(rect, BUILD_LAYOUT.nodeArea), `${tree}/${name}`).toBe(true);
+      }
+      expect(overlapPairs([...items, ...labels, ...fixedButtons, ...fixedDisplays]), tree).toEqual([]);
+    }
+  });
+
+  it('요괴는 30칸(2열 x 5줄), 배타 갈래 쌍은 붙어 있다', () => {
+    const yogoe = nodeCells('yogoe');
+    expect(yogoe).toHaveLength(30);
+    expect(new Set(yogoe.map((c) => c.rect.y)).size).toBe(5);
+    expect(new Set(yogoe.map((c) => c.rect.x >= 340)).size).toBe(2);
+    const m = nodeCells('mudang');
+    const rect = (id: string) => m.find((c) => c.nodeId === id)!.rect;
+    const pairGap = rect('fanWindGust').x - (rect('fanWindTornado').x + rect('fanWindTornado').w);
+    const groupGap = rect('blessingGrandRite').x - (rect('fanWindGust').x + rect('fanWindGust').w);
+    expect(pairGap).toBeLessThan(groupGap);
+  });
+
+  it('소환 순서 탭: 10칸·기본 순서 버튼이 66x66 이상, 화면 안, 겹치지 않는다', () => {
+    expect(B.orderCells).toHaveLength(10);
+    const items = [
+      ...B.orderCells.map((rect, i) => ({ name: `order${i}`, rect })),
+      { name: 'orderReset', rect: B.orderReset },
+    ];
+    for (const { name, rect } of items) {
+      expect(rect.w, name).toBeGreaterThanOrEqual(MIN_TOUCH);
+      expect(rect.h, name).toBeGreaterThanOrEqual(MIN_TOUCH);
+      expect(inside(rect, B.nodeArea), name).toBe(true);
+    }
+    expect(inside(B.orderHint, B.nodeArea)).toBe(true);
+    expect(overlapPairs([...items, { name: 'hint', rect: B.orderHint }, ...fixedButtons, ...fixedDisplays])).toEqual([]);
+  });
+
+  it('확인창 버튼은 패널 안, 66x66 이상, 겹치지 않는다', () => {
+    for (const count of [2, 3]) {
+      const row = dialogButtons(count);
+      row.forEach((r, i) => {
+        expect(r.w).toBeGreaterThanOrEqual(MIN_TOUCH);
+        expect(r.h).toBeGreaterThanOrEqual(MIN_TOUCH);
+        expect(inside(r, B.dialogPanel)).toBe(true);
+        if (i > 0) expect(overlaps(row[i - 1], r)).toBe(false);
+      });
+    }
+    expect(inside(B.dialogPanel, screen)).toBe(true);
   });
 });

@@ -2,8 +2,7 @@ import Phaser from 'phaser';
 import { ALLIES } from '../data/allies';
 import { COMBAT } from '../data/combat';
 import { HERO } from '../data/hero';
-import { RESOURCES } from '../data/resources';
-import { SKILL_EFFECTS, SKILLS, type SkillId } from '../data/skills';
+import { SKILLS, type SkillId } from '../data/skills';
 import { STAGE_COUNT } from '../data/waves';
 import { STAR_RULES } from '../data/rewards';
 import { getStageDef } from '../battle/stage';
@@ -18,7 +17,9 @@ import {
   BUTTON_FILL, BUTTON_FILL_ACTION, BUTTON_FILL_GATHER, colorForTags, ENEMY_COLOR, HERO_COLOR, HUD_PANEL,
   HUD_STRIP, SHRINE_COLOR, SKILL_COLORS, TAG_COLORS,
 } from './palette';
-import { progress } from '../game/progress';
+import { builds, progress, summonOrder, wallet } from '../game/session';
+import { computeBuildEffects, parseUpgradeQuery } from '../game/buildEffects';
+import type { BattleModifiers } from '../battle/modifiers';
 import { ResultRecorder } from '../game/resultRecorder';
 import type { StageResult } from '../battle/result';
 import { ORIENTATION_KEY, type OrientationWatcher } from '../orientation';
@@ -41,6 +42,7 @@ interface CastFx {
   id: SkillId;
   x: number;
   facing: 1 | -1;
+  range: number;
   age: number;
 }
 
@@ -52,6 +54,8 @@ export class BattleScene extends Phaser.Scene {
   private hud!: Phaser.GameObjects.Graphics;
   private summonButtons: HudButton[] = [];
   private skillButtons: HudButton[] = [];
+  /** 소환 버튼(키) 번호 -> ALLIES 인덱스. 저장된 소환 순서를 따른다 */
+  private slotAlly: number[] = [];
   private castFx: CastFx[] = [];
   private gatherButton!: HudButton;
   private moveLeftButton!: HudButton;
@@ -81,6 +85,8 @@ export class BattleScene extends Phaser.Scene {
   private castleText!: Phaser.GameObjects.Text;
   private infoText!: Phaser.GameObjects.Text;
   private noteText!: Phaser.GameObjects.Text;
+  /** 이번 전투에 적용하는 빌드 효과 (사용 중인 빌드 또는 ?upg=) */
+  private modifiers!: BattleModifiers;
   private keyInput!: KeyInput;
   /** 승패가 난 뒤 지난 시간(초) */
   private resultElapsed = 0;
@@ -101,12 +107,14 @@ export class BattleScene extends Phaser.Scene {
   init(data: { stage?: number }): void {
     const fromUrl = Number(new URLSearchParams(window.location.search).get('stage'));
     const stage = data.stage ?? (Number.isFinite(fromUrl) ? fromUrl : 0);
+    this.modifiers = modifiersForBattle();
     this.battle = new Battle({
       stage: Math.max(0, Math.min(STAGE_COUNT - 1, Math.floor(stage))),
       synergies: synergiesFromUrl(),
       bossAt: bossAtFromUrl(),
+      modifiers: this.modifiers,
     });
-    this.recorder = new ResultRecorder(progress);
+    this.recorder = new ResultRecorder(progress, wallet);
     this.bossIntroLeft = 0;
     this.bossSeen = false;
     this.bossChips = [];
@@ -116,6 +124,7 @@ export class BattleScene extends Phaser.Scene {
     this.resultElapsed = 0;
     this.summonButtons = [];
     this.skillButtons = [];
+    this.slotAlly = ALLIES.map((_, slot) => summonOrder.allyIndexAt(slot));
     this.castFx = [];
   }
 
@@ -415,7 +424,7 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     const index = summonIndexOf(code);
-    if (index >= 0) this.battle.summon(index);
+    if (index >= 0) this.battle.summon(this.slotAlly[index]);
   }
 
   // ----- 버튼 -----
@@ -432,12 +441,13 @@ export class BattleScene extends Phaser.Scene {
     );
     this.pauseButton.setTexts('⏸', '');
 
-    ALLIES.forEach((def, i) => {
+    this.slotAlly.forEach((allyIndex, i) => {
+      const def = ALLIES[allyIndex];
       const btn = new HudButton(
         this, L.summon[i], { fill: BUTTON_FILL, border: colorForTags(def.tags), borderWidth: 4 },
-        { onPress: () => { if (!this.paused) this.battle.summon(i); } },
+        { onPress: () => { if (!this.paused) this.battle.summon(allyIndex); } },
       );
-      btn.setTexts(`${(i + 1) % 10} ${def.name}`, `${def.cost}`);
+      btn.setTexts(`${(i + 1) % 10} ${def.name}`, `${this.battle.allyDef(allyIndex).cost}`);
       this.summonButtons.push(btn);
     });
     SKILLS.forEach((def, i) => {
@@ -456,11 +466,13 @@ export class BattleScene extends Phaser.Scene {
 
   private updateButtons(): void {
     const b = this.battle;
-    ALLIES.forEach((def, i) => {
-      const cd = b.summonCooldown(i);
+    this.slotAlly.forEach((allyIndex, i) => {
+      const base = ALLIES[allyIndex];
+      const def = b.allyDef(allyIndex); // 업그레이드로 바뀐 비용·쿨타임
+      const cd = b.summonCooldown(allyIndex);
       const enabled = cd <= 0 && b.resources.talisman >= def.cost && b.allies.length < COMBAT.maxAllies;
       const sub = cd > 0 ? `${cd.toFixed(1)}s` : `${def.cost}`;
-      this.summonButtons[i].setTexts(`${(i + 1) % 10} ${def.name}`, sub);
+      this.summonButtons[i].setTexts(`${(i + 1) % 10} ${base.name}`, sub);
       this.summonButtons[i].setState(cd / def.cooldown, enabled);
     });
     SKILLS.forEach((def, i) => {
@@ -469,12 +481,12 @@ export class BattleScene extends Phaser.Scene {
         b.result === 'playing' && cd <= 0 && b.hero.alive && !b.hero.status?.stunned && b.resources.spirit >= def.spiritCost;
       const sub = cd > 0 ? `${cd.toFixed(1)}s` : `신력 ${def.spiritCost}`;
       this.skillButtons[i].setTexts(`${KEY_MAP.skills[i].slice(3)} ${def.name}`, sub);
-      this.skillButtons[i].setState(cd / def.cooldown, enabled);
+      this.skillButtons[i].setState(cd / b.skillCooldownMax(def.id), enabled);
     });
     const cost = b.resources.nextGatherCost;
     const r = b.resources;
     this.gatherButton.setTexts(
-      `R 기운 모으기\n${r.gatherLevel}/${RESOURCES.gather.costs.length}`,
+      `R 기운 모으기\n${r.gatherLevel}/${r.maxGatherLevel}`,
       cost === null ? '최대' : `부적 ${cost}`,
     );
     this.gatherButton.setState(0, cost !== null && r.talisman >= cost);
@@ -505,11 +517,11 @@ export class BattleScene extends Phaser.Scene {
       const t = fx.age / CAST_FX_SECONDS;
       const alpha = 0.5 * (1 - t);
       if (fx.id === 'fanWind') {
-        const r = SKILL_EFFECTS.fanWind.range * t;
+        const r = fx.range * t;
         const start = fx.facing > 0 ? -Math.PI / 2 : Math.PI / 2;
         g.fillStyle(TAG_COLORS.wind, alpha).slice(fx.x, GROUND_Y, r, start, start + Math.PI, false).fillPath();
       } else {
-        const full = fx.id === 'blessing' ? SKILL_EFFECTS.blessing.radius : SKILL_EFFECTS.bladeDance.radius;
+        const full = fx.range;
         const color = fx.id === 'blessing' ? TAG_COLORS.divine : TAG_COLORS.fire;
         g.fillStyle(color, alpha).fillCircle(fx.x, GROUND_Y, full * t);
         g.lineStyle(2, color, alpha * 2).strokeCircle(fx.x, GROUND_Y, full * t);
@@ -775,6 +787,15 @@ function synergiesFromUrl(): SynergyId[] {
   if (!value) return [];
   if (value === 'all') return [...ALL_SYNERGY_IDS];
   return value.split(',').filter(isSynergyId);
+}
+
+/**
+ * 전투에 적용할 빌드 효과. URL ?upg=id1,id2:3 이 있으면 그 노드들을(신명·규칙과 무관, 저장에는 반영 안 함),
+ * 없으면 사용 중인 빌드를 쓴다
+ */
+function modifiersForBattle(): BattleModifiers {
+  const upg = new URLSearchParams(window.location.search).get('upg');
+  return computeBuildEffects(upg !== null ? parseUpgradeQuery(upg) : builds.current.toData());
 }
 
 /** URL ?bossAt=초 로 보스 등장 시각을 바꾼다 (없거나 잘못된 값이면 기본 60초) */

@@ -10,6 +10,8 @@ export class AbilityState {
   growthTimer = 0;
   growthCount = 0;
   pulseTimer = 0;
+  /** 태양 불꽃 타이머 */
+  sunTimer = 0;
 
   /** 공격 한 번을 세고, every번째면 true */
   countAttack(every: number): boolean {
@@ -33,6 +35,8 @@ export interface AbilityHost {
   readonly livingHero: Body | null;
   applyStun(target: Body, duration: number): void;
   dispelBuffs(target: Body, duration: number): void;
+  /** 태양 불꽃: source 기준 반경 안 적 전체에 화상 */
+  sunFlame(source: Fighter, radius: number): void;
 }
 
 /** 붙잡기·성장·버프 해제 펄스처럼 주기적으로 발동하는 능력 */
@@ -44,6 +48,7 @@ export class TimedAbilities {
       if (!f.alive) continue;
       this.growth(f, dt);
       this.dispelPulse(f, dt);
+      this.sunFlame(f, dt);
       this.grab(f, dt);
     }
   }
@@ -75,6 +80,17 @@ export class TimedAbilities {
     for (const b of foes) {
       if (b.alive && Math.abs(b.x - f.x) <= p.radius) this.host.dispelBuffs(b, p.duration);
     }
+  }
+
+  /** 태양 불꽃(삼족오 각성): 주기마다 반경 안 적 전체에 화상. 기절 중에는 쓰지 못하고 대기한다 */
+  private sunFlame(f: Fighter, dt: number): void {
+    const s = f.ability.sunFlame;
+    if (!s) return;
+    const st = f.abilityState;
+    st.sunTimer = Math.min(s.interval, st.sunTimer + dt);
+    if (st.sunTimer < s.interval - STATUS.epsilon || f.status?.stunned) return;
+    st.sunTimer = 0;
+    this.host.sunFlame(f, s.radius);
   }
 
   /** 붙잡기: 사거리 안(근접이라 비행 제외)에서 가장 앞(x가 큰)의 적 하나 */

@@ -15,8 +15,8 @@ export const HERO = {
     type: 'melee' as AttackType,
     tags: ['hero'] as Tag[],
   },
-  /** 부활 시간 = base + 위협 단계, 최대 max */
-  respawn: { base: 4, max: 10 },
+  /** 부활 시간 = base + 위협 단계, 최대 max (업그레이드로 줄여도 min초 밑으로는 안 내려감) */
+  respawn: { base: 4, max: 10, min: 1 },
   /** 부활 위치 (서낭당 앞) */
   respawnX: 130,
 } as const;

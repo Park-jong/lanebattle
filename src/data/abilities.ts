@@ -14,18 +14,20 @@ export interface AbilityDef {
   /** 소환 후 첫 공격 피해 배율 */
   firstStrikeMultiplier?: number;
   /** every번째 공격마다 대상에게 넉백 + 기절 */
-  nthStrike?: { every: number; knockback: number; stun: number };
+  nthStrike?: { every: number; knockback: number; stun: number; collisionDamage?: number };
   /** interval초마다 사거리 안 가장 앞의 적 하나를 duration초 붙잡음 */
   grab?: { interval: number; duration: number };
   /** 오라: 반경 안 아군에게 효과 */
   aura?: { radius: number; effect: BuffValues };
   /** 반경 안 아군을 노리는 적 투사체가 chance 확률로 빗나감 (여럿이어도 합산 없음) */
-  missAura?: { radius: number; chance: number };
+  missAura?: { radius: number; chance: number; reflect?: boolean };
   /** 특정 특성의 대상에게 주는 피해 배율 (공격자 쪽 배율) */
-  vsTrait?: { trait: EnemyTrait; multiplier: number };
+  vsTrait?: { trait: EnemyTrait; multiplier: number; stagger?: number };
   /** 공격이 맞은 대상에게 거는 효과 */
   onHit?: {
     defenseBreak?: boolean;
+    /** 방어 파괴 최대 중첩 (없으면 기본값) */
+    defenseBreakMaxStacks?: number;
     slow?: { ratio: number; duration: number };
     healBlock?: number;
   };
@@ -37,6 +39,19 @@ export interface AbilityDef {
   growth?: { interval: number; multiplier: number; sizeMultiplier: number; maxCount: number };
   /** interval초마다 반경 안 적 대상(아군 쪽)에게 버프 해제 */
   dispelPulse?: { interval: number; radius: number; duration: number };
+  // ----- 요괴 각성(③) 업그레이드로만 생기는 능력 -----
+  /** 소환 후 첫 공격이 자신과 대상 사이(대상 너머 pathExtra까지)의 적 모두를 친다 */
+  pierce?: { pathExtra: number };
+  /** 한 번 공격할 때 서로 다른 대상 targets명에게 쏜다 */
+  multiTarget?: number;
+  /** 한 번 공격할 때 shots번 interval초 간격으로 쏜다 */
+  salvo?: { shots: number; interval: number };
+  /** 적을 처치하면 chance 확률로 같은 유닛 count마리를 추가 소환 */
+  killSpawn?: { chance: number; count: number };
+  /** 갑옷 적을 처치하면 체력 healRatio 회복, 그 판 동안 공격력 attackPerStack씩 중첩 */
+  armorKill?: { healRatio: number; attackPerStack: number };
+  /** interval초마다 반경 안 적 전체에 화상 */
+  sunFlame?: { interval: number; radius: number };
   /** 이 태그가 붙은 공격의 피해·상태를 무효화 */
   immuneTags?: readonly Tag[];
 }

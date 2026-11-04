@@ -167,9 +167,11 @@ export class Fighter extends Body {
     readonly defId: string,
     readonly stats: FighterStats,
     x: number,
+    /** 업그레이드로 바뀐 고유 능력 (없으면 기본 능력) */
+    ability?: AbilityDef,
   ) {
     super('unit', team, x, stats.maxHp, (stats.width * stats.scale) / 2);
-    this.ability = getAbility(defId);
+    this.ability = ability ?? getAbility(defId);
   }
 
   /** 현재 공격력 (성장 반영) */

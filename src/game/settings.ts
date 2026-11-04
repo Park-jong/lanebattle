@@ -47,4 +47,3 @@ export class MemorySettings implements SettingsStore {
   }
 }
 
-export const settings: SettingsStore = new MemorySettings();

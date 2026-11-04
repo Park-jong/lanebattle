@@ -49,6 +49,15 @@ export class MenuButton {
     this.label.setText(text);
   }
 
+  setFill(color: number): void {
+    this.bg.setFillStyle(color);
+  }
+
+  destroy(): void {
+    this.bg.destroy();
+    this.label.destroy();
+  }
+
   setEnabled(enabled: boolean): void {
     this.enabled = enabled;
     this.applyAlpha();
