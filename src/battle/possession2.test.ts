@@ -61,7 +61,7 @@ function shotHits(b: Battle, target: Fighter): boolean {
 }
 
 describe('유닛 6 불가사리 스킬', () => {
-  it('쇠 씹기: 앞쪽 120 범위 근접 피해 60 + 방어 파괴 3중첩 (비행·뒤쪽·범위 밖 제외)', () => {
+  it('쇠 씹기: 앞쪽 120 범위 근접 피해 90 + 방어 파괴 3중첩 (비행·뒤쪽·범위 밖 제외)', () => {
     const b = possess('bulgasari');
     const a = foe(b, 'geuseundae', 100);
     const edge = foe(b, 'geuseundae', 134); // 134 - 14 = 120
@@ -69,7 +69,7 @@ describe('유닛 6 불가사리 스킬', () => {
     const behind = foe(b, 'geuseundae', -50);
     const bird = foe(b, 'eodduksini', 50);
     b.castSkill('fanWind');
-    expect([lost(a), lost(edge), lost(out), lost(behind), lost(bird)]).toEqual([60, 60, 0, 0, 0]);
+    expect([lost(a), lost(edge), lost(out), lost(behind), lost(bird)]).toEqual([90, 90, 0, 0, 0]);
     expect([a.status!.defenseBreakStacks, edge.status!.defenseBreakStacks, out.status!.defenseBreakStacks]).toEqual([3, 3, 0]);
   });
 
@@ -91,7 +91,7 @@ describe('유닛 6 불가사리 스킬', () => {
     expect([b.hero.status!.damageReduction, near.status!.damageReduction]).toEqual([0, 0]);
   });
 
-  it('탐식: 반경 250 근접 피해 280 + 방어 파괴 5중첩, 처치 1마리당 영웅 최대 체력 10% 회복', () => {
+  it('탐식: 반경 250 근접 피해 420 + 방어 파괴 5중첩, 처치 1마리당 영웅 최대 체력 10% 회복', () => {
     const b = possess('bulgasari');
     const weak1 = foe(b, 'geuseundae', 50, 100);
     const weak2 = foe(b, 'geuseundae', -80, 100);
@@ -101,7 +101,7 @@ describe('유닛 6 불가사리 스킬', () => {
     b.hero.hp = 100;
     b.castSkill('bladeDance');
     expect([weak1.alive, weak2.alive]).toEqual([false, false]);
-    expect(lost(tank)).toBe(280);
+    expect(lost(tank)).toBe(420);
     expect(tank.status!.defenseBreakStacks).toBe(5);
     expect([lost(out), lost(bird)]).toEqual([0, 0]);
     expect(b.hero.hp).toBeCloseTo(100 + 2 * b.hero.maxHp * 0.1);
@@ -124,14 +124,14 @@ describe('유닛 6 불가사리 스킬', () => {
 });
 
 describe('유닛 7 해태 스킬', () => {
-  it('정의의 일격: 앞쪽 150 범위 근접 피해 60 + 붙잡기 2초', () => {
+  it('정의의 일격: 앞쪽 150 범위 근접 피해 90 + 붙잡기 2초', () => {
     const b = possess('haetae');
     const a = foe(b, 'geuseundae', 100);
     const edge = foe(b, 'geuseundae', 164); // 150
     const out = foe(b, 'geuseundae', 170);
     const behind = foe(b, 'geuseundae', -50);
     b.castSkill('fanWind');
-    expect([lost(a), lost(edge), lost(out), lost(behind)]).toEqual([60, 60, 0, 0]);
+    expect([lost(a), lost(edge), lost(out), lost(behind)]).toEqual([90, 90, 0, 0]);
     expect([a.status!.stunned, edge.status!.stunned, out.status!.stunned, behind.status!.stunned]).toEqual([true, true, false, false]);
     b.step(1.9);
     expect(a.status!.stunned).toBe(true);
@@ -139,11 +139,11 @@ describe('유닛 7 해태 스킬', () => {
     expect(a.status!.stunned).toBe(false);
   });
 
-  it('정의의 일격: 보스는 붙잡기 대신 0.5초 경직 (거대 원귀 근접 저항 ×0.2 = 12)', () => {
+  it('정의의 일격: 보스는 붙잡기 대신 0.5초 경직 (거대 원귀 근접 저항 ×0.2 = 18)', () => {
     const { b, boss } = bossFight('haetae', 1, 100);
     const hp = boss.hp;
     b.castSkill('fanWind');
-    expect(hp - boss.hp).toBeCloseTo(12);
+    expect(hp - boss.hp).toBeCloseTo(18);
     expect(boss.status!.stunned).toBe(true);
     b.step(0.6);
     expect(boss.status!.stunned).toBe(false);
@@ -186,7 +186,7 @@ describe('유닛 7 해태 스킬', () => {
     expect(b.auraCircles).toEqual([]);
   });
 
-  it('해태의 심판: 반경 300 마법 피해 300 + 기절 2초 (비행 포함, 갑옷 ×0.5 = 150), 서낭당 최대 체력 10% 회복', () => {
+  it('해태의 심판: 반경 300 마법 피해 450 + 기절 2초 (비행 포함, 갑옷 ×0.5 = 225), 서낭당 최대 체력 10% 회복', () => {
     const b = possess('haetae');
     const a = foe(b, 'geuseundae', 100);
     const edge = foe(b, 'geuseundae', 314); // 300
@@ -196,7 +196,7 @@ describe('유닛 7 해태 스킬', () => {
     const armor = foe(b, 'jangseungSpirit', 150);
     b.shrine.hp = 100;
     b.castSkill('bladeDance');
-    expect([lost(a), lost(edge), lost(out), lost(back), lost(bird), lost(armor)]).toEqual([300, 300, 0, 300, 300, 150]);
+    expect([lost(a), lost(edge), lost(out), lost(back), lost(bird), lost(armor)]).toEqual([450, 450, 0, 450, 450, 225]);
     expect([a.status!.stunned, out.status!.stunned, bird.status!.stunned]).toEqual([true, false, true]);
     expect(b.shrine.hp).toBeCloseTo(100 + b.shrine.maxHp * 0.1);
   });
@@ -210,23 +210,23 @@ describe('유닛 7 해태 스킬', () => {
 });
 
 describe('유닛 8 삼족오 스킬', () => {
-  it('태양 깃: 가까운 적 3명(비행·뒤쪽 포함)에게 원거리 45 + 화상 6, 4번째는 제외', () => {
+  it('태양 깃: 가까운 적 3명(비행·뒤쪽 포함)에게 원거리 67.5 + 화상 9, 4번째는 제외', () => {
     const b = possess('samjokgo');
     const back = foe(b, 'geuseundae', -30);
     const bird = foe(b, 'eodduksini', 60);
     const front = foe(b, 'geuseundae', 110);
     const fourth = foe(b, 'geuseundae', 160);
     b.castSkill('fanWind');
-    expect([lost(back), lost(bird), lost(front), lost(fourth)]).toEqual([45, 45, 45, 0]);
-    expect([back.status!.burnDps, bird.status!.burnDps, front.status!.burnDps, fourth.status!.burnDps]).toEqual([6, 6, 6, 0]);
+    expect([lost(back), lost(bird), lost(front), lost(fourth)]).toEqual([67.5, 67.5, 67.5, 0]);
+    expect([back.status!.burnDps, bird.status!.burnDps, front.status!.burnDps, fourth.status!.burnDps]).toEqual([9, 9, 9, 0]);
   });
 
-  it('태양 깃 상성: 영체 불 ×1.5 = 67.5, 강철이 불 무효(피해·화상 없음)', () => {
+  it('태양 깃 상성: 영체 불 ×1.5 = 101.25, 강철이 불 무효(피해·화상 없음)', () => {
     const b = possess('samjokgo');
     const ghost = foe(b, 'maidenGhost', 30);
     const steel = foe(b, 'gangcheol', 60);
     b.castSkill('fanWind');
-    expect(lost(ghost)).toBeCloseTo(67.5);
+    expect(lost(ghost)).toBeCloseTo(101.25);
     expect(lost(steel)).toBe(0);
     expect(steel.status!.burnDps).toBe(0);
   });
@@ -244,7 +244,7 @@ describe('유닛 8 삼족오 스킬', () => {
     expect([b.hero.status!.attackBonus, near.status!.attackBonus]).toEqual([0, 0]);
   });
 
-  it('일식: 반경 600 모든 적(비행 포함, 기지 제외) 마법 220 + 화상 12, 갑옷 ×0.5, 강철이 무효', () => {
+  it('일식: 반경 600 모든 적(비행 포함, 기지 제외) 마법 330 + 화상 18, 갑옷 ×0.5, 강철이 무효', () => {
     const b = possess('samjokgo');
     const a = foe(b, 'geuseundae', 100);
     const edge = foe(b, 'geuseundae', 614); // 600
@@ -255,38 +255,38 @@ describe('유닛 8 삼족오 스킬', () => {
     const steel = foe(b, 'gangcheol', 300);
     const castleHp = b.castle.hp;
     b.castSkill('bladeDance');
-    expect([lost(a), lost(edge), lost(out), lost(back), lost(bird), lost(armor), lost(steel)]).toEqual([220, 220, 0, 220, 220, 110, 0]);
-    expect([a.status!.burnDps, out.status!.burnDps, armor.status!.burnDps, steel.status!.burnDps]).toEqual([12, 0, 12, 0]);
+    expect([lost(a), lost(edge), lost(out), lost(back), lost(bird), lost(armor), lost(steel)]).toEqual([330, 330, 0, 330, 330, 165, 0]);
+    expect([a.status!.burnDps, out.status!.burnDps, armor.status!.burnDps, steel.status!.burnDps]).toEqual([18, 0, 18, 0]);
     expect(b.castle.hp).toBe(castleHp);
   });
 
-  it('일식 vs 거대 원귀: 불 약점 ×2 = 440 (근접 저항과 무관한 마법)', () => {
+  it('일식 vs 거대 원귀: 불 약점 ×2 = 660 (근접 저항과 무관한 마법)', () => {
     const { b, boss } = bossFight('samjokgo', 1, 100);
     const hp = boss.hp;
     b.castSkill('bladeDance');
-    expect(hp - boss.hp).toBeCloseTo(440);
+    expect(hp - boss.hp).toBeCloseTo(660);
   });
 });
 
 describe('유닛 9 까치 떼 스킬', () => {
-  it('까치 떼 쇄도: 앞쪽 400 범위 가까운 적 5명에게 원거리 35, 땅 위 적은 35 (6번째·범위 밖·뒤쪽 제외)', () => {
+  it('까치 떼 쇄도: 앞쪽 400 범위 가까운 적 5명에게 원거리 52.5, 땅 위 적은 52.5 (6번째·범위 밖·뒤쪽 제외)', () => {
     const b = possess('magpieFlock');
     const list = [60, 120, 180, 240, 300].map((dx) => foe(b, 'geuseundae', dx));
     const sixth = foe(b, 'geuseundae', 350);
     const behind = foe(b, 'geuseundae', -50);
     b.castSkill('fanWind');
-    expect(list.map(lost)).toEqual([35, 35, 35, 35, 35]);
+    expect(list.map(lost)).toEqual([52.5, 52.5, 52.5, 52.5, 52.5]);
     expect([lost(sixth), lost(behind)]).toEqual([0, 0]);
   });
 
-  it('까치 떼 쇄도: 400 경계(414)까지, 비행 적은 ×2 (바람 태그 비행 ×1.5와 곱해져 105)', () => {
+  it('까치 떼 쇄도: 400 경계(414)까지, 비행 적은 ×2 (바람 태그 비행 ×1.5와 곱해져 157.5)', () => {
     const b = possess('magpieFlock');
     const edge = foe(b, 'geuseundae', 414);
     const out = foe(b, 'geuseundae', 420);
     const bird = foe(b, 'eodduksini', 100);
     b.castSkill('fanWind');
-    expect([lost(edge), lost(out)]).toEqual([35, 0]);
-    expect(lost(bird)).toBeCloseTo(35 * 2 * 1.5);
+    expect([lost(edge), lost(out)]).toEqual([52.5, 0]);
+    expect(lost(bird)).toBeCloseTo(157.5);
   });
 
   it('길조: 8초간 반경 250 아군(영웅 포함) 공격 속도 +40%, 반경 밖·해제 중 제외', () => {
@@ -350,7 +350,7 @@ describe('유닛 9 까치 떼 스킬', () => {
 });
 
 describe('유닛 10 영등 바람 스킬', () => {
-  it('돌개바람: 앞쪽 250 범위 마법 45 + 넉백 120 (비행 ×1.5, 무리 ×1.5, 뒤쪽·범위 밖 제외)', () => {
+  it('돌개바람: 앞쪽 250 범위 마법 67.5 + 넉백 120 (비행 ×1.5, 무리 ×1.5, 뒤쪽·범위 밖 제외)', () => {
     const b = possess('yeongdeungWind');
     const a = foe(b, 'geuseundae', 100);
     const edge = foe(b, 'geuseundae', 264); // 250
@@ -359,9 +359,9 @@ describe('유닛 10 영등 바람 스킬', () => {
     const bird = foe(b, 'eodduksini', 50);
     const swarm = foe(b, 'eggGhost', 60);
     b.castSkill('fanWind');
-    expect([lost(a), lost(edge), lost(out), lost(behind)]).toEqual([45, 45, 0, 0]);
-    expect(lost(bird)).toBeCloseTo(67.5);
-    expect(lost(swarm)).toBeCloseTo(67.5);
+    expect([lost(a), lost(edge), lost(out), lost(behind)]).toEqual([67.5, 67.5, 0, 0]);
+    expect(lost(bird)).toBeCloseTo(101.25);
+    expect(lost(swarm)).toBeCloseTo(101.25);
     expect([a.x, out.x, behind.x]).toEqual([HX + 220, HX + 270, HX - 50]);
   });
 
@@ -389,14 +389,14 @@ describe('유닛 10 영등 바람 스킬', () => {
     expect(near.status!.attackSpeedBonus).toBe(0);
   });
 
-  it('영등 폭풍: 반경 350 마법 260 + 넉백 200 + 감속 50% 4초 (뒤쪽 포함, 범위 밖 제외)', () => {
+  it('영등 폭풍: 반경 350 마법 390 + 넉백 200 + 감속 50% 4초 (뒤쪽 포함, 범위 밖 제외)', () => {
     const b = possess('yeongdeungWind');
     const a = foe(b, 'geuseundae', 100);
     const back = foe(b, 'geuseundae', -100);
     const edge = foe(b, 'geuseundae', 364); // 350
     const out = foe(b, 'geuseundae', 370);
     b.castSkill('bladeDance');
-    expect([lost(a), lost(back), lost(edge), lost(out)]).toEqual([260, 260, 260, 0]);
+    expect([lost(a), lost(back), lost(edge), lost(out)]).toEqual([390, 390, 390, 0]);
     expect([a.x, back.x, out.x]).toEqual([HX + 300, HX + 100, HX + 370]);
     expect(a.status!.slowRatio).toBeCloseTo(0.5);
     expect(out.status!.slowed).toBe(false);

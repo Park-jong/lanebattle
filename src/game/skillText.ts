@@ -2,7 +2,7 @@
 import type { BuffValues } from '../data/abilities';
 import { getAllyDef } from '../data/allies';
 import {
-  POSSESSION_COMMON, possessionSkillsOf, type PossessionArea, type PossessionEffect, type PossessionHitEffects,
+  POSSESSION_COMMON, POSSESSION_TUNING, possessionSkillsOf, type PossessionArea, type PossessionEffect, type PossessionHitEffects,
 } from '../data/possession';
 import { getSkill, SKILL_EFFECTS, type SkillId } from '../data/skills';
 import type { AttackType, Tag } from '../data/types';
@@ -101,13 +101,13 @@ function areaText(area: PossessionArea): string {
 /** 맞은 적에게 일어나는 일 (피해·화상·기절·넉백 ...) */
 function hitText(fx: PossessionHitEffects): string {
   const parts: string[] = [];
-  if (fx.damage) parts.push(`피해 ${fmt(fx.damage)}`);
-  if (fx.burnPerSec) parts.push(`화상 초당 ${fmt(fx.burnPerSec)}`);
+  if (fx.damage) parts.push(`피해 ${fmt(fx.damage * POSSESSION_TUNING.damageMultiplier)}`);
+  if (fx.burnPerSec) parts.push(`화상 초당 ${fmt(fx.burnPerSec * POSSESSION_TUNING.burnMultiplier)}`);
   if (fx.stun) parts.push(`기절·붙잡기 ${fmt(fx.stun)}초`);
   if (fx.knockback) parts.push(`넉백 ${fmt(fx.knockback)}`);
   if (fx.slow) parts.push(`감속 ${pct(fx.slow.ratio)} ${fmt(fx.slow.duration)}초`);
   if (fx.defenseBreak) parts.push(fx.defenseBreak === 'max' ? '방어 파괴 최대 중첩' : `방어 파괴 ${fx.defenseBreak}중첩`);
-  if (fx.collision) parts.push(`밀려난 적이 부딪힌 적도 피해 ${fmt(fx.collision)}`);
+  if (fx.collision) parts.push(`밀려난 적이 부딪힌 적도 피해 ${fmt(fx.collision * POSSESSION_TUNING.damageMultiplier)}`);
   if (fx.healOnKill) parts.push(`처치 1마리당 체력 ${pct(fx.healOnKill)} 회복`);
   if (fx.flyingMultiplier) parts.push(`비행 적에게 ×${fmt(fx.flyingMultiplier)}`);
   return `${parts.join(' + ')} (${TYPE_NAMES[fx.type]})`;
@@ -129,7 +129,7 @@ function effectText(e: PossessionEffect): string {
     case 'charge':
       return `앞으로 ${fmt(e.distance)} 돌진, 지나간 길의 적: ${hitText(e.hit)}`;
     case 'repeat': {
-      const total = e.hit.damage ? ` (피해 총 ${fmt(e.hit.damage * e.times)})` : '';
+      const total = e.hit.damage ? ` (피해 총 ${fmt(e.hit.damage * POSSESSION_TUNING.damageMultiplier * e.times)})` : '';
       return `${fmt(e.interval)}초 간격 ${e.times}회, ${areaText(e.hit.area)}: ${hitText(e.hit)}${total}`;
     }
     case 'summon':

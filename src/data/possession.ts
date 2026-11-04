@@ -10,10 +10,22 @@ export const POSSESSION_SLOTS: readonly SkillId[] = ['fanWind', 'blessing', 'bla
 
 /** 빙의 스킬 공통 신력 비용과 쿨타임(초) */
 export const POSSESSION_COMMON: Readonly<Record<SkillId, { spiritCost: number; cooldown: number }>> = {
-  fanWind: { spiritCost: 12, cooldown: 3.6 },
-  blessing: { spiritCost: 16, cooldown: 7.2 },
-  bladeDance: { spiritCost: 32, cooldown: 24 },
+  fanWind: { spiritCost: 12, cooldown: 2.4 },
+  blessing: { spiritCost: 16, cooldown: 4.8 },
+  bladeDance: { spiritCost: 32, cooldown: 16 },
 };
+
+/** 빙의 상향 배율 (스킬 표의 기준값에 실행 시점에 곱한다). 값 하나로 전체를 조정한다 */
+export interface PossessionTuning {
+  /** 빙의 스킬 피해(즉발·돌진·연속 타격·충돌) */
+  damageMultiplier: number;
+  /** 빙의 스킬이 거는 화상 초당 피해 (기본 공격의 유닛 화상은 해당 없음) */
+  burnMultiplier: number;
+  /** 빙의 중 영웅 기본 공격력 (방울 단련 배율 적용 후 곱한다) */
+  basicAttackMultiplier: number;
+}
+
+export const POSSESSION_TUNING: PossessionTuning = { damageMultiplier: 1.5, burnMultiplier: 1.5, basicAttackMultiplier: 1.5 };
 
 /** "가장 가까운 적 N명" 계열이 닿는 최대 거리 (문서에 없어 정한 값) */
 export const NEAREST_REACH = 400;

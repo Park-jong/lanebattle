@@ -1,6 +1,6 @@
 import { getAbility, type AbilityDef, type BuffValues } from '../data/abilities';
 import { HERO } from '../data/hero';
-import { NEAREST_REACH, type PossessionArea, type PossessionEffect, type PossessionHitEffects, type PossessionSkillDef } from '../data/possession';
+import { NEAREST_REACH, POSSESSION_TUNING, type PossessionTuning, type PossessionArea, type PossessionEffect, type PossessionHitEffects, type PossessionSkillDef } from '../data/possession';
 import { STATUS } from '../data/status';
 import type { AllyDef, AttackType, Tag } from '../data/types';
 import type { AttackInfo } from './damage';
@@ -86,7 +86,11 @@ const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.m
  */
 export class PossessionSkillRunner {
   /** tags: 영웅 태그 + 유닛 태그 (공격 정보와 면역·화상 판정에 쓴다) */
-  constructor(private readonly host: PossessionHost, private readonly tags: readonly Tag[]) {}
+  constructor(
+    private readonly host: PossessionHost,
+    private readonly tags: readonly Tag[],
+    private readonly tuning: PossessionTuning = POSSESSION_TUNING,
+  ) {}
 
   /** 스킬을 실행하고 화면 이펙트용 모양을 돌려준다 (돌진이면 출발 지점 기준) */
   run(skill: PossessionSkillDef): CastShape {
@@ -241,11 +245,11 @@ export class PossessionSkillRunner {
     for (const t of targets) {
       if (!t.alive) continue;
       if (fx.damage) {
-        host.dealFixedDamage(t, fx.damage * (t.flying ? (fx.flyingMultiplier ?? 1) : 1), info);
+        host.dealFixedDamage(t, fx.damage * this.tuning.damageMultiplier * (t.flying ? (fx.flyingMultiplier ?? 1) : 1), info);
         if (!t.alive) kills++;
       }
       if (!t.alive || t.isImmuneTo(this.tags)) continue;
-      if (burning) host.applyBurn(t, fx.burnPerSec!);
+      if (burning) host.applyBurn(t, fx.burnPerSec! * this.tuning.burnMultiplier);
       if (fx.stun) host.applyStun(t, fx.stun);
       if (fx.slow) host.applySlow(t, fx.slow.ratio, fx.slow.duration);
       if (fx.defenseBreak) {
@@ -255,7 +259,7 @@ export class PossessionSkillRunner {
       if (fx.knockback) {
         const from = t.x;
         host.knockback(t, fx.knockback);
-        if (fx.collision) host.collideEnemies(t, from, fx.collision, info, collided);
+        if (fx.collision) host.collideEnemies(t, from, fx.collision * this.tuning.damageMultiplier, info, collided);
       }
     }
     if (fx.healOnKill && kills > 0) host.hero.heal(host.hero.maxHp * fx.healOnKill * kills);

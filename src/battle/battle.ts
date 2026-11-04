@@ -3,7 +3,7 @@ import { BOSS_RULES, getBossById } from '../data/bosses';
 import { COMBAT } from '../data/combat';
 import { HERO } from '../data/hero';
 import { getSkill, SKILL_EFFECTS, type SkillId } from '../data/skills';
-import { POSSESSION_COMMON, possessionSkillsOf, type PossessionSkillSet } from '../data/possession';
+import { POSSESSION_COMMON, POSSESSION_TUNING, possessionSkillsOf, type PossessionSkillSet } from '../data/possession';
 import { RESOURCES } from '../data/resources';
 import { getAbility, type AbilityDef } from '../data/abilities';
 import type { AllyDef, AttackType, EnemyTrait, Tag } from '../data/types';
@@ -564,9 +564,10 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
     );
   }
 
-  /** 방울 단련을 반영한 영웅 기본 공격력 */
+  /** 방울 단련을 반영한 영웅 기본 공격력 (빙의 중이면 상향 배율을 곱한다. 각성 충격파도 이 값 기준) */
   private get heroBaseDamage(): number {
-    return HERO.attack.damage * this.mods.hero.attackMultiplier;
+    const possession = this.heroForm ? POSSESSION_TUNING.basicAttackMultiplier : 1;
+    return HERO.attack.damage * this.mods.hero.attackMultiplier * possession;
   }
 
   /** 무당 각성: 영웅 주변 반경 안 땅 위의 적 모두에게 근접·영웅 태그 피해 (공격력 배율 적용) */
