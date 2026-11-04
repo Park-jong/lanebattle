@@ -3,9 +3,10 @@ import { BOSS_RULES, getBossById } from '../data/bosses';
 import { COMBAT } from '../data/combat';
 import { HERO } from '../data/hero';
 import { getSkill, SKILL_EFFECTS, type SkillId } from '../data/skills';
+import { POSSESSION_COMMON, possessionSkillsOf, type PossessionSkillSet } from '../data/possession';
 import { RESOURCES } from '../data/resources';
 import { getAbility, type AbilityDef } from '../data/abilities';
-import type { AllyDef, EnemyTrait } from '../data/types';
+import type { AllyDef, AttackType, EnemyTrait, Tag } from '../data/types';
 import { ALL_SYNERGY_IDS, type SynergyId } from '../data/synergy';
 import { TimedAbilities, type AbilityHost } from './abilities';
 import { BossEncounter, type BossHost } from './boss';
@@ -15,6 +16,7 @@ import { Base, Body, Fighter, Projectile, type ProjectilePayload } from './entit
 import type { AuraDef, BuffEffect } from './status';
 import { createEnemy } from './enemyFactory';
 import { Hero } from './hero';
+import { buildHeroForm, PossessionSkillRunner, type HeroForm, type PossessionHost } from './possession';
 import { noModifiers, type BattleModifiers } from './modifiers';
 import { MathRng, type Rng } from './rng';
 import { Resources } from './resources';
@@ -80,7 +82,7 @@ export interface StepInput {
 }
 
 /** Phaser에 의존하지 않는 전투 시뮬레이션 */
-export class Battle implements AbilityHost, BossHost {
+export class Battle implements AbilityHost, BossHost, PossessionHost {
   readonly stage: number;
   readonly resources: Resources;
   readonly hero: Hero;
@@ -106,6 +108,13 @@ export class Battle implements AbilityHost, BossHost {
   /** 불가사리 각성: 갑옷 적 처치로 쌓인 공격력 중첩 (그 판 동안) */
   private armorKillStacks = 0;
   private auras: { owner: Body; def: AuraDef }[] = [];
+  /** 빙의 스킬의 오라형 버프: 영웅 중심, 남은 시간이 다하면 사라진다 */
+  private timedAuras: { def: AuraDef; remaining: number }[] = [];
+  /** 빙의한 영웅의 기본 공격 방식 (빙의 없으면 null) */
+  readonly heroForm: HeroForm | null;
+  /** 빙의 유닛의 스킬 3개. 빙의가 없거나 아직 스킬이 없는 유닛(준비 중)이면 null = 기본 무당 스킬 */
+  private readonly possessionSkills: PossessionSkillSet | null;
+  private readonly possessionRunner: PossessionSkillRunner | null;
   private readonly rng: Rng;
   private readonly skillCooldowns = new SkillCooldowns();
   private castEvents: SkillCastEvent[] = [];
@@ -132,6 +141,12 @@ export class Battle implements AbilityHost, BossHost {
       maxSpiritBonus: mods.hero.maxSpiritBonus,
     });
     this.hero = new Hero(HERO.maxHp * mods.hero.hpMultiplier, mods.hero.reviveReduction);
+    const possessedIndex = ALLIES.findIndex((d) => d.id === mods.hero.possession);
+    this.heroForm =
+      possessedIndex >= 0 ? buildHeroForm(this.allyDefs[possessedIndex], this.allyAbilities.get(ALLIES[possessedIndex].id)!) : null;
+    this.hero.possessedId = this.heroForm?.unitId ?? null;
+    this.possessionSkills = this.heroForm ? possessionSkillsOf(this.heroForm.unitId) : null;
+    this.possessionRunner = this.possessionSkills ? new PossessionSkillRunner(this, this.heroForm!.tags) : null;
     this.synergy = new SynergyEngine([...new Set([...(options.synergies ?? []), ...mods.synergies])]);
     this.timedAbilities = new TimedAbilities(this);
     this.director = new WaveDirector(this.stage, rng);
@@ -166,7 +181,8 @@ export class Battle implements AbilityHost, BossHost {
   /** 살아 있는 오라의 위치와 반경 (화면 표시용) */
   get auraCircles(): { x: number; radius: number }[] {
     if (this.allyAurasSuppressed) return [];
-    return this.auras.filter((a) => a.owner.alive).map((a) => ({ x: a.owner.x, radius: a.def.radius }));
+    const timed = this.hero.alive ? this.timedAuras.map((a) => ({ x: this.hero.x, radius: a.def.radius })) : [];
+    return [...this.auras.filter((a) => a.owner.alive).map((a) => ({ x: a.owner.x, radius: a.def.radius })), ...timed];
   }
 
   /** 위협 단계: 30초마다 +1 (1부터) */
@@ -241,8 +257,24 @@ export class Battle implements AbilityHost, BossHost {
 
   /** 업그레이드를 반영한 스킬 쿨타임 전체 길이(초) */
   skillCooldownMax(id: SkillId): number {
+    if (this.possessionSkills) return POSSESSION_COMMON[id].cooldown; // 신내림 등 무당 쿨타임 감소는 적용하지 않는다
     const base = getSkill(id).cooldown;
     return id === 'bladeDance' ? base * this.mods.skills.bladeDance.cooldownMultiplier : base;
+  }
+
+  /** 지금 스킬 슬롯의 신력 비용 (빙의 스킬이면 빙의 공통 비용) */
+  skillSpiritCost(id: SkillId): number {
+    return this.possessionSkills ? POSSESSION_COMMON[id].spiritCost : getSkill(id).spiritCost;
+  }
+
+  /** 지금 스킬 슬롯의 이름 (빙의 스킬이면 빙의 스킬 이름) */
+  skillName(id: SkillId): string {
+    return this.possessionSkills ? this.possessionSkills[id].name : getSkill(id).name;
+  }
+
+  /** 빙의 스킬을 쓰는 중인가 (빙의했고 그 유닛의 스킬이 준비돼 있을 때) */
+  get possessionSkillsActive(): boolean {
+    return this.possessionSkills !== null;
   }
 
   /** 남은 스킬 쿨타임(초) */
@@ -265,18 +297,26 @@ export class Battle implements AbilityHost, BossHost {
   /** 영웅 스킬 사용. 실패하면 신력·쿨타임을 쓰지 않는다 */
   castSkill(id: SkillId): CastResult {
     if (this.result !== 'playing') return 'ended';
-    let def;
     try {
-      def = getSkill(id);
+      getSkill(id);
     } catch {
       return 'invalidSkill';
     }
     if (!this.hero.alive) return 'heroDead';
     if (this.hero.status?.stunned) return 'stunned';
     if (this.skillCooldowns.get(id) > 0) return 'cooldown';
-    if (!this.resources.spendSpirit(def.spiritCost)) return 'noSpirit';
+    if (!this.resources.spendSpirit(this.skillSpiritCost(id))) return 'noSpirit';
     this.skillCooldowns.start(id, this.skillCooldownMax(id));
-    this.castEvents.push({ id, x: this.hero.x, facing: this.hero.facing, range: this.skillRange(id) });
+    const possessed = this.possessionSkills?.[id];
+    if (possessed && this.possessionRunner && this.heroForm) {
+      const shape = this.possessionRunner.run(possessed);
+      this.castEvents.push({
+        id, ...shape, facing: this.hero.facing,
+        possessed: { unitId: this.heroForm.unitId, tint: this.heroForm.unitTags[0] ?? 'hero' },
+      });
+      return 'ok';
+    }
+    this.castEvents.push({ id, x: this.hero.x, facing: this.hero.facing, range: this.skillRange(id), shape: id === 'fanWind' ? 'fan' : 'circle' });
     if (id === 'fanWind') this.castFanWind();
     else if (id === 'blessing') this.castBlessing();
     else this.castBladeDance();
@@ -358,6 +398,31 @@ export class Battle implements AbilityHost, BossHost {
     this.skillDots = this.skillDots.filter((d) => d.remaining > 1e-9);
   }
 
+  // ----- 빙의 스킬 실행기가 쓰는 동작 -----
+
+  /** 아군 상한을 지켜 부적 없이 소환한다. 실제 소환 수를 돌려준다 */
+  spawnFreeAllies(unitId: string, count: number): number {
+    const def = this.allyDefs.find((d) => d.id === unitId);
+    if (!def) return 0;
+    const n = Math.max(0, Math.min(count, COMBAT.maxAllies - this.allies.length));
+    for (let i = 0; i < n; i++) this.spawnAlly(def, COMBAT.allySpawnX + i * COMBAT.summonSpread);
+    return n;
+  }
+
+  /** 영웅 중심 오라형 버프를 duration초 동안 건다 */
+  addTimedAura(radius: number, effect: BuffEffect, duration: number): void {
+    this.timedAuras.push({ def: { radius, effect }, remaining: duration });
+  }
+
+  healShrine(amount: number): void {
+    this.shrine.heal(amount);
+  }
+
+  /** delay초 뒤에 실행한다 (전투 시간 기준) */
+  schedule(delay: number, run: () => void): void {
+    this.delayed.push({ remaining: delay, run });
+  }
+
   /** 기운 모으기 */
   gather(): boolean {
     return this.result === 'playing' && this.resources.gather();
@@ -391,7 +456,7 @@ export class Battle implements AbilityHost, BossHost {
     this.refreshCastleShield();
     this.skillCooldowns.step(dt); // 영웅이 죽어 있어도 줄어든다
     this.hero.update(dt, input.moveDir);
-    this.applyAuras();
+    this.applyAuras(dt);
     this.synergy.update(this.allies, this.livingHero, dt);
     this.timedAbilities.update(dt);
     this.tickStatuses(dt);
@@ -454,18 +519,49 @@ export class Battle implements AbilityHost, BossHost {
     return [...this.allies, ...(this.hero.alive ? [this.hero] : []), this.shrine];
   }
 
+  /** 영웅 공격 정보의 태그: 영웅 + (빙의 중이면) 그 유닛의 태그 */
+  private get heroTags(): readonly Tag[] {
+    return this.heroForm?.tags ?? HERO.attack.tags;
+  }
+
   private heroAttack(): void {
     if (!this.hero.attackReady) return;
     const status = this.hero.status!;
-    const target = this.findTarget('ally', this.hero.x, HERO.attack.range, HERO.attack.type === 'melee');
+    const form = this.heroForm;
+    const type: AttackType = form?.attackType ?? HERO.attack.type;
+    const range = form?.range ?? HERO.attack.range;
+    const target = this.findTarget('ally', this.hero.x, range, type === 'melee');
     if (!target) return;
     this.hero.attackCooldown = HERO.attack.interval / (1 + status.attackSpeedBonus);
     this.hero.markAttack(target.x);
-    const info: AttackInfo = { type: HERO.attack.type, tags: HERO.attack.tags, source: 'hero' };
-    this.strike(target, { attacker: this.hero, base: this.heroBaseDamage, info, attackBonus: status.attackBonus, burnPerSec: 0 });
+    if (!form) {
+      const info: AttackInfo = { type, tags: this.heroTags, source: 'hero' };
+      this.strike(target, { attacker: this.hero, base: this.heroBaseDamage, info, attackBonus: status.attackBonus, burnPerSec: 0 });
+    } else this.heroFormAttack(form, target);
     this.resources.addSpirit(RESOURCES.spirit.perHeroHit);
     const awakening = this.mods.hero.awakening;
     if (awakening && ++this.heroAttackCount % awakening.everyNth === 0) this.heroShockwave(awakening);
+  }
+
+  /**
+   * 빙의 기본 공격: 공격력·간격은 영웅 값, 유형·사거리·적중 효과(화상·방어 파괴·범위·비행 배율)는 유닛을 따른다.
+   * 원거리·마법이면 투사체를 쏜다
+   */
+  private heroFormAttack(form: HeroForm, target: Body): void {
+    const attackBonus = this.hero.status!.attackBonus;
+    const multiplier = form.flyingMultiplier > 1 && this.hasTraitFor(target, 'flying') ? form.flyingMultiplier : 1;
+    if (form.attackType === 'melee') {
+      const info: AttackInfo = { type: 'melee', tags: form.tags, source: 'hero', defenseBreak: form.defenseBreak ? true : undefined };
+      this.strike(target, { attacker: this.hero, base: this.heroBaseDamage, info, attackBonus, burnPerSec: form.burnPerSec, multiplier });
+      if (form.defenseBreak) this.applyDefenseBreak(target, form.defenseBreak.maxStacks);
+      return;
+    }
+    this.projectiles.push(
+      new Projectile('ally', this.hero.x, target, this.heroBaseDamage, COMBAT.projectileSpeed, form.attackType, {
+        tags: form.tags, source: 'hero', attackBonus, burnPerSec: form.burnPerSec, areaRadius: form.areaRadius,
+        attacker: this.hero, multiplier,
+      }),
+    );
   }
 
   /** 방울 단련을 반영한 영웅 기본 공격력 */
@@ -475,7 +571,7 @@ export class Battle implements AbilityHost, BossHost {
 
   /** 무당 각성: 영웅 주변 반경 안 땅 위의 적 모두에게 근접·영웅 태그 피해 (공격력 배율 적용) */
   private heroShockwave(awakening: NonNullable<BattleModifiers['hero']['awakening']>): void {
-    const info: AttackInfo = { type: 'melee', tags: ['hero'], source: 'hero' };
+    const info: AttackInfo = { type: 'melee', tags: this.heroTags, source: 'hero' };
     const base = this.heroBaseDamage * awakening.attackMultiplier;
     const attackBonus = this.hero.status!.attackBonus;
     for (const e of [...this.enemies]) {
@@ -581,7 +677,17 @@ export class Battle implements AbilityHost, BossHost {
    * 가장 먼저 닿는 다른 적과 부딪혀 둘 다 고정 피해를 입는다. 밀려나지 않았으면(보스 등) 충돌 없음.
    */
   private collide(f: Fighter, thrown: Body, from: number, damage: number): void {
-    const dir = f.direction;
+    const info: AttackInfo = { type: 'melee', tags: f.stats.tags, source: 'ally' };
+    this.collideAlong(f.direction, thrown, from, damage, info);
+  }
+
+  /** 밀려난 적이 길 위의 다른 적과 부딪히는 판정 (영웅 스킬은 적이 항상 성 쪽으로 밀리므로 dir = 1) */
+  collideEnemies(thrown: Body, from: number, damage: number, info: AttackInfo, collided?: Set<Body>): void {
+    this.collideAlong(1, thrown, from, damage, info, collided);
+  }
+
+  /** collided: 이번 시전에서 이미 충돌 피해를 받은 대상 (있으면 한 번만 받는다) */
+  private collideAlong(dir: 1 | -1, thrown: Body, from: number, damage: number, info: AttackInfo, collided?: Set<Body>): void {
     const travelled = (thrown.x - from) * dir;
     if (travelled <= 0) return;
     const reach = travelled + thrown.radius;
@@ -596,9 +702,11 @@ export class Battle implements AbilityHost, BossHost {
       }
     }
     if (!hit) return;
-    const info: AttackInfo = { type: 'melee', tags: f.stats.tags, source: 'ally' };
-    this.resolveHit(thrown, damage, info, {});
-    this.resolveHit(hit, damage, info, {});
+    for (const b of [thrown, hit]) {
+      if (collided?.has(b)) continue;
+      collided?.add(b);
+      this.resolveHit(b, damage, info, {});
+    }
   }
 
   private updateProjectiles(dt: number): void {
@@ -836,11 +944,22 @@ export class Battle implements AbilityHost, BossHost {
   }
 
   /** 오라: 매 틱 이전 오라 효과를 지우고 살아 있는 소유자 주변 아군에게 다시 건다 */
-  private applyAuras(): void {
+  private applyAuras(dt: number): void {
     for (const b of this.statusBodies()) b.status!.clearAuraEffects();
+    for (const a of this.timedAuras) a.remaining -= dt;
+    this.timedAuras = this.timedAuras.filter((a) => a.remaining > 1e-9);
+    // 소유자(영웅 포함)가 버프 해제 중이면 오라를 내보내지 않는다
+    if (this.hero.alive && !this.allyAurasSuppressed && !this.hero.status!.buffsDisabled) {
+      for (const { def } of this.timedAuras) {
+        for (const b of [...this.allies, this.hero]) {
+          if (b.alive && Math.abs(b.x - this.hero.x) <= def.radius) b.status!.addAuraEffect(def.effect);
+        }
+      }
+    }
     this.auras = this.auras.filter((a) => a.owner.alive);
     for (const { owner, def } of this.auras) {
       if (this.allyAurasSuppressed && owner.team === 'ally') continue;
+      if (owner.status!.buffsDisabled) continue;
       const pool = owner.team === 'ally' ? [...this.allies, ...(this.hero.alive ? [this.hero] : [])] : this.enemies;
       for (const b of pool) {
         if (b.alive && Math.abs(b.x - owner.x) <= def.radius) b.status!.addAuraEffect(def.effect);

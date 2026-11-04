@@ -6,7 +6,7 @@ import { ALL_SYNERGY_IDS } from '../data/synergy';
 import { computeBuildEffects } from '../game/buildEffects';
 import type { BuildLevels } from '../game/build';
 import { Battle, type BattleOptions } from './battle';
-import type { Fighter } from './entities';
+import { Projectile, type Fighter } from './entities';
 import { Hero } from './hero';
 import { SeededRng, type Rng } from './rng';
 
@@ -505,6 +505,41 @@ describe('요괴 삼족오', () => {
   });
 });
 
+describe('오라 소유자 버프 해제', () => {
+  /** 삼족오(500)와 방망이병(600)을 제자리에 두고 n초 진행 */
+  const hold = (b: Battle, list: Fighter[], seconds: number) => {
+    const xs = list.map((a) => a.x);
+    for (let t = 0; t < seconds - 1e-9; t += 0.05) {
+      b.step(0.05);
+      list.forEach((a, i) => (a.x = xs[i]));
+    }
+  };
+
+  it('저승사자 해제를 받은 삼족오 주변 아군의 공격력 오라가 사라지고 3초 뒤 복구된다', () => {
+    const b = newBattle();
+    const sam = ally(b, 'samjokgo', 500);
+    const near = ally(b, 'clubGoblin', 600);
+    hold(b, [sam, near], 0.05);
+    expect(near.status!.attackBonus).toBeCloseTo(0.2);
+    b.dispelBuffs(sam, 3);
+    hold(b, [sam, near], 1);
+    expect(near.status!.attackBonus).toBe(0);
+    hold(b, [sam, near], 2.2);
+    expect(near.status!.attackBonus).toBeCloseTo(0.2);
+  });
+
+  it('소유자가 아닌 대상만 해제되면 그 대상만 오라를 못 받는다', () => {
+    const b = newBattle();
+    const sam = ally(b, 'samjokgo', 500);
+    const hit = ally(b, 'clubGoblin', 600);
+    const other = ally(b, 'clubGoblin', 650);
+    b.dispelBuffs(hit, 3);
+    hold(b, [sam, hit, other], 0.1);
+    expect(hit.status!.attackBonus).toBe(0);
+    expect(other.status!.attackBonus).toBeCloseTo(0.2);
+  });
+});
+
 describe('요괴 까치 떼', () => {
   it('② 핵심: 소환 시 2무리, 비용은 한 번만, 아군 상한 준수', () => {
     const b = newBattle({ magpieFlockCore: 1 });
@@ -732,5 +767,73 @@ describe('W1: 시전 이벤트에 실제 범위', () => {
     up.castSkill('fanWind');
     up.castSkill('blessing');
     expect(up.drainCastEvents().map((e) => e.range)).toEqual([300, 300]);
+  });
+});
+
+describe('버프 해제와 오라 소유자', () => {
+  /** 적 투사체 하나를 대상에게 쏘고 한 틱 진행한 뒤 피해를 받았는지 */
+  function shotHits(b: Battle, target: Fighter): boolean {
+    const before = target.hp;
+    b.projectiles.push(
+      new Projectile('enemy', target.x + 5, target as never, 10, 420, 'ranged', {
+        tags: [],
+        source: 'enemy',
+        attackBonus: 0,
+        burnPerSec: 0,
+        areaRadius: 0,
+      }),
+    );
+    b.step(0.05);
+    return target.hp < before;
+  }
+
+  it('영등 오라 소유자가 해제 중이면 빗나감이 없고, 해제가 풀리면 다시 빗나간다 (주입 RNG 0.2)', () => {
+    const b = newBattle({}, { rng: constRng(0.2) });
+    const wind = ally(b, 'yeongdeungWind', 500);
+    const club = ally(b, 'clubGoblin', 520);
+    for (const a of [wind, club]) a.status!.stun(10000, false);
+    club.hp = club.maxHp = BIG_HP;
+    expect(shotHits(b, club)).toBe(false); // 기본 25% 안이라 빗나감
+    b.dispelBuffs(wind, 3);
+    expect(shotHits(b, club)).toBe(true);
+    b.step(3.1);
+    expect(shotHits(b, club)).toBe(false);
+  });
+
+  it('해태 ③ 오라와 연계 3종은 해태 해제 중에 꺼지고, 해제 후 복구된다', () => {
+    const b = newBattle({ haetaeAwaken: 1, guardFormation: 1, divineBlessing: 1, guardianVowII: 1 });
+    const haetae = ally(b, 'haetae', 500);
+    const club = ally(b, 'clubGoblin', 560);
+    const archer = ally(b, 'foxfireArcher', 450);
+    for (const a of [haetae, club, archer]) a.status!.stun(10000, false);
+    b.step(0.05);
+    const clubReduction = club.status!.damageReduction;
+    const archerReduction = archer.status!.damageReduction;
+    expect(clubReduction).toBeCloseTo(0.2); // 정의의 수호 오라
+    expect(archerReduction).toBeCloseTo(0.5); // 오라 0.2 + 수호 진형 0.3
+    expect(club.maxHp).toBeCloseTo(156); // 신수의 축복
+
+    b.dispelBuffs(haetae, 5);
+    club.hp = 60;
+    b.step(1);
+    expect(club.status!.damageReduction).toBe(0);
+    expect(archer.status!.damageReduction).toBe(0);
+    expect(club.maxHp).toBe(120);
+    expect(club.hp).toBe(60); // 수호의 맹세 Ⅱ 회복도 없음
+
+    b.step(4.2);
+    expect(club.status!.damageReduction).toBeCloseTo(clubReduction);
+    expect(archer.status!.damageReduction).toBeCloseTo(archerReduction);
+    expect(club.maxHp).toBeCloseTo(156);
+    expect(club.hp).toBeGreaterThan(60);
+  });
+
+  it('차사왕 생존 중 오라 무효: 해태 오라와 연계가 모두 꺼진다', () => {
+    const b = newBattle({ haetaeAwaken: 1, guardFormation: 1 });
+    ally(b, 'haetae', 500);
+    const archer = ally(b, 'foxfireArcher', 450);
+    b.setAllyBonusesSuppressed(true);
+    b.step(0.05);
+    expect(archer.status!.damageReduction).toBe(0);
   });
 });

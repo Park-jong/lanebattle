@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { ALLIES } from '../data/allies';
+import type { Tag } from '../data/types';
 import { COMBAT } from '../data/combat';
 import { HERO } from '../data/hero';
 import { SKILLS, type SkillId } from '../data/skills';
@@ -29,7 +30,7 @@ import { DamageFloaters } from './DamageFloaters';
 import { floaterStyle } from './floaterStyle';
 import { HudButton } from './HudButton';
 import { KEY_MAP, KeyInput, skillIndexOf, summonIndexOf } from './input';
-import { describeSkill, skillStatus } from '../game/skillText';
+import { describePossessionSkill, describeSkill, skillStatus } from '../game/skillText';
 import { describeUnit, summonStatus } from '../game/unitText';
 import { Tooltip } from './Tooltip';
 import { addArtImage, CharacterRenderer } from '../render/CharacterRenderer';
@@ -48,8 +49,14 @@ interface CastFx {
   x: number;
   facing: 1 | -1;
   range: number;
+  shape: 'fan' | 'circle';
+  /** 빙의 스킬이면 이펙트 색을 정하는 유닛 태그 */
+  tint?: Tag;
   age: number;
 }
+
+/** 빙의 표시 색 (금색) */
+const POSSESSION_GOLD = 0xffd84a;
 
 /** 전투 상태를 도형으로 그리고 입력만 전달하는 씬 */
 export class BattleScene extends Phaser.Scene {
@@ -96,6 +103,8 @@ export class BattleScene extends Phaser.Scene {
   private castleText!: Phaser.GameObjects.Text;
   private infoText!: Phaser.GameObjects.Text;
   private noteText!: Phaser.GameObjects.Text;
+  /** 영웅 머리 위 "빙의: ○○" 이름표 (빙의했을 때만 만든다) */
+  private possessionLabel?: Phaser.GameObjects.Text;
   /** 이번 전투에 적용하는 빌드 효과 (사용 중인 빌드 또는 ?upg=) */
   private modifiers!: BattleModifiers;
   private keyInput!: KeyInput;
@@ -152,6 +161,7 @@ export class BattleScene extends Phaser.Scene {
     this.hud = this.add.graphics().setScrollFactor(0).setDepth(90);
     this.floaters = new DamageFloaters(this);
     this.createHudTexts();
+    this.createPossessionLabel();
     addTestBadge(this);
     this.createBossUi();
     this.createButtons();
@@ -175,6 +185,18 @@ export class BattleScene extends Phaser.Scene {
     this.castleText = inBar(L.castleBar);
     this.infoText = small(L.infoText, 12, '#cfd6ee');
     this.noteText = small(L.noteText, 12, '#ffd166');
+  }
+
+  /** 빙의 중이면 영웅 머리 위에 금색 이름표를 둔다 */
+  private createPossessionLabel(): void {
+    const form = this.battle.heroForm;
+    this.possessionLabel = undefined;
+    if (!form) return;
+    this.possessionLabel = this.add
+      .text(0, 0, `빙의: ${form.name}`, {
+        fontFamily: HUD_FONT, fontSize: '12px', fontStyle: 'bold', color: '#ffe48a', backgroundColor: '#1b1e33cc', padding: { x: 4, y: 1 },
+      })
+      .setOrigin(0.5, 1).setDepth(60);
   }
 
   /** 보스 이름·상태·연출 글자와 성 무적 표시 (처음엔 숨김) */
@@ -294,10 +316,10 @@ export class BattleScene extends Phaser.Scene {
       const def = SKILLS[hover.index];
       const status = skillStatus({
         heroAlive: b.hero.alive, stunned: !!b.hero.status?.stunned, cooldown: b.skillCooldown(def.id),
-        spirit: b.resources.spirit, spiritCost: def.spiritCost,
+        spirit: b.resources.spirit, spiritCost: b.skillSpiritCost(def.id),
       });
       if (this.tooltipShown !== key) {
-        this.tooltip.show(L.skills[hover.index], describeSkill(def.id, this.modifiers), status);
+        this.tooltip.show(L.skills[hover.index], this.skillTooltip(def.id), status);
         this.tooltipShown = key;
       } else this.tooltip.setStatus(status);
       return;
@@ -313,6 +335,17 @@ export class BattleScene extends Phaser.Scene {
       this.tooltip.show(L.summon[hover.index], describeUnit(def.id, this.modifiers, keyLabel), status);
       this.tooltipShown = key;
     } else this.tooltip.setStatus(status);
+  }
+
+  /** 스킬 툴팁 문구: 빙의 스킬이 있으면 그것, 빙의했지만 스킬이 준비 중이면 기본 스킬 + 안내 */
+  private skillTooltip(id: SkillId) {
+    const b = this.battle;
+    const unitId = b.hero.possessedId;
+    const possessed = unitId && b.possessionSkillsActive ? describePossessionSkill(unitId, id) : null;
+    if (possessed) return possessed;
+    const text = describeSkill(id, this.modifiers);
+    if (b.heroForm) text.lines.push(`빙의: ${b.heroForm.name} - 빙의 스킬 준비 중이라 기본 무당 스킬을 씁니다.`);
+    return text;
   }
 
   /** 키보드와 화면 ◀ ▶ 버튼을 합친 이동 방향 (-1, 0, 1) */
@@ -531,7 +564,7 @@ export class BattleScene extends Phaser.Scene {
           onHoverOut: () => { if (this.hover?.kind === 'skill' && this.hover.index === i) this.hover = null; },
         },
       );
-      btn.setTexts(`${KEY_MAP.skills[i].slice(3)} ${def.name}`, `신력 ${def.spiritCost}`);
+      btn.setTexts(`${KEY_MAP.skills[i].slice(3)} ${this.battle.skillName(def.id)}`, `신력 ${this.battle.skillSpiritCost(def.id)}`);
       this.skillButtons.push(btn);
     });
     this.gatherButton = new HudButton(
@@ -553,19 +586,19 @@ export class BattleScene extends Phaser.Scene {
     });
     SKILLS.forEach((def, i) => {
       const cd = b.skillCooldown(def.id);
-      const enabled =
-        b.result === 'playing' && cd <= 0 && b.hero.alive && !b.hero.status?.stunned && b.resources.spirit >= def.spiritCost;
-      const sub = cd > 0 ? `${cd.toFixed(1)}s` : `신력 ${def.spiritCost}`;
-      this.skillButtons[i].setTexts(`${KEY_MAP.skills[i].slice(3)} ${def.name}`, sub);
+      const cost = b.skillSpiritCost(def.id);
+      const enabled = b.result === 'playing' && cd <= 0 && b.hero.alive && !b.hero.status?.stunned && b.resources.spirit >= cost;
+      const sub = cd > 0 ? `${cd.toFixed(1)}s` : `신력 ${cost}`;
+      this.skillButtons[i].setTexts(`${KEY_MAP.skills[i].slice(3)} ${b.skillName(def.id)}`, sub);
       this.skillButtons[i].setState(cd / b.skillCooldownMax(def.id), enabled);
     });
-    const cost = b.resources.nextGatherCost;
+    const gatherCost = b.resources.nextGatherCost;
     const r = b.resources;
     this.gatherButton.setTexts(
       `R 기운 모으기\n${r.gatherLevel}/${r.maxGatherLevel}`,
-      cost === null ? '최대' : `부적 ${cost}`,
+      gatherCost === null ? '최대' : `부적 ${gatherCost}`,
     );
-    this.gatherButton.setState(0, cost !== null && r.talisman >= cost);
+    this.gatherButton.setState(0, gatherCost !== null && r.talisman >= gatherCost);
     this.moveLeftButton.setState(0, true);
     this.moveRightButton.setState(0, true);
     this.pauseButton.setState(0, true);
@@ -582,26 +615,26 @@ export class BattleScene extends Phaser.Scene {
   /** 시전 기록을 받아 이펙트를 만들고, 일시정지 중이 아니면 나이를 먹인다 */
   private updateCastFx(dt: number, advance: boolean): void {
     for (const e of this.battle.drainCastEvents()) {
-      this.castFx.push({ ...e, age: 0 });
+      this.castFx.push({ id: e.id, x: e.x, facing: e.facing, range: e.range, shape: e.shape, tint: e.possessed?.tint, age: 0 });
       this.characters.cast(this.battle.hero, e, GROUND_Y);
     }
     if (advance) for (const fx of this.castFx) fx.age += dt;
     this.castFx = this.castFx.filter((fx) => fx.age < CAST_FX_SECONDS);
   }
 
-  /** 스킬 범위 이펙트 (임시 도형): 부채 바람은 반원, 나머지는 원이 퍼진다 */
+  /** 스킬 범위 이펙트 (임시 도형): 앞쪽 범위는 반원, 나머지는 원이 퍼진다. 빙의 스킬은 유닛 태그 색 */
   private drawCastFx(): void {
     const g = this.world;
     for (const fx of this.castFx) {
       const t = fx.age / CAST_FX_SECONDS;
       const alpha = 0.5 * (1 - t);
-      if (fx.id === 'fanWind') {
+      if (fx.shape === 'fan') {
         const r = fx.range * t;
         const start = fx.facing > 0 ? -Math.PI / 2 : Math.PI / 2;
-        g.fillStyle(TAG_COLORS.wind, alpha).slice(fx.x, GROUND_Y, r, start, start + Math.PI, false).fillPath();
+        g.fillStyle(fx.tint ? TAG_COLORS[fx.tint] : TAG_COLORS.wind, alpha).slice(fx.x, GROUND_Y, r, start, start + Math.PI, false).fillPath();
       } else {
         const full = fx.range;
-        const color = fx.id === 'blessing' ? TAG_COLORS.divine : TAG_COLORS.fire;
+        const color = fx.tint ? TAG_COLORS[fx.tint] : fx.id === 'blessing' ? TAG_COLORS.divine : TAG_COLORS.fire;
         g.fillStyle(color, alpha).fillCircle(fx.x, GROUND_Y, full * t);
         g.lineStyle(2, color, alpha * 2).strokeCircle(fx.x, GROUND_Y, full * t);
       }
@@ -633,13 +666,22 @@ export class BattleScene extends Phaser.Scene {
     const h = b.hero;
     if (h.alive) {
       const w = HERO.width, ht = HERO.height;
+      const form = b.heroForm;
+      if (form) {
+        // 빙의 표시: 금색 후광과 테두리
+        g.fillStyle(POSSESSION_GOLD, 0.18).fillEllipse(h.x, GROUND_Y - ht / 2, w + 30, ht + 18);
+        g.lineStyle(2, POSSESSION_GOLD, 0.9).strokeEllipse(h.x, GROUND_Y - ht / 2, w + 30, ht + 18);
+      }
       if (!this.characters.shows(h)) {
-        g.fillStyle(TAG_COLORS.hero, 1).fillRect(h.x - w / 2, GROUND_Y - ht, w, ht);
+        // 에셋이 없으면 기존 대체 도형 (빙의 중이면 그 유닛의 태그 색)
+        g.fillStyle(form ? colorForTags(form.unitTags) : TAG_COLORS.hero, 1).fillRect(h.x - w / 2, GROUND_Y - ht, w, ht);
         g.fillStyle(0xd9473b, 1).fillRect(h.x - w / 2, GROUND_Y - ht, w, 8);
+        if (form) g.lineStyle(3, POSSESSION_GOLD, 1).strokeRect(h.x - w / 2, GROUND_Y - ht, w, ht);
       }
       this.drawHpBar(h.x, GROUND_Y - ht - 8, w + 8, h.hp / h.maxHp, 0x66dd66);
       this.drawStatusMarks(h, h.x, GROUND_Y - ht, w, ht);
     }
+    this.possessionLabel?.setVisible(h.alive).setPosition(h.x, GROUND_Y - HERO.height - 22);
 
     this.drawCastFx();
 
@@ -738,7 +780,7 @@ export class BattleScene extends Phaser.Scene {
     );
     const hero = b.hero;
     const heroLine = hero.alive ? '' : `영웅 부활 ${Math.ceil(hero.respawnTimer)}초  `;
-    this.noteText.setText(heroLine + this.synergyLine());
+    this.noteText.setText(heroLine + this.possessionLine() + this.synergyLine());
   }
 
   /** 미니맵: 전장 전체를 가로로 줄여 아군·적·영웅·보스 점과 현재 카메라 범위를 보여 준다 */
@@ -772,6 +814,13 @@ export class BattleScene extends Phaser.Scene {
     const b = this.battle;
     const pending = b.pendingSpawns > 0 ? ` (대기 ${b.pendingSpawns})` : '';
     return `적 ${b.enemyCount}/${COMBAT.maxEnemies}${pending}`;
+  }
+
+  /** 빙의 중이면 "빙의: ○○" (스킬이 아직 없는 유닛은 준비 중 표시) */
+  private possessionLine(): string {
+    const form = this.battle.heroForm;
+    if (!form) return '';
+    return `빙의: ${form.name}${this.battle.possessionSkillsActive ? '' : ' (스킬 준비 중)'}  `;
   }
 
   /** 활성 연계 이름 (켜진 것이 없으면 빈 문자열) */

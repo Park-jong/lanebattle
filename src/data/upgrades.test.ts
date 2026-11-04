@@ -13,13 +13,13 @@ import {
 } from './upgrades';
 
 describe('업그레이드 트리 데이터', () => {
-  it('트리별 합계 31/100/46/21, 전체 198', () => {
+  it('트리별 합계 31/150/46/21, 전체 248 (빙의 50은 배타 그룹이라 하나만 센다)', () => {
     expect(treeTotalCost('mudang')).toBe(31);
-    expect(treeTotalCost('yogoe')).toBe(100);
+    expect(treeTotalCost('yogoe')).toBe(150);
     expect(treeTotalCost('yeongye')).toBe(46);
     expect(treeTotalCost('salim')).toBe(21);
     const all = TREE_IDS.reduce((s, t) => s + treeTotalCost(t), 0);
-    expect(all).toBe(198);
+    expect(all).toBe(248);
   });
 
   it('노드 id는 중복이 없다', () => {

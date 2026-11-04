@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { fitFontSize } from './labelFit';
 import { HUD_FONT, type Rect } from './layout';
 import { BUTTON_FILL } from './palette';
 import { addArtImage } from '../render/CharacterRenderer';
@@ -38,6 +39,7 @@ export class HudButton {
   private enabled = true;
   private visible = true;
   private held = false;
+  private fitKey = '';
   private portrait?: Phaser.GameObjects.Image;
   private readonly cooldownOverlay: Phaser.GameObjects.Graphics;
 
@@ -107,8 +109,23 @@ export class HudButton {
 
   setTexts(label: string, sub: string): void {
     this.label.setText(label);
+    // 둥근 버튼은 이름이 길면 두 줄 안에 들어가게 글자를 줄여 비용 줄과 겹치지 않게 한다.
+    // 줄 수는 getWrappedText로 실측하며, 글자(또는 기본 크기·폭)가 바뀔 때만 계산한다
+    if (this.style.shape === 'round' && !this.portrait) {
+      const base = this.style.labelSize ?? 11;
+      const key = `${label}|${base}|${this.rect.w}`;
+      if (key !== this.fitKey) {
+        this.fitKey = key;
+        const size = fitFontSize(2, base, 8, (s) => {
+          this.label.setFontSize(s);
+          return this.label.getWrappedText().length;
+        });
+        this.label.setFontSize(size);
+      }
+    }
     this.sub.setText(sub);
   }
+
 
   /** Portrait sits between the background and cooldown mask; text stays readable. */
   setPortrait(subject: string): void {
@@ -145,7 +162,7 @@ export class HudButton {
       this.sub.setPosition(x + 3, y + h - 16);
     } else if (s.center) {
       const round = s.shape === 'round';
-      this.label.setOrigin(0.5, 0).setPosition(x + w / 2, y + (round ? 12 : 4));
+      this.label.setOrigin(0.5, 0).setPosition(x + w / 2, y + (round ? 8 : 4));
       this.sub.setOrigin(0.5, 0).setPosition(x + w / 2, y + h - (round ? 22 : 18));
     } else {
       this.label.setOrigin(0).setPosition(x + 3, y + 3);

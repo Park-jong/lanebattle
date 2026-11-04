@@ -231,6 +231,19 @@ describe('보스 상성', () => {
     expect(lost(b, 'clubGoblin', boss)).toBeCloseTo(14); // 일반 아군은 상성 없음
   });
 
+  it('차사왕: 칼날 춤 지속 피해도 영웅 약점 x2 (W3 결정)', () => {
+    const b = new Battle({ stage: bossStage(5), bossAt: 0, rng: new SeededRng(1), modifiers: computeBuildEffects({ bladeDanceBlades: 1 }) });
+    b.step(0.05);
+    const boss = b.encounter!.boss!;
+    boss.x = 140;
+    b.resources.spirit = 100;
+    b.castSkill('bladeDance');
+    b.hero.status!.stun(10000, false); // 영웅 기본 공격 차단
+    const mid = boss.hp;
+    b.step(1);
+    expect(mid - boss.hp).toBeCloseTo(40 * 2, 0);
+  });
+
   it('약점·저항이 동시에 해당하면 곱한다', () => {
     const target: DamageTarget = {
       traits: [], weakness: { tags: ['fire'] }, resistance: { attackTypes: ['ranged'] },

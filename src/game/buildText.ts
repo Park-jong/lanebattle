@@ -1,5 +1,6 @@
+import { ALLIES } from '../data/allies';
 import { SINMYEONG_PURCHASE } from '../data/rewards';
-import { getUpgradeNode, TIER_UNLOCK_SPENT, TREE_IDS, TREE_NAMES, type TreeId, type UpgradeNode } from '../data/upgrades';
+import { getUpgradeNode, POSSESSION_GROUP, TIER_UNLOCK_SPENT, TREE_IDS, TREE_NAMES, type TreeId, type UpgradeNode } from '../data/upgrades';
 import type { AllocateCheck, AllocateFailure, Build, DeallocateCheck } from './build';
 import type { PurchaseResult } from './wallet';
 
@@ -21,6 +22,15 @@ export type NodeStatus = 'allocated' | 'available' | 'locked' | 'blocked';
 function nameOf(id: string | undefined): string {
   return (id && getUpgradeNode(id)?.name) || id || '';
 }
+
+function unitNameOf(unitId: string): string {
+  return ALLIES.find((a) => a.id === unitId)?.name ?? unitId;
+}
+
+/** 빙의 노드가 아직 숨겨져 있을 때 칸에 보이는 이름 */
+export const HIDDEN_NODE_NAME = '???';
+/** 숨겨진 빙의 노드의 상세 패널 문구 */
+export const HIDDEN_NODE_TEXT = '숨겨진 힘이 잠들어 있다…';
 
 /** 단 해금 조건 문구. 1단은 조건이 없어 null */
 export function tierUnlockText(tier: number): string | null {
@@ -51,9 +61,15 @@ export function allocateFailureText(
       const need = TIER_UNLOCK_SPENT[node.tier] ?? 0;
       return `${node.tier}단이 잠겨 있습니다. 낮은 단에 ${need}점이 필요합니다 (지금 ${ctx.build.spentIn(node.tree, node.tier)}점)`;
     }
+    case 'mudangIncomplete':
+      return '무당 트리를 모두 찍어야 합니다';
     case 'prerequisite':
+      if (node.possessionOf) return `${unitNameOf(node.possessionOf)} 각성을 먼저 찍어야 합니다`;
       return `먼저 "${nameOf(node.requires)}"을(를) 찍어야 합니다`;
     case 'exclusive':
+      if (node.exclusiveGroup === POSSESSION_GROUP) {
+        return `이미 "${exclusiveOtherName(ctx.build, node, ctx.allNodes)}"에 빙의했습니다. 한 유닛만 빙의할 수 있습니다`;
+      }
       return `다른 갈래("${exclusiveOtherName(ctx.build, node, ctx.allNodes)}")를 이미 골랐습니다`;
   }
 }

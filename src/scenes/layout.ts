@@ -1,4 +1,4 @@
-import { MAX_TIER, nodesOfTree, YOGOE_UNIT_IDS, yogoeNodeIds, type TreeId } from '../data/upgrades';
+import { MAX_TIER, nodesOfTree, possessionNodeId, YOGOE_UNIT_IDS, yogoeNodeIds, type TreeId } from '../data/upgrades';
 
 // 화면 배치 상수 (도형 그래픽 단계용)
 export const GAME_WIDTH = 960;
@@ -201,7 +201,7 @@ export function tierLabelRect(tier: number): Rect {
 
 /**
  * 트리의 노드 칸 배치.
- * 무당·연계·살림은 단별 줄, 배타 갈래 쌍은 붙여서 놓는다. 요괴는 유닛 10종 x ①②③ (2열 x 5줄)
+ * 무당·연계·살림은 단별 줄, 배타 갈래 쌍은 붙여서 놓는다. 요괴는 유닛 10종 x ①②③④(빙의) (2열 x 5줄)
  */
 export function nodeCells(tree: TreeId): { nodeId: string; rect: Rect }[] {
   if (tree === 'yogoe') {
@@ -209,9 +209,9 @@ export function nodeCells(tree: TreeId): { nodeId: string; rect: Rect }[] {
       const ids = yogoeNodeIds(unitId);
       const col = Math.floor(i / 5);
       const row = i % 5;
-      return [ids.basic, ids.core, ids.awaken].map((nodeId, k) => ({
+      return [ids.basic, ids.core, ids.awaken, possessionNodeId(unitId)].map((nodeId, k) => ({
         nodeId,
-        rect: { x: 8 + col * 342 + k * 112, y: BUILD_TOP + row * BUILD_ROW_STEP, w: 108, h: MIN_TOUCH },
+        rect: { x: 8 + col * 342 + k * 84, y: BUILD_TOP + row * BUILD_ROW_STEP, w: 80, h: MIN_TOUCH },
       }));
     });
   }

@@ -47,9 +47,10 @@ export class SynergyEngine {
   update(allies: readonly Fighter[], hero: Body | null, dt: number): void {
     const units = allies.filter((a) => a.alive);
     this.countTags(units);
-    const divine = units.filter((u) => u.stats.tags.includes(SYNERGY.divineBlessing.guardianTag));
-    const nearDivine = (b: Body, radius: number) => divine.some((d) => Math.abs(d.x - b.x) <= radius);
     const usable = (b: Body) => !b.status!.buffsDisabled;
+    // 수호 오라의 소유자가 버프 해제 중이면 오라를 내보내지 않는다
+    const divine = units.filter((u) => u.stats.tags.includes(SYNERGY.divineBlessing.guardianTag) && usable(u));
+    const nearDivine = (b: Body, radius: number) => divine.some((d) => Math.abs(d.x - b.x) <= radius);
 
     for (const u of units) {
       const effect = this.unitEffect(u, units);
@@ -105,7 +106,7 @@ export class SynergyEngine {
     }
     if (this.isEnabled('guardFormation') && u.stats.attackType !== 'melee') {
       const ff = SYNERGY.guardFormation;
-      if (units.some((g) => g.defId === ff.guardianId && g.x > u.x)) add({ damageReduction: ff.damageReduction });
+      if (units.some((g) => g.defId === ff.guardianId && g.x > u.x && !g.status!.buffsDisabled)) add({ damageReduction: ff.damageReduction });
     }
     add(this.hundredDemonsEffect() ?? {});
     return fx;

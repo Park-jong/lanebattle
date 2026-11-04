@@ -1,4 +1,5 @@
 import { SKILLS, type SkillId } from '../data/skills';
+import type { Tag } from '../data/types';
 
 export type CastResult = 'ok' | 'ended' | 'invalidSkill' | 'heroDead' | 'stunned' | 'cooldown' | 'noSpirit';
 
@@ -10,6 +11,10 @@ export interface SkillCastEvent {
   facing: 1 | -1;
   /** 실제 범위 (업그레이드 반영). 부채 바람은 길이, 나머지는 반경 */
   range: number;
+  /** 이펙트 모양: 영웅 앞쪽 반원 / 원 */
+  shape: 'fan' | 'circle';
+  /** 빙의 스킬이면 빙의한 유닛 id와 이펙트 색을 정하는 태그 */
+  possessed?: { unitId: string; tint: Tag };
 }
 
 /** 스킬별 남은 쿨타임. 전투 시간(step)으로만 줄어든다 */

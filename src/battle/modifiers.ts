@@ -30,6 +30,8 @@ export interface HeroModifiers {
   maxSpiritBonus: number;
   /** 무당 각성: 기본 공격 everyNth번째마다 충격파 (없으면 null) */
   awakening: { everyNth: number; radius: number; attackMultiplier: number } | null;
+  /** 빙의한 유닛 id (없으면 null). 영웅이 그 유닛으로 변신한다 */
+  possession: string | null;
 }
 
 export interface SkillModifiers {
@@ -63,6 +65,7 @@ export function noModifiers(): BattleModifiers {
       spiritChargeMultiplier: 1,
       maxSpiritBonus: 0,
       awakening: null,
+      possession: null,
     },
     skills: {
       fanWind: { rangeMultiplier: 1, damageMultiplier: 1, knockbackMultiplier: 1 },

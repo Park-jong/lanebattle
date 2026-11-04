@@ -1,3 +1,5 @@
+import { ALLIES } from './allies';
+import { POSSESSION_SLOTS, possessionSkillsOf } from './possession';
 import type { SynergyId } from './synergy';
 
 // numbers.md 9장 업그레이드 트리 전체. params는 game/buildEffects.ts가 읽어 전투 보정값으로 바꾼다
@@ -31,6 +33,8 @@ export interface UpgradeNode {
   requires?: string;
   /** 상호 배타 그룹: 같은 그룹에서는 한 노드만 찍을 수 있다 */
   exclusiveGroup?: string;
+  /** 빙의 노드면 빙의하는 유닛 id (해금: 그 유닛 ①②③ + 무당 트리 전부 + 신명 50) */
+  possessionOf?: string;
   /** 전투에 적용할 때 쓰는 수치 (B 묶음) */
   params?: Readonly<Record<string, number>>;
 }
@@ -109,7 +113,7 @@ export function yogoeNodeIds(unitId: string): { basic: string; core: string; awa
   return { basic: `${unitId}Basic`, core: `${unitId}Core`, awaken: `${unitId}Awaken` };
 }
 
-const YOGOE_NODES: UpgradeNode[] = UNIT_UPGRADES.flatMap((u) => {
+const YOGOE_BASE_NODES: UpgradeNode[] = UNIT_UPGRADES.flatMap((u) => {
   const ids = yogoeNodeIds(u.unitId);
   return [
     make('yogoe', { id: ids.basic, tier: 1, name: '기본 강화', description: '체력·공격력 +25%', cost: 2, params: { hpBonus: 0.25, attackBonus: 0.25 } }),
@@ -121,6 +125,35 @@ const YOGOE_NODES: UpgradeNode[] = UNIT_UPGRADES.flatMap((u) => {
 
 /** 요괴 노드가 속한 유닛 id 목록 (표시·검증용) */
 export const YOGOE_UNIT_IDS: readonly string[] = UNIT_UPGRADES.map((u) => u.unitId);
+
+// ── 빙의 (numbers.md 10장): 유닛마다 ④ 노드 하나, 10개가 한 배타 그룹 ──
+export const POSSESSION_GROUP = 'possession';
+export const POSSESSION_COST = 50;
+
+/** 빙의 노드 id 규칙: <유닛id>Possess */
+export function possessionNodeId(unitId: string): string {
+  return `${unitId}Possess`;
+}
+
+function possessionDescription(unitId: string): string {
+  const skills = possessionSkillsOf(unitId);
+  const names = skills ? POSSESSION_SLOTS.map((slot) => skills[slot].name).join(' / ') : '스킬 준비 중';
+  return `이 요괴로 변신한다. 기본 공격의 유형·사거리·적중 효과가 요괴를 따르고, Q/W/E가 빙의 스킬로 바뀐다 (${names})`;
+}
+
+const POSSESSION_NODES: UpgradeNode[] = UNIT_UPGRADES.map((u) => {
+  const ally = ALLIES.find((a) => a.id === u.unitId);
+  return make('yogoe', {
+    id: possessionNodeId(u.unitId),
+    tier: 4,
+    name: `빙의: ${ally?.name ?? u.unitId}`,
+    description: possessionDescription(u.unitId),
+    cost: POSSESSION_COST,
+    requires: yogoeNodeIds(u.unitId).awaken,
+    exclusiveGroup: POSSESSION_GROUP,
+    possessionOf: u.unitId,
+  });
+});
 
 // ── 연계 (합계 46). 노드 id = 연계 id ──
 const SYNERGY_INITS: (NodeInit & { id: SynergyId })[] = [
@@ -155,7 +188,8 @@ const SALIM_NODES: UpgradeNode[] = SALIM_INITS.map((n) => make('salim', n));
 
 export const UPGRADE_NODES: readonly UpgradeNode[] = [
   ...MUDANG_NODES,
-  ...YOGOE_NODES,
+  ...YOGOE_BASE_NODES,
+  ...POSSESSION_NODES,
   ...YEONGYE_NODES,
   ...SALIM_NODES,
 ];

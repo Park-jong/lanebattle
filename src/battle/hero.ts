@@ -9,6 +9,8 @@ export class Hero extends Body {
   respawnTimer = 0;
   /** 바라보는 방향: 마지막으로 움직인 쪽 (처음엔 오른쪽) */
   facing: 1 | -1 = 1;
+  /** 빙의한 유닛 id (없으면 null). 외형·태그·기본 공격이 이 유닛을 따른다 */
+  possessedId: string | null = null;
 
   /** maxHp: 단단한 몸 반영 최대 체력. reviveReduction: 빠른 부활로 줄어드는 부활 시간(초) */
   constructor(maxHp: number = HERO.maxHp, private readonly reviveReduction = 0) {

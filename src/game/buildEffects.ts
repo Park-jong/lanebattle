@@ -1,6 +1,6 @@
 import { noModifiers, type BattleModifiers, type UnitModifiers } from '../battle/modifiers';
 import { isSynergyId, type SynergyId } from '../data/synergy';
-import { getUpgradeNode, nodesOfTree, YOGOE_UNIT_IDS, yogoeNodeIds } from '../data/upgrades';
+import { getUpgradeNode, nodesOfTree, possessionNodeId, YOGOE_UNIT_IDS, yogoeNodeIds } from '../data/upgrades';
 import type { BuildLevels } from './build';
 
 /**
@@ -50,6 +50,9 @@ export function computeBuildEffects(levels: Readonly<BuildLevels>): BattleModifi
   if (level('bladeDancePossession') > 0) {
     m.skills.bladeDance.cooldownMultiplier -= param('bladeDancePossession', 'cooldownReduction');
   }
+
+  // ── 빙의: 한 유닛만 (배타 그룹). 여럿이 들어와도 앞쪽 유닛 하나만 쓴다 ──
+  m.hero.possession = YOGOE_UNIT_IDS.find((unitId) => level(possessionNodeId(unitId)) > 0) ?? null;
 
   // ── 요괴 ──
   const units: Record<string, UnitModifiers> = {};

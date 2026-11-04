@@ -1,5 +1,11 @@
 // 영웅 스킬 툴팁 문구 (Phaser에 의존하지 않는다). 수치는 data/skills.ts와 BattleModifiers에서 계산한다
+import type { BuffValues } from '../data/abilities';
+import { getAllyDef } from '../data/allies';
+import {
+  POSSESSION_COMMON, possessionSkillsOf, type PossessionArea, type PossessionEffect, type PossessionHitEffects,
+} from '../data/possession';
 import { getSkill, SKILL_EFFECTS, type SkillId } from '../data/skills';
+import type { AttackType, Tag } from '../data/types';
 import { getUpgradeNode } from '../data/upgrades';
 import type { BattleModifiers } from '../battle/modifiers';
 import { fmt, pct, type TooltipStatus, type TooltipText } from './tooltipText';
@@ -70,6 +76,89 @@ export function describeSkill(id: SkillId, mods: BattleModifiers): TooltipText {
   if (branch) lines.push(`갈래: ${branchName(branch)}`);
   lines.push(RULES[id]);
   return { title: `${def.name} (${SKILL_KEYS[id]})`, lines };
+}
+
+// ----- 빙의 스킬: 효과 문구를 데이터(기본 동작 조합)에서 만든다 -----
+
+const TAG_NAMES: Record<Tag, string> = { dokkaebi: '도깨비', fire: '불', divine: '신수', wind: '바람', hero: '영웅' };
+const TYPE_NAMES: Record<AttackType, string> = { melee: '근접', ranged: '원거리', magic: '마법' };
+
+function areaText(area: PossessionArea): string {
+  switch (area.kind) {
+    case 'front':
+      return area.limit ? `앞쪽 ${fmt(area.range)} 범위 가까운 적 ${area.limit}명` : `앞쪽 ${fmt(area.range)} 범위 모든 적`;
+    case 'radius':
+      return area.limit ? `반경 ${fmt(area.radius)} 가까운 적 ${area.limit}명` : `반경 ${fmt(area.radius)} 적`;
+    case 'nearest':
+      return `가장 가까운 적 ${area.count}명`;
+    case 'point':
+      return `앞쪽 ${fmt(area.ahead)} 지점 반경 ${fmt(area.radius)} 적`;
+    case 'nearestPoint':
+      return `가장 가까운 적 위치 반경 ${fmt(area.radius)} 적`;
+  }
+}
+
+/** 맞은 적에게 일어나는 일 (피해·화상·기절·넉백 ...) */
+function hitText(fx: PossessionHitEffects): string {
+  const parts: string[] = [];
+  if (fx.damage) parts.push(`피해 ${fmt(fx.damage)}`);
+  if (fx.burnPerSec) parts.push(`화상 초당 ${fmt(fx.burnPerSec)}`);
+  if (fx.stun) parts.push(`기절·붙잡기 ${fmt(fx.stun)}초`);
+  if (fx.knockback) parts.push(`넉백 ${fmt(fx.knockback)}`);
+  if (fx.slow) parts.push(`감속 ${pct(fx.slow.ratio)} ${fmt(fx.slow.duration)}초`);
+  if (fx.defenseBreak) parts.push(fx.defenseBreak === 'max' ? '방어 파괴 최대 중첩' : `방어 파괴 ${fx.defenseBreak}중첩`);
+  if (fx.collision) parts.push(`밀려난 적이 부딪힌 적도 피해 ${fmt(fx.collision)}`);
+  if (fx.healOnKill) parts.push(`처치 1마리당 체력 ${pct(fx.healOnKill)} 회복`);
+  return `${parts.join(' + ')} (${TYPE_NAMES[fx.type]})`;
+}
+
+function buffText(effect: BuffValues): string {
+  const parts: string[] = [];
+  if (effect.attack) parts.push(`공격력 +${pct(effect.attack)}`);
+  if (effect.attackSpeed) parts.push(`공격 속도 +${pct(effect.attackSpeed)}`);
+  if (effect.moveSpeed) parts.push(`이동 속도 +${pct(effect.moveSpeed)}`);
+  if (effect.damageReduction) parts.push(`받는 피해 -${pct(effect.damageReduction)}`);
+  return parts.join(', ');
+}
+
+function effectText(e: PossessionEffect): string {
+  switch (e.kind) {
+    case 'hit':
+      return `${areaText(e.area)}: ${hitText(e)}`;
+    case 'charge':
+      return `앞으로 ${fmt(e.distance)} 돌진, 지나간 길의 적: ${hitText(e.hit)}`;
+    case 'repeat': {
+      const total = e.hit.damage ? ` (피해 총 ${fmt(e.hit.damage * e.times)})` : '';
+      return `${fmt(e.interval)}초 간격 ${e.times}회, ${areaText(e.hit.area)}: ${hitText(e.hit)}${total}`;
+    }
+    case 'summon':
+      return `${getAllyDef(e.unitId).name} ${e.count}마리 무료 소환 (아군 상한까지, 부적 미사용)`;
+    case 'buff': {
+      const who = e.tag ? `${TAG_NAMES[e.tag]} 아군과 영웅` : `반경 ${fmt(e.radius ?? 0)} 아군(영웅 포함)`;
+      return `${fmt(e.duration)}초간 ${who} ${buffText(e.effect)}`;
+    }
+    case 'aura':
+      return `${fmt(e.duration)}초간 반경 ${fmt(e.radius)} 아군(영웅 포함) ${buffText(e.effect)} 오라`;
+    case 'shrineHeal':
+      return `서낭당 최대 체력 ${pct(e.ratio)} 회복`;
+  }
+}
+
+/** 빙의 스킬 툴팁. 이름·비용·쿨타임·효과 문구를 데이터에서 만든다. 스킬이 아직 없는 유닛이면 null */
+export function describePossessionSkill(unitId: string, id: SkillId): TooltipText | null {
+  const set = possessionSkillsOf(unitId);
+  if (!set) return null;
+  const skill = set[id];
+  const common = POSSESSION_COMMON[id];
+  return {
+    title: `${skill.name} (${SKILL_KEYS[id]})`,
+    lines: [
+      `빙의: ${getAllyDef(unitId).name}`,
+      `신력 ${common.spiritCost} / 쿨타임 ${fmt(common.cooldown)}초`,
+      ...skill.effects.map(effectText),
+      '피해는 고정 수치(공격력·연계 미적용)입니다. 무당 스킬 갈래와 신내림은 적용되지 않고, 보스는 밀리지 않으며 기절 대신 경직만 걸립니다.',
+    ],
+  };
 }
 
 /** 스킬 상태 판정에 필요한 현재 값 */

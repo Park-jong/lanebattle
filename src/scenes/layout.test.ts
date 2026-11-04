@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MAX_TIER, TREE_IDS, nodesOfTree } from '../data/upgrades';
+import { MAX_TIER, TREE_IDS, nodesOfTree, possessionNodeId, YOGOE_UNIT_IDS, yogoeNodeIds } from '../data/upgrades';
 import {
   battleButtons, battleDisplays, BATTLE_LAYOUT, centeredRow, GAME_HEIGHT, GAME_WIDTH, GROUND_Y, MAP_LAYOUT,
   MIN_TOUCH, minimapX, BUILD_LAYOUT, dialogButtons, nodeCells, tierLabelRect, PAUSE_BUTTON, RESULT_LAYOUT, type Rect,
@@ -181,9 +181,9 @@ describe('빌드 화면 배치', () => {
     }
   });
 
-  it('요괴는 30칸(2열 x 5줄), 배타 갈래 쌍은 붙어 있다', () => {
+  it('요괴는 40칸(유닛 10종 x ①②③④, 2열 x 5줄), 배타 갈래 쌍은 붙어 있다', () => {
     const yogoe = nodeCells('yogoe');
-    expect(yogoe).toHaveLength(30);
+    expect(yogoe).toHaveLength(40);
     expect(new Set(yogoe.map((c) => c.rect.y)).size).toBe(5);
     expect(new Set(yogoe.map((c) => c.rect.x >= 340)).size).toBe(2);
     const m = nodeCells('mudang');
@@ -191,6 +191,16 @@ describe('빌드 화면 배치', () => {
     const pairGap = rect('fanWindGust').x - (rect('fanWindTornado').x + rect('fanWindTornado').w);
     const groupGap = rect('blessingGrandRite').x - (rect('fanWindGust').x + rect('fanWindGust').w);
     expect(pairGap).toBeLessThan(groupGap);
+  });
+
+  it('요괴 탭은 유닛마다 ①②③④ 4칸이 한 줄에 놓이고 ④는 빙의 노드다', () => {
+    const cells = nodeCells('yogoe');
+    for (const unitId of YOGOE_UNIT_IDS) {
+      const row = cells.filter((c) => c.nodeId.startsWith(unitId));
+      expect(row.map((c) => c.nodeId)).toEqual([...Object.values(yogoeNodeIds(unitId)), possessionNodeId(unitId)]);
+      expect(new Set(row.map((c) => c.rect.y)).size).toBe(1);
+      expect(row[3].rect.x).toBeGreaterThan(row[2].rect.x);
+    }
   });
 
   it('소환 순서 탭: 10칸·기본 순서 버튼이 66x66 이상, 화면 안, 겹치지 않는다', () => {

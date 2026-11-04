@@ -6,7 +6,7 @@ import type { SkillCastEvent } from '../battle/skills';
 import { ART_MANIFEST_KEY, artFor, clipFrame, clipSeconds, type CharacterArt } from './art';
 
 export function subjectOf(body: Body): string {
-  if (body instanceof Hero) return 'hero:kkomaMudang';
+  if (body instanceof Hero) return body.possessedId ? `ally:${body.possessedId}` : 'hero:kkomaMudang';
   if (body instanceof Fighter) return `${body.isBoss ? 'boss' : body.team}:${body.defId}`;
   return '';
 }
@@ -91,7 +91,8 @@ class CharacterView {
       else if (body instanceof Hero && this.actionAge >= this.actionLength) this.facing = body.facing;
       this.lastX = body.x;
       const height = body instanceof Fighter ? body.stats.height * body.sizeScale : HERO.height;
-      this.lastY = ground - lift - (body.flying && this.art.origin.y === 0.5 ? height / 2 : 0);
+      // 비행 유닛 그림(중심 기준)으로 빙의한 영웅도 땅 위에 서 있도록 몸 절반만큼 올린다
+      this.lastY = ground - lift - ((body.flying || body instanceof Hero) && this.art.origin.y === 0.5 ? height / 2 : 0);
     }
     let clip = body.visualMoving ? 'walk' : 'idle';
     if (body instanceof Fighter && body.defId === 'eodduksiniKing' && !body.flying && this.art.clips.ground_idle) clip = 'ground_idle';
@@ -155,8 +156,10 @@ export class CharacterRenderer {
   hit(body: Body): void { this.views.get(body)?.hit(); }
 
   cast(hero: Body, event: SkillCastEvent, ground: number): void {
-    const clip = { fanWind: 'skill_fan', blessing: 'skill_blessing', bladeDance: 'skill_blade' }[event.id];
+    // 빙의 스킬은 그 유닛의 공격 동작을 보여 준다
+    const clip = event.possessed ? 'attack' : { fanWind: 'skill_fan', blessing: 'skill_blessing', bladeDance: 'skill_blade' }[event.id];
     this.views.get(hero)?.special(clip);
+    if (event.possessed) return;
     const fx = { fanWind: 'fx_fan', blessing: 'fx_blessing', bladeDance: 'fx_blade' }[event.id];
     const art = artInScene(this.scene, subjectOf(hero));
     if (!art?.clips[fx]) return;

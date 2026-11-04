@@ -4,7 +4,7 @@ import { getBossById } from '../data/bosses';
 import { STAGES } from '../data/stages';
 import { getUpgradeNode, MAX_TIER, TREE_NAMES, UPGRADE_NODES, type TreeId, type UpgradeNode } from '../data/upgrades';
 import {
-  allocateFailureText, BUILD_TABS, deallocateFailureText, nodeStatus, purchaseText, tabName,
+  allocateFailureText, BUILD_TABS, deallocateFailureText, HIDDEN_NODE_NAME, HIDDEN_NODE_TEXT, nodeStatus, purchaseText, tabName,
   tierUnlockText, type BuildTab, type NodeStatus,
 } from '../game/buildText';
 import { builds, summonOrder, wallet } from '../game/session';
@@ -234,7 +234,8 @@ export class BuildScene extends Phaser.Scene {
       const node = getUpgradeNode(nodeId)!;
       const status = nodeStatus(build, node, build.canAllocate(nodeId, available));
       const tierOpen = build.isTierUnlocked(tree, node.tier);
-      const title = tree === 'yogoe' && node.tier === 1 ? unitNameOf(node) : node.name;
+      const revealed = build.isRevealed(node);
+      const title = !revealed ? HIDDEN_NODE_NAME : tree === 'yogoe' && node.tier === 1 ? unitNameOf(node) : node.name;
       this.drawCell(
         rect,
         `${title}\nLv ${build.getLevel(nodeId)}/${node.maxLevel}`,
@@ -259,8 +260,15 @@ export class BuildScene extends Phaser.Scene {
       this.secondaryButton.setEnabled(false);
       return;
     }
+    if (!build.isRevealed(node)) {
+      // 빙의 노드는 ①②③과 무당 트리를 채우기 전까지 이름과 효과를 숨긴다
+      this.track(this.detailText(`${HIDDEN_NODE_NAME}\n\n${HIDDEN_NODE_TEXT}`, '#6b5a3a'));
+      this.primaryButton.setEnabled(false);
+      this.secondaryButton.setEnabled(false);
+      return;
+    }
     const where =
-      node.tree === 'yogoe' ? `${unitNameOf(node)}  ${'①②③'[node.tier - 1]}` : `${TREE_NAMES[node.tree]}  ${node.tier}단`;
+      node.tree === 'yogoe' ? `${unitNameOf(node)}  ${'①②③④'[node.tier - 1]}` : `${TREE_NAMES[node.tree]}  ${node.tier}단`;
     const info = this.track(
       this.detailText(
         `${node.name}\n${where}\n\n${node.description}\n\n레벨 ${build.getLevel(node.id)}/${node.maxLevel}\n레벨당 비용 ${node.costPerLevel}`,

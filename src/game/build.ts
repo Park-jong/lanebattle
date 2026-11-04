@@ -2,15 +2,17 @@ import { BUILD_SLOTS } from '../data/rewards';
 import {
   getUpgradeNode,
   MAX_TIER,
+  nodesOfTree,
   TIER_UNLOCK_SPENT,
   TREE_IDS,
   UPGRADE_NODES,
+  yogoeNodeIds,
   type TreeId,
   type UpgradeNode,
 } from '../data/upgrades';
 import type { SinmyeongSource } from './wallet';
 
-export type AllocateFailure = 'unknownNode' | 'maxLevel' | 'notEnoughSinmyeong' | 'tierLocked' | 'prerequisite' | 'exclusive';
+export type AllocateFailure = 'unknownNode' | 'maxLevel' | 'notEnoughSinmyeong' | 'tierLocked' | 'prerequisite' | 'exclusive' | 'mudangIncomplete';
 export type DeallocateFailure = 'unknownNode' | 'notAllocated' | DependencyFailure;
 /** 빼면 다른 노드의 단 해금이 깨짐 / 선행이 깨짐 (이때 dependentId에 필요로 하는 노드 id가 담긴다) */
 export type DependencyFailure = 'tierDependency' | 'prerequisiteDependency';
@@ -89,6 +91,7 @@ export class Build {
     if (this.getLevel(nodeId) >= node.maxLevel) return { ok: false, reason: 'maxLevel' };
     if (!this.isTierUnlocked(node.tree, node.tier)) return { ok: false, reason: 'tierLocked' };
     if (node.requires && this.getLevel(node.requires) < 1) return { ok: false, reason: 'prerequisite' };
+    if (node.possessionOf && !this.isTreeComplete('mudang')) return { ok: false, reason: 'mudangIncomplete' };
     if (this.exclusiveConflict(node)) return { ok: false, reason: 'exclusive' };
     if (available < node.costPerLevel) return { ok: false, reason: 'notEnoughSinmyeong' };
     return { ok: true };
@@ -116,6 +119,27 @@ export class Build {
     return check;
   }
 
+  /** 트리를 다 찍었는가: 레벨 노드는 최대 레벨, 배타 갈래는 각 그룹에서 한쪽 (빙의 해금 조건) */
+  isTreeComplete(tree: TreeId): boolean {
+    const groupPicked = new Map<string, boolean>();
+    for (const n of nodesOfTree(tree)) {
+      const lv = this.getLevel(n.id);
+      if (n.exclusiveGroup) groupPicked.set(n.exclusiveGroup, (groupPicked.get(n.exclusiveGroup) ?? false) || lv > 0);
+      else if (lv < n.maxLevel) return false;
+    }
+    return [...groupPicked.values()].every(Boolean);
+  }
+
+  /**
+   * 빙의 노드가 드러나는가: 그 유닛 ①②③과 무당 트리를 모두 찍었을 때 (신명은 보지 않는다).
+   * 빙의가 아닌 노드는 항상 true
+   */
+  isRevealed(node: UpgradeNode): boolean {
+    if (!node.possessionOf) return true;
+    const ids = yogoeNodeIds(node.possessionOf);
+    return this.getLevel(ids.basic) > 0 && this.getLevel(ids.core) > 0 && this.getLevel(ids.awaken) > 0 && this.isTreeComplete('mudang');
+  }
+
   /** 전부 비운다. 돌려받은 신명 수를 반환 */
   reset(): number {
     const refunded = this.spent();
@@ -131,6 +155,7 @@ export class Build {
       if (!this.isTierUnlocked(node.tree, node.tier)) return false;
       if (node.requires && this.getLevel(node.requires) < 1) return false;
       if (this.exclusiveConflict(node)) return false;
+      if (node.possessionOf && !this.isTreeComplete('mudang')) return false;
     }
     return true;
   }
@@ -142,6 +167,8 @@ export class Build {
       const node = getUpgradeNode(id);
       if (!node) continue;
       if (node.requires && this.getLevel(node.requires) < 1) return { reason: 'prerequisiteDependency', dependentId: id };
+      // 빙의를 찍은 동안에는 무당 트리 노드를 뺄 수 없다
+      if (node.possessionOf && !this.isTreeComplete('mudang')) return { reason: 'prerequisiteDependency', dependentId: id };
       if (tierBroken === null && !this.isTierUnlocked(node.tree, node.tier)) tierBroken = id;
     }
     return tierBroken === null ? null : { reason: 'tierDependency', dependentId: tierBroken };

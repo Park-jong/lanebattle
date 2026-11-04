@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { UPGRADE_NODES, getUpgradeNode } from '../data/upgrades';
+import { UPGRADE_NODES, getUpgradeNode, possessionNodeId } from '../data/upgrades';
 import { Build } from './build';
 import { allocateFailureText, deallocateFailureText, nodeStatus, purchaseText, tierUnlockText } from './buildText';
 
@@ -27,6 +27,15 @@ describe('찍기 실패 사유 문구', () => {
   it('다른 갈래 선택됨은 이미 고른 노드 이름', () => {
     const b = new Build({ fanWindGust: 1 });
     expect(allocateFailureText('exclusive', node('fanWindTornado'), ctx(b))).toContain('부채 바람: 돌풍');
+  });
+});
+
+describe('빙의 거부 문구', () => {
+  it('두 번째 빙의는 빙의 전용 문구, 스킬 갈래 문구는 그대로', () => {
+    const b = new Build({ [possessionNodeId('foxfireArcher')]: 1 });
+    const text = allocateFailureText('exclusive', node(possessionNodeId('sumoGoblin')), ctx(b));
+    expect(text).toBe('이미 "빙의: 여우불 사수"에 빙의했습니다. 한 유닛만 빙의할 수 있습니다');
+    expect(text).not.toContain('갈래');
   });
 });
 
