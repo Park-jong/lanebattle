@@ -6,6 +6,14 @@ export type AttackType = 'melee' | 'ranged' | 'magic';
 /** 적 특성: 무리 / 영체 / 갑옷 / 비행 */
 export type EnemyTrait = 'swarm' | 'ghost' | 'armor' | 'flying';
 export type Team = 'ally' | 'enemy';
+/** 공격자 종류 */
+export type AttackSource = 'ally' | 'enemy' | 'hero';
+
+/** 공격 유형·태그 목록 (보스 약점·저항 등). 하나라도 맞으면 해당 */
+export interface Affinity {
+  attackTypes?: readonly AttackType[];
+  tags?: readonly Tag[];
+}
 
 /** 전투 능력치 공통 필드 */
 export interface CombatStats {
@@ -26,7 +34,7 @@ export interface AllyDef extends CombatStats {
   id: string;
   name: string;
   tags: Tag[];
-  /** 비행 여부 (판정은 3단계) */
+  /** 비행 여부 */
   flying: boolean;
   /** 부적 비용 */
   cost: number;
@@ -34,6 +42,10 @@ export interface AllyDef extends CombatStats {
   cooldown: number;
   /** 고유 능력 설명 (구현은 3단계) */
   ability: string;
+  /** 이 유닛 공격이 거는 화상의 초당 피해 (불 태그 유닛) */
+  burnPerSec?: number;
+  /** 마법 공격의 범위 반경 */
+  areaRadius?: number;
 }
 
 export interface EnemyDef extends CombatStats {

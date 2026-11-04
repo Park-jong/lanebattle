@@ -34,6 +34,11 @@ export class HudButton {
     this.sub.setText(sub);
   }
 
+  setVisible(visible: boolean): void {
+    for (const o of [this.bg, this.cover, this.label, this.sub]) o.setVisible(visible);
+    if (this.bg.input) this.bg.input.enabled = visible;
+  }
+
   /** 0~1: 쿨타임 비율, enabled=false면 어둡게 */
   setState(cooldownRatio: number, enabled: boolean): void {
     this.cover.setSize(this.w, this.h * cooldownRatio);

@@ -10,6 +10,8 @@ import { Hero } from './hero';
 import { SeededRng } from './rng';
 import { Resources } from './resources';
 import { availableEnemyIds, waveBudget, WaveDirector } from './wave';
+import { getStageInfo } from './stage';
+import { CHAPTER_THEME, STAGE_COUNT } from '../data/waves';
 import { getEnemyDef } from '../data/enemies';
 
 const newBattle = (stage = 0) => new Battle({ stage, rng: new SeededRng(1) });
@@ -170,6 +172,23 @@ describe('유닛 전투', () => {
   });
 });
 
+describe('처치 보상 중복 방지', () => {
+  it('같은 틱에 여러 아군이 한 적을 처치해도 처치 부적은 한 번만 지급된다', () => {
+    const b = newBattle();
+    b.resources.addTalisman(1000);
+    b.summon(idx('clubGoblin'));
+    b.summon(idx('samjokgo'));
+    const enemy = b.spawnEnemy('waterGhostThrower', false, 700);
+    enemy.hp = 1;
+    for (const a of b.allies) a.x = 690;
+    const before = b.resources.talisman;
+    b.step(0.05);
+    expect(b.enemies).toHaveLength(0);
+    const gained = b.resources.talisman - before - RESOURCES.talisman.chargePerSec * 0.05;
+    expect(gained).toBeCloseTo(getEnemyDef('waterGhostThrower').killTalisman);
+  });
+});
+
 describe('영웅', () => {
   it('양쪽 기지 사이로만 이동한다', () => {
     const b = newBattle();
@@ -183,7 +202,7 @@ describe('영웅', () => {
   it('사망 후 4 + 위협 단계초 뒤 서낭당 앞에서 부활한다', () => {
     const b = newBattle();
     b.hero.hp = 1;
-    b.spawnEnemy('dueoksini', false, 140);
+    b.spawnEnemy('eggGhost', false, 140);
     b.step(0.05);
     expect(b.hero.alive).toBe(false);
     expect(b.hero.respawnTimer).toBeCloseTo(HERO.respawn.base + 1);
@@ -259,6 +278,69 @@ describe('웨이브', () => {
     expect(boss.composeWave(8).some((s) => s.elite)).toBe(false);
   });
 
+  it('정예 종류도 테마 적을 2배 가중치로 뽑는다', () => {
+    const stage = 2; // 1-3: 알유령, 물귀신, 처녀귀신(테마)
+    const ids = availableEnemyIds(stage);
+    const theme = CHAPTER_THEME[getStageInfo(stage).chapter - 1];
+    expect(ids).toContain(theme);
+    const d = new WaveDirector(stage, new SeededRng(11));
+    const counts = new Map<string, number>(ids.map((id) => [id, 0]));
+    const n = 6000;
+    for (let i = 0; i < n; i++) {
+      const elite = d.composeWave(8).find((s) => s.elite)!;
+      counts.set(elite.enemyId, counts.get(elite.enemyId)! + 1);
+    }
+    const others = ids.filter((id) => id !== theme).map((id) => counts.get(id)!);
+    for (const c of others) expect(counts.get(theme)! / c).toBeGreaterThan(1.8);
+    for (const c of others) expect(counts.get(theme)! / c).toBeLessThan(2.2);
+  });
+
+  it('일반 웨이브에서도 테마 적이 대략 2배로 뽑힌다', () => {
+    const stage = 2;
+    const theme = CHAPTER_THEME[0];
+    const d = new WaveDirector(stage, new SeededRng(7));
+    const counts = new Map<string, number>();
+    for (let i = 0; i < 3000; i++) {
+      for (const s of d.composeWave(0)) counts.set(s.enemyId, (counts.get(s.enemyId) ?? 0) + 1);
+    }
+    // 비용이 다른 적이 섞이므로 같은 비용(2)인 물귀신과 비교한다
+    const ratio = counts.get(theme)! / counts.get('waterGhostThrower')!;
+    expect(ratio).toBeGreaterThan(1.6);
+    expect(ratio).toBeLessThan(2.4);
+  });
+
+  it('웨이브는 예산을 넘지 않고, 더 뽑을 적이 없을 때까지 채운다', () => {
+    for (const stage of [0, 2, 9, 24]) {
+      const d = new WaveDirector(stage, new SeededRng(stage + 1));
+      const ids = availableEnemyIds(stage);
+      const minScore = Math.min(...ids.map((id) => getEnemyDef(id).waveScore));
+      for (let w = 0; w < 10; w++) {
+        const budget = waveBudget(stage, Math.min(w, 8));
+        const cost = d.composeWave(w).filter((s) => !s.elite).reduce((sum, s) => sum + getEnemyDef(s.enemyId).waveScore, 0);
+        expect(cost).toBeLessThanOrEqual(budget);
+        expect(budget - cost).toBeLessThan(minScore);
+      }
+    }
+  });
+
+  it('한 웨이브 안의 적이 0.8초 간격으로 나온다', () => {
+    const b = newBattle();
+    const times: number[] = [];
+    let count = 0;
+    for (let i = 0; i < 200 && times.length < 5; i++) {
+      b.step(0.05);
+      if (b.enemies.length > count) {
+        for (let k = count; k < b.enemies.length; k++) times.push(b.elapsed);
+        count = b.enemies.length;
+      }
+    }
+    expect(times.length).toBeGreaterThanOrEqual(4);
+    // 0.05초 틱 단위로 관측하므로 간격은 한 틱 안에서 0.8초와 같다
+    for (let i = 1; i < times.length; i++) expect(Math.abs(times[i] - times[i - 1] - 0.8)).toBeLessThanOrEqual(0.05 + 1e-6);
+    const mean = (times[times.length - 1] - times[0]) / (times.length - 1);
+    expect(mean).toBeCloseTo(0.8, 1);
+  });
+
   it('첫 웨이브는 5초, 이후 20초 간격, 0.8초 간격으로 내보낸다', () => {
     const b = newBattle();
     b.step(4.9);
@@ -310,6 +392,63 @@ describe('승패', () => {
     b.step(1);
     expect(b.elapsed).toBe(t);
     expect(b.summon(0)).toBe('ended');
+  });
+
+  it('같은 틱에 두 기지가 함께 부서지면 승리한다', () => {
+    const b = newBattle();
+    b.hero.x = COMBAT.castle.x - 40;
+    b.castle.hp = 1;
+    b.shrine.hp = 1;
+    b.spawnEnemy('eggGhost', false, COMBAT.shrine.x + 20);
+    b.step(0.05);
+    expect(b.castle.alive).toBe(false);
+    expect(b.shrine.alive).toBe(false);
+    expect(b.result).toBe('victory');
+  });
+
+  it('큰 dt를 한 번에 넣어도 예외 없이 진행된다', () => {
+    const b = newBattle();
+    expect(() => b.step(1000)).not.toThrow();
+    expect(b.elapsed).toBeLessThanOrEqual(1000 + 1e-6);
+    const t = b.elapsed;
+    if (b.result !== 'playing') {
+      b.step(10);
+      expect(b.elapsed).toBe(t);
+    }
+  });
+
+  it('큰 dt 중에 승패가 나면 그 틱에서 멈춘다', () => {
+    const b = newBattle();
+    b.shrine.hp = 1;
+    b.spawnEnemy('eggGhost', false, COMBAT.shrine.x + 20);
+    b.step(1000);
+    expect(b.result).toBe('defeat');
+    expect(b.elapsed).toBeLessThan(1);
+  });
+
+  it('날아가던 투사체의 대상이 죽으면 투사체가 사라지고 다른 대상은 피해를 받지 않는다', () => {
+    const b = newBattle();
+    b.summon(idx('foxfireArcher'));
+    const target = b.spawnEnemy('jangseungSpirit', false, b.allies[0].x + 150);
+    const bystander = b.spawnEnemy('jangseungSpirit', false, 1800);
+    b.step(0.05);
+    expect(b.projectiles.length).toBeGreaterThan(0);
+    target.hp = 0;
+    const heroHp = b.hero.hp;
+    b.step(0.05);
+    expect(b.projectiles).toHaveLength(0);
+    expect(bystander.hp).toBe(bystander.maxHp);
+    expect(b.castle.hp).toBe(b.castle.maxHp);
+    expect(b.hero.hp).toBeGreaterThanOrEqual(heroHp);
+  });
+
+  it('범위 밖 스테이지 번호는 RangeError', () => {
+    for (const bad of [-1, 1.5, STAGE_COUNT, 100, NaN]) {
+      expect(() => new Battle({ stage: bad })).toThrow(RangeError);
+      expect(() => getStageInfo(bad)).toThrow(RangeError);
+    }
+    expect(() => new Battle({ stage: STAGE_COUNT - 1 })).not.toThrow();
+    expect(() => new Battle({ stage: 25 })).toThrow(/24/);
   });
 
   it('서낭당이 부서지면 패배한다', () => {

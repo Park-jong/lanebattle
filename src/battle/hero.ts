@@ -20,8 +20,9 @@ export class Hero extends Body {
       return;
     }
     this.attackCooldown = Math.max(0, this.attackCooldown - dt);
-    this.hp = Math.min(this.maxHp, this.hp + HERO.regenPerSec * dt);
-    const next = this.x + moveDir * HERO.speed * dt;
+    this.heal(HERO.regenPerSec * dt); // 회복 차단 중이면 자연 회복도 막힌다
+    const dir = this.status?.stunned ? 0 : moveDir;
+    const next = this.x + dir * HERO.speed * (this.status?.moveMultiplier ?? 1) * dt;
     this.x = Math.min(COMBAT.castle.x, Math.max(COMBAT.shrine.x, next));
   }
 
@@ -31,7 +32,7 @@ export class Hero extends Body {
   }
 
   get attackReady(): boolean {
-    return this.alive && this.attackCooldown <= 0;
+    return this.alive && this.attackCooldown <= 0 && !this.status?.stunned;
   }
 
   private revive(): void {
@@ -39,5 +40,6 @@ export class Hero extends Body {
     this.x = HERO.respawnX;
     this.respawnTimer = 0;
     this.attackCooldown = 0;
+    this.status?.clear();
   }
 }

@@ -49,6 +49,9 @@ const CH5: ChapterEnemyEntry[] = unlocked(CH4);
 /** 인덱스 0 = 1장 */
 export const CHAPTER_ENEMIES: readonly (readonly ChapterEnemyEntry[])[] = [CH1, CH2, CH3, CH4, CH5];
 
+/** 전체 스테이지 수 (장 수 x 장당 스테이지 수) */
+export const STAGE_COUNT = CHAPTER_ENEMIES.length * WAVE_RULES.stagesPerChapter;
+
 /** 장별 테마 적 (확률 2배) */
 export const CHAPTER_THEME: readonly string[] = [
   'maidenGhost', 'jangseungSpirit', 'gangcheol', 'eodduksini', 'grimReaper',

@@ -17,4 +17,6 @@ export const COMBAT = {
   projectileSpeed: 420,
   /** 시뮬레이션 1틱 최대 시간 */
   maxStepSeconds: 0.05,
+  /** 승패가 난 뒤 이 시간(초) 동안은 재시작 입력을 무시 */
+  resultInputDelay: 1,
 } as const;

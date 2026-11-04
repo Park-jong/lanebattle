@@ -78,17 +78,22 @@ export class WaveDirector {
     for (;;) {
       const candidates = ids.filter((id) => getEnemyDef(id).waveScore <= budget);
       if (candidates.length === 0) break;
-      const weights = candidates.map((id) => (id === theme ? WAVE_RULES.themeWeight : 1));
-      const id = candidates[this.pickWeighted(weights)];
+      const id = this.pickEnemy(candidates, theme);
       picks.push({ enemyId: id, elite: false });
       budget -= getEnemyDef(id).waveScore;
     }
 
-    // 정예: 일반 스테이지의 9번째 웨이브에만 1마리 추가
+    // 정예: 일반 스테이지의 9번째 웨이브에만 1마리 추가 (예산과 별개, 테마 적 가중치 적용)
     if (waveIndex === lastIndex && !info.isBossStage) {
-      picks.push({ enemyId: ids[Math.floor(this.rng.next() * ids.length)], elite: true });
+      picks.push({ enemyId: this.pickEnemy(ids, theme), elite: true });
     }
     return picks;
+  }
+
+  /** 테마 적에 가중치를 주어 한 종류를 고른다 */
+  private pickEnemy(candidates: string[], theme: string): string {
+    const weights = candidates.map((id) => (id === theme ? WAVE_RULES.themeWeight : 1));
+    return candidates[this.pickWeighted(weights)];
   }
 
   private pickWeighted(weights: number[]): number {
