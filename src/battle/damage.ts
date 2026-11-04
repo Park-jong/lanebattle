@@ -7,6 +7,10 @@ export interface AttackInfo {
   type: AttackType;
   tags: readonly Tag[];
   source: AttackSource;
+  /** 방어 파괴를 거는 공격인지 (보스 약점 판정용, strike가 채운다) */
+  defenseBreak?: boolean;
+  /** 공격자가 비행 유닛인지 (보스 약점 판정용, strike가 채운다) */
+  attackerFlying?: boolean;
 }
 
 /** 피해를 받는 쪽의 계산용 정보 */
@@ -31,10 +35,14 @@ export interface DamageOptions {
   multiplier?: number;
 }
 
-function matches(affinity: Affinity | undefined, attack: AttackInfo): boolean {
+/** 상성 해당 여부. 지속 피해(dot)는 공격 유형·방어 파괴·비행 공격자를 보지 않고 태그로만 판정한다 */
+function matches(affinity: Affinity | undefined, attack: AttackInfo, dot: boolean): boolean {
   if (!affinity) return false;
+  if (affinity.tags?.some((t) => attack.tags.includes(t))) return true;
+  if (dot) return false;
   if (affinity.attackTypes?.includes(attack.type)) return true;
-  return affinity.tags?.some((t) => attack.tags.includes(t)) ?? false;
+  if (affinity.defenseBreak && attack.defenseBreak) return true;
+  return (affinity.flyingAttacker && attack.attackerFlying) ?? false;
 }
 
 /** 적 특성 배율. 해당하는 규칙을 모두 곱한다 */
@@ -52,10 +60,10 @@ export function traitMultiplier(attack: AttackInfo, target: DamageTarget, dot = 
 }
 
 /** 보스 상성 배율. 약점 x2(한 번만), 저항 x0.2, 둘 다면 곱한다 */
-export function affinityMultiplier(attack: AttackInfo, target: DamageTarget): number {
+export function affinityMultiplier(attack: AttackInfo, target: DamageTarget, dot = false): number {
   let result = 1;
-  if (matches(target.weakness, attack)) result *= STATUS.bossWeaknessMultiplier;
-  if (matches(target.resistance, attack)) result *= STATUS.bossResistanceMultiplier;
+  if (matches(target.weakness, attack, dot)) result *= STATUS.bossWeaknessMultiplier;
+  if (matches(target.resistance, attack, dot)) result *= STATUS.bossResistanceMultiplier;
   return result;
 }
 
@@ -79,7 +87,7 @@ export function calcDamage(
     (1 + attackBonus) *
     (options.multiplier ?? 1) *
     traitMultiplier(attack, target, dot) *
-    affinityMultiplier(attack, target) *
+    affinityMultiplier(attack, target, dot) *
     (1 + increase - reduction);
   return dot ? damage : Math.max(COMBAT.minDamage, damage);
 }

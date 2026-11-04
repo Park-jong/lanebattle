@@ -5,6 +5,12 @@ export class Resources {
   talisman: number = RESOURCES.talisman.start;
   spirit: number = RESOURCES.spirit.start;
   private level = 0;
+  /** 부적 충전 속도 배율 (이무기 강철이의 가뭄: 0.6) */
+  private chargeFactor = 1;
+
+  setTalismanChargeFactor(factor: number): void {
+    this.chargeFactor = factor;
+  }
 
   get gatherLevel(): number {
     return this.level;
@@ -15,7 +21,7 @@ export class Resources {
   }
 
   get talismanPerSec(): number {
-    return RESOURCES.talisman.chargePerSec + this.level * RESOURCES.gather.chargeBonusPerLevel;
+    return (RESOURCES.talisman.chargePerSec + this.level * RESOURCES.gather.chargeBonusPerLevel) * this.chargeFactor;
   }
 
   get maxSpirit(): number {

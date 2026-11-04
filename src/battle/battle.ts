@@ -1,4 +1,5 @@
 import { ALLIES } from '../data/allies';
+import { BOSS_RULES, getBossDef } from '../data/bosses';
 import { COMBAT } from '../data/combat';
 import { HERO } from '../data/hero';
 import { getSkill, SKILL_EFFECTS, type SkillId } from '../data/skills';
@@ -6,7 +7,8 @@ import { RESOURCES } from '../data/resources';
 import { type AbilityDef } from '../data/abilities';
 import { ALL_SYNERGY_IDS, type SynergyId } from '../data/synergy';
 import { TimedAbilities, type AbilityHost } from './abilities';
-import { calcDamage, type AttackInfo } from './damage';
+import { BossEncounter, type BossHost } from './boss';
+import { calcDamage, type AttackInfo, type DamageOptions } from './damage';
 import { Base, Body, Fighter, Projectile, type ProjectilePayload } from './entities';
 import type { AuraDef, BuffEffect } from './status';
 import { createEnemy } from './enemyFactory';
@@ -27,6 +29,8 @@ export interface BattleOptions {
   rng?: Rng;
   /** 켜 둘 연계 ID 목록. 기본은 빈 목록 (8단계 업그레이드 트리에서 정한다) */
   synergies?: readonly SynergyId[];
+  /** 보스 스테이지에서 보스가 등장하는 시각(초). 기본 60 */
+  bossAt?: number;
 }
 
 /** 타격 한 번의 입력 */
@@ -51,7 +55,7 @@ export interface StepInput {
 }
 
 /** Phaser에 의존하지 않는 전투 시뮬레이션 */
-export class Battle implements AbilityHost {
+export class Battle implements AbilityHost, BossHost {
   readonly stage: number;
   readonly resources = new Resources();
   readonly hero = new Hero();
@@ -71,6 +75,10 @@ export class Battle implements AbilityHost {
   private castEvents: SkillCastEvent[] = [];
   private readonly timedAbilities: TimedAbilities;
   readonly synergy: SynergyEngine;
+  /** 보스 스테이지의 보스 한 판 (일반 스테이지는 null) */
+  readonly encounter: BossEncounter | null;
+  /** 차사왕: 아군 오라를 끈다 */
+  private allyAurasSuppressed = false;
 
   constructor(options: BattleOptions = {}) {
     this.stage = options.stage ?? 0;
@@ -88,6 +96,11 @@ export class Battle implements AbilityHost {
       COMBAT.castle.width,
       COMBAT.castle.height,
     );
+    const info = getStageInfo(this.stage);
+    this.encounter = info.isBossStage
+      ? new BossEncounter(getBossDef(info.chapter), this, options.bossAt ?? BOSS_RULES.appearAt)
+      : null;
+    this.refreshCastleShield();
   }
 
   /** 살아 있는 영웅 (죽었으면 null) */
@@ -106,6 +119,7 @@ export class Battle implements AbilityHost {
 
   /** 살아 있는 오라의 위치와 반경 (화면 표시용) */
   get auraCircles(): { x: number; radius: number }[] {
+    if (this.allyAurasSuppressed) return [];
     return this.auras.filter((a) => a.owner.alive).map((a) => ({ x: a.owner.x, radius: a.def.radius }));
   }
 
@@ -174,8 +188,7 @@ export class Battle implements AbilityHost {
   /** 스킬 피해: 마법·영웅 태그. 공격력 버프는 적용하지 않는 고정 수치이고, 신력 충전도 없다 */
   private skillHit(target: Body, base: number, extraTags: AttackInfo['tags'] = []): void {
     const info: AttackInfo = { type: 'magic', tags: ['hero', ...extraTags], source: 'hero' };
-    const damage = calcDamage(base, info, target.damageTarget);
-    this.applyDamage(target, damage, damage === 0 ? 0 : undefined);
+    this.resolveHit(target, base, info, {});
   }
 
   /** 부채 바람: 바라보는 방향 앞쪽(대상 반지름 고려)에 피해 + 넉백. 비행 적도 맞고 기지는 제외 */
@@ -239,6 +252,8 @@ export class Battle implements AbilityHost {
       this.cooldowns[i] = Math.max(0, this.cooldowns[i] - dt);
     }
 
+    this.encounter?.update(this.elapsed, dt);
+    this.refreshCastleShield();
     this.skillCooldowns.step(dt); // 영웅이 죽어 있어도 줄어든다
     this.hero.update(dt, input.moveDir);
     this.applyAuras();
@@ -401,7 +416,13 @@ export class Battle implements AbilityHost {
    * 공격자 쪽 배율(능력)과 연계 배율은 곱해진다. 공격자가 버프 해제 중이면 연계 공격 효과는 없다.
    */
   private strike(target: Body, s: Strike): void {
-    const { attacker, info } = s;
+    const { attacker } = s;
+    // 보스 약점 판정용: 방어 파괴를 거는 공격인지, 공격자가 비행 유닛인지
+    const info: AttackInfo = {
+      ...s.info,
+      defenseBreak: s.info.defenseBreak ?? (attacker instanceof Fighter ? (attacker.ability.onHit?.defenseBreak ?? false) : false),
+      attackerFlying: s.info.attackerFlying ?? attacker?.flying ?? false,
+    };
     const ability = attacker instanceof Fighter ? attacker.ability : undefined;
     const dispelled = attacker?.status?.buffsDisabled ?? false;
     const targetBurning = target.status?.burning ?? false;
@@ -411,8 +432,7 @@ export class Battle implements AbilityHost {
     if (ability?.baseDamageMultiplier && target.kind === 'base') multiplier *= ability.baseDamageMultiplier;
     multiplier *= this.synergy.hitMultiplier(info, dispelled, targetBurning);
 
-    const damage = calcDamage(s.base, info, target.damageTarget, { attackBonus: s.attackBonus, multiplier });
-    this.applyDamage(target, damage, damage === 0 ? 0 : undefined);
+    this.resolveHit(target, s.base, info, { attackBonus: s.attackBonus, multiplier });
 
     const burn = this.synergy.burnModifier(info, dispelled);
     if (s.burnPerSec > 0 && !target.isImmuneTo(info.tags)) {
@@ -443,6 +463,43 @@ export class Battle implements AbilityHost {
     }
   }
 
+  /**
+   * 피해 계산 + 적용. 대상이 태그 회복 특성(강철이의 불)을 가졌고 공격이 그 태그면,
+   * 저항 적용 전 피해량만큼 회복한다 (회복 차단의 영향을 받음).
+   * 최소 피해는 지속 피해(dot)가 아니면 1, 면역(피해 0)이면 0.
+   */
+  private resolveHit(target: Body, base: number, info: AttackInfo, options: DamageOptions): void {
+    const damage = calcDamage(base, info, target.damageTarget, options);
+    this.applyDamage(target, damage, damage === 0 || options.dot ? 0 : undefined);
+    const healTags = target instanceof Fighter ? target.stats.healFromTags : undefined;
+    if (!target.alive || !healTags?.some((t) => info.tags.includes(t))) return;
+    const raw = calcDamage(base, info, { ...target.damageTarget, resistance: undefined }, options);
+    target.heal(raw);
+  }
+
+  /** 고정 피해 (보스 패턴용): 공격력 버프 없이 피해 계산 함수만 거친다 */
+  dealFixedDamage(target: Body, base: number, info: AttackInfo): void {
+    this.resolveHit(target, base, info, {});
+  }
+
+  addEnemy(enemy: Fighter): void {
+    this.enemies.push(enemy);
+  }
+
+  setAllyBonusesSuppressed(value: boolean): void {
+    this.synergyDisabled = value;
+    this.allyAurasSuppressed = value;
+  }
+
+  setTalismanChargeFactor(factor: number): void {
+    this.resources.setTalismanChargeFactor(factor);
+  }
+
+  /** 보스를 잡기 전에는 원귀의 성이 무적 */
+  private refreshCastleShield(): void {
+    this.castle.invulnerable = this.encounter?.castleInvulnerable ?? false;
+  }
+
   /** 피해 적용과 사망 처리(처치 보상, 영웅 부활 시작) */
   private applyDamage(target: Body, amount: number, minimum?: number): void {
     if (!target.takeDamage(amount, minimum)) return;
@@ -465,7 +522,7 @@ export class Battle implements AbilityHost {
     for (const b of this.statusBodies()) {
       if (!b.alive) continue;
       const base = b.status!.update(dt);
-      if (base > 0) this.applyDamage(b, calcDamage(base, BURN_ATTACK, b.damageTarget, { dot: true }), 0);
+      if (base > 0) this.resolveHit(b, base, BURN_ATTACK, { dot: true });
     }
   }
 
@@ -474,6 +531,7 @@ export class Battle implements AbilityHost {
     for (const b of this.statusBodies()) b.status!.clearAuraEffects();
     this.auras = this.auras.filter((a) => a.owner.alive);
     for (const { owner, def } of this.auras) {
+      if (this.allyAurasSuppressed && owner.team === 'ally') continue;
       const pool = owner.team === 'ally' ? [...this.allies, ...(this.hero.alive ? [this.hero] : [])] : this.enemies;
       for (const b of pool) {
         if (b.alive && Math.abs(b.x - owner.x) <= def.radius) b.status!.addAuraEffect(def.effect);
@@ -509,6 +567,7 @@ export class Battle implements AbilityHost {
 
   applyDefenseBreak(target: Body, maxStacks?: number): void {
     target.status?.applyDefenseBreak(maxStacks);
+    this.encounter?.notifyDefenseBreak(target);
   }
 
   /** 버프 부여. 버프 해제 중이거나 기지면 false */

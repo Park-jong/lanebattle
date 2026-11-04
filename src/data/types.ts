@@ -13,6 +13,10 @@ export type AttackSource = 'ally' | 'enemy' | 'hero';
 export interface Affinity {
   attackTypes?: readonly AttackType[];
   tags?: readonly Tag[];
+  /** 방어 파괴를 거는 공격 */
+  defenseBreak?: boolean;
+  /** 공격자가 비행 유닛 */
+  flyingAttacker?: boolean;
 }
 
 /** 전투 능력치 공통 필드 */

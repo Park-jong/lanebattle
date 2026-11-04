@@ -20,6 +20,16 @@ const BUTTON_Y = GAME_HEIGHT - BUTTON_H - 6;
 const SKILL_W = 110;
 const SKILL_H = 40;
 const SKILL_Y = BUTTON_Y - SKILL_H - 6;
+/** 보스 등장 연출 길이(초): 화면이 어두워지고 이름이 나타났다 사라진다 */
+const BOSS_INTRO_SECONDS = 1.6;
+/** 보스 체력바 배치 (위쪽 가운데, 기본 HUD 글자 아래) */
+const BOSS_BAR_W = 400;
+const BOSS_BAR_X = (GAME_WIDTH - BOSS_BAR_W) / 2;
+const BOSS_NAME_Y = 94;
+const BOSS_BAR_Y = 116;
+const BOSS_CHIP_Y = 138;
+/** 일반 비행 유닛이 떠 있는 높이 */
+const FLY_LIFT = 40;
 /** 스킬 이펙트가 퍼지는 시간(초) */
 const CAST_FX_SECONDS = 0.3;
 
@@ -46,6 +56,14 @@ export class BattleScene extends Phaser.Scene {
   private keyInput!: KeyInput;
   /** 승패가 난 뒤 지난 시간(초) */
   private resultElapsed = 0;
+  /** 보스 등장 연출 남은 시간(초). 0이면 연출 없음 */
+  private bossIntroLeft = 0;
+  private bossSeen = false;
+  private bossNameText!: Phaser.GameObjects.Text;
+  private bossIntroText!: Phaser.GameObjects.Text;
+  private bossStateText!: Phaser.GameObjects.Text;
+  private bossChips: Phaser.GameObjects.Text[] = [];
+  private castleShieldText!: Phaser.GameObjects.Text;
 
   constructor() {
     super('Battle');
@@ -58,7 +76,11 @@ export class BattleScene extends Phaser.Scene {
     this.battle = new Battle({
       stage: Math.max(0, Math.min(STAGE_COUNT - 1, Math.floor(stage))),
       synergies: synergiesFromUrl(),
+      bossAt: bossAtFromUrl(),
     });
+    this.bossIntroLeft = 0;
+    this.bossSeen = false;
+    this.bossChips = [];
     this.paused = false;
     this.resultElapsed = 0;
     this.summonButtons = [];
@@ -85,15 +107,35 @@ export class BattleScene extends Phaser.Scene {
       .setDepth(200)
       .setVisible(false);
 
+    this.createBossUi();
     this.createButtons();
     this.setupInput();
+  }
+
+  /** 보스 이름·상태·연출 글자와 성 무적 표시 (처음엔 숨김) */
+  private createBossUi(): void {
+    const style = { fontFamily: HUD_FONT, color: '#ffffff' };
+    this.bossNameText = this.add
+      .text(GAME_WIDTH / 2, BOSS_NAME_Y, '', { ...style, fontSize: '16px', fontStyle: 'bold' })
+      .setOrigin(0.5, 0).setScrollFactor(0).setDepth(95).setVisible(false);
+    this.bossStateText = this.add
+      .text(BOSS_BAR_X + BOSS_BAR_W + 8, BOSS_BAR_Y - 1, '', { ...style, fontSize: '13px' })
+      .setScrollFactor(0).setDepth(95).setVisible(false);
+    this.bossIntroText = this.add
+      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 60, '', { ...style, fontSize: '64px', fontStyle: 'bold' })
+      .setOrigin(0.5).setScrollFactor(0).setDepth(150).setVisible(false);
+    this.castleShieldText = this.add
+      .text(0, 0, '무적', { ...style, fontSize: '16px', fontStyle: 'bold', backgroundColor: '#3a6fd4cc', padding: { x: 6, y: 2 } })
+      .setOrigin(0.5, 1).setDepth(60).setVisible(false);
   }
 
   update(_time: number, delta: number): void {
     const playing = this.battle.result === 'playing';
     if (playing && !this.paused) {
       this.battle.step(delta / 1000, { moveDir: this.keyInput.moveDir() });
+      this.bossIntroLeft = Math.max(0, this.bossIntroLeft - delta / 1000);
     }
+    this.watchBossAppearance();
     if (!playing) this.resultElapsed += delta / 1000;
     this.updateCastFx(delta / 1000, playing && !this.paused);
     this.followHero();
@@ -101,6 +143,57 @@ export class BattleScene extends Phaser.Scene {
     this.drawHud();
     this.updateButtons();
     this.updateOverlay();
+  }
+
+  // ----- 보스 -----
+
+  /** 보스가 처음 등장한 프레임에 연출을 시작하고 약점·저항 칩을 만든다 */
+  private watchBossAppearance(): void {
+    const enc = this.battle.encounter;
+    if (!enc || this.bossSeen || enc.state === 'pending') return;
+    this.bossSeen = true;
+    this.bossIntroLeft = BOSS_INTRO_SECONDS;
+    this.bossIntroText.setText(enc.def.name);
+    this.bossNameText.setText(enc.def.name);
+    const chips: [string, string, string][] = [
+      ...enc.def.weaknessLabels.map((l): [string, string, string] => [`약점: ${l}`, '#1a1a1a', '#ffd84a']),
+      ...enc.def.resistanceLabels.map((l): [string, string, string] => [`저항: ${l}`, '#1a1a1a', '#a0a0a0']),
+    ];
+    this.bossChips = chips.map(([label, color, bg]) =>
+      this.add
+        .text(0, BOSS_CHIP_Y, label, { fontFamily: HUD_FONT, fontSize: '13px', color, backgroundColor: bg, padding: { x: 6, y: 2 } })
+        .setScrollFactor(0).setDepth(95),
+    );
+    const gap = 6;
+    const total = this.bossChips.reduce((sum, c) => sum + c.width, 0) + gap * (this.bossChips.length - 1);
+    let x = (GAME_WIDTH - total) / 2;
+    for (const c of this.bossChips) {
+      c.setX(x);
+      x += c.width + gap;
+    }
+  }
+
+  /** 보스 등장 연출 / 체력바 / 상태 글자. 보스가 죽으면 숨긴다 */
+  private drawBossHud(g: Phaser.GameObjects.Graphics): void {
+    const enc = this.battle.encounter;
+    const boss = enc?.boss;
+    const show = !!enc && !!boss && boss.alive;
+    this.bossNameText.setVisible(show);
+    this.bossStateText.setVisible(show);
+    for (const c of this.bossChips) c.setVisible(show);
+
+    // 등장 연출: 화면이 어두워졌다가 풀리고, 이름이 나타났다 사라진다
+    if (this.bossIntroLeft > 0) {
+      const t = 1 - this.bossIntroLeft / BOSS_INTRO_SECONDS;
+      const wave = Math.sin(Math.PI * t);
+      g.fillStyle(0x000000, 0.6 * wave).fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+      this.bossIntroText.setVisible(true).setAlpha(wave).setScale(1 + 0.2 * t);
+    } else {
+      this.bossIntroText.setVisible(false);
+    }
+    if (!enc || !boss || !show) return;
+    this.bar(g, BOSS_BAR_X, BOSS_BAR_Y, BOSS_BAR_W, 16, boss.hp / boss.maxHp, 0xc23b3b);
+    this.bossStateText.setText(enc.statusLabel);
   }
 
   // ----- 입력 -----
@@ -258,6 +351,9 @@ export class BattleScene extends Phaser.Scene {
     }
     this.drawBase(b.shrine, 0xe0b52e);
     this.drawBase(b.castle, ENEMY_COLOR);
+    this.castleShieldText
+      .setVisible(b.castle.invulnerable)
+      .setPosition(b.castle.x, GROUND_Y - b.castle.height - 16);
     for (const f of b.allies) this.drawFighter(f, colorForTags(f.stats.tags));
     for (const f of b.enemies) this.drawFighter(f, ENEMY_COLOR);
 
@@ -292,12 +388,22 @@ export class BattleScene extends Phaser.Scene {
     const w = f.stats.width * f.sizeScale;
     const h = f.stats.height * f.sizeScale;
     // 비행 유닛은 위쪽에 띄워 그린다
-    const lift = f.stats.flying ? 40 : 0;
+    const lift = f.flying ? this.liftOf(f) : 0;
     const top = GROUND_Y - h - lift;
     g.fillStyle(color, 1).fillRect(f.x - w / 2, top, w, h);
     if (f.stats.elite) g.lineStyle(3, 0xffd166, 1).strokeRect(f.x - w / 2, top, w, h);
+    if (f.isBoss) g.lineStyle(3, 0xff4040, 1).strokeRect(f.x - w / 2, top, w, h);
+    // 떠 있으면 그림자를 땅에 둔다 (비행/착지 구분)
+    if (lift > 0) g.fillStyle(0x000000, 0.35).fillEllipse(f.x, GROUND_Y + 2, w, 8);
     this.drawHpBar(f.x, top - 6, w + 6, f.hp / f.maxHp, f.team === 'ally' ? 0x66dd66 : 0xdd5555);
     this.drawStatusMarks(f, f.x, top, w, h);
+  }
+
+  /** 비행 유닛이 떠 있는 높이. 보스는 패턴 데이터의 높이를 쓴다 */
+  private liftOf(f: Fighter): number {
+    const def = this.battle.encounter?.def;
+    if (def && this.battle.encounter?.boss === f && def.pattern.kind === 'descend') return def.pattern.flyHeight;
+    return FLY_LIFT;
   }
 
   /** 상태 표시 (임시): 화상 빨강 점, 감속 파랑 점, 기절 노랑 점, 방어 파괴 주황 칸(중첩 수), 버프 초록 테두리 */
@@ -332,10 +438,11 @@ export class BattleScene extends Phaser.Scene {
     const b = this.battle;
     const r = b.resources;
     g.clear();
+    this.drawBossHud(g);
     this.bar(g, 8, 8, 200, 12, r.talisman / r.maxTalisman, 0xe0b52e);
     this.bar(g, 8, 24, 200, 12, r.spirit / r.maxSpirit, 0x58a6ff);
     this.bar(g, 330, 8, 180, 14, b.shrine.hp / b.shrine.maxHp, 0x66aaff);
-    this.bar(g, GAME_WIDTH - 190, 8, 180, 14, b.castle.hp / b.castle.maxHp, 0xdd5555);
+    this.bar(g, GAME_WIDTH - 190, 8, 180, 14, b.castle.hp / b.castle.maxHp, b.castle.invulnerable ? 0x9aa5c0 : 0xdd5555);
 
     const hero = b.hero;
     const heroLine = hero.alive ? '' : `  영웅 부활 ${Math.ceil(hero.respawnTimer)}초`;
@@ -386,4 +493,12 @@ function synergiesFromUrl(): SynergyId[] {
   if (!value) return [];
   if (value === 'all') return [...ALL_SYNERGY_IDS];
   return value.split(',').filter(isSynergyId);
+}
+
+/** URL ?bossAt=초 로 보스 등장 시각을 바꾼다 (없거나 잘못된 값이면 기본 60초) */
+function bossAtFromUrl(): number | undefined {
+  const value = new URLSearchParams(window.location.search).get('bossAt');
+  if (value === null || value === '') return undefined;
+  const n = Number(value);
+  return Number.isFinite(n) && n >= 0 ? n : undefined;
 }

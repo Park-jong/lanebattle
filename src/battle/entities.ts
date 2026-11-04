@@ -40,6 +40,11 @@ export abstract class Body {
     return false;
   }
 
+  /** 상태 효과와 별개로 타고난 받는 피해 감소 (장승왕 갑옷) */
+  get innateDamageReduction(): number {
+    return 0;
+  }
+
   get traits(): readonly EnemyTrait[] {
     return [];
   }
@@ -84,7 +89,7 @@ export abstract class Body {
       weakness: this.weakness,
       resistance: this.resistance,
       defenseBreakStacks: this.status?.defenseBreakStacks ?? 0,
-      damageReduction: this.status?.damageReduction ?? 0,
+      damageReduction: (this.status?.damageReduction ?? 0) + this.innateDamageReduction,
       immuneTags: this.immuneTags,
     };
   }
@@ -111,8 +116,16 @@ export abstract class Body {
 
 /** 기지 (서낭당 / 원귀의 성) */
 export class Base extends Body {
+  /** 무적이면 피해를 받지 않는다 (보스가 살아 있는 동안의 원귀의 성) */
+  invulnerable = false;
+
   constructor(team: Team, x: number, maxHp: number, readonly width: number, readonly height: number) {
     super('base', team, x, maxHp, width / 2);
+  }
+
+  override takeDamage(amount: number, minimum?: number): boolean {
+    if (this.invulnerable) return false;
+    return super.takeDamage(amount, minimum);
   }
 }
 
@@ -125,6 +138,8 @@ export interface FighterStats extends CombatStats {
   scale: number;
   elite: boolean;
   boss?: boolean;
+  /** 이 태그가 붙은 피해를 받으면 그만큼 회복 (이무기 강철이) */
+  healFromTags?: readonly Tag[];
   weakness?: Affinity;
   resistance?: Affinity;
   /** 이 유닛 공격이 거는 화상의 초당 피해 */
@@ -142,6 +157,10 @@ export class Fighter extends Body {
   /** 성장 능력으로 늘어난 배율 */
   private growthAttack = 1;
   private growthSize = 1;
+  /** 패턴이 정한 받는 피해 감소 */
+  private patternReduction = 0;
+  /** 비행 여부를 패턴이 덮어쓴 값 (null이면 stats.flying) */
+  private flyingOverride: boolean | null = null;
 
   constructor(
     team: Team,
@@ -180,7 +199,20 @@ export class Fighter extends Body {
   }
 
   override get flying(): boolean {
-    return this.stats.flying;
+    return this.flyingOverride ?? this.stats.flying;
+  }
+
+  /** 패턴에서 비행 상태를 바꾼다 (어둑시니 대왕의 착지) */
+  setFlying(value: boolean): void {
+    this.flyingOverride = value;
+  }
+
+  override get innateDamageReduction(): number {
+    return this.patternReduction;
+  }
+
+  setPatternReduction(value: number): void {
+    this.patternReduction = value;
   }
 
   override get isBoss(): boolean {
