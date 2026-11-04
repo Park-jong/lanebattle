@@ -4,6 +4,8 @@ export const COMBAT = {
   shrine: { x: 80, maxHp: 1000, width: 50, height: 90 },
   castle: { x: 2320, baseHp: 1200, hpPerStage: 150, width: 70, height: 130 },
   maxAllies: 30,
+  /** 동시에 살아 있는 적 상한 (보스 제외) */
+  maxEnemies: 60,
   /** 전투 시작 후 이 시간(초)마다 위협 단계 +1 (1부터 시작) */
   threatInterval: 30,
   threatStart: 1,

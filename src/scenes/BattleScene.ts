@@ -5,6 +5,8 @@ import { HERO } from '../data/hero';
 import { RESOURCES } from '../data/resources';
 import { SKILL_EFFECTS, SKILLS, type SkillId } from '../data/skills';
 import { STAGE_COUNT } from '../data/waves';
+import { STAR_RULES } from '../data/rewards';
+import { getStageDef } from '../battle/stage';
 import { ALL_SYNERGY_IDS, Battle } from '../battle/battle';
 import { isSynergyId, SYNERGY, type SynergyId } from '../data/synergy';
 import type { Base, Body, Fighter } from '../battle/entities';
@@ -32,6 +34,11 @@ const BOSS_CHIP_Y = 138;
 const FLY_LIFT = 40;
 /** 스킬 이펙트가 퍼지는 시간(초) */
 const CAST_FX_SECONDS = 0.3;
+/** 결과 패널 (HUD 버튼보다 아래, 결과 글자보다 아래에 그린다) */
+const RESULT_PANEL = { x: 230, y: 60, w: 500, h: 340 };
+const RESULT_BUTTON_Y = GAME_HEIGHT / 2 + 70;
+const RESULT_BUTTON_W = 160;
+const RESULT_BUTTON_GAP = 20;
 
 interface CastFx {
   id: SkillId;
@@ -53,6 +60,12 @@ export class BattleScene extends Phaser.Scene {
   private castFx: CastFx[] = [];
   private gatherButton!: HudButton;
   private restartButton!: HudButton;
+  private nextButton!: HudButton;
+  private resultPanel!: Phaser.GameObjects.Graphics;
+  private resultTitle!: Phaser.GameObjects.Text;
+  private resultStars!: Phaser.GameObjects.Text;
+  private resultBody!: Phaser.GameObjects.Text;
+  private stageText!: Phaser.GameObjects.Text;
   private keyInput!: KeyInput;
   /** 승패가 난 뒤 지난 시간(초) */
   private resultElapsed = 0;
@@ -107,7 +120,14 @@ export class BattleScene extends Phaser.Scene {
       .setDepth(200)
       .setVisible(false);
 
+    this.stageText = this.add
+      .text(330, 26, '', { fontFamily: HUD_FONT, fontSize: '12px', color: '#cfd6ee' })
+      .setScrollFactor(0)
+      .setDepth(95);
+    const def = getStageDef(this.battle.stage);
+    this.stageText.setText(`스테이지 ${def.code} ${def.name}`);
     this.createBossUi();
+    this.createResultUi();
     this.createButtons();
     this.setupInput();
   }
@@ -127,6 +147,25 @@ export class BattleScene extends Phaser.Scene {
     this.castleShieldText = this.add
       .text(0, 0, '무적', { ...style, fontSize: '16px', fontStyle: 'bold', backgroundColor: '#3a6fd4cc', padding: { x: 6, y: 2 } })
       .setOrigin(0.5, 1).setDepth(60).setVisible(false);
+  }
+
+  /** 결과 화면 패널과 글자 (처음엔 숨김) */
+  private createResultUi(): void {
+    const { x, y, w, h } = RESULT_PANEL;
+    const cx = x + w / 2;
+    this.resultPanel = this.add.graphics().setScrollFactor(0).setDepth(98).setVisible(false);
+    this.resultPanel.fillStyle(0x10142a, 0.92).fillRect(x, y, w, h);
+    this.resultPanel.lineStyle(2, 0xffffff, 0.6).strokeRect(x, y, w, h);
+    const style = { fontFamily: HUD_FONT, color: '#ffffff' };
+    this.resultTitle = this.add
+      .text(cx, y + 14, '', { ...style, fontSize: '34px', fontStyle: 'bold' })
+      .setOrigin(0.5, 0).setScrollFactor(0).setDepth(200).setVisible(false);
+    this.resultStars = this.add
+      .text(cx, y + 62, '', { ...style, fontSize: '40px', color: '#ffd84a' })
+      .setOrigin(0.5, 0).setScrollFactor(0).setDepth(200).setVisible(false);
+    this.resultBody = this.add
+      .text(x + 40, y + 120, '', { ...style, fontSize: '15px', lineSpacing: 6 })
+      .setScrollFactor(0).setDepth(200).setVisible(false);
   }
 
   update(_time: number, delta: number): void {
@@ -210,13 +249,26 @@ export class BattleScene extends Phaser.Scene {
     return this.battle.result !== 'playing' && this.resultElapsed >= COMBAT.resultInputDelay;
   }
 
+  /** 현재 스테이지를 다시 시작 (URL의 ?stage와 무관하게 지금 스테이지로) */
   private restart(): void {
-    if (this.restartAllowed) this.scene.restart();
+    if (this.restartAllowed) this.scene.restart({ stage: this.battle.stage });
+  }
+
+  /** 승리했고 마지막 스테이지가 아니면 다음 스테이지 번호 */
+  private get nextStage(): number | null {
+    const next = this.battle.stage + 1;
+    return this.battle.result === 'victory' && next < STAGE_COUNT ? next : null;
+  }
+
+  private goNextStage(): void {
+    const next = this.nextStage;
+    if (this.restartAllowed && next !== null) this.scene.restart({ stage: next });
   }
 
   private onKeyDown(code: string): void {
     if (this.battle.result !== 'playing') {
       if (code === KEY_MAP.gatherOrRestart) this.restart();
+      else if (code === KEY_MAP.nextStage) this.goNextStage();
       return;
     }
     if ((KEY_MAP.pause as readonly string[]).includes(code)) {
@@ -263,11 +315,17 @@ export class BattleScene extends Phaser.Scene {
     });
     const gx = 6 + ALLIES.length * (BUTTON_W + BUTTON_GAP);
     this.restartButton = new HudButton(
-      this, GAME_WIDTH / 2 - 80, GAME_HEIGHT / 2 + 70, 160, 44, 0x3a6b4a,
+      this, GAME_WIDTH / 2 - 80, RESULT_BUTTON_Y, RESULT_BUTTON_W, 44, 0x3a6b4a,
       () => this.restart(),
     );
-    this.restartButton.setTexts('다시 하기', '');
+    this.restartButton.setTexts(`${KEY_MAP.gatherOrRestart.slice(3)} 다시 하기`, '');
     this.restartButton.setVisible(false);
+    this.nextButton = new HudButton(
+      this, GAME_WIDTH / 2 + RESULT_BUTTON_GAP / 2, RESULT_BUTTON_Y, RESULT_BUTTON_W, 44, 0x3a5a8b,
+      () => this.goNextStage(),
+    );
+    this.nextButton.setTexts(`${KEY_MAP.nextStage.slice(3)} 다음 스테이지`, '');
+    this.nextButton.setVisible(false);
     this.gatherButton = new HudButton(
       this, gx, BUTTON_Y, GAME_WIDTH - gx - 6, BUTTON_H, 0x6b5a3a,
       () => {
@@ -452,9 +510,16 @@ export class BattleScene extends Phaser.Scene {
     this.hudText.setPosition(8, 42);
     this.hudText.setText(
       `부적 ${Math.floor(r.talisman)}/${r.maxTalisman} (+${r.talismanPerSec}/s)  신력 ${Math.floor(r.spirit)}/${r.maxSpirit}\n` +
-        `위협 ${b.threatLevel}  시간 ${mm}:${ss}  아군 ${b.allies.length}/${COMBAT.maxAllies}  웨이브 ${b.waveCount}${heroLine}` +
+        `위협 ${b.threatLevel}  시간 ${mm}:${ss}  아군 ${b.allies.length}/${COMBAT.maxAllies}  웨이브 ${b.waveCount}  ${this.enemyLine()}${heroLine}` +
         this.synergyLine(),
     );
+  }
+
+  /** 적 수 표시. 상한에 닿으면 대기 수도 보여 준다 */
+  private enemyLine(): string {
+    const b = this.battle;
+    const pending = b.pendingSpawns > 0 ? ` (대기 ${b.pendingSpawns})` : '';
+    return `적 ${b.enemyCount}/${COMBAT.maxEnemies}${pending}`;
   }
 
   /** 활성 연계 이름 (켜진 것이 없으면 빈 문자열) */
@@ -472,19 +537,55 @@ export class BattleScene extends Phaser.Scene {
   private updateOverlay(): void {
     const result = this.battle.result;
     const ended = result !== 'playing';
+    const next = this.nextStage;
     this.restartButton.setVisible(ended);
-    if (ended) this.restartButton.setState(0, this.restartAllowed);
-    const hint = this.restartAllowed ? '\nR 또는 다시 하기 버튼으로 재시작' : '';
-    if (result === 'victory') {
-      this.overlay.setText(`승리!${hint}`).setVisible(true);
-    } else if (result === 'defeat') {
-      this.overlay.setText(`패배...${hint}`).setVisible(true);
+    this.nextButton.setVisible(ended && next !== null);
+    if (ended) {
+      // 다음 스테이지 버튼이 있으면 둘을 나란히, 없으면 다시 하기를 가운데에
+      const total = next !== null ? RESULT_BUTTON_W * 2 + RESULT_BUTTON_GAP : RESULT_BUTTON_W;
+      this.restartButton.moveTo((GAME_WIDTH - total) / 2, RESULT_BUTTON_Y);
+      this.restartButton.setState(0, this.restartAllowed);
+      this.nextButton.setState(0, this.restartAllowed);
+    }
+    this.resultPanel.setVisible(ended);
+    this.resultTitle.setVisible(ended);
+    this.resultStars.setVisible(ended);
+    this.resultBody.setVisible(ended);
+    if (ended) {
+      this.drawResultTexts();
     } else if (this.paused) {
       this.overlay.setText('일시정지\nEsc 또는 P로 계속').setVisible(true);
-    } else {
-      this.overlay.setVisible(false);
+      return;
     }
+    this.overlay.setVisible(false);
   }
+
+  /** 결과 패널 글자: 제목, 별, 걸린 시간·체력, 별 조건, 보상 */
+  private drawResultTexts(): void {
+    const res = this.battle.stageResult();
+    if (!res) return;
+    const def = getStageDef(this.battle.stage);
+    const hpPercent = Math.floor((this.battle.shrine.hp / this.battle.shrine.maxHp) * 100);
+    const mark = (ok: boolean) => (ok ? '✔' : '✘');
+    this.resultTitle.setText(res.victory ? '승리!' : '패배...');
+    this.resultStars.setText('★'.repeat(res.stars) + '☆'.repeat(STAR_RULES.maxStars - res.stars));
+    this.resultBody.setText(
+      [
+        `${def.code} ${def.name}`,
+        `걸린 시간 ${formatTime(this.battle.elapsed)}    서낭당 체력 ${hpPercent}%`,
+        `${mark(res.conditions.clear)} ★1  클리어`,
+        `${mark(res.conditions.shrineHp)} ★2  서낭당 체력 ${STAR_RULES.shrineHpRatio * 100}% 이상`,
+        `${mark(res.conditions.time)} ★3  ★2 조건 + ${formatTime(def.threeStarSeconds)} 안에 클리어`,
+        `엽전 +${res.yeopjeon}    신명 +${res.sinmyeong}`,
+      ].join('\n'),
+    );
+  }
+}
+
+/** 초 → mm:ss */
+function formatTime(seconds: number): string {
+  const sec = Math.floor(seconds);
+  return `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`;
 }
 
 /** URL ?synergy=all 이면 모든 연계, 쉼표로 ID를 나열하면 그 연계만. 기본은 꺼짐 */

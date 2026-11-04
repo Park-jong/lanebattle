@@ -8,6 +8,8 @@ export const KEY_MAP = {
   gatherOrRestart: 'KeyR',
   /** 영웅 스킬: data/skills.ts의 SKILLS 순서 (부채 바람, 축원, 작두 타기) */
   skills: ['KeyQ', 'KeyW', 'KeyE'],
+  /** 결과 화면에서 승리 시 다음 스테이지 */
+  nextStage: 'KeyN',
   pause: ['Escape', 'KeyP'],
 } as const satisfies Record<string, string | readonly string[]>;
 

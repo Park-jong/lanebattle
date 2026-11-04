@@ -82,3 +82,10 @@ export function getBossDef(chapter: number): BossDef {
   if (!def) throw new Error(`unknown boss chapter: ${chapter}`);
   return def;
 }
+
+/** id로 보스를 찾는다 */
+export function getBossById(id: string): BossDef {
+  const def = BOSSES.find((b) => b.id === id);
+  if (!def) throw new Error(`unknown boss id: ${id}`);
+  return def;
+}

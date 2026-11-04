@@ -298,6 +298,7 @@ class FakeHost implements BossHost {
   dispels: { target: Body; duration: number }[] = [];
   suppressed = false;
   chargeFactor = 1;
+  freeEnemySlots = Infinity;
 
   addEnemy(e: Fighter): void {
     this.enemies.push(e);

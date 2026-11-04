@@ -4,6 +4,8 @@ export const WAVE_RULES = {
   waveInterval: 20,
   /** 같은 웨이브 안에서 적을 내보내는 간격 */
   spawnInterval: 0.8,
+  /** 적 상한 때문에 대기하는 적의 최대 수. 넘치는 적은 버린다 */
+  maxQueue: 60,
   /** 예산 = base + perWave * 웨이브 순서(0~) + perChapter * (장-1) + perOrder * (장 안 순서-1) */
   budget: { base: 6, perWave: 2, perChapter: 3, perOrder: 1 },
   /** 일반 스테이지 웨이브 수. 이후엔 마지막 웨이브 구성을 반복 */

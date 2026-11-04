@@ -29,6 +29,14 @@ export class HudButton {
     this.bg.setInteractive({ useHandCursor: true }).on('pointerdown', onClick);
   }
 
+  /** 버튼을 다른 위치로 옮긴다 */
+  moveTo(x: number, y: number): void {
+    this.bg.setPosition(x, y);
+    this.cover.setPosition(x, y + this.h);
+    this.label.setPosition(x + 3, y + 3);
+    this.sub.setPosition(x + 3, y + this.h - 16);
+  }
+
   setTexts(label: string, sub: string): void {
     this.label.setText(label);
     this.sub.setText(sub);

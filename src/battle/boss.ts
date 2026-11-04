@@ -11,6 +11,8 @@ export interface BossHost {
   readonly livingHero: Body | null;
   readonly shrine: Base;
   readonly castle: Base;
+  /** 지금 더 둘 수 있는 일반 적 수 (적 상한). 졸개 소환은 이만큼만 한다 */
+  readonly freeEnemySlots: number;
   addEnemy(enemy: Fighter): void;
   spawnEnemy(enemyId: string, elite: boolean, x: number): Fighter;
   /** 고정 피해: 공격력 버프 없이 피해 계산 함수(받는 피해 증감 포함)만 거친다 */
@@ -101,7 +103,9 @@ class SummonPattern extends BasePattern {
   override update(dt: number, boss: Fighter): void {
     for (let n = this.timer.advance(dt); n > 0; n--) {
       const { count, spread, enemyId } = this.def;
-      for (let i = 0; i < count; i++) {
+      // 적 상한을 넘는 만큼은 소환을 생략한다
+      const spawnable = Math.min(count, this.host.freeEnemySlots);
+      for (let i = 0; i < spawnable; i++) {
         const x = boss.x + (i - (count - 1) / 2) * spread;
         this.host.spawnEnemy(enemyId, false, Math.min(this.host.castle.x, Math.max(this.host.shrine.x, x)));
       }

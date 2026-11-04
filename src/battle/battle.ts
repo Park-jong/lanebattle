@@ -1,5 +1,5 @@
 import { ALLIES } from '../data/allies';
-import { BOSS_RULES, getBossDef } from '../data/bosses';
+import { BOSS_RULES, getBossById } from '../data/bosses';
 import { COMBAT } from '../data/combat';
 import { HERO } from '../data/hero';
 import { getSkill, SKILL_EFFECTS, type SkillId } from '../data/skills';
@@ -16,7 +16,8 @@ import { Hero } from './hero';
 import { MathRng, type Rng } from './rng';
 import { Resources } from './resources';
 import { SkillCooldowns, type CastResult, type SkillCastEvent } from './skills';
-import { getStageInfo } from './stage';
+import { getStageDef } from './stage';
+import { evaluateStage, type StageResult } from './result';
 import { SynergyEngine } from './synergy';
 import { WaveDirector } from './wave';
 
@@ -82,7 +83,7 @@ export class Battle implements AbilityHost, BossHost {
 
   constructor(options: BattleOptions = {}) {
     this.stage = options.stage ?? 0;
-    getStageInfo(this.stage); // 범위 밖이면 RangeError
+    const stageDef = getStageDef(this.stage); // 범위 밖이면 RangeError
     const rng = options.rng ?? new MathRng();
     this.rng = rng;
     this.synergy = new SynergyEngine(options.synergies ?? []);
@@ -92,13 +93,12 @@ export class Battle implements AbilityHost, BossHost {
     this.castle = new Base(
       'enemy',
       COMBAT.castle.x,
-      COMBAT.castle.baseHp + COMBAT.castle.hpPerStage * this.stage,
+      stageDef.castleHp,
       COMBAT.castle.width,
       COMBAT.castle.height,
     );
-    const info = getStageInfo(this.stage);
-    this.encounter = info.isBossStage
-      ? new BossEncounter(getBossDef(info.chapter), this, options.bossAt ?? BOSS_RULES.appearAt)
+    this.encounter = stageDef.bossId
+      ? new BossEncounter(getBossById(stageDef.bossId), this, options.bossAt ?? BOSS_RULES.appearAt)
       : null;
     this.refreshCastleShield();
   }
@@ -130,6 +130,33 @@ export class Battle implements AbilityHost, BossHost {
 
   get waveCount(): number {
     return this.director.waveCount;
+  }
+
+  /** 살아 있는 적 수 (보스 제외, 적 상한 계산용) */
+  get enemyCount(): number {
+    return this.enemies.filter((e) => e.alive && !e.isBoss).length;
+  }
+
+  /** 지금 더 둘 수 있는 적 수 */
+  get freeEnemySlots(): number {
+    return Math.max(0, COMBAT.maxEnemies - this.enemyCount);
+  }
+
+  /** 상한 때문에 대기 중인 적 수 */
+  get pendingSpawns(): number {
+    return this.director.pendingCount;
+  }
+
+  /** 결과 계산 (진행 중이면 null). 이전 최고 별은 저장 연결 전이라 기본 0 */
+  stageResult(previousBestStars = 0): StageResult | null {
+    if (this.result === 'playing') return null;
+    return evaluateStage({
+      victory: this.result === 'victory',
+      elapsed: this.elapsed,
+      shrineHpRatio: this.shrine.hp / this.shrine.maxHp,
+      stage: getStageDef(this.stage),
+      previousBestStars,
+    });
   }
 
   /** 남은 소환 쿨타임(초) */
@@ -228,7 +255,7 @@ export class Battle implements AbilityHost, BossHost {
     return this.result === 'playing' && this.resources.gather();
   }
 
-  /** 적 한 마리를 내보낸다 (웨이브 및 테스트용) */
+  /** 적 한 마리를 내보낸다 (웨이브 및 테스트용). 적 상한은 웨이브 쪽에서 지키므로 여기서는 검사하지 않는다 */
   spawnEnemy(enemyId: string, elite = false, x = this.castle.x - COMBAT.enemySpawnOffset): Fighter {
     const enemy = createEnemy(enemyId, this.stage, elite, x);
     this.enemies.push(enemy);
@@ -262,7 +289,7 @@ export class Battle implements AbilityHost, BossHost {
     this.tickStatuses(dt);
     this.heroAttack();
 
-    for (const req of this.director.update(dt)) this.spawnEnemy(req.enemyId, req.elite);
+    for (const req of this.director.update(dt, this.freeEnemySlots)) this.spawnEnemy(req.enemyId, req.elite);
 
     for (const f of [...this.allies, ...this.enemies]) this.actFighter(f, dt);
     this.updateProjectiles(dt);
