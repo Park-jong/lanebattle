@@ -200,6 +200,10 @@ export interface GameSaveOptions {
   key?: string;
   /** true면 시작할 때 저장을 지운다 (?resetSave=1) */
   reset?: boolean;
+  /** 저장이 없을 때 시작하는 엽전 (기본 0) */
+  startYeopjeon?: number;
+  /** 신명 총량에 더하는 보너스 (기본 0, 저장하지 않음) */
+  bonusSinmyeong?: number;
 }
 
 /**
@@ -216,17 +220,20 @@ export class GameSave {
   private readonly data: SaveData;
   private readonly storage: StorageLike | null;
   private readonly key: string;
+  /** 저장된 값이 없어 기본값으로 시작했는가 */
+  private isFresh = false;
 
   constructor(options: GameSaveOptions) {
     this.storage = options.storage;
     this.key = options.key ?? SAVE_KEY;
     if (options.reset) this.safely(() => this.storage?.removeItem(this.key));
     this.data = this.load();
+    if (this.isFresh) this.data.yeopjeon = options.startYeopjeon ?? 0;
 
     const persist = () => this.persist();
     this.progress = new SavedProgress(this.data, persist);
     this.settings = new SavedSettings(this.data, persist);
-    this.wallet = new Wallet(this.progress, new SavedPurse(this.data, persist));
+    this.wallet = new Wallet(this.progress, new SavedPurse(this.data, persist), options.bonusSinmyeong ?? 0);
     this.builds = new BuildBook(this.wallet, this.data.builds, persist);
     this.summonOrder = new SummonOrder(this.data.summonOrder, persist);
     // 저장 데이터와 맞지 않는 칸은 초기화하고 바로 저장한다
@@ -238,11 +245,17 @@ export class GameSave {
     return { ...this.data, stars: [...this.data.stars], builds: this.builds.toData(), summonOrder: this.summonOrder.toData() };
   }
 
+  /** 이 저장 키의 데이터를 지운다 (메모리 상태는 그대로이므로 호출 뒤 새로 시작해야 한다) */
+  clearStorage(): void {
+    this.safely(() => this.storage?.removeItem(this.key));
+  }
+
   private load(): SaveData {
     let text: string | null = null;
     this.safely(() => {
       text = this.storage?.getItem(this.key) ?? null;
     });
+    this.isFresh = text === null;
     return parseSave(text);
   }
 
@@ -259,6 +272,29 @@ export class GameSave {
     } catch {
       // 저장소를 쓸 수 없으면(비공개 모드, 용량 초과 등) 메모리로만 계속한다
     }
+  }
+}
+
+/**
+ * 허용된 키 하나만 접근하는 저장소 래퍼.
+ * 다른 키는 읽으면 null, 쓰기·삭제는 무시한다 (테스트 모드가 실제 저장을 건드리지 못하게 한다)
+ */
+export class KeyScopedStorage implements StorageLike {
+  constructor(
+    private readonly inner: StorageLike,
+    private readonly allowedKey: string,
+  ) {}
+
+  getItem(key: string): string | null {
+    return key === this.allowedKey ? this.inner.getItem(key) : null;
+  }
+
+  setItem(key: string, value: string): void {
+    if (key === this.allowedKey) this.inner.setItem(key, value);
+  }
+
+  removeItem(key: string): void {
+    if (key === this.allowedKey) this.inner.removeItem(key);
   }
 }
 

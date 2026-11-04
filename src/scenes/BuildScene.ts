@@ -14,6 +14,7 @@ import { KEY_MAP, KeyInput } from './input';
 import { BUILD_LAYOUT as L, dialogButtons, HUD_FONT, nodeCells, tierLabelRect, type Rect } from './layout';
 import { MenuButton } from './MenuButton';
 import { HUD_STRIP, INK, PAPER } from './palette';
+import { addTestBadge } from './testBadge';
 import { addArtImage } from '../render/CharacterRenderer';
 
 const GOLD = 0xe0b52e;
@@ -78,6 +79,7 @@ export class BuildScene extends Phaser.Scene {
     this.add.rectangle(L.detail.x, L.detail.y, L.detail.w, L.detail.h, PAPER).setOrigin(0).setStrokeStyle(3, INK);
 
     this.createStrip();
+    addTestBadge(this, 'left');
     this.createTabs();
     this.createDetailControls();
 

@@ -22,6 +22,8 @@
 - 8단계 C(빌드 화면·소환 순서)도 독립 검증 통과(브라우저 실제 조작)
 - (미커밋) W2·P1·C2 반영: 신명 풀이 75% 가산, 비행 중 대왕에게 까치 대공 보너스, 빌드 화면 메시지 지움. 0.8.0과 합친 뒤 typecheck·테스트 477개·build 통과
 - 배포: https://park-jong.github.io/lanebattle/ (main push → Actions가 빌드해 gh-pages 브랜치에 올림, Pages Source = gh-pages / root)
+  - 수동 배포: `npm run deploy` (테스트 → 빌드 → gh-pages 패키지로 dist를 gh-pages 브랜치에 push). Actions가 반영을 놓쳤을 때나 push 없이 다시 배포할 때 사용
+  - Actions 수동 재실행: 저장소 Actions → Deploy to GitHub Pages → Run workflow
 - 실행 `npm run dev` / 테스트 `npm test` / 타입 검사 `npm run typecheck` / 빌드 `npm run build`
 - 폴더
   - `src/data`: 수치·정의 데이터
@@ -35,6 +37,7 @@
   - `?synergy=all` 또는 `?synergy=id,id`
   - `?upg=노드id,노드id:레벨`(저장 미반영)
   - `?resetSave=1`(저장 삭제, URL에 남아 있으면 매번 삭제)
+  - `test.html`(빌드 테스트 모드: 신명 총량 +300, 엽전 100000, 별도 저장 키 `kkoma-mudang-save-test`, 실제 기록 무관)
 
 ## 다음 할 일 (사용자 결정 대기)
 1. 아래 "결정 대기" 항목 정리
@@ -78,6 +81,7 @@
 
 ### 기타 개선
 - [x] 스킬·소환 버튼 마우스 툴팁
+- [x] 빌드 테스트 전용 페이지(test.html)
 
 ---
 
@@ -98,6 +102,7 @@
 - [ ] V1. 설정 화면 슬라이더 터치 영역 높이 32 (66 기준 미달)
 - [ ] K1. 유닛 툴팁에서 각성으로 값이 바뀐 능력 줄 전체에 "각성:"이 붙어 ② 변경분도 각성처럼 읽힘 (예: 씨름 ③) `unitText.ts`
 - [ ] K2. 일시정지 후 재개하면 마우스를 움직이지 않아도 툴팁이 다시 열림 (hover 상태 유지)
+- [ ] X1. test.html 빌드 화면 요괴 탭에서 왼쪽 아래 "테스트 모드" 배지가 마지막 줄 첫 칸(구미호) 테두리 아래 약 5px와 겹침 (글자·클릭 영역은 안 가림) `BuildScene.ts`·`testBadge.ts`
 - [ ] V2. ⏸ ◀ ▶ 글리프가 시스템 글꼴 의존 → 9단계 이미지 교체 때 정리
 
 ### 영향 미미

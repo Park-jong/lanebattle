@@ -3,13 +3,15 @@ import { STAGES } from '../data/stages';
 import { getBossById } from '../data/bosses';
 import { STAR_RULES } from '../data/rewards';
 import { MAP_ROWS, gridPosition, moveSelection, stageAt } from '../game/mapGrid';
-import { builds, progress, wallet } from '../game/session';
+import { TEST_MODE } from '../data/testMode';
+import { builds, gameSave, isTestMode, progress, wallet } from '../game/session';
 import { drawNightSky } from './background';
 import { bossChipSpecs } from './bossChips';
 import { HUD_FONT, MAP_LAYOUT } from './layout';
 import { KEY_MAP, KeyInput, mapDirectionOf } from './input';
 import { MenuButton } from './MenuButton';
 import { chapterColor, INK, PAPER } from './palette';
+import { addTestBadge } from './testBadge';
 import { isBlockedByOverlay, openSettings } from './openSettings';
 
 const L = MAP_LAYOUT;
@@ -44,6 +46,7 @@ export class MapScene extends Phaser.Scene {
     this.createGrid();
     this.createInfoPanel();
     this.createBottomButtons();
+    addTestBadge(this);
     this.refreshSelection();
 
     this.keyInput = new KeyInput(window, (code) => this.onKeyDown(code));
@@ -205,10 +208,20 @@ export class MapScene extends Phaser.Scene {
   private createBottomButtons(): void {
     new MenuButton(this, 104, 490, 160, 66, '타이틀로 (Esc)', () => this.scene.start('Title'), { fontSize: 15 });
     new MenuButton(this, 284, 490, 160, 66, `설정 (${KEY_MAP.openSettings.slice(3)})`, () => openSettings(this), { fontSize: 15 });
-    this.add.text(380, 480, '방향키 이동  ·  Enter 출전  ·  B 빌드', { fontFamily: HUD_FONT, fontSize: '14px', color: '#9aa5c0' });
+    if (isTestMode) {
+      new MenuButton(this, 460, 490, 160, 66, TEST_MODE.resetButton, () => this.resetTestData(), { fontSize: 14 });
+    }
+    this.add.text(isTestMode ? 556 : 380, 480, '방향키 이동  ·  Enter 출전  ·  B 빌드', { fontFamily: HUD_FONT, fontSize: '14px', color: '#9aa5c0' });
   }
 
   // ----- 동작 -----
+
+  /** 테스트 저장만 지우고 처음 재화로 되돌린다 (새로 시작해 메모리 상태도 초기화) */
+  private resetTestData(): void {
+    if (!window.confirm(TEST_MODE.resetConfirm)) return;
+    gameSave.clearStorage();
+    window.location.reload();
+  }
 
   private launch(): void {
     this.scene.start('Battle', { stage: this.selected });

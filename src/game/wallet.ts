@@ -50,6 +50,8 @@ export class Wallet implements SinmyeongSource {
   constructor(
     private readonly progress: ProgressStore,
     private readonly purse: PurseStore,
+    /** 별·구매와 별개로 더하는 신명 (테스트 모드용, 저장하지 않음) */
+    private readonly bonusSinmyeong = 0,
   ) {}
 
   get yeopjeon(): number {
@@ -67,9 +69,9 @@ export class Wallet implements SinmyeongSource {
     return sum;
   }
 
-  /** 신명 총량 = 별 합 + 구매 횟수 */
+  /** 신명 총량 = 별 합 + 구매 횟수 + 보너스(기본 0) */
   totalSinmyeong(): number {
-    return this.starSinmyeong() + this.purchases;
+    return this.starSinmyeong() + this.purchases + this.bonusSinmyeong;
   }
 
   /** 클리어 엽전을 더한다. 0 이하·숫자가 아닌 값은 무시 */

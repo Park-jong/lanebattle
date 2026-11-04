@@ -18,6 +18,7 @@ import {
   HUD_STRIP, SHRINE_COLOR, SKILL_COLORS, TAG_COLORS,
 } from './palette';
 import { builds, progress, summonOrder, wallet } from '../game/session';
+import { addTestBadge } from './testBadge';
 import { computeBuildEffects, parseUpgradeQuery } from '../game/buildEffects';
 import type { BattleModifiers } from '../battle/modifiers';
 import { ResultRecorder } from '../game/resultRecorder';
@@ -151,6 +152,7 @@ export class BattleScene extends Phaser.Scene {
     this.hud = this.add.graphics().setScrollFactor(0).setDepth(90);
     this.floaters = new DamageFloaters(this);
     this.createHudTexts();
+    addTestBadge(this);
     this.createBossUi();
     this.createButtons();
     this.createPauseUi();

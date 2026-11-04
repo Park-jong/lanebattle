@@ -5,6 +5,7 @@ import { KEY_MAP, KeyInput } from './input';
 import { MenuButton } from './MenuButton';
 import { FIVE_COLORS } from './palette';
 import { isBlockedByOverlay, openSettings } from './openSettings';
+import { addTestBadge } from './testBadge';
 import { addArtImage } from '../render/CharacterRenderer';
 
 /** 등불 위치(x)와 줄 길이 */
@@ -28,6 +29,7 @@ export class TitleScene extends Phaser.Scene {
   create(): void {
     drawNightSky(this);
     this.drawLanterns();
+    addTestBadge(this);
     this.drawTexts();
     addArtImage(this, 'hero:kkomaMudang', 'preview', 250, 364, 160, 160);
     addArtImage(this, 'ally:clubGoblin', 'preview', 710, 364, 150, 150);
