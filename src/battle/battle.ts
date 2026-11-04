@@ -8,7 +8,8 @@ import { type AbilityDef } from '../data/abilities';
 import { ALL_SYNERGY_IDS, type SynergyId } from '../data/synergy';
 import { TimedAbilities, type AbilityHost } from './abilities';
 import { BossEncounter, type BossHost } from './boss';
-import { calcDamage, type AttackInfo, type DamageOptions } from './damage';
+import { calcDamage, classifyMatchup, type AttackInfo, type DamageOptions } from './damage';
+import { DamageFeed, type DamageEvent, type HitKind } from './damageEvents';
 import { Base, Body, Fighter, Projectile, type ProjectilePayload } from './entities';
 import type { AuraDef, BuffEffect } from './status';
 import { createEnemy } from './enemyFactory';
@@ -46,6 +47,7 @@ interface Strike {
 }
 
 export { ALL_SYNERGY_IDS };
+export type { DamageEvent, HitKind };
 
 /** 화상 지속 피해의 공격 정보 (불 태그) */
 const BURN_ATTACK: AttackInfo = { type: 'magic', tags: ['fire'], source: 'ally' };
@@ -74,6 +76,7 @@ export class Battle implements AbilityHost, BossHost {
   private readonly rng: Rng;
   private readonly skillCooldowns = new SkillCooldowns();
   private castEvents: SkillCastEvent[] = [];
+  private readonly damageFeed = new DamageFeed();
   private readonly timedAbilities: TimedAbilities;
   readonly synergy: SynergyEngine;
   /** 보스 스테이지의 보스 한 판 (일반 스테이지는 null) */
@@ -191,6 +194,11 @@ export class Battle implements AbilityHost, BossHost {
     return events;
   }
 
+  /** 쌓인 피해 기록(상성 분류 포함)을 비우며 돌려준다 (데미지 숫자용) */
+  drainDamageEvents(): DamageEvent[] {
+    return this.damageFeed.drain();
+  }
+
   /** 영웅 스킬 사용. 실패하면 신력·쿨타임을 쓰지 않는다 */
   castSkill(id: SkillId): CastResult {
     if (this.result !== 'playing') return 'ended';
@@ -297,6 +305,7 @@ export class Battle implements AbilityHost, BossHost {
     this.allies = this.allies.filter((f) => f.alive);
     this.enemies = this.enemies.filter((f) => f.alive);
     this.projectiles = this.projectiles.filter((p) => p.alive);
+    this.damageFeed.step(dt);
     this.checkResult();
   }
 
@@ -496,12 +505,31 @@ export class Battle implements AbilityHost, BossHost {
    * 최소 피해는 지속 피해(dot)가 아니면 1, 면역(피해 0)이면 0.
    */
   private resolveHit(target: Body, base: number, info: AttackInfo, options: DamageOptions): void {
+    const wasAlive = target.alive;
     const damage = calcDamage(base, info, target.damageTarget, options);
     this.applyDamage(target, damage, damage === 0 || options.dot ? 0 : undefined);
+    if (wasAlive) this.recordHit(target, damage, info, options.dot ?? false);
     const healTags = target instanceof Fighter ? target.stats.healFromTags : undefined;
     if (!target.alive || !healTags?.some((t) => info.tags.includes(t))) return;
     const raw = calcDamage(base, info, { ...target.damageTarget, resistance: undefined }, options);
     target.heal(raw);
+  }
+
+  /** 피해 기록: 면역(0)·화상(묶음)·약점·저항·보통으로 나눈다. 무적 기지가 맞은 것은 기록하지 않는다 */
+  private recordHit(target: Body, damage: number, info: AttackInfo, dot: boolean): void {
+    if (target instanceof Base && target.invulnerable) return;
+    if (dot) {
+      if (damage > 0) this.damageFeed.addBurn(target, damage);
+      return;
+    }
+    const kind: HitKind = damage === 0 ? 'immune' : classifyMatchup(info, target.damageTarget);
+    this.damageFeed.push({
+      target,
+      x: target.x,
+      amount: damage === 0 ? 0 : Math.max(1, Math.round(damage)),
+      kind,
+      friendly: target.team === 'ally',
+    });
   }
 
   /** 고정 피해 (보스 패턴용): 공격력 버프 없이 피해 계산 함수만 거친다 */

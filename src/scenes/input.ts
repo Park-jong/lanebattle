@@ -1,3 +1,5 @@
+import type { MapDirection } from '../game/mapGrid';
+
 // 키 매핑은 모두 KeyboardEvent.code 기준으로 이 파일에 모은다
 export const KEY_MAP = {
   moveLeft: ['KeyA', 'ArrowLeft'],
@@ -11,6 +13,18 @@ export const KEY_MAP = {
   /** 결과 화면에서 승리 시 다음 스테이지 */
   nextStage: 'KeyN',
   pause: ['Escape', 'KeyP'],
+  /** 결과 화면에서 지도로 (Esc는 일시정지용이라 M 사용) */
+  toMap: 'KeyM',
+  /** 메뉴 화면 공통: 확인 / 뒤로 / 설정 열기 */
+  confirm: ['Enter', 'Space'],
+  back: 'Escape',
+  openSettings: 'KeyO',
+  /** 지도 칸 이동 */
+  mapLaunch: 'Enter',
+  mapLeft: ['ArrowLeft'],
+  mapRight: ['ArrowRight'],
+  mapUp: ['ArrowUp'],
+  mapDown: ['ArrowDown'],
 } as const satisfies Record<string, string | readonly string[]>;
 
 /** 소환 키 → 슬롯 번호 (해당 없으면 -1) */
@@ -23,7 +37,22 @@ export function skillIndexOf(code: string): number {
   return KEY_MAP.skills.indexOf(code as (typeof KEY_MAP.skills)[number]);
 }
 
-const PREVENT_DEFAULT = new Set<string>([...KEY_MAP.moveLeft, ...KEY_MAP.moveRight]);
+/** 방향키 매핑 → 지도 이동 방향 (해당 없으면 null) */
+export function mapDirectionOf(code: string): MapDirection | null {
+  if ((KEY_MAP.mapLeft as readonly string[]).includes(code)) return 'left';
+  if ((KEY_MAP.mapRight as readonly string[]).includes(code)) return 'right';
+  if ((KEY_MAP.mapUp as readonly string[]).includes(code)) return 'up';
+  if ((KEY_MAP.mapDown as readonly string[]).includes(code)) return 'down';
+  return null;
+}
+
+const PREVENT_DEFAULT = new Set<string>([
+  ...KEY_MAP.moveLeft,
+  ...KEY_MAP.moveRight,
+  ...KEY_MAP.mapUp,
+  ...KEY_MAP.mapDown,
+  'Space',
+]);
 
 /** keydown/keyup으로 눌림 상태를 추적하고, 창이 blur되면 모두 해제한다 */
 export class KeyInput {

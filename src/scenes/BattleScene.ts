@@ -7,38 +7,35 @@ import { SKILL_EFFECTS, SKILLS, type SkillId } from '../data/skills';
 import { STAGE_COUNT } from '../data/waves';
 import { STAR_RULES } from '../data/rewards';
 import { getStageDef } from '../battle/stage';
-import { ALL_SYNERGY_IDS, Battle } from '../battle/battle';
+import { ALL_SYNERGY_IDS, Battle, type DamageEvent } from '../battle/battle';
 import { isSynergyId, SYNERGY, type SynergyId } from '../data/synergy';
-import type { Base, Body, Fighter } from '../battle/entities';
-import { GAME_HEIGHT, GAME_WIDTH, GROUND_Y, HUD_FONT } from './layout';
-import { colorForTags, ENEMY_COLOR, TAG_COLORS } from './palette';
+import { Base, Fighter, type Body } from '../battle/entities';
+import {
+  BATTLE_LAYOUT as L, centeredRow, GAME_HEIGHT, GAME_WIDTH, GROUND_Y, HUD_FONT, minimapX,
+  PAUSE_BUTTON, RESULT_LAYOUT, type Rect,
+} from './layout';
+import {
+  BUTTON_FILL, BUTTON_FILL_ACTION, BUTTON_FILL_GATHER, colorForTags, ENEMY_COLOR, HERO_COLOR, HUD_PANEL,
+  HUD_STRIP, SHRINE_COLOR, SKILL_COLORS, TAG_COLORS,
+} from './palette';
+import { progress } from '../game/progress';
+import { ResultRecorder } from '../game/resultRecorder';
+import type { StageResult } from '../battle/result';
+import { ORIENTATION_KEY, type OrientationWatcher } from '../orientation';
+import { bossChipSpecs } from './bossChips';
+import { DamageFloaters } from './DamageFloaters';
+import { floaterStyle } from './floaterStyle';
 import { HudButton } from './HudButton';
 import { KEY_MAP, KeyInput, skillIndexOf, summonIndexOf } from './input';
 
-const BUTTON_W = 74;
-const BUTTON_H = 56;
-const BUTTON_GAP = 4;
-const BUTTON_Y = GAME_HEIGHT - BUTTON_H - 6;
-const SKILL_W = 110;
-const SKILL_H = 40;
-const SKILL_Y = BUTTON_Y - SKILL_H - 6;
 /** 보스 등장 연출 길이(초): 화면이 어두워지고 이름이 나타났다 사라진다 */
 const BOSS_INTRO_SECONDS = 1.6;
-/** 보스 체력바 배치 (위쪽 가운데, 기본 HUD 글자 아래) */
-const BOSS_BAR_W = 400;
-const BOSS_BAR_X = (GAME_WIDTH - BOSS_BAR_W) / 2;
-const BOSS_NAME_Y = 94;
-const BOSS_BAR_Y = 116;
-const BOSS_CHIP_Y = 138;
 /** 일반 비행 유닛이 떠 있는 높이 */
 const FLY_LIFT = 40;
 /** 스킬 이펙트가 퍼지는 시간(초) */
 const CAST_FX_SECONDS = 0.3;
-/** 결과 패널 (HUD 버튼보다 아래, 결과 글자보다 아래에 그린다) */
-const RESULT_PANEL = { x: 230, y: 60, w: 500, h: 340 };
-const RESULT_BUTTON_Y = GAME_HEIGHT / 2 + 70;
-const RESULT_BUTTON_W = 160;
-const RESULT_BUTTON_GAP = 20;
+/** 화면 겹침 깊이: HUD < 일시정지 덮개 < 결과 덮개 < 패널·글자 < 팝업 버튼 */
+const DEPTH = { pauseDim: 180, resultDim: 190, resultPanel: 195, popupText: 200, popupButton: 210 } as const;
 
 interface CastFx {
   id: SkillId;
@@ -53,19 +50,37 @@ export class BattleScene extends Phaser.Scene {
   private paused = false;
   private world!: Phaser.GameObjects.Graphics;
   private hud!: Phaser.GameObjects.Graphics;
-  private hudText!: Phaser.GameObjects.Text;
-  private overlay!: Phaser.GameObjects.Text;
   private summonButtons: HudButton[] = [];
   private skillButtons: HudButton[] = [];
   private castFx: CastFx[] = [];
   private gatherButton!: HudButton;
+  private moveLeftButton!: HudButton;
+  private moveRightButton!: HudButton;
+  private pauseButton!: HudButton;
+  private resumeButton!: HudButton;
+  private pauseMapButton!: HudButton;
   private restartButton!: HudButton;
   private nextButton!: HudButton;
+  private mapButton!: HudButton;
+  /** 결과를 한 번만 계산·기록한다 */
+  private recorder!: ResultRecorder;
+  private floaters!: DamageFloaters;
+  private pauseDim!: Phaser.GameObjects.Rectangle;
+  private pauseTitle!: Phaser.GameObjects.Text;
+  private pauseHint!: Phaser.GameObjects.Text;
+  private pauseShown = false;
+  private resultDim!: Phaser.GameObjects.Rectangle;
   private resultPanel!: Phaser.GameObjects.Graphics;
   private resultTitle!: Phaser.GameObjects.Text;
   private resultStars!: Phaser.GameObjects.Text;
   private resultBody!: Phaser.GameObjects.Text;
-  private stageText!: Phaser.GameObjects.Text;
+  private resultLaidOut = false;
+  private talismanText!: Phaser.GameObjects.Text;
+  private spiritText!: Phaser.GameObjects.Text;
+  private shrineText!: Phaser.GameObjects.Text;
+  private castleText!: Phaser.GameObjects.Text;
+  private infoText!: Phaser.GameObjects.Text;
+  private noteText!: Phaser.GameObjects.Text;
   private keyInput!: KeyInput;
   /** 승패가 난 뒤 지난 시간(초) */
   private resultElapsed = 0;
@@ -91,10 +106,13 @@ export class BattleScene extends Phaser.Scene {
       synergies: synergiesFromUrl(),
       bossAt: bossAtFromUrl(),
     });
+    this.recorder = new ResultRecorder(progress);
     this.bossIntroLeft = 0;
     this.bossSeen = false;
     this.bossChips = [];
     this.paused = false;
+    this.pauseShown = false;
+    this.resultLaidOut = false;
     this.resultElapsed = 0;
     this.summonButtons = [];
     this.skillButtons = [];
@@ -106,40 +124,39 @@ export class BattleScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor(0x2a3350);
     this.world = this.add.graphics();
     this.hud = this.add.graphics().setScrollFactor(0).setDepth(90);
-    this.hudText = this.add
-      .text(0, 0, '', { fontFamily: HUD_FONT, fontSize: '13px', color: '#ffffff' })
-      .setScrollFactor(0)
-      .setDepth(95);
-    this.overlay = this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 40, '', {
-        fontFamily: HUD_FONT, fontSize: '40px', color: '#ffffff', align: 'center',
-        backgroundColor: '#000000aa', padding: { x: 20, y: 12 },
-      })
-      .setOrigin(0.5)
-      .setScrollFactor(0)
-      .setDepth(200)
-      .setVisible(false);
-
-    this.stageText = this.add
-      .text(330, 26, '', { fontFamily: HUD_FONT, fontSize: '12px', color: '#cfd6ee' })
-      .setScrollFactor(0)
-      .setDepth(95);
-    const def = getStageDef(this.battle.stage);
-    this.stageText.setText(`스테이지 ${def.code} ${def.name}`);
+    this.floaters = new DamageFloaters(this);
+    this.createHudTexts();
     this.createBossUi();
-    this.createResultUi();
     this.createButtons();
+    this.createPauseUi();
+    this.createResultUi();
     this.setupInput();
+  }
+
+  /** HUD 글자: 바 안의 숫자, 오른쪽 정보 3줄, 아래 한 줄 */
+  private createHudTexts(): void {
+    const small = (r: Rect, size: number, color = '#ffffff') =>
+      this.add
+        .text(r.x, r.y, '', { fontFamily: HUD_FONT, fontSize: `${size}px`, color, lineSpacing: -2 })
+        .setScrollFactor(0)
+        .setDepth(95);
+    const inBar = (r: Rect) => small({ ...r, x: r.x + 4, y: r.y }, 12).setStroke('#000000', 2);
+    this.talismanText = inBar(L.talismanBar);
+    this.spiritText = inBar(L.spiritBar);
+    this.shrineText = inBar(L.shrineBar);
+    this.castleText = inBar(L.castleBar);
+    this.infoText = small(L.infoText, 12, '#cfd6ee');
+    this.noteText = small(L.noteText, 12, '#ffd166');
   }
 
   /** 보스 이름·상태·연출 글자와 성 무적 표시 (처음엔 숨김) */
   private createBossUi(): void {
     const style = { fontFamily: HUD_FONT, color: '#ffffff' };
     this.bossNameText = this.add
-      .text(GAME_WIDTH / 2, BOSS_NAME_Y, '', { ...style, fontSize: '16px', fontStyle: 'bold' })
+      .text(GAME_WIDTH / 2, L.bossName.y, '', { ...style, fontSize: '16px', fontStyle: 'bold' })
       .setOrigin(0.5, 0).setScrollFactor(0).setDepth(95).setVisible(false);
     this.bossStateText = this.add
-      .text(BOSS_BAR_X + BOSS_BAR_W + 8, BOSS_BAR_Y - 1, '', { ...style, fontSize: '13px' })
+      .text(L.bossBar.x + L.bossBar.w + 8, L.bossBar.y - 1, '', { ...style, fontSize: '13px' })
       .setScrollFactor(0).setDepth(95).setVisible(false);
     this.bossIntroText = this.add
       .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 60, '', { ...style, fontSize: '64px', fontStyle: 'bold' })
@@ -149,39 +166,104 @@ export class BattleScene extends Phaser.Scene {
       .setOrigin(0.5, 1).setDepth(60).setVisible(false);
   }
 
-  /** 결과 화면 패널과 글자 (처음엔 숨김) */
+  /** 입력을 막는 반투명 전체 덮개 (처음엔 숨김) */
+  private createDim(depth: number, alpha: number): Phaser.GameObjects.Rectangle {
+    const dim = this.add
+      .rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x000000, alpha)
+      .setScrollFactor(0).setDepth(depth).setInteractive();
+    setShown(dim, false);
+    return dim;
+  }
+
+  /** 일시정지 화면: 덮개, 제목, 계속·지도로 버튼 */
+  private createPauseUi(): void {
+    this.pauseDim = this.createDim(DEPTH.pauseDim, 0.65);
+    const style = { fontFamily: HUD_FONT, color: '#ffffff' };
+    this.pauseTitle = this.add
+      .text(GAME_WIDTH / 2, 200, '일시정지', { ...style, fontSize: '48px', fontStyle: 'bold' })
+      .setOrigin(0.5).setScrollFactor(0).setDepth(DEPTH.popupText).setVisible(false);
+    this.pauseHint = this.add
+      .text(GAME_WIDTH / 2, 262, '지도로 나가면 이번 전투는 기록되지 않습니다', { ...style, fontSize: '15px', color: '#cfd6ee' })
+      .setOrigin(0.5).setScrollFactor(0).setDepth(DEPTH.popupText).setVisible(false);
+    const [resume, toMap] = centeredRow(2, PAUSE_BUTTON.w, PAUSE_BUTTON.gap, PAUSE_BUTTON.y);
+    const big = { center: true, bigLabel: true, labelSize: 18, depth: DEPTH.popupButton };
+    this.resumeButton = new HudButton(this, resume, { ...big, fill: 0x3a6b4a }, { onPress: () => this.setPaused(false) });
+    this.resumeButton.setTexts('계속 (Esc/P)', '');
+    this.pauseMapButton = new HudButton(this, toMap, { ...big, fill: 0x6b5a3a }, { onPress: () => this.abandonToMap() });
+    this.pauseMapButton.setTexts(`지도로 (${KEY_MAP.toMap.slice(3)})`, '');
+    this.resumeButton.setVisible(false);
+    this.pauseMapButton.setVisible(false);
+  }
+
+  /** 결과 화면: 전체 덮개 위에 패널과 글자, 버튼 (처음엔 숨김) */
   private createResultUi(): void {
-    const { x, y, w, h } = RESULT_PANEL;
+    this.resultDim = this.createDim(DEPTH.resultDim, 0.7);
+    const { x, y, w, h } = RESULT_LAYOUT.panel;
     const cx = x + w / 2;
-    this.resultPanel = this.add.graphics().setScrollFactor(0).setDepth(98).setVisible(false);
-    this.resultPanel.fillStyle(0x10142a, 0.92).fillRect(x, y, w, h);
+    this.resultPanel = this.add.graphics().setScrollFactor(0).setDepth(DEPTH.resultPanel).setVisible(false);
+    this.resultPanel.fillStyle(0x10142a, 1).fillRect(x, y, w, h);
     this.resultPanel.lineStyle(2, 0xffffff, 0.6).strokeRect(x, y, w, h);
     const style = { fontFamily: HUD_FONT, color: '#ffffff' };
+    const depth = DEPTH.popupText;
     this.resultTitle = this.add
       .text(cx, y + 14, '', { ...style, fontSize: '34px', fontStyle: 'bold' })
-      .setOrigin(0.5, 0).setScrollFactor(0).setDepth(200).setVisible(false);
+      .setOrigin(0.5, 0).setScrollFactor(0).setDepth(depth).setVisible(false);
     this.resultStars = this.add
       .text(cx, y + 62, '', { ...style, fontSize: '40px', color: '#ffd84a' })
-      .setOrigin(0.5, 0).setScrollFactor(0).setDepth(200).setVisible(false);
+      .setOrigin(0.5, 0).setScrollFactor(0).setDepth(depth).setVisible(false);
     this.resultBody = this.add
       .text(x + 40, y + 120, '', { ...style, fontSize: '15px', lineSpacing: 6 })
-      .setScrollFactor(0).setDepth(200).setVisible(false);
+      .setScrollFactor(0).setDepth(depth).setVisible(false);
+
+    const { w: bw, gap, y: by } = RESULT_LAYOUT.button;
+    const [first] = centeredRow(1, bw, gap, by);
+    const big = { center: true, bigLabel: true, labelSize: 16, depth: DEPTH.popupButton };
+    this.restartButton = new HudButton(this, first, { ...big, fill: 0x3a6b4a }, { onPress: () => this.restart() });
+    this.restartButton.setTexts(`${KEY_MAP.gatherOrRestart.slice(3)} 다시 하기`, '');
+    this.nextButton = new HudButton(this, first, { ...big, fill: 0x3a5a8b }, { onPress: () => this.goNextStage() });
+    this.nextButton.setTexts(`${KEY_MAP.nextStage.slice(3)} 다음 스테이지`, '');
+    this.mapButton = new HudButton(this, first, { ...big, fill: 0x6b5a3a }, { onPress: () => this.goMap() });
+    this.mapButton.setTexts(`${KEY_MAP.toMap.slice(3)} 지도로`, '');
+    for (const b of [this.restartButton, this.nextButton, this.mapButton]) b.setVisible(false);
   }
 
   update(_time: number, delta: number): void {
     const playing = this.battle.result === 'playing';
-    if (playing && !this.paused) {
-      this.battle.step(delta / 1000, { moveDir: this.keyInput.moveDir() });
+    const active = playing && !this.paused;
+    if (active) {
+      this.battle.step(delta / 1000, { moveDir: this.moveDir() });
       this.bossIntroLeft = Math.max(0, this.bossIntroLeft - delta / 1000);
     }
     this.watchBossAppearance();
     if (!playing) this.resultElapsed += delta / 1000;
-    this.updateCastFx(delta / 1000, playing && !this.paused);
+    this.updateCastFx(delta / 1000, active);
+    this.updateFloaters(delta / 1000, active);
     this.followHero();
     this.drawWorld();
     this.drawHud();
     this.updateButtons();
     this.updateOverlay();
+  }
+
+  /** 키보드와 화면 ◀ ▶ 버튼을 합친 이동 방향 (-1, 0, 1) */
+  private moveDir(): number {
+    const touch = (this.moveRightButton.isHeld ? 1 : 0) - (this.moveLeftButton.isHeld ? 1 : 0);
+    return Math.max(-1, Math.min(1, this.keyInput.moveDir() + touch));
+  }
+
+  // ----- 데미지 숫자 -----
+
+  /** 피해 기록을 숫자로 바꿔 띄우고, 이미 떠 있는 숫자는 움직인다 */
+  private updateFloaters(dt: number, advance: boolean): void {
+    for (const e of this.battle.drainDamageEvents()) this.spawnFloater(e);
+    this.floaters.update(advance ? dt : 0);
+  }
+
+  private spawnFloater(e: DamageEvent): void {
+    const t = e.target;
+    const lift = t instanceof Fighter && t.flying ? this.liftOf(t) : 0;
+    const y = GROUND_Y - heightOf(t) - lift - 14;
+    this.floaters.spawn(e.x + (Math.random() - 0.5) * 16, y, floaterStyle(e));
   }
 
   // ----- 보스 -----
@@ -194,13 +276,11 @@ export class BattleScene extends Phaser.Scene {
     this.bossIntroLeft = BOSS_INTRO_SECONDS;
     this.bossIntroText.setText(enc.def.name);
     this.bossNameText.setText(enc.def.name);
-    const chips: [string, string, string][] = [
-      ...enc.def.weaknessLabels.map((l): [string, string, string] => [`약점: ${l}`, '#1a1a1a', '#ffd84a']),
-      ...enc.def.resistanceLabels.map((l): [string, string, string] => [`저항: ${l}`, '#1a1a1a', '#a0a0a0']),
-    ];
-    this.bossChips = chips.map(([label, color, bg]) =>
+    this.bossChips = bossChipSpecs(enc.def).map((spec) =>
       this.add
-        .text(0, BOSS_CHIP_Y, label, { fontFamily: HUD_FONT, fontSize: '13px', color, backgroundColor: bg, padding: { x: 6, y: 2 } })
+        .text(0, L.bossChips.y, spec.text, {
+          fontFamily: HUD_FONT, fontSize: '13px', color: spec.color, backgroundColor: spec.background, padding: { x: 6, y: 2 },
+        })
         .setScrollFactor(0).setDepth(95),
     );
     const gap = 6;
@@ -231,7 +311,7 @@ export class BattleScene extends Phaser.Scene {
       this.bossIntroText.setVisible(false);
     }
     if (!enc || !boss || !show) return;
-    this.bar(g, BOSS_BAR_X, BOSS_BAR_Y, BOSS_BAR_W, 16, boss.hp / boss.maxHp, 0xc23b3b);
+    this.bar(g, L.bossBar, boss.hp / boss.maxHp, 0xc23b3b);
     this.bossStateText.setText(enc.statusLabel);
   }
 
@@ -240,8 +320,38 @@ export class BattleScene extends Phaser.Scene {
   private setupInput(): void {
     this.keyInput = new KeyInput(window, (code) => this.onKeyDown(code));
     this.keyInput.attach();
-    // 씬이 끝나면 리스너를 해제한다
-    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.keyInput.detach());
+
+    // 창이 숨겨지면 자동 일시정지 (키 눌림도 풀어 둔다)
+    const onVisibility = () => {
+      if (!document.hidden) return;
+      this.keyInput.releaseAll();
+      this.setPaused(true);
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    // 세로 화면이 되면 자동 일시정지. 가로로 돌아와도 사용자가 직접 재개한다
+    const watcher = this.registry.get(ORIENTATION_KEY) as OrientationWatcher | undefined;
+    const unsubscribe = watcher?.subscribe((portrait) => {
+      if (portrait) this.setPaused(true);
+    });
+    if (watcher?.isPortrait) this.setPaused(true);
+
+    // 씬이 끝나면 리스너를 모두 해제한다
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      this.keyInput.detach();
+      document.removeEventListener('visibilitychange', onVisibility);
+      unsubscribe?.();
+    });
+  }
+
+  /** 전투 중에만 일시정지/재개한다. 멈추면 누르고 있던 이동 버튼을 놓는다 */
+  private setPaused(value: boolean): void {
+    if (this.battle.result !== 'playing' || this.paused === value) return;
+    this.paused = value;
+    if (value) {
+      this.moveLeftButton.release();
+      this.moveRightButton.release();
+    }
   }
 
   /** 결과가 난 직후 일정 시간은 재시작 입력을 무시한다 */
@@ -265,17 +375,36 @@ export class BattleScene extends Phaser.Scene {
     if (this.restartAllowed && next !== null) this.scene.restart({ stage: next });
   }
 
+  /** 결과 화면에서 지도로 돌아간다 (방금 한 스테이지를 선택해 둔다) */
+  private goMap(): void {
+    if (this.restartAllowed) this.scene.start('Map', { stage: this.battle.stage });
+  }
+
+  /** 일시정지 중 전투를 포기하고 지도로 간다. 결과를 계산하지 않으므로 진행 기록은 남지 않는다 */
+  private abandonToMap(): void {
+    if (this.paused && this.battle.result === 'playing') this.scene.start('Map', { stage: this.battle.stage });
+  }
+
+  /** 결과를 한 번만 계산해 기록하고 같은 값을 돌려준다. 아직 안 끝났으면 null */
+  private settledResult(): StageResult | null {
+    return this.recorder.settle(this.battle.stage, (prev) => this.battle.stageResult(prev));
+  }
+
   private onKeyDown(code: string): void {
     if (this.battle.result !== 'playing') {
       if (code === KEY_MAP.gatherOrRestart) this.restart();
       else if (code === KEY_MAP.nextStage) this.goNextStage();
+      else if (code === KEY_MAP.toMap) this.goMap();
       return;
     }
     if ((KEY_MAP.pause as readonly string[]).includes(code)) {
-      this.paused = !this.paused;
+      this.setPaused(!this.paused);
       return;
     }
-    if (this.paused) return;
+    if (this.paused) {
+      if (code === KEY_MAP.toMap) this.abandonToMap();
+      return;
+    }
     if (code === KEY_MAP.gatherOrRestart) {
       this.battle.gather();
       return;
@@ -292,45 +421,36 @@ export class BattleScene extends Phaser.Scene {
   // ----- 버튼 -----
 
   private createButtons(): void {
+    const arrow = { center: true, bigLabel: true, labelSize: 30, fill: BUTTON_FILL_ACTION };
+    this.moveLeftButton = new HudButton(this, L.moveLeft, arrow, { onPress: () => {} });
+    this.moveLeftButton.setTexts('◀', '');
+    this.moveRightButton = new HudButton(this, L.moveRight, arrow, { onPress: () => {} });
+    this.moveRightButton.setTexts('▶', '');
+    this.pauseButton = new HudButton(
+      this, L.pause, { center: true, bigLabel: true, labelSize: 26, fill: BUTTON_FILL_ACTION },
+      { onPress: () => this.setPaused(!this.paused) },
+    );
+    this.pauseButton.setTexts('⏸', '');
+
     ALLIES.forEach((def, i) => {
-      const color = colorForTags(def.tags);
       const btn = new HudButton(
-        this, 6 + i * (BUTTON_W + BUTTON_GAP), BUTTON_Y, BUTTON_W, BUTTON_H, color,
-        () => {
-          if (!this.paused) this.battle.summon(i);
-        },
+        this, L.summon[i], { fill: BUTTON_FILL, border: colorForTags(def.tags), borderWidth: 4 },
+        { onPress: () => { if (!this.paused) this.battle.summon(i); } },
       );
       btn.setTexts(`${(i + 1) % 10} ${def.name}`, `${def.cost}`);
       this.summonButtons.push(btn);
     });
     SKILLS.forEach((def, i) => {
       const btn = new HudButton(
-        this, 6 + i * (SKILL_W + BUTTON_GAP), SKILL_Y, SKILL_W, SKILL_H, 0x4a4a6b,
-        () => {
-          if (!this.paused) this.battle.castSkill(def.id);
-        },
+        this, L.skills[i], { shape: 'round', center: true, fill: BUTTON_FILL_ACTION, border: SKILL_COLORS[def.id], borderWidth: 3 },
+        { onPress: () => { if (!this.paused) this.battle.castSkill(def.id); } },
       );
       btn.setTexts(`${KEY_MAP.skills[i].slice(3)} ${def.name}`, `신력 ${def.spiritCost}`);
       this.skillButtons.push(btn);
     });
-    const gx = 6 + ALLIES.length * (BUTTON_W + BUTTON_GAP);
-    this.restartButton = new HudButton(
-      this, GAME_WIDTH / 2 - 80, RESULT_BUTTON_Y, RESULT_BUTTON_W, 44, 0x3a6b4a,
-      () => this.restart(),
-    );
-    this.restartButton.setTexts(`${KEY_MAP.gatherOrRestart.slice(3)} 다시 하기`, '');
-    this.restartButton.setVisible(false);
-    this.nextButton = new HudButton(
-      this, GAME_WIDTH / 2 + RESULT_BUTTON_GAP / 2, RESULT_BUTTON_Y, RESULT_BUTTON_W, 44, 0x3a5a8b,
-      () => this.goNextStage(),
-    );
-    this.nextButton.setTexts(`${KEY_MAP.nextStage.slice(3)} 다음 스테이지`, '');
-    this.nextButton.setVisible(false);
     this.gatherButton = new HudButton(
-      this, gx, BUTTON_Y, GAME_WIDTH - gx - 6, BUTTON_H, 0x6b5a3a,
-      () => {
-        if (!this.paused) this.battle.gather();
-      },
+      this, L.gather, { center: true, labelSize: 15, fill: BUTTON_FILL_GATHER },
+      { onPress: () => { if (!this.paused) this.battle.gather(); } },
     );
   }
 
@@ -354,10 +474,13 @@ export class BattleScene extends Phaser.Scene {
     const cost = b.resources.nextGatherCost;
     const r = b.resources;
     this.gatherButton.setTexts(
-      `R 기운 모으기 ${r.gatherLevel}/${RESOURCES.gather.costs.length}`,
-      cost === null ? '최대' : `${cost}`,
+      `R 기운 모으기\n${r.gatherLevel}/${RESOURCES.gather.costs.length}`,
+      cost === null ? '최대' : `부적 ${cost}`,
     );
     this.gatherButton.setState(0, cost !== null && r.talisman >= cost);
+    this.moveLeftButton.setState(0, true);
+    this.moveRightButton.setState(0, true);
+    this.pauseButton.setState(0, true);
   }
 
   // ----- 그리기 -----
@@ -496,23 +619,58 @@ export class BattleScene extends Phaser.Scene {
     const b = this.battle;
     const r = b.resources;
     g.clear();
+    // 위쪽 띠와 아래 패널 배경
+    g.fillStyle(HUD_STRIP, 0.88).fillRect(L.topStrip.x, L.topStrip.y, L.topStrip.w, L.topStrip.h);
+    g.fillStyle(HUD_PANEL, 1).fillRect(L.panel.x, L.panel.y, L.panel.w, L.panel.h);
+    g.lineStyle(2, 0x6b5a3a, 1).lineBetween(0, L.panel.y, GAME_WIDTH, L.panel.y);
     this.drawBossHud(g);
-    this.bar(g, 8, 8, 200, 12, r.talisman / r.maxTalisman, 0xe0b52e);
-    this.bar(g, 8, 24, 200, 12, r.spirit / r.maxSpirit, 0x58a6ff);
-    this.bar(g, 330, 8, 180, 14, b.shrine.hp / b.shrine.maxHp, 0x66aaff);
-    this.bar(g, GAME_WIDTH - 190, 8, 180, 14, b.castle.hp / b.castle.maxHp, b.castle.invulnerable ? 0x9aa5c0 : 0xdd5555);
 
-    const hero = b.hero;
-    const heroLine = hero.alive ? '' : `  영웅 부활 ${Math.ceil(hero.respawnTimer)}초`;
-    const sec = Math.floor(b.elapsed);
-    const mm = String(Math.floor(sec / 60)).padStart(2, '0');
-    const ss = String(sec % 60).padStart(2, '0');
-    this.hudText.setPosition(8, 42);
-    this.hudText.setText(
-      `부적 ${Math.floor(r.talisman)}/${r.maxTalisman} (+${r.talismanPerSec}/s)  신력 ${Math.floor(r.spirit)}/${r.maxSpirit}\n` +
-        `위협 ${b.threatLevel}  시간 ${mm}:${ss}  아군 ${b.allies.length}/${COMBAT.maxAllies}  웨이브 ${b.waveCount}  ${this.enemyLine()}${heroLine}` +
-        this.synergyLine(),
+    this.bar(g, L.talismanBar, r.talisman / r.maxTalisman, 0xe0b52e);
+    this.bar(g, L.spiritBar, r.spirit / r.maxSpirit, 0x58a6ff);
+    this.bar(g, L.shrineBar, b.shrine.hp / b.shrine.maxHp, 0x66aaff);
+    const shielded = b.castle.invulnerable;
+    this.bar(g, L.castleBar, b.castle.hp / b.castle.maxHp, shielded ? 0x9aa5c0 : 0xdd5555);
+    this.talismanText.setText(`부적 ${Math.floor(r.talisman)}/${r.maxTalisman} (+${r.talismanPerSec}/s)`);
+    this.spiritText.setText(`신력 ${Math.floor(r.spirit)}/${r.maxSpirit}`);
+    this.shrineText.setText(`서낭당 ${Math.ceil(b.shrine.hp)}`);
+    this.castleText.setText(shielded ? '원귀의 성 무적' : `원귀의 성 ${Math.ceil(b.castle.hp)}`);
+    this.drawMinimap(g);
+
+    const def = getStageDef(b.stage);
+    this.infoText.setText(
+      `${def.code} ${def.name}\n` +
+        `웨이브 ${b.waveCount}  ${formatTime(b.elapsed)}  위협 ${b.threatLevel}\n` +
+        `${this.enemyLine()}  아군 ${b.allies.length}/${COMBAT.maxAllies}`,
     );
+    const hero = b.hero;
+    const heroLine = hero.alive ? '' : `영웅 부활 ${Math.ceil(hero.respawnTimer)}초  `;
+    this.noteText.setText(heroLine + this.synergyLine());
+  }
+
+  /** 미니맵: 전장 전체를 가로로 줄여 아군·적·영웅·보스 점과 현재 카메라 범위를 보여 준다 */
+  private drawMinimap(g: Phaser.GameObjects.Graphics): void {
+    const b = this.battle;
+    const m = L.minimap;
+    const len = COMBAT.battlefieldLength;
+    const at = (x: number) => minimapX(x, len, m);
+    g.fillStyle(0x000000, 0.65).fillRect(m.x, m.y, m.w, m.h);
+    g.lineStyle(1, 0xffffff, 0.5).strokeRect(m.x, m.y, m.w, m.h);
+    const mid = m.y + m.h / 2;
+    g.fillStyle(SHRINE_COLOR, 1).fillRect(at(b.shrine.x) - 2, m.y + 3, 4, m.h - 6);
+    g.fillStyle(b.castle.invulnerable ? 0x9aa5c0 : 0xdd5555, 1).fillRect(at(b.castle.x) - 3, m.y + 3, 6, m.h - 6);
+    for (const f of b.allies) g.fillStyle(colorForTags(f.stats.tags), 1).fillRect(at(f.x) - 1, mid + 2, 3, 3);
+    for (const f of b.enemies) {
+      if (f.isBoss) continue;
+      g.fillStyle(0xb58cff, 1).fillRect(at(f.x) - 1, mid - 5, 3, 3);
+    }
+    const boss = b.encounter?.boss;
+    if (boss?.alive) g.fillStyle(0xff4040, 1).fillCircle(at(boss.x), mid, 4);
+    if (b.hero.alive) {
+      const hx = at(b.hero.x);
+      g.fillStyle(HERO_COLOR, 1).fillTriangle(hx, mid - 5, hx - 4, mid + 5, hx + 4, mid + 5);
+    }
+    const camW = (GAME_WIDTH / len) * m.w;
+    g.lineStyle(1, 0xffffff, 0.9).strokeRect(at(this.cameras.main.scrollX), m.y + 1, camW, m.h - 2);
   }
 
   /** 적 수 표시. 상한에 닿으면 대기 수도 보여 준다 */
@@ -525,44 +683,54 @@ export class BattleScene extends Phaser.Scene {
   /** 활성 연계 이름 (켜진 것이 없으면 빈 문자열) */
   private synergyLine(): string {
     const names = this.battle.synergy.activeIds().map((id) => SYNERGY[id].name);
-    return names.length > 0 ? `\n연계: ${names.join(', ')}` : '';
+    return names.length > 0 ? `연계: ${names.join(', ')}` : '';
   }
 
-  private bar(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, ratio: number, color: number): void {
-    g.fillStyle(0x000000, 0.6).fillRect(x, y, w, h);
-    g.fillStyle(color, 1).fillRect(x, y, w * Math.max(0, Math.min(1, ratio)), h);
-    g.lineStyle(1, 0xffffff, 0.5).strokeRect(x, y, w, h);
+  private bar(g: Phaser.GameObjects.Graphics, r: Rect, ratio: number, color: number): void {
+    g.fillStyle(0x000000, 0.6).fillRect(r.x, r.y, r.w, r.h);
+    g.fillStyle(color, 1).fillRect(r.x, r.y, r.w * Math.max(0, Math.min(1, ratio)), r.h);
+    g.lineStyle(1, 0xffffff, 0.5).strokeRect(r.x, r.y, r.w, r.h);
   }
 
+  /** 일시정지·결과 화면의 보임/숨김 */
   private updateOverlay(): void {
-    const result = this.battle.result;
-    const ended = result !== 'playing';
+    const ended = this.battle.result !== 'playing';
+    this.setPauseShown(!ended && this.paused);
+
     const next = this.nextStage;
-    this.restartButton.setVisible(ended);
-    this.nextButton.setVisible(ended && next !== null);
-    if (ended) {
-      // 다음 스테이지 버튼이 있으면 둘을 나란히, 없으면 다시 하기를 가운데에
-      const total = next !== null ? RESULT_BUTTON_W * 2 + RESULT_BUTTON_GAP : RESULT_BUTTON_W;
-      this.restartButton.moveTo((GAME_WIDTH - total) / 2, RESULT_BUTTON_Y);
-      this.restartButton.setState(0, this.restartAllowed);
-      this.nextButton.setState(0, this.restartAllowed);
-    }
+    setShown(this.resultDim, ended);
     this.resultPanel.setVisible(ended);
     this.resultTitle.setVisible(ended);
     this.resultStars.setVisible(ended);
     this.resultBody.setVisible(ended);
-    if (ended) {
-      this.drawResultTexts();
-    } else if (this.paused) {
-      this.overlay.setText('일시정지\nEsc 또는 P로 계속').setVisible(true);
-      return;
+    if (!ended) return;
+    if (!this.resultLaidOut) {
+      // 보이는 버튼을 왼쪽부터 다시 하기, (다음 스테이지), 지도로 순으로 가운데 정렬
+      this.resultLaidOut = true;
+      const row = next !== null ? [this.restartButton, this.nextButton, this.mapButton] : [this.restartButton, this.mapButton];
+      const { w, gap, y } = RESULT_LAYOUT.button;
+      centeredRow(row.length, w, gap, y).forEach((rect, i) => {
+        row[i].moveTo(rect.x, rect.y);
+        row[i].setVisible(true);
+      });
     }
-    this.overlay.setVisible(false);
+    for (const btn of [this.restartButton, this.nextButton, this.mapButton]) btn.setState(0, this.restartAllowed);
+    this.drawResultTexts();
+  }
+
+  private setPauseShown(shown: boolean): void {
+    if (shown === this.pauseShown) return;
+    this.pauseShown = shown;
+    setShown(this.pauseDim, shown);
+    this.pauseTitle.setVisible(shown);
+    this.pauseHint.setVisible(shown);
+    this.resumeButton.setVisible(shown);
+    this.pauseMapButton.setVisible(shown);
   }
 
   /** 결과 패널 글자: 제목, 별, 걸린 시간·체력, 별 조건, 보상 */
   private drawResultTexts(): void {
-    const res = this.battle.stageResult();
+    const res = this.settledResult();
     if (!res) return;
     const def = getStageDef(this.battle.stage);
     const hpPercent = Math.floor((this.battle.shrine.hp / this.battle.shrine.maxHp) * 100);
@@ -580,6 +748,19 @@ export class BattleScene extends Phaser.Scene {
       ].join('\n'),
     );
   }
+}
+
+/** 몸 위쪽까지의 높이(땅 기준). 데미지 숫자를 머리 위에 띄우는 데 쓴다 */
+function heightOf(body: Body): number {
+  if (body instanceof Base) return body.height;
+  if (body instanceof Fighter) return body.stats.height * body.sizeScale;
+  return HERO.height;
+}
+
+/** 보이기/숨기기와 함께 입력 받기도 켜고 끈다 */
+function setShown(obj: Phaser.GameObjects.Rectangle, shown: boolean): void {
+  obj.setVisible(shown);
+  if (obj.input) obj.input.enabled = shown;
 }
 
 /** 초 → mm:ss */

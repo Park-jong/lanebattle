@@ -21,4 +21,6 @@ export const COMBAT = {
   maxStepSeconds: 0.05,
   /** 승패가 난 뒤 이 시간(초) 동안은 재시작 입력을 무시 */
   resultInputDelay: 1,
+  /** 화상 지속 피해 숫자를 묶어서 보여 주는 간격(초) */
+  burnNumberInterval: 0.5,
 } as const;

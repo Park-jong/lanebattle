@@ -67,6 +67,17 @@ export function affinityMultiplier(attack: AttackInfo, target: DamageTarget, dot
   return result;
 }
 
+/** 피해 숫자 색을 정하는 상성 분류 */
+export type Matchup = 'weak' | 'resist' | 'normal';
+
+/** 적 특성 배율과 보스 상성 배율의 곱이 1보다 크면 약점, 작으면 저항 */
+export function classifyMatchup(attack: AttackInfo, target: DamageTarget, dot = false): Matchup {
+  const m = traitMultiplier(attack, target, dot) * affinityMultiplier(attack, target, dot);
+  if (m > 1 + 1e-9) return 'weak';
+  if (m < 1 - 1e-9) return 'resist';
+  return 'normal';
+}
+
 /**
  * 최종 피해 = 기본 공격력 x (1 + 공격력 버프) x 공격자 배율 x 특성 배율 x 보스 상성 배율
  *            x (1 + 받는 피해 증가 - 받는 피해 감소). 최소 1.
