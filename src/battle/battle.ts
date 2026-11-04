@@ -109,10 +109,10 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
   private armorKillStacks = 0;
   private auras: { owner: Body; def: AuraDef }[] = [];
   /** 빙의 스킬의 오라형 버프: 영웅 중심, 남은 시간이 다하면 사라진다 */
-  private timedAuras: { def: AuraDef; remaining: number }[] = [];
+  private timedAuras: { def: AuraDef; remaining: number; missChance: number }[] = [];
   /** 빙의한 영웅의 기본 공격 방식 (빙의 없으면 null) */
   readonly heroForm: HeroForm | null;
-  /** 빙의 유닛의 스킬 3개. 빙의가 없거나 아직 스킬이 없는 유닛(준비 중)이면 null = 기본 무당 스킬 */
+  /** 빙의 유닛의 스킬 3개. 빙의가 없으면 null = 기본 무당 스킬 */
   private readonly possessionSkills: PossessionSkillSet | null;
   private readonly possessionRunner: PossessionSkillRunner | null;
   private readonly rng: Rng;
@@ -272,7 +272,7 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
     return this.possessionSkills ? this.possessionSkills[id].name : getSkill(id).name;
   }
 
-  /** 빙의 스킬을 쓰는 중인가 (빙의했고 그 유닛의 스킬이 준비돼 있을 때) */
+  /** 빙의 스킬을 쓰는 중인가 (빙의했을 때) */
   get possessionSkillsActive(): boolean {
     return this.possessionSkills !== null;
   }
@@ -409,9 +409,9 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
     return n;
   }
 
-  /** 영웅 중심 오라형 버프를 duration초 동안 건다 */
-  addTimedAura(radius: number, effect: BuffEffect, duration: number): void {
-    this.timedAuras.push({ def: { radius, effect }, remaining: duration });
+  /** 영웅 중심 오라형 버프를 duration초 동안 건다. missChance가 있으면 반경 안 아군을 노리는 적 투사체가 그 확률로 빗나간다 */
+  addTimedAura(radius: number, effect: BuffEffect, duration: number, missChance = 0): void {
+    this.timedAuras.push({ def: { radius, effect }, remaining: duration, missChance });
   }
 
   healShrine(amount: number): void {
@@ -746,7 +746,7 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
   private missOutcome(p: Projectile): MissOutcome {
     const t = p.target;
     if (p.team !== 'enemy' || t.team !== 'ally' || t.kind === 'base' || t.status?.buffsDisabled) return 'hit';
-    let chance = 0;
+    let chance = this.timedMissChance(t);
     let reflect = false;
     for (const a of this.allies) {
       const miss = a.ability.missAura;
@@ -757,6 +757,17 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
     }
     if (chance <= 0 || this.rng.next() >= chance) return 'hit';
     return reflect ? 'reflect' : 'miss';
+  }
+
+  /** 빙의 오라(순풍)의 빗나감 확률. 영웅이 살아 있고 해제 중이 아니며 차사왕이 오라를 막지 않을 때만, 영웅 중심 반경 안 대상에게 적용 */
+  private timedMissChance(target: Body): number {
+    const { hero } = this;
+    if (!hero.alive || hero.status!.buffsDisabled || this.allyAurasSuppressed) return 0;
+    let chance = 0;
+    for (const a of this.timedAuras) {
+      if (Math.abs(target.x - hero.x) <= a.def.radius) chance = Math.max(chance, a.missChance);
+    }
+    return chance;
   }
 
   /** 되돌림 바람: 빗나간 투사체가 같은 피해로 쏜 적에게 되돌아간다. 다시 빗나가지 않는다 */

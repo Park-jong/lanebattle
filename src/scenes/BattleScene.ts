@@ -337,15 +337,13 @@ export class BattleScene extends Phaser.Scene {
     } else this.tooltip.setStatus(status);
   }
 
-  /** 스킬 툴팁 문구: 빙의 스킬이 있으면 그것, 빙의했지만 스킬이 준비 중이면 기본 스킬 + 안내 */
+  /** 스킬 툴팁 문구: 빙의 중이면 빙의 스킬, 아니면 기본 무당 스킬 */
   private skillTooltip(id: SkillId) {
     const b = this.battle;
     const unitId = b.hero.possessedId;
     const possessed = unitId && b.possessionSkillsActive ? describePossessionSkill(unitId, id) : null;
     if (possessed) return possessed;
-    const text = describeSkill(id, this.modifiers);
-    if (b.heroForm) text.lines.push(`빙의: ${b.heroForm.name} - 빙의 스킬 준비 중이라 기본 무당 스킬을 씁니다.`);
-    return text;
+    return describeSkill(id, this.modifiers);
   }
 
   /** 키보드와 화면 ◀ ▶ 버튼을 합친 이동 방향 (-1, 0, 1) */
@@ -816,11 +814,11 @@ export class BattleScene extends Phaser.Scene {
     return `적 ${b.enemyCount}/${COMBAT.maxEnemies}${pending}`;
   }
 
-  /** 빙의 중이면 "빙의: ○○" (스킬이 아직 없는 유닛은 준비 중 표시) */
+  /** 빙의 중이면 "빙의: ○○" */
   private possessionLine(): string {
     const form = this.battle.heroForm;
     if (!form) return '';
-    return `빙의: ${form.name}${this.battle.possessionSkillsActive ? '' : ' (스킬 준비 중)'}  `;
+    return `빙의: ${form.name}  `;
   }
 
   /** 활성 연계 이름 (켜진 것이 없으면 빈 문자열) */

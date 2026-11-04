@@ -137,8 +137,8 @@ export function possessionNodeId(unitId: string): string {
 
 function possessionDescription(unitId: string): string {
   const skills = possessionSkillsOf(unitId);
-  const names = skills ? POSSESSION_SLOTS.map((slot) => skills[slot].name).join(' / ') : '스킬 준비 중';
-  return `이 요괴로 변신한다. 기본 공격의 유형·사거리·적중 효과가 요괴를 따르고, Q/W/E가 빙의 스킬로 바뀐다 (${names})`;
+  const names = skills ? ` (${POSSESSION_SLOTS.map((slot) => skills[slot].name).join(' / ')})` : '';
+  return `이 요괴로 변신한다. 기본 공격의 유형·사거리·적중 효과가 요괴를 따르고, Q/W/E가 빙의 스킬로 바뀐다${names}`;
 }
 
 const POSSESSION_NODES: UpgradeNode[] = UNIT_UPGRADES.map((u) => {

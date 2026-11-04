@@ -50,6 +50,10 @@ export interface PossessionHitEffects {
   collision?: number;
   /** 이 스킬로 처치한 적 1마리당 영웅 최대 체력 비율 회복 */
   healOnKill?: number;
+  /** 비행 적에게 주는 피해 배율 (까치 떼 쇄도) */
+  flyingMultiplier?: number;
+  /** true면 비행 적만 대상 (오작교 경직) */
+  flyingOnly?: boolean;
 }
 
 export interface PossessionHit extends PossessionHitEffects {
@@ -66,10 +70,10 @@ export type PossessionEffect =
   | { kind: 'repeat'; times: number; interval: number; hit: PossessionHit }
   /** 아군 무료 소환 (아군 상한 준수, 부적 미사용) */
   | { kind: 'summon'; unitId: string; count: number }
-  /** 시간제 버프. tag를 주면 그 태그 아군만, radius를 주면 영웅 중심 반경 안만 (영웅은 항상 포함) */
-  | { kind: 'buff'; tag?: Tag; radius?: number; effect: BuffValues; duration: number }
-  /** 오라형 버프: duration초 동안 영웅 중심 반경 안 아군(영웅 포함) */
-  | { kind: 'aura'; radius: number; effect: BuffValues; duration: number }
+  /** 시간제 버프. tag를 주면 그 태그 아군만, radius를 주면 영웅 중심 반경 안만 (영웅은 항상 포함). heroEffect를 주면 영웅은 effect 대신 이것만 받는다 */
+  | { kind: 'buff'; tag?: Tag; radius?: number; effect: BuffValues; heroEffect?: BuffValues; duration: number }
+  /** 오라형 버프: duration초 동안 영웅 중심 반경 안 아군(영웅 포함). missChance는 반경 안 아군을 노리는 적 투사체의 빗나감 확률 */
+  | { kind: 'aura'; radius: number; effect: BuffValues; duration: number; missChance?: number }
   /** 서낭당 최대 체력 비율 회복 */
   | { kind: 'shrineHeal'; ratio: number };
 
@@ -81,7 +85,7 @@ export interface PossessionSkillDef {
 /** 유닛 하나의 빙의 스킬 3개 (슬롯 id별) */
 export type PossessionSkillSet = Readonly<Record<SkillId, PossessionSkillDef>>;
 
-/** 유닛 id -> 빙의 스킬. 아직 없는 유닛(6~10)은 키가 없다 (11-2에서 채움) */
+/** 유닛 id -> 빙의 스킬 (유닛 10종 모두) */
 export const POSSESSION_SKILLS: Readonly<Record<string, PossessionSkillSet>> = {
   clubGoblin: {
     fanWind: { name: '방망이 난타', effects: [{ kind: 'hit', area: { kind: 'front', range: 150 }, type: 'melee', damage: 55 }] },
@@ -143,9 +147,81 @@ export const POSSESSION_SKILLS: Readonly<Record<string, PossessionSkillSet>> = {
       ],
     },
   },
+  bulgasari: {
+    fanWind: {
+      name: '쇠 씹기',
+      effects: [{ kind: 'hit', area: { kind: 'front', range: 120 }, type: 'melee', damage: 60, defenseBreak: 3 }],
+    },
+    blessing: {
+      name: '쇠 갑옷',
+      effects: [{ kind: 'buff', radius: 150, effect: { damageReduction: 0.25 }, heroEffect: { damageReduction: 0.5 }, duration: 6 }],
+    },
+    bladeDance: {
+      name: '탐식',
+      effects: [{ kind: 'hit', area: { kind: 'radius', radius: 250 }, type: 'melee', damage: 280, defenseBreak: 'max', healOnKill: 0.1 }],
+    },
+  },
+  haetae: {
+    fanWind: {
+      name: '정의의 일격',
+      effects: [{ kind: 'hit', area: { kind: 'front', range: 150 }, type: 'melee', damage: 60, stun: 2 }],
+    },
+    blessing: { name: '수호 진형', effects: [{ kind: 'aura', radius: 200, effect: { damageReduction: 0.35 }, duration: 8 }] },
+    bladeDance: {
+      name: '해태의 심판',
+      effects: [
+        { kind: 'hit', area: { kind: 'radius', radius: 300 }, type: 'magic', damage: 300, stun: 2 },
+        { kind: 'shrineHeal', ratio: 0.1 },
+      ],
+    },
+  },
+  samjokgo: {
+    fanWind: {
+      name: '태양 깃',
+      effects: [{ kind: 'hit', area: { kind: 'nearest', count: 3 }, type: 'ranged', damage: 45, burnPerSec: 6 }],
+    },
+    blessing: { name: '태양 오라', effects: [{ kind: 'aura', radius: 250, effect: { attack: 0.5 }, duration: 10 }] },
+    bladeDance: {
+      name: '일식',
+      effects: [{ kind: 'hit', area: { kind: 'radius', radius: 600 }, type: 'magic', damage: 220, burnPerSec: 12 }],
+    },
+  },
+  magpieFlock: {
+    fanWind: {
+      name: '까치 떼 쇄도',
+      effects: [{ kind: 'hit', area: { kind: 'front', range: 400, limit: 5 }, type: 'ranged', damage: 35, flyingMultiplier: 2 }],
+    },
+    blessing: {
+      name: '길조',
+      effects: [{ kind: 'buff', radius: 250, effect: { attackSpeed: 0.4 }, duration: 8 }],
+    },
+    bladeDance: {
+      name: '오작교',
+      effects: [
+        { kind: 'summon', unitId: 'magpieFlock', count: 6 },
+        { kind: 'hit', area: { kind: 'radius', radius: 600 }, type: 'ranged', stun: 2, flyingOnly: true },
+      ],
+    },
+  },
+  yeongdeungWind: {
+    fanWind: {
+      name: '돌개바람',
+      effects: [{ kind: 'hit', area: { kind: 'front', range: 250 }, type: 'magic', damage: 45, knockback: 120 }],
+    },
+    blessing: {
+      name: '순풍',
+      effects: [{ kind: 'aura', radius: 250, effect: { moveSpeed: 0.4, attackSpeed: 0.4 }, duration: 10, missChance: 0.5 }],
+    },
+    bladeDance: {
+      name: '영등 폭풍',
+      effects: [
+        { kind: 'hit', area: { kind: 'radius', radius: 350 }, type: 'magic', damage: 260, knockback: 200, slow: { ratio: 0.5, duration: 4 } },
+      ],
+    },
+  },
 };
 
-/** 유닛의 빙의 스킬 (없으면 null = 준비 중) */
+/** 유닛의 빙의 스킬 (알 수 없는 유닛 id면 null) */
 export function possessionSkillsOf(unitId: string): PossessionSkillSet | null {
   return POSSESSION_SKILLS[unitId] ?? null;
 }

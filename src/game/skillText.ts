@@ -109,6 +109,7 @@ function hitText(fx: PossessionHitEffects): string {
   if (fx.defenseBreak) parts.push(fx.defenseBreak === 'max' ? '방어 파괴 최대 중첩' : `방어 파괴 ${fx.defenseBreak}중첩`);
   if (fx.collision) parts.push(`밀려난 적이 부딪힌 적도 피해 ${fmt(fx.collision)}`);
   if (fx.healOnKill) parts.push(`처치 1마리당 체력 ${pct(fx.healOnKill)} 회복`);
+  if (fx.flyingMultiplier) parts.push(`비행 적에게 ×${fmt(fx.flyingMultiplier)}`);
   return `${parts.join(' + ')} (${TYPE_NAMES[fx.type]})`;
 }
 
@@ -124,7 +125,7 @@ function buffText(effect: BuffValues): string {
 function effectText(e: PossessionEffect): string {
   switch (e.kind) {
     case 'hit':
-      return `${areaText(e.area)}: ${hitText(e)}`;
+      return `${e.flyingOnly ? areaText(e.area).replace('적', '비행 적') : areaText(e.area)}: ${hitText(e)}`;
     case 'charge':
       return `앞으로 ${fmt(e.distance)} 돌진, 지나간 길의 적: ${hitText(e.hit)}`;
     case 'repeat': {
@@ -135,16 +136,19 @@ function effectText(e: PossessionEffect): string {
       return `${getAllyDef(e.unitId).name} ${e.count}마리 무료 소환 (아군 상한까지, 부적 미사용)`;
     case 'buff': {
       const who = e.tag ? `${TAG_NAMES[e.tag]} 아군과 영웅` : `반경 ${fmt(e.radius ?? 0)} 아군(영웅 포함)`;
+      if (e.heroEffect) return `${fmt(e.duration)}초간 영웅 ${buffText(e.heroEffect)}, 반경 ${fmt(e.radius ?? 0)} 다른 아군 ${buffText(e.effect)}`;
       return `${fmt(e.duration)}초간 ${who} ${buffText(e.effect)}`;
     }
-    case 'aura':
-      return `${fmt(e.duration)}초간 반경 ${fmt(e.radius)} 아군(영웅 포함) ${buffText(e.effect)} 오라`;
+    case 'aura': {
+      const miss = e.missChance ? `, 이 동안 반경 안 아군을 노리는 적 투사체 ${pct(e.missChance)} 빗나감` : '';
+      return `${fmt(e.duration)}초간 반경 ${fmt(e.radius)} 아군(영웅 포함) ${buffText(e.effect)}${miss} 오라`;
+    }
     case 'shrineHeal':
       return `서낭당 최대 체력 ${pct(e.ratio)} 회복`;
   }
 }
 
-/** 빙의 스킬 툴팁. 이름·비용·쿨타임·효과 문구를 데이터에서 만든다. 스킬이 아직 없는 유닛이면 null */
+/** 빙의 스킬 툴팁. 이름·비용·쿨타임·효과 문구를 데이터에서 만든다. 알 수 없는 유닛이면 null */
 export function describePossessionSkill(unitId: string, id: SkillId): TooltipText | null {
   const set = possessionSkillsOf(unitId);
   if (!set) return null;

@@ -71,7 +71,7 @@ export interface PossessionHost {
   addBuff(target: Body, effect: BuffValues, duration: number): boolean;
   /** 아군 상한을 지켜 무료로 소환하고 실제 소환 수를 돌려준다 */
   spawnFreeAllies(unitId: string, count: number): number;
-  addTimedAura(radius: number, effect: BuffValues, duration: number): void;
+  addTimedAura(radius: number, effect: BuffValues, duration: number, missChance?: number): void;
   healShrine(amount: number): void;
   schedule(delay: number, run: () => void): void;
 }
@@ -119,7 +119,7 @@ export class PossessionSkillRunner {
         this.buff(effect);
         break;
       case 'aura':
-        host.addTimedAura(effect.radius, effect.effect, effect.duration);
+        host.addTimedAura(effect.radius, effect.effect, effect.duration, effect.missChance);
         break;
       case 'shrineHeal':
         host.healShrine(host.shrine.maxHp * effect.ratio);
@@ -213,7 +213,8 @@ export class PossessionSkillRunner {
   // ----- 동작 -----
 
   private hitArea(area: PossessionArea, effects: PossessionHitEffects): void {
-    this.applyHit(this.select(area, effects.type), effects);
+    const targets = this.select(area, effects.type).filter((e) => !effects.flyingOnly || e.flying);
+    this.applyHit(targets, effects);
   }
 
   /** 돌진: 영웅이 앞으로 이동(서낭당~성 사이로 제한)하고, 출발점부터 도착점까지 길 위의 땅 위 적을 친다 */
@@ -240,7 +241,7 @@ export class PossessionSkillRunner {
     for (const t of targets) {
       if (!t.alive) continue;
       if (fx.damage) {
-        host.dealFixedDamage(t, fx.damage, info);
+        host.dealFixedDamage(t, fx.damage * (t.flying ? (fx.flyingMultiplier ?? 1) : 1), info);
         if (!t.alive) kills++;
       }
       if (!t.alive || t.isImmuneTo(this.tags)) continue;
@@ -260,7 +261,7 @@ export class PossessionSkillRunner {
     if (fx.healOnKill && kills > 0) host.hero.heal(host.hero.maxHp * fx.healOnKill * kills);
   }
 
-  /** 시간제 버프: 영웅은 항상, 아군은 태그·반경 조건에 맞는 것만. 버프 해제 중인 대상에게는 걸리지 않는다 */
+  /** 시간제 버프: 영웅은 항상, 아군은 태그·반경 조건에 맞는 것만. 버프 해제 중인 대상에게는 걸리지 않는다. 영웅은 heroEffect가 있으면 그것만 받는다 */
   private buff(effect: Extract<PossessionEffect, { kind: 'buff' }>): void {
     const { hero, allies } = this.host;
     const receivers: Body[] = allies.filter((a) => {
@@ -269,6 +270,6 @@ export class PossessionSkillRunner {
       return effect.radius === undefined || Math.abs(a.x - hero.x) - a.radius <= effect.radius;
     });
     if (hero.alive) receivers.push(hero);
-    for (const r of receivers) this.host.addBuff(r, effect.effect, effect.duration);
+    for (const r of receivers) this.host.addBuff(r, r === hero ? (effect.heroEffect ?? effect.effect) : effect.effect, effect.duration);
   }
 }

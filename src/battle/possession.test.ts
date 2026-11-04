@@ -240,7 +240,7 @@ describe('빙의 스킬 공통', () => {
     expect(POSSESSION_COMMON.fanWind).toEqual({ spiritCost: 12, cooldown: 3.6 });
     expect(POSSESSION_COMMON.blessing).toEqual({ spiritCost: 16, cooldown: 7.2 });
     expect(POSSESSION_COMMON.bladeDance).toEqual({ spiritCost: 32, cooldown: 24 });
-    for (const unitId of ['clubGoblin', 'oneLegGoblin', 'sumoGoblin', 'foxfireArcher', 'gumiho']) {
+    for (const unitId of Object.keys(POSSESSION_SKILLS)) {
       const b = possess(unitId);
       const spent: number[] = [];
       for (const id of POSSESSION_SLOTS) {
@@ -291,18 +291,26 @@ describe('빙의 스킬 공통', () => {
     expect(charge.drainCastEvents()[0]).toMatchObject({ x: HX, range: 200, shape: 'fan' });
   });
 
-  it('유닛 6~10은 스킬이 준비 중이라 기본 무당 스킬을 쓴다 (변신은 그대로)', () => {
-    for (const unitId of ['bulgasari', 'haetae', 'samjokgo', 'magpieFlock', 'yeongdeungWind']) {
-      expect(POSSESSION_SKILLS[unitId]).toBeUndefined();
+  it('유닛 6~10도 빙의 스킬을 쓴다 (준비 중 대체 동작 없음): 이름·비용 12/16/32', () => {
+    const names: Record<string, string[]> = {
+      bulgasari: ['쇠 씹기', '쇠 갑옷', '탐식'],
+      haetae: ['정의의 일격', '수호 진형', '해태의 심판'],
+      samjokgo: ['태양 깃', '태양 오라', '일식'],
+      magpieFlock: ['까치 떼 쇄도', '길조', '오작교'],
+      yeongdeungWind: ['돌개바람', '순풍', '영등 폭풍'],
+    };
+    for (const [unitId, list] of Object.entries(names)) {
+      expect(POSSESSION_SKILLS[unitId]).toBeDefined();
       const b = possess(unitId);
-      expect(b.heroForm).not.toBeNull();
-      expect(b.possessionSkillsActive).toBe(false);
-      expect(b.skillName('fanWind')).toBe('부채 바람');
-      const e = foe(b, 'geuseundae', 100);
-      const before = b.resources.spirit;
-      expect(b.castSkill('fanWind')).toBe('ok');
-      expect(before - b.resources.spirit).toBe(30);
-      expect(lost(e)).toBe(30);
+      expect(b.possessionSkillsActive).toBe(true);
+      expect(POSSESSION_SLOTS.map((id) => b.skillName(id))).toEqual(list);
+      const spent: number[] = [];
+      for (const id of POSSESSION_SLOTS) {
+        const before = b.resources.spirit;
+        expect(b.castSkill(id), `${unitId} ${id}`).toBe('ok');
+        spent.push(before - b.resources.spirit);
+      }
+      expect(spent).toEqual([12, 16, 32]);
     }
   });
 

@@ -37,7 +37,7 @@ describe('빙의 스킬 툴팁', () => {
     );
   });
 
-  it('15개 스킬 모두 이름이 제목에 들어가고 마지막 줄에 고정 피해 안내가 있다', () => {
+  it('유닛 10종 스킬 30개 모두 이름이 제목에 들어가고 마지막 줄에 고정 피해 안내가 있다', () => {
     let count = 0;
     for (const [unitId, set] of Object.entries(POSSESSION_SKILLS)) {
       for (const [slot, skill] of Object.entries(set)) {
@@ -47,10 +47,34 @@ describe('빙의 스킬 툴팁', () => {
         count++;
       }
     }
-    expect(count).toBe(15);
+    expect(count).toBe(30);
   });
 
-  it('스킬이 준비 중인 유닛(6~10)은 null', () => {
-    expect(describePossessionSkill('bulgasari', 'fanWind')).toBeNull();
+  it('알 수 없는 유닛 id는 null', () => {
+    expect(describePossessionSkill('nobody', 'fanWind')).toBeNull();
+  });
+});
+
+describe('빙의 스킬 툴팁 (유닛 6~10)', () => {
+  const line = (unitId: string, slot: 'fanWind' | 'blessing' | 'bladeDance') => describePossessionSkill(unitId, slot)!.lines[2];
+
+  it('효과 문구가 데이터에서 나온다', () => {
+    expect(line('bulgasari', 'fanWind')).toBe('앞쪽 120 범위 모든 적: 피해 60 + 방어 파괴 3중첩 (근접)');
+    expect(line('bulgasari', 'blessing')).toBe('6초간 영웅 받는 피해 -50%, 반경 150 다른 아군 받는 피해 -25%');
+    expect(line('bulgasari', 'bladeDance')).toContain('방어 파괴 최대 중첩 + 처치 1마리당 체력 10% 회복');
+    expect(line('haetae', 'blessing')).toBe('8초간 반경 200 아군(영웅 포함) 받는 피해 -35% 오라');
+    expect(describePossessionSkill('haetae', 'bladeDance')!.lines[3]).toBe('서낭당 최대 체력 10% 회복');
+    expect(line('magpieFlock', 'fanWind')).toContain('앞쪽 400 범위 가까운 적 5명');
+    expect(line('magpieFlock', 'fanWind')).toContain('비행 적에게 ×2');
+    expect(describePossessionSkill('magpieFlock', 'bladeDance')!.lines[3]).toContain('반경 600 비행 적');
+    expect(line('yeongdeungWind', 'blessing')).toContain('적 투사체 50% 빗나감');
+  });
+
+  it('준비 중 문구가 없다', () => {
+    for (const unitId of ['bulgasari', 'haetae', 'samjokgo', 'magpieFlock', 'yeongdeungWind']) {
+      for (const slot of ['fanWind', 'blessing', 'bladeDance'] as const) {
+        expect(describePossessionSkill(unitId, slot)!.lines.join('\n')).not.toContain('준비 중');
+      }
+    }
   });
 });
