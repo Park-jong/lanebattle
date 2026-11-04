@@ -159,13 +159,24 @@ describe('무당: 스킬 갈래', () => {
     expect(a.hp).toBeCloseTo(10 + 120 * 0.25);
   });
 
-  it('축원 신명 풀이: 공격력 버프 +25% -> +50%, 회복은 그대로', () => {
+  it('축원 신명 풀이: 공격력 버프 +50%p (25% -> 75%), 회복은 그대로', () => {
     const b = heroBattle({ blessingSpiritRelease: 1 });
     const a = ally(b, 'clubGoblin', HX + 100);
     a.hp = 10;
     b.castSkill('blessing');
-    expect(a.status!.attackBonus).toBeCloseTo(0.5);
+    expect(a.status!.attackBonus).toBeCloseTo(0.75);
     expect(a.hp).toBeCloseTo(10 + 120 * 0.25);
+  });
+
+  it('축원 신명 풀이: 버프 중 공격력 x1.75 (방망이병 14 -> 24.5)', () => {
+    const b = heroBattle({ blessingSpiritRelease: 1 });
+    const a = ally(b, 'clubGoblin', HX + 100);
+    b.castSkill('blessing');
+    const e = foe(b, 'grimReaper', HX + 130);
+    b.step(0.05);
+    for (let t = 0; t < 2 && lost(e) === 0; t += 0.05) b.step(0.05);
+    expect(a.status!.attackBonus).toBeCloseTo(0.75);
+    expect(lost(e)).toBeCloseTo(14 * 1.75);
   });
 
   it('작두 타기 칼날 춤: 3초간 초당 40, 총 추가 피해 120', () => {

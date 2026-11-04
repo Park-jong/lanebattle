@@ -36,7 +36,7 @@ describe('computeBuildEffects', () => {
     const rite = computeBuildEffects({ blessingGrandRite: 1 }).skills.blessing;
     expect(rite).toEqual({ rangeMultiplier: 1.5, healRatio: 0.4, attackBonus: 0.25 });
     const release = computeBuildEffects({ blessingSpiritRelease: 1 }).skills.blessing;
-    expect(release).toEqual({ rangeMultiplier: 1, healRatio: 0.25, attackBonus: 0.5 });
+    expect(release).toEqual({ rangeMultiplier: 1, healRatio: 0.25, attackBonus: 0.75 });
     expect(computeBuildEffects({ bladeDanceBlades: 1 }).skills.bladeDance).toEqual({
       cooldownMultiplier: 1, extraDuration: 3, extraDamagePerSec: 40,
     });

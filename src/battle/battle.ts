@@ -5,7 +5,7 @@ import { HERO } from '../data/hero';
 import { getSkill, SKILL_EFFECTS, type SkillId } from '../data/skills';
 import { RESOURCES } from '../data/resources';
 import { getAbility, type AbilityDef } from '../data/abilities';
-import type { AllyDef } from '../data/types';
+import type { AllyDef, EnemyTrait } from '../data/types';
 import { ALL_SYNERGY_IDS, type SynergyId } from '../data/synergy';
 import { TimedAbilities, type AbilityHost } from './abilities';
 import { BossEncounter, type BossHost } from './boss';
@@ -677,7 +677,8 @@ export class Battle implements AbilityHost, BossHost {
     const targetBurning = target.status?.burning ?? false;
 
     let multiplier = s.multiplier ?? 1;
-    if (ability?.vsTrait && target.traits.includes(ability.vsTrait.trait)) multiplier *= ability.vsTrait.multiplier;
+    const vsTraitHit = ability?.vsTrait !== undefined && this.hasTraitFor(target, ability.vsTrait.trait);
+    if (ability?.vsTrait && vsTraitHit) multiplier *= ability.vsTrait.multiplier;
     if (ability?.baseDamageMultiplier && target.kind === 'base') multiplier *= ability.baseDamageMultiplier;
     if (ability?.armorKill) multiplier *= 1 + ability.armorKill.attackPerStack * this.armorKillStacks;
     multiplier *= this.synergy.hitMultiplier(info, dispelled, targetBurning);
@@ -692,11 +693,18 @@ export class Battle implements AbilityHost, BossHost {
     }
     this.applyHitEffects(target, ability?.onHit);
     const vs = ability?.vsTrait;
-    if (vs?.stagger && target.alive && target.traits.includes(vs.trait)) this.applyStun(target, vs.stagger);
+    // 경직은 보스에게 걸지 않는다 (비행 중인 대왕도 배율만 받는다)
+    if (vs?.stagger && target.alive && !target.isBoss && target.traits.includes(vs.trait)) this.applyStun(target, vs.stagger);
     const slow = this.synergy.hitSlow(info, dispelled);
     if (slow) this.applySlow(target, slow.ratio, slow.duration);
     const spread = this.synergy.spreadRadius(info, dispelled, targetBurning);
     if (spread > 0) this.spreadBurn(target, spread, burn.maxStacks);
+  }
+
+  /** 특성 대상 판정. 비행 중인 보스는 일반 비행 특성 없이도 비행 적으로 취급한다 (배율만, 바람 ×1.5 등은 없음) */
+  private hasTraitFor(target: Body, trait: EnemyTrait): boolean {
+    if (target.traits.includes(trait)) return true;
+    return trait === 'flying' && target.isBoss && target.flying;
   }
 
   /** 타격으로 적을 처치했을 때의 아군 능력 (뚝딱: 추가 소환, 쇠를 먹는 자: 회복과 공격력 중첩) */

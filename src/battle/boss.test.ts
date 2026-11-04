@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ALLIES } from '../data/allies';
 import { BOSS_RULES, BOSSES, getBossDef } from '../data/bosses';
+import { computeBuildEffects } from '../game/buildEffects';
 import { Battle } from './battle';
 import { BossEncounter, type BossHost } from './boss';
 import { calcDamage, type AttackInfo, type DamageTarget } from './damage';
@@ -182,12 +183,31 @@ describe('보스 상성', () => {
   it('어둑시니 대왕: 원거리 약점, 근접 저항, 비행 유닛 약점', () => {
     const { b, boss } = withBoss(4);
     expect(boss.flying).toBe(true);
-    expect(lost(b, 'magpieFlock', boss)).toBeCloseTo(7 * 2); // 원거리와 비행 유닛이 겹쳐도 x2 한 번
+    expect(lost(b, 'magpieFlock', boss)).toBeCloseTo(7 * 2 * 2); // 약점 x2 한 번 x 까치 비행 적 x2 (비행 중 대왕)
     expect(lost(b, 'samjokgo', boss)).toBeCloseTo(14 * 2);
     expect(lost(b, 'yeongdeungWind', boss)).toBeCloseTo(8); // 마법은 상성 없음
     boss.setFlying(false); // 착지
     expect(lost(b, 'clubGoblin', boss)).toBeCloseTo(14 * 0.2);
-    expect(lost(b, 'magpieFlock', boss)).toBeCloseTo(7 * 2); // 약점은 비행 상태와 무관
+    expect(lost(b, 'magpieFlock', boss)).toBeCloseTo(7 * 2); // 착지 중: 약점 x2만, 까치 x2 없음
+  });
+
+  it('대왕 vs 까치 떼 ③: 비행 중 x3 x 약점 x2, 경직 없음, 착지 중에는 배율 없음', () => {
+    const b = new Battle({ stage: bossStage(4), bossAt: 0, rng: new SeededRng(1), modifiers: computeBuildEffects({ magpieFlockAwaken: 1 }) });
+    b.step(0.05);
+    const boss = b.encounter!.boss!;
+    expect(boss.flying).toBe(true);
+    expect(lost(b, 'magpieFlock', boss)).toBeCloseTo(7 * 3 * 2);
+    expect(boss.status!.stunned).toBe(false);
+    boss.setFlying(false);
+    expect(lost(b, 'magpieFlock', boss)).toBeCloseTo(7 * 2);
+    expect(boss.status!.stunned).toBe(false);
+  });
+
+  it('대왕 vs 까치 떼 ① 강화 + ③: 7 x 1.25 x 3 x 2', () => {
+    const levels = { magpieFlockBasic: 1, magpieFlockAwaken: 1 };
+    const b = new Battle({ stage: bossStage(4), bossAt: 0, rng: new SeededRng(1), modifiers: computeBuildEffects(levels) });
+    b.step(0.05);
+    expect(lost(b, 'magpieFlock', b.encounter!.boss!)).toBeCloseTo(7 * 1.25 * 3 * 2);
   });
 
   it('비행 유닛 약점은 공격 유형과 별개로 판정된다', () => {

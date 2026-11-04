@@ -51,7 +51,7 @@ const MUDANG_INITS: NodeInit[] = [
   { id: 'fanWindTornado', tier: 3, name: '부채 바람: 회오리', description: '부채 바람 범위 +50%', cost: 3, exclusiveGroup: 'fanWind', params: { rangeBonus: 0.5 } },
   { id: 'fanWindGust', tier: 3, name: '부채 바람: 돌풍', description: '부채 바람 피해 x2, 넉백 x1.5', cost: 3, exclusiveGroup: 'fanWind', params: { damageMultiplier: 2, knockbackMultiplier: 1.5 } },
   { id: 'blessingGrandRite', tier: 3, name: '축원: 큰 굿', description: '축원 범위 +50%, 회복 40%', cost: 3, exclusiveGroup: 'blessing', params: { rangeBonus: 0.5, healRatio: 0.4 } },
-  { id: 'blessingSpiritRelease', tier: 3, name: '축원: 신명 풀이', description: '축원 공격력 버프 +50%', cost: 3, exclusiveGroup: 'blessing', params: { attackBuff: 0.5 } },
+  { id: 'blessingSpiritRelease', tier: 3, name: '축원: 신명 풀이', description: '축원 공격력 버프 +50%p (25% -> 75%)', cost: 3, exclusiveGroup: 'blessing', params: { attackBuffAdd: 0.5 } },
   { id: 'bladeDanceBlades', tier: 3, name: '작두 타기: 칼날 춤', description: '3초간 초당 40 추가 피해', cost: 3, exclusiveGroup: 'bladeDance', params: { duration: 3, damagePerSec: 40 } },
   { id: 'bladeDancePossession', tier: 3, name: '작두 타기: 신내림', description: '작두 타기 쿨타임 -40%', cost: 3, exclusiveGroup: 'bladeDance', params: { cooldownReduction: 0.4 } },
   { id: 'mudangAwakening', tier: 4, name: '무당 각성', description: '기본 공격 3번째마다 반경 80 충격파 (공격력 x1.5)', cost: 5, params: { everyNth: 3, radius: 80, attackMultiplier: 1.5 } },

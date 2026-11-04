@@ -239,6 +239,7 @@ export class BuildScene extends Phaser.Scene {
         { ...STATUS_STYLE[status], alpha: tierOpen ? 1 : 0.55, selected: nodeId === this.selectedNode },
         () => {
           this.selectedNode = nodeId;
+          this.message = ''; // 옛 결과 문구 지움
           this.dirty = true;
         },
       );
@@ -302,6 +303,7 @@ export class BuildScene extends Phaser.Scene {
         { ...STATUS_STYLE[picked ? 'allocated' : 'available'], alpha: 1, selected: picked },
         () => {
           this.selectedUnit = unitId;
+          this.message = '';
           this.dirty = true;
         },
         `ally:${unitId}`,

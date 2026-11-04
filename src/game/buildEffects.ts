@@ -41,8 +41,8 @@ export function computeBuildEffects(levels: Readonly<BuildLevels>): BattleModifi
     m.skills.blessing.rangeMultiplier += param('blessingGrandRite', 'rangeBonus');
     m.skills.blessing.healRatio = param('blessingGrandRite', 'healRatio');
   }
-  // 신명 풀이: 공격력 버프 수치 자체가 +50%가 된다 (기본 25% -> 50%)
-  if (level('blessingSpiritRelease') > 0) m.skills.blessing.attackBonus = param('blessingSpiritRelease', 'attackBuff');
+  // 신명 풀이: 공격력 버프에 +50%p 가산 (기본 25% -> 75%)
+  if (level('blessingSpiritRelease') > 0) m.skills.blessing.attackBonus += param('blessingSpiritRelease', 'attackBuffAdd');
   if (level('bladeDanceBlades') > 0) {
     m.skills.bladeDance.extraDuration = param('bladeDanceBlades', 'duration');
     m.skills.bladeDance.extraDamagePerSec = param('bladeDanceBlades', 'damagePerSec');
