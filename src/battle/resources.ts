@@ -46,6 +46,12 @@ export class Resources {
     return true;
   }
 
+  spendSpirit(amount: number): boolean {
+    if (this.spirit < amount) return false;
+    this.spirit -= amount;
+    return true;
+  }
+
   /** 기운 모으기: 부적을 쓰고 단계를 올린다 */
   gather(): boolean {
     const cost = this.nextGatherCost;

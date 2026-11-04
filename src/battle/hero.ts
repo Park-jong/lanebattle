@@ -7,6 +7,8 @@ export class Hero extends Body {
   attackCooldown = 0;
   /** 부활까지 남은 시간. 살아 있으면 0 */
   respawnTimer = 0;
+  /** 바라보는 방향: 마지막으로 움직인 쪽 (처음엔 오른쪽) */
+  facing: 1 | -1 = 1;
 
   constructor() {
     super('hero', 'ally', HERO.respawnX, HERO.maxHp, HERO.width / 2);
@@ -22,6 +24,7 @@ export class Hero extends Body {
     this.attackCooldown = Math.max(0, this.attackCooldown - dt);
     this.heal(HERO.regenPerSec * dt); // 회복 차단 중이면 자연 회복도 막힌다
     const dir = this.status?.stunned ? 0 : moveDir;
+    if (dir !== 0) this.facing = dir > 0 ? 1 : -1;
     const next = this.x + dir * HERO.speed * (this.status?.moveMultiplier ?? 1) * dt;
     this.x = Math.min(COMBAT.castle.x, Math.max(COMBAT.shrine.x, next));
   }
@@ -39,6 +42,7 @@ export class Hero extends Body {
     this.hp = this.maxHp;
     this.x = HERO.respawnX;
     this.respawnTimer = 0;
+    this.facing = 1;
     this.attackCooldown = 0;
     this.status?.clear();
   }

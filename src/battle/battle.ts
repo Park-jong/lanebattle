@@ -1,6 +1,7 @@
 import { ALLIES } from '../data/allies';
 import { COMBAT } from '../data/combat';
 import { HERO } from '../data/hero';
+import { getSkill, SKILL_EFFECTS, type SkillId } from '../data/skills';
 import { RESOURCES } from '../data/resources';
 import { type AbilityDef } from '../data/abilities';
 import { ALL_SYNERGY_IDS, type SynergyId } from '../data/synergy';
@@ -12,6 +13,7 @@ import { createEnemy } from './enemyFactory';
 import { Hero } from './hero';
 import { MathRng, type Rng } from './rng';
 import { Resources } from './resources';
+import { SkillCooldowns, type CastResult, type SkillCastEvent } from './skills';
 import { getStageInfo } from './stage';
 import { SynergyEngine } from './synergy';
 import { WaveDirector } from './wave';
@@ -65,6 +67,8 @@ export class Battle implements AbilityHost {
   private readonly cooldowns: number[] = ALLIES.map(() => 0);
   private auras: { owner: Body; def: AuraDef }[] = [];
   private readonly rng: Rng;
+  private readonly skillCooldowns = new SkillCooldowns();
+  private castEvents: SkillCastEvent[] = [];
   private readonly timedAbilities: TimedAbilities;
   readonly synergy: SynergyEngine;
 
@@ -134,6 +138,78 @@ export class Battle implements AbilityHost {
     return 'ok';
   }
 
+  /** 남은 스킬 쿨타임(초) */
+  skillCooldown(id: SkillId): number {
+    return this.skillCooldowns.get(id);
+  }
+
+  /** 쌓인 시전 기록을 비우며 돌려준다 (화면 이펙트용) */
+  drainCastEvents(): SkillCastEvent[] {
+    const events = this.castEvents;
+    this.castEvents = [];
+    return events;
+  }
+
+  /** 영웅 스킬 사용. 실패하면 신력·쿨타임을 쓰지 않는다 */
+  castSkill(id: SkillId): CastResult {
+    if (this.result !== 'playing') return 'ended';
+    let def;
+    try {
+      def = getSkill(id);
+    } catch {
+      return 'invalidSkill';
+    }
+    if (!this.hero.alive) return 'heroDead';
+    if (this.hero.status?.stunned) return 'stunned';
+    if (this.skillCooldowns.get(id) > 0) return 'cooldown';
+    if (!this.resources.spendSpirit(def.spiritCost)) return 'noSpirit';
+    this.skillCooldowns.start(id, def.cooldown);
+    this.castEvents.push({ id, x: this.hero.x, facing: this.hero.facing });
+    if (id === 'fanWind') this.castFanWind();
+    else if (id === 'blessing') this.castBlessing();
+    else this.castBladeDance();
+    return 'ok';
+  }
+
+  /** 스킬 피해: 마법·영웅 태그. 공격력 버프는 적용하지 않는 고정 수치이고, 신력 충전도 없다 */
+  private skillHit(target: Body, base: number, extraTags: AttackInfo['tags'] = []): void {
+    const info: AttackInfo = { type: 'magic', tags: ['hero', ...extraTags], source: 'hero' };
+    const damage = calcDamage(base, info, target.damageTarget);
+    this.applyDamage(target, damage, damage === 0 ? 0 : undefined);
+  }
+
+  /** 부채 바람: 바라보는 방향 앞쪽(대상 반지름 고려)에 피해 + 넉백. 비행 적도 맞고 기지는 제외 */
+  private castFanWind(): void {
+    const { range, damage, knockback } = SKILL_EFFECTS.fanWind;
+    const { x, facing } = this.hero;
+    for (const e of [...this.enemies]) {
+      const ahead = (e.x - x) * facing;
+      if (!e.alive || ahead < 0 || ahead - e.radius > range) continue;
+      this.skillHit(e, damage, ['wind']);
+      if (e.alive && !e.isImmuneTo(['wind'])) this.knockback(e, knockback);
+    }
+  }
+
+  /** 축원: 반경 안 아군(영웅 포함)을 회복하고 공격력 버프를 건다 */
+  private castBlessing(): void {
+    const { radius, healRatio, attackBonus, duration } = SKILL_EFFECTS.blessing;
+    for (const a of [this.hero, ...this.allies]) {
+      if (!a.alive || Math.abs(a.x - this.hero.x) - a.radius > radius) continue;
+      a.heal(a.maxHp * healRatio);
+      this.addBuff(a, { attack: attackBonus }, duration);
+    }
+  }
+
+  /** 작두 타기: 반경 안 모든 적에게 피해 + 기절 (보스는 경직) */
+  private castBladeDance(): void {
+    const { radius, damage, stun } = SKILL_EFFECTS.bladeDance;
+    for (const e of [...this.enemies]) {
+      if (!e.alive || Math.abs(e.x - this.hero.x) - e.radius > radius) continue;
+      this.skillHit(e, damage);
+      if (e.alive && !e.isImmuneTo(['hero'])) this.applyStun(e, stun);
+    }
+  }
+
   /** 기운 모으기 */
   gather(): boolean {
     return this.result === 'playing' && this.resources.gather();
@@ -163,6 +239,7 @@ export class Battle implements AbilityHost {
       this.cooldowns[i] = Math.max(0, this.cooldowns[i] - dt);
     }
 
+    this.skillCooldowns.step(dt); // 영웅이 죽어 있어도 줄어든다
     this.hero.update(dt, input.moveDir);
     this.applyAuras();
     this.synergy.update(this.allies, this.livingHero, dt);

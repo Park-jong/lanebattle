@@ -3,6 +3,7 @@ import { ALLIES } from '../data/allies';
 import { COMBAT } from '../data/combat';
 import { HERO } from '../data/hero';
 import { RESOURCES } from '../data/resources';
+import { SKILL_EFFECTS, SKILLS, type SkillId } from '../data/skills';
 import { STAGE_COUNT } from '../data/waves';
 import { ALL_SYNERGY_IDS, Battle } from '../battle/battle';
 import { isSynergyId, SYNERGY, type SynergyId } from '../data/synergy';
@@ -10,12 +11,24 @@ import type { Base, Body, Fighter } from '../battle/entities';
 import { GAME_HEIGHT, GAME_WIDTH, GROUND_Y, HUD_FONT } from './layout';
 import { colorForTags, ENEMY_COLOR, TAG_COLORS } from './palette';
 import { HudButton } from './HudButton';
-import { KEY_MAP, KeyInput, summonIndexOf } from './input';
+import { KEY_MAP, KeyInput, skillIndexOf, summonIndexOf } from './input';
 
 const BUTTON_W = 74;
 const BUTTON_H = 56;
 const BUTTON_GAP = 4;
 const BUTTON_Y = GAME_HEIGHT - BUTTON_H - 6;
+const SKILL_W = 110;
+const SKILL_H = 40;
+const SKILL_Y = BUTTON_Y - SKILL_H - 6;
+/** 스킬 이펙트가 퍼지는 시간(초) */
+const CAST_FX_SECONDS = 0.3;
+
+interface CastFx {
+  id: SkillId;
+  x: number;
+  facing: 1 | -1;
+  age: number;
+}
 
 /** 전투 상태를 도형으로 그리고 입력만 전달하는 씬 */
 export class BattleScene extends Phaser.Scene {
@@ -26,6 +39,8 @@ export class BattleScene extends Phaser.Scene {
   private hudText!: Phaser.GameObjects.Text;
   private overlay!: Phaser.GameObjects.Text;
   private summonButtons: HudButton[] = [];
+  private skillButtons: HudButton[] = [];
+  private castFx: CastFx[] = [];
   private gatherButton!: HudButton;
   private restartButton!: HudButton;
   private keyInput!: KeyInput;
@@ -47,6 +62,8 @@ export class BattleScene extends Phaser.Scene {
     this.paused = false;
     this.resultElapsed = 0;
     this.summonButtons = [];
+    this.skillButtons = [];
+    this.castFx = [];
   }
 
   create(): void {
@@ -78,6 +95,7 @@ export class BattleScene extends Phaser.Scene {
       this.battle.step(delta / 1000, { moveDir: this.keyInput.moveDir() });
     }
     if (!playing) this.resultElapsed += delta / 1000;
+    this.updateCastFx(delta / 1000, playing && !this.paused);
     this.followHero();
     this.drawWorld();
     this.drawHud();
@@ -117,6 +135,11 @@ export class BattleScene extends Phaser.Scene {
       this.battle.gather();
       return;
     }
+    const skill = skillIndexOf(code);
+    if (skill >= 0) {
+      this.battle.castSkill(SKILLS[skill].id);
+      return;
+    }
     const index = summonIndexOf(code);
     if (index >= 0) this.battle.summon(index);
   }
@@ -134,6 +157,16 @@ export class BattleScene extends Phaser.Scene {
       );
       btn.setTexts(`${(i + 1) % 10} ${def.name}`, `${def.cost}`);
       this.summonButtons.push(btn);
+    });
+    SKILLS.forEach((def, i) => {
+      const btn = new HudButton(
+        this, 6 + i * (SKILL_W + BUTTON_GAP), SKILL_Y, SKILL_W, SKILL_H, 0x4a4a6b,
+        () => {
+          if (!this.paused) this.battle.castSkill(def.id);
+        },
+      );
+      btn.setTexts(`${KEY_MAP.skills[i].slice(3)} ${def.name}`, `신력 ${def.spiritCost}`);
+      this.skillButtons.push(btn);
     });
     const gx = 6 + ALLIES.length * (BUTTON_W + BUTTON_GAP);
     this.restartButton = new HudButton(
@@ -159,6 +192,14 @@ export class BattleScene extends Phaser.Scene {
       this.summonButtons[i].setTexts(`${(i + 1) % 10} ${def.name}`, sub);
       this.summonButtons[i].setState(cd / def.cooldown, enabled);
     });
+    SKILLS.forEach((def, i) => {
+      const cd = b.skillCooldown(def.id);
+      const enabled =
+        b.result === 'playing' && cd <= 0 && b.hero.alive && !b.hero.status?.stunned && b.resources.spirit >= def.spiritCost;
+      const sub = cd > 0 ? `${cd.toFixed(1)}s` : `신력 ${def.spiritCost}`;
+      this.skillButtons[i].setTexts(`${KEY_MAP.skills[i].slice(3)} ${def.name}`, sub);
+      this.skillButtons[i].setState(cd / def.cooldown, enabled);
+    });
     const cost = b.resources.nextGatherCost;
     const r = b.resources;
     this.gatherButton.setTexts(
@@ -174,6 +215,32 @@ export class BattleScene extends Phaser.Scene {
     const cam = this.cameras.main;
     const target = this.battle.hero.x - GAME_WIDTH / 2;
     cam.scrollX = Math.max(0, Math.min(COMBAT.battlefieldLength - GAME_WIDTH, target));
+  }
+
+  /** 시전 기록을 받아 이펙트를 만들고, 일시정지 중이 아니면 나이를 먹인다 */
+  private updateCastFx(dt: number, advance: boolean): void {
+    for (const e of this.battle.drainCastEvents()) this.castFx.push({ ...e, age: 0 });
+    if (advance) for (const fx of this.castFx) fx.age += dt;
+    this.castFx = this.castFx.filter((fx) => fx.age < CAST_FX_SECONDS);
+  }
+
+  /** 스킬 범위 이펙트 (임시 도형): 부채 바람은 반원, 나머지는 원이 퍼진다 */
+  private drawCastFx(): void {
+    const g = this.world;
+    for (const fx of this.castFx) {
+      const t = fx.age / CAST_FX_SECONDS;
+      const alpha = 0.5 * (1 - t);
+      if (fx.id === 'fanWind') {
+        const r = SKILL_EFFECTS.fanWind.range * t;
+        const start = fx.facing > 0 ? -Math.PI / 2 : Math.PI / 2;
+        g.fillStyle(TAG_COLORS.wind, alpha).slice(fx.x, GROUND_Y, r, start, start + Math.PI, false).fillPath();
+      } else {
+        const full = fx.id === 'blessing' ? SKILL_EFFECTS.blessing.radius : SKILL_EFFECTS.bladeDance.radius;
+        const color = fx.id === 'blessing' ? TAG_COLORS.divine : TAG_COLORS.fire;
+        g.fillStyle(color, alpha).fillCircle(fx.x, GROUND_Y, full * t);
+        g.lineStyle(2, color, alpha * 2).strokeCircle(fx.x, GROUND_Y, full * t);
+      }
+    }
   }
 
   private drawWorld(): void {
@@ -203,6 +270,8 @@ export class BattleScene extends Phaser.Scene {
       this.drawHpBar(h.x, GROUND_Y - ht - 8, w + 8, h.hp / h.maxHp, 0x66dd66);
       this.drawStatusMarks(h, h.x, GROUND_Y - ht, w, ht);
     }
+
+    this.drawCastFx();
 
     // 투사체
     for (const p of b.projectiles) {

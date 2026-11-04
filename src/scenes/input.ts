@@ -6,12 +6,19 @@ export const KEY_MAP = {
   summon: ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0'],
   /** 전투 중 기운 모으기, 결과 화면에서는 재시작 */
   gatherOrRestart: 'KeyR',
+  /** 영웅 스킬: data/skills.ts의 SKILLS 순서 (부채 바람, 축원, 작두 타기) */
+  skills: ['KeyQ', 'KeyW', 'KeyE'],
   pause: ['Escape', 'KeyP'],
 } as const satisfies Record<string, string | readonly string[]>;
 
 /** 소환 키 → 슬롯 번호 (해당 없으면 -1) */
 export function summonIndexOf(code: string): number {
   return KEY_MAP.summon.indexOf(code as (typeof KEY_MAP.summon)[number]);
+}
+
+/** 스킬 키 → 슬롯 번호 (해당 없으면 -1) */
+export function skillIndexOf(code: string): number {
+  return KEY_MAP.skills.indexOf(code as (typeof KEY_MAP.skills)[number]);
 }
 
 const PREVENT_DEFAULT = new Set<string>([...KEY_MAP.moveLeft, ...KEY_MAP.moveRight]);
