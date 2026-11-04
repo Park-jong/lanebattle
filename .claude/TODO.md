@@ -14,8 +14,11 @@
 
 ---
 
-## 현재 상태 (2026-11-04, v0.7.0)
-- 0~8단계 완료. 9단계(아트·사운드)와 10단계(밸런스·플레이 테스트) 남음
+## 현재 상태 (2026-11-04, v0.8.0)
+- 0~8단계 완료. 9단계 캐릭터 기본 이미지·UI 연결 구현, 사운드와 세부 아트 보정·10단계는 남음
+- 캐릭터 26종 런타임 아틀라스, 수동 애니메이션 시계(일시정지), 공격 표시 순번, 피해 기록 단일 소비 후 숫자·피격 분배. 기본 전투 수치·저장 형식은 유지
+- 원본은 `output/art-generation/source-assets/`에 보존, 배포는 `public/assets/characters/runtime/`와 manifest만 사용. 패킹은 `python scripts/pack-runtime-art.py`
+- 0.8.0 독립 검증 1차 통과: typecheck·테스트 474개(27파일)·프로덕션 빌드 통과. 로컬 Chrome에서 이미지·소환 UI·일시정지와 에셋 실패 시 대체 표시 확인
 - 8단계 C(빌드 화면·소환 순서)는 개발만 하고 **독립 검증 안 함**(사용자 요청). typecheck·test(469개)·build는 통과
 - 배포: https://park-jong.github.io/lanebattle/ (main push → Actions가 빌드해 gh-pages 브랜치에 올림, Pages Source = gh-pages / root)
 - 실행 `npm run dev` / 테스트 `npm test` / 타입 검사 `npm run typecheck` / 빌드 `npm run build`
@@ -64,8 +67,8 @@
 | 10-3 | GitHub Pages 배포(gh-pages 브랜치 방식, `.github/workflows/deploy.yml`) | d0ea690·dd1a0ee |
 
 ### 9. 아트·사운드
-- [ ] 9-1. 에셋 수령 (사용자가 구해 옴, 기준은 `docs/design.md` 8번 "에셋 준비 가이드")
-- [ ] 9-2. 도형 → 이미지 교체, 종이 인형 애니메이션
+- [x] 9-1. 기본 캐릭터 26종 생성·정리 (사용자 지정 이미지 생성, 출처·한계는 `docs/art/GENERATED.md`)
+- [x] 9-2. 도형 → 기본 캐릭터 이미지·프레임 애니메이션, UI 초상화 연결 (0.8.0)
 - [ ] 9-3. 장별 배경 3겹 패럴랙스
 - [ ] 9-4. 배경음 2곡, 효과음, 소리 설정 연결 (설정 값은 이미 저장됨)
 - [ ] 9-5. 연출: 연기처럼 사라짐, 소환 펑, 보스 등장

@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { HUD_FONT, type Rect } from './layout';
 import { BUTTON_FILL } from './palette';
+import { addArtImage } from '../render/CharacterRenderer';
 
 export interface HudButtonStyle {
   fill?: number;
@@ -34,6 +35,8 @@ export class HudButton {
   private enabled = true;
   private visible = true;
   private held = false;
+  private portrait?: Phaser.GameObjects.Image;
+  private readonly cooldownOverlay: Phaser.GameObjects.Graphics;
 
   constructor(
     scene: Phaser.Scene,
@@ -44,6 +47,7 @@ export class HudButton {
     this.rect = { ...rect };
     const depth = style.depth ?? 100;
     this.gfx = scene.add.graphics().setScrollFactor(0).setDepth(depth);
+    this.cooldownOverlay = scene.add.graphics().setScrollFactor(0).setDepth(depth + 0.8);
     const font = { fontFamily: HUD_FONT, color: '#ffffff' };
     const round = style.shape === 'round';
     const wrap = { width: rect.w - (round ? 16 : 6) };
@@ -101,10 +105,19 @@ export class HudButton {
     this.sub.setText(sub);
   }
 
+  /** Portrait sits between the background and cooldown mask; text stays readable. */
+  setPortrait(subject: string): void {
+    this.portrait?.destroy();
+    this.portrait = addArtImage(this.gfx.scene, subject, 'icon', 0, 0, 28, 28)
+      ?.setScrollFactor(0).setDepth((this.style.depth ?? 100) + 0.5);
+    this.layout();
+    this.redraw();
+  }
+
   setVisible(visible: boolean): void {
     if (visible === this.visible) return;
     this.visible = visible;
-    for (const o of [this.gfx, this.label, this.sub]) o.setVisible(visible);
+    for (const o of [this.gfx, this.label, this.sub, this.cooldownOverlay, this.portrait]) o?.setVisible(visible);
     if (this.zone.input) this.zone.input.enabled = visible;
     if (!visible) this.release();
     else this.redraw();
@@ -133,6 +146,11 @@ export class HudButton {
       this.label.setOrigin(0).setPosition(x + 3, y + 3);
       this.sub.setOrigin(0).setPosition(x + 3, y + h - 16);
     }
+    if (this.portrait) {
+      this.label.setFontSize(9).setWordWrapWidth(w - 6).setPosition(x + 3, y + 2);
+      this.portrait.setPosition(x + 20, y + h - 21);
+      this.sub.setOrigin(1, 0).setPosition(x + w - 4, y + h - 16);
+    }
   }
 
   private redraw(): void {
@@ -144,22 +162,24 @@ export class HudButton {
     const bw = s.borderWidth ?? 2;
     const border = s.border ?? 0x000000;
     g.clear();
+    const overlay = this.cooldownOverlay.clear();
     this.label.setAlpha(alpha);
     this.sub.setAlpha(alpha);
+    this.portrait?.setAlpha(alpha);
     if (s.shape === 'round') {
       const cx = x + w / 2, cy = y + h / 2, r = Math.min(w, h) / 2 - 1;
       g.fillStyle(fill, alpha).fillCircle(cx, cy, r);
       if (this.cooldown > 0) {
         // 남은 쿨타임만큼 위에서 시계 방향으로 어둡게 덮는다
         const start = -Math.PI / 2;
-        g.fillStyle(0x000000, 0.6).slice(cx, cy, r, start, start + Math.PI * 2 * this.cooldown, false).fillPath();
+        overlay.fillStyle(0x000000, 0.6).slice(cx, cy, r, start, start + Math.PI * 2 * this.cooldown, false).fillPath();
       }
       g.lineStyle(bw, border, alpha).strokeCircle(cx, cy, r);
       return;
     }
     g.fillStyle(fill, alpha).fillRoundedRect(x, y, w, h, 6);
     if (this.cooldown > 0) {
-      g.fillStyle(0x000000, 0.6).fillRect(x + 1, y + h - h * this.cooldown, w - 2, h * this.cooldown - 1);
+      overlay.fillStyle(0x000000, 0.6).fillRect(x + 1, y + h - h * this.cooldown, w - 2, h * this.cooldown - 1);
     }
     g.lineStyle(bw, border, alpha).strokeRoundedRect(x, y, w, h, 6);
   }

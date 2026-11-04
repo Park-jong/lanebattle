@@ -5,6 +5,7 @@ import { KEY_MAP, KeyInput } from './input';
 import { MenuButton } from './MenuButton';
 import { FIVE_COLORS } from './palette';
 import { isBlockedByOverlay, openSettings } from './openSettings';
+import { addArtImage } from '../render/CharacterRenderer';
 
 /** 등불 위치(x)와 줄 길이 */
 const LANTERNS = [
@@ -28,6 +29,8 @@ export class TitleScene extends Phaser.Scene {
     drawNightSky(this);
     this.drawLanterns();
     this.drawTexts();
+    addArtImage(this, 'hero:kkomaMudang', 'preview', 250, 364, 160, 160);
+    addArtImage(this, 'ally:clubGoblin', 'preview', 710, 364, 150, 150);
 
     new MenuButton(this, GAME_WIDTH / 2, 322, 220, 66, '시작', () => this.start(), { fontSize: 24 });
     new MenuButton(this, GAME_WIDTH / 2, 398, 220, 66, `설정 (${KEY_MAP.openSettings.slice(3)})`, () => openSettings(this), { fontSize: 18 });

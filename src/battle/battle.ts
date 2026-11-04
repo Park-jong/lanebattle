@@ -460,6 +460,7 @@ export class Battle implements AbilityHost, BossHost {
     const target = this.findTarget('ally', this.hero.x, HERO.attack.range, HERO.attack.type === 'melee');
     if (!target) return;
     this.hero.attackCooldown = HERO.attack.interval / (1 + status.attackSpeedBonus);
+    this.hero.markAttack(target.x);
     const info: AttackInfo = { type: HERO.attack.type, tags: HERO.attack.tags, source: 'hero' };
     this.strike(target, { attacker: this.hero, base: this.heroBaseDamage, info, attackBonus: status.attackBonus, burnPerSec: 0 });
     this.resources.addSpirit(RESOURCES.spirit.perHeroHit);
@@ -484,6 +485,7 @@ export class Battle implements AbilityHost, BossHost {
   }
 
   private actFighter(f: Fighter, dt: number): void {
+    f.visualMoving = false;
     if (!f.alive) return;
     const status = f.status!;
     f.attackCooldown = Math.max(0, f.attackCooldown - dt);
@@ -494,10 +496,12 @@ export class Battle implements AbilityHost, BossHost {
     const target = targets[0];
     if (!target) {
       f.x += f.direction * f.stats.speed * status.moveMultiplier * dt;
+      f.visualMoving = f.stats.speed * status.moveMultiplier > 0;
       return;
     }
     if (f.attackCooldown > 0) return;
     f.attackCooldown = f.stats.attackInterval / (1 + status.attackSpeedBonus);
+    f.markAttack(target.x);
     const charged = !!ability.firstStrikeMultiplier && f.abilityState.consumeFirstStrike();
     const multiplier = charged ? ability.firstStrikeMultiplier! : 1;
     const payload: ProjectilePayload = {

@@ -14,6 +14,7 @@ import { KEY_MAP, KeyInput } from './input';
 import { BUILD_LAYOUT as L, dialogButtons, HUD_FONT, nodeCells, tierLabelRect, type Rect } from './layout';
 import { MenuButton } from './MenuButton';
 import { HUD_STRIP, INK, PAPER } from './palette';
+import { addArtImage } from '../render/CharacterRenderer';
 
 const GOLD = 0xe0b52e;
 const DEPTH = { dim: 290, panel: 295, button: 300 } as const;
@@ -194,16 +195,19 @@ export class BuildScene extends Phaser.Scene {
     text: string,
     look: { fill: number; text: string; alpha: number; selected: boolean },
     onClick: () => void,
+    subject?: string,
   ): void {
     const cx = rect.x + rect.w / 2;
     const cy = rect.y + rect.h / 2;
     const bg = this.track(this.add.rectangle(cx, cy, rect.w, rect.h, look.fill, look.alpha));
     bg.setStrokeStyle(look.selected ? 4 : 2, look.selected ? 0xffffff : INK);
     bg.setInteractive({ useHandCursor: true }).on('pointerdown', onClick);
+    const portrait = subject ? addArtImage(this, subject, 'icon', rect.x + 25, cy, 40, 40) : undefined;
+    if (portrait) this.track(portrait.setAlpha(look.alpha));
     this.track(
-      this.add.text(cx, cy, text, {
+      this.add.text(cx + (portrait ? 20 : 0), cy, text, {
         fontFamily: HUD_FONT, fontSize: '12px', fontStyle: 'bold', color: look.text, align: 'center',
-        wordWrap: { width: rect.w - 8, useAdvancedWrap: true },
+        wordWrap: { width: rect.w - (portrait ? 48 : 8), useAdvancedWrap: true },
       }).setOrigin(0.5).setAlpha(look.alpha),
     );
   }
@@ -300,6 +304,7 @@ export class BuildScene extends Phaser.Scene {
           this.selectedUnit = unitId;
           this.dirty = true;
         },
+        `ally:${unitId}`,
       );
     });
     this.dynamicButtons.push(
@@ -327,6 +332,8 @@ export class BuildScene extends Phaser.Scene {
     const ally = ALLIES.find((a) => a.id === this.selectedUnit)!;
     const key = (index + 1) % 10;
     this.track(this.detailText(`${ally.name}\n\n지금 ${key}번 (키 ${key})\n\n${ally.ability}`, '#2b2622'));
+    const portrait = addArtImage(this, `ally:${ally.id}`, 'preview', L.detailText.x + L.detailText.w / 2, 332, 110, 110);
+    if (portrait) this.track(portrait);
     this.primaryButton.setEnabled(index > 0);
     this.secondaryButton.setEnabled(index < order.length - 1);
   }

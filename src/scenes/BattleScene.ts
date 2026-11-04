@@ -28,6 +28,7 @@ import { DamageFloaters } from './DamageFloaters';
 import { floaterStyle } from './floaterStyle';
 import { HudButton } from './HudButton';
 import { KEY_MAP, KeyInput, skillIndexOf, summonIndexOf } from './input';
+import { addArtImage, CharacterRenderer } from '../render/CharacterRenderer';
 
 /** 보스 등장 연출 길이(초): 화면이 어두워지고 이름이 나타났다 사라진다 */
 const BOSS_INTRO_SECONDS = 1.6;
@@ -51,6 +52,7 @@ export class BattleScene extends Phaser.Scene {
   private battle!: Battle;
   private paused = false;
   private world!: Phaser.GameObjects.Graphics;
+  private characters!: CharacterRenderer;
   private hud!: Phaser.GameObjects.Graphics;
   private summonButtons: HudButton[] = [];
   private skillButtons: HudButton[] = [];
@@ -98,6 +100,7 @@ export class BattleScene extends Phaser.Scene {
   private bossStateText!: Phaser.GameObjects.Text;
   private bossChips: Phaser.GameObjects.Text[] = [];
   private castleShieldText!: Phaser.GameObjects.Text;
+  private bossPortrait?: Phaser.GameObjects.Image;
 
   constructor() {
     super('Battle');
@@ -117,6 +120,7 @@ export class BattleScene extends Phaser.Scene {
     this.recorder = new ResultRecorder(progress, wallet);
     this.bossIntroLeft = 0;
     this.bossSeen = false;
+    this.bossPortrait = undefined;
     this.bossChips = [];
     this.paused = false;
     this.pauseShown = false;
@@ -131,7 +135,9 @@ export class BattleScene extends Phaser.Scene {
   create(): void {
     this.cameras.main.setBounds(0, 0, COMBAT.battlefieldLength, GAME_HEIGHT);
     this.cameras.main.setBackgroundColor(0x2a3350);
-    this.world = this.add.graphics();
+    this.world = this.add.graphics().setDepth(30);
+    this.characters = new CharacterRenderer(this);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.characters.destroy());
     this.hud = this.add.graphics().setScrollFactor(0).setDepth(90);
     this.floaters = new DamageFloaters(this);
     this.createHudTexts();
@@ -244,6 +250,9 @@ export class BattleScene extends Phaser.Scene {
       this.bossIntroLeft = Math.max(0, this.bossIntroLeft - delta / 1000);
     }
     this.watchBossAppearance();
+    this.characters.update(active ? delta / 1000 : 0, [this.battle.hero, ...this.battle.allies, ...this.battle.enemies],
+      GROUND_Y, (body) => body instanceof Fighter && body.flying ? this.liftOf(body) : 0);
+    this.characters.pruneProjectiles(this.battle.projectiles);
     if (!playing) this.resultElapsed += delta / 1000;
     this.updateCastFx(delta / 1000, active);
     this.updateFloaters(delta / 1000, active);
@@ -264,7 +273,10 @@ export class BattleScene extends Phaser.Scene {
 
   /** 피해 기록을 숫자로 바꿔 띄우고, 이미 떠 있는 숫자는 움직인다 */
   private updateFloaters(dt: number, advance: boolean): void {
-    for (const e of this.battle.drainDamageEvents()) this.spawnFloater(e);
+    for (const e of this.battle.drainDamageEvents()) {
+      this.spawnFloater(e);
+      if (e.amount > 0 && e.kind !== 'burn' && e.kind !== 'immune') this.characters.hit(e.target);
+    }
     this.floaters.update(advance ? dt : 0);
   }
 
@@ -282,6 +294,8 @@ export class BattleScene extends Phaser.Scene {
     const enc = this.battle.encounter;
     if (!enc || this.bossSeen || enc.state === 'pending') return;
     this.bossSeen = true;
+    this.bossPortrait = addArtImage(this, `boss:${enc.def.id}`, 'icon', L.bossBar.x - 25, L.bossBar.y + 6, 34, 34)
+      ?.setScrollFactor(0).setDepth(95);
     this.bossIntroLeft = BOSS_INTRO_SECONDS;
     this.bossIntroText.setText(enc.def.name);
     this.bossNameText.setText(enc.def.name);
@@ -308,6 +322,7 @@ export class BattleScene extends Phaser.Scene {
     const show = !!enc && !!boss && boss.alive;
     this.bossNameText.setVisible(show);
     this.bossStateText.setVisible(show);
+    this.bossPortrait?.setVisible(show);
     for (const c of this.bossChips) c.setVisible(show);
 
     // 등장 연출: 화면이 어두워졌다가 풀리고, 이름이 나타났다 사라진다
@@ -448,6 +463,7 @@ export class BattleScene extends Phaser.Scene {
         { onPress: () => { if (!this.paused) this.battle.summon(allyIndex); } },
       );
       btn.setTexts(`${(i + 1) % 10} ${def.name}`, `${this.battle.allyDef(allyIndex).cost}`);
+      btn.setPortrait(`ally:${def.id}`);
       this.summonButtons.push(btn);
     });
     SKILLS.forEach((def, i) => {
@@ -505,7 +521,10 @@ export class BattleScene extends Phaser.Scene {
 
   /** 시전 기록을 받아 이펙트를 만들고, 일시정지 중이 아니면 나이를 먹인다 */
   private updateCastFx(dt: number, advance: boolean): void {
-    for (const e of this.battle.drainCastEvents()) this.castFx.push({ ...e, age: 0 });
+    for (const e of this.battle.drainCastEvents()) {
+      this.castFx.push({ ...e, age: 0 });
+      this.characters.cast(this.battle.hero, e, GROUND_Y);
+    }
     if (advance) for (const fx of this.castFx) fx.age += dt;
     this.castFx = this.castFx.filter((fx) => fx.age < CAST_FX_SECONDS);
   }
@@ -554,8 +573,10 @@ export class BattleScene extends Phaser.Scene {
     const h = b.hero;
     if (h.alive) {
       const w = HERO.width, ht = HERO.height;
-      g.fillStyle(TAG_COLORS.hero, 1).fillRect(h.x - w / 2, GROUND_Y - ht, w, ht);
-      g.fillStyle(0xd9473b, 1).fillRect(h.x - w / 2, GROUND_Y - ht, w, 8);
+      if (!this.characters.shows(h)) {
+        g.fillStyle(TAG_COLORS.hero, 1).fillRect(h.x - w / 2, GROUND_Y - ht, w, ht);
+        g.fillStyle(0xd9473b, 1).fillRect(h.x - w / 2, GROUND_Y - ht, w, 8);
+      }
       this.drawHpBar(h.x, GROUND_Y - ht - 8, w + 8, h.hp / h.maxHp, 0x66dd66);
       this.drawStatusMarks(h, h.x, GROUND_Y - ht, w, ht);
     }
@@ -564,6 +585,7 @@ export class BattleScene extends Phaser.Scene {
 
     // 투사체
     for (const p of b.projectiles) {
+      if (this.characters.projectile(p, GROUND_Y, b.elapsed)) continue;
       const color = p.team === 'ally' ? 0xffe28a : 0xb58cff;
       g.fillStyle(color, 1).fillCircle(p.x, GROUND_Y - 24, p.attackType === 'magic' ? 6 : 4);
     }
@@ -583,7 +605,7 @@ export class BattleScene extends Phaser.Scene {
     // 비행 유닛은 위쪽에 띄워 그린다
     const lift = f.flying ? this.liftOf(f) : 0;
     const top = GROUND_Y - h - lift;
-    g.fillStyle(color, 1).fillRect(f.x - w / 2, top, w, h);
+    if (!this.characters.shows(f)) g.fillStyle(color, 1).fillRect(f.x - w / 2, top, w, h);
     if (f.stats.elite) g.lineStyle(3, 0xffd166, 1).strokeRect(f.x - w / 2, top, w, h);
     if (f.isBoss) g.lineStyle(3, 0xff4040, 1).strokeRect(f.x - w / 2, top, w, h);
     // 떠 있으면 그림자를 땅에 둔다 (비행/착지 구분)

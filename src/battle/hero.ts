@@ -17,6 +17,7 @@ export class Hero extends Body {
 
   /** moveDir: -1 왼쪽, 0 정지, 1 오른쪽 */
   update(dt: number, moveDir: number): void {
+    this.visualMoving = false;
     if (!this.alive) {
       this.respawnTimer -= dt;
       if (this.respawnTimer <= 0) this.revive();
@@ -27,7 +28,9 @@ export class Hero extends Body {
     const dir = this.status?.stunned ? 0 : moveDir;
     if (dir !== 0) this.facing = dir > 0 ? 1 : -1;
     const next = this.x + dir * HERO.speed * (this.status?.moveMultiplier ?? 1) * dt;
+    const before = this.x;
     this.x = Math.min(COMBAT.castle.x, Math.max(COMBAT.shrine.x, next));
+    this.visualMoving = Math.abs(this.x - before) > 1e-6;
   }
 
   /** 사망 처리 시작. 부활 시간 = 4 + 위협 단계 (최대 10초) - 부활 단축 (최소 1초) */

@@ -9,6 +9,16 @@ export type BodyKind = 'unit' | 'hero' | 'base';
 
 /** 피해를 받을 수 있는 모든 대상의 공통 부모 */
 export abstract class Body {
+  /** 표시 전용 상태. 전투 판정과 난수에는 영향을 주지 않는다. */
+  visualMoving = false;
+  visualAttack = 0;
+  visualTargetX = 0;
+
+  markAttack(targetX: number): void {
+    this.visualAttack += 1;
+    this.visualTargetX = targetX;
+  }
+
   hp: number;
   /** 현재 최대 체력 (기본값 x (1 + 보너스)) */
   maxHp: number;
