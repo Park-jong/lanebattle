@@ -7,6 +7,7 @@ import { SettingsScene } from './scenes/SettingsScene';
 import { BattleScene } from './scenes/BattleScene';
 import { GAME_HEIGHT, GAME_WIDTH } from './scenes/layout';
 import { ORIENTATION_KEY, OrientationWatcher } from './orientation';
+import { FULLSCREEN_KEY, FullscreenController } from './fullscreen';
 
 /** 게임을 만들고 화면 방향·제스처 처리를 연결한다 (index.html과 test.html이 함께 쓴다) */
 export function startGame(): Phaser.Game {
@@ -37,6 +38,14 @@ export function startGame(): Phaser.Game {
   game.registry.set(ORIENTATION_KEY, orientation);
   window.addEventListener('resize', () => orientation.refresh());
   window.addEventListener('orientationchange', () => orientation.refresh());
+
+  // 전체화면: 씬들이 같은 객체를 쓴다. 상태가 바뀌면 FIT 크기와 세로 안내를 바로 다시 계산한다
+  const fullscreen = new FullscreenController(document, screen);
+  game.registry.set(FULLSCREEN_KEY, fullscreen);
+  fullscreen.subscribe(() => {
+    game.scale.refresh();
+    orientation.refresh();
+  });
 
   // 길게 누름 메뉴, 두 손가락 확대(iOS)를 막는다
   window.addEventListener('contextmenu', (e) => e.preventDefault());

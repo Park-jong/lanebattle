@@ -1,0 +1,11 @@
+{
+  "name": "꼬마 무당 대소동",
+  "short_name": "꼬마 무당 대소동",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#1b1d26",
+  "theme_color": "#1b1d26"
+}

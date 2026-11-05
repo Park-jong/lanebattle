@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { settings } from '../game/session';
-import { GAME_HEIGHT, GAME_WIDTH, HUD_FONT } from './layout';
+import { FULLSCREEN_LAYOUT, GAME_HEIGHT, GAME_WIDTH, HUD_FONT, SETTINGS_PANEL } from './layout';
+import { FullscreenButton } from './FullscreenButton';
 import { KEY_MAP, KeyInput } from './input';
 import { MenuButton } from './MenuButton';
 import { Slider } from './Slider';
@@ -8,7 +9,7 @@ import { DEFAULT_UI as U } from '../ui/default/tokens';
 import { panel } from '../ui/default/decor';
 
 const DEPTH = 1000;
-const PANEL = { w: 680, h: 476 };
+const PANEL = SETTINGS_PANEL;
 const CONTROLS: readonly (readonly [string, string])[] = [
   ['영웅 이동', 'A / D 또는 ← / →'],
   ['유닛 소환', '1 ~ 0'],
@@ -73,6 +74,7 @@ export class SettingsScene extends Phaser.Scene {
     new MenuButton(this, cx, top + PANEL.h - 46, 250, 66, '축제로 돌아가기 (Esc)', () => this.close(), {
       tone: 'primary', fontSize: 18,
     }).setDepth(DEPTH + 2);
+    new FullscreenButton(this, FULLSCREEN_LAYOUT.settings, 'icon', DEPTH + 10);
     showTab(true);
     this.keyInput = new KeyInput(window, code => { if (code === KEY_MAP.back) this.close(); });
     this.keyInput.attach();

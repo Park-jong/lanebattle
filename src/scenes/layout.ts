@@ -120,8 +120,10 @@ export function centeredRow(count: number, w: number, gap: number, y: number): R
   return Array.from({ length: count }, (_, i) => ({ x: x0 + i * (w + gap), y, w, h: MIN_TOUCH }));
 }
 
-/** 일시정지 화면 */
-export const PAUSE_BUTTON = { w: 170, gap: 16, y: 300 } as const;
+/** 일시정지 화면: 패널, 계속·지도 줄, 그 아래 전체화면 버튼 */
+export const PAUSE_BUTTON = { w: 170, gap: 16, y: 256 } as const;
+export const PAUSE_PANEL: Rect = { x: 220, y: 120, w: 520, h: 320 };
+export const PAUSE_FULLSCREEN: Rect = { x: (GAME_WIDTH - 200) / 2, y: 338, w: 200, h: MIN_TOUCH };
 /** 결과 화면: 패널과 버튼 줄 */
 export const RESULT_LAYOUT = {
   panel: { x: 230, y: 40, w: 500, h: 400 } as Rect,
@@ -144,6 +146,23 @@ export const MAP_LAYOUT = {
   route: { x: 24, y: 158, w: 568, h: 304 } as Rect,
   nodes: Array.from({ length: 5 }, (_, i) => ({ x: 48 + i * 104, y: 250 + (i % 2 === 0 ? 20 : 0), w: 88, h: 112 })) as Rect[],
   preview: { x: 612, y: 158, w: 324, h: 366 } as Rect,
+  /** 오른쪽 위 별 합계 글자 (오른쪽 정렬, 세 자리 합계까지 여유를 둔다) */
+  starText: { x: 780, y: 26, w: 156, h: 32 } as Rect,
+} as const;
+
+// ----- 전체화면 버튼 (지원하는 기기에서만 보인다) -----
+
+/** 타이틀의 설정 버튼 */
+export const TITLE_SETTINGS: Rect = { x: 840, y: 18, w: 100, h: MIN_TOUCH };
+/** 설정 오버레이 패널 크기 (화면 가운데) */
+export const SETTINGS_PANEL = { w: 680, h: 476 } as const;
+
+/** 구석 아이콘 버튼(타이틀·지도·설정)과 일시정지 패널 안의 글자 버튼 */
+export const FULLSCREEN_LAYOUT = {
+  title: { x: 766, y: 18, w: MIN_TOUCH, h: MIN_TOUCH } as Rect,
+  map: { x: 704, y: 2, w: MIN_TOUCH, h: MIN_TOUCH } as Rect,
+  settings: { x: 874, y: 96, w: MIN_TOUCH, h: MIN_TOUCH } as Rect,
+  pause: PAUSE_FULLSCREEN,
 } as const;
 
 // ----- 빌드 화면 -----

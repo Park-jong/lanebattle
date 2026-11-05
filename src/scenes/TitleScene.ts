@@ -1,6 +1,8 @@
 ﻿import Phaser from 'phaser';
 import { drawNightSky } from './background';
-import { GAME_HEIGHT, GAME_WIDTH, HUD_FONT } from './layout';
+import { FULLSCREEN_LAYOUT, GAME_HEIGHT, GAME_WIDTH, HUD_FONT, TITLE_SETTINGS } from './layout';
+import { FULLSCREEN_KEY, shouldAutoEnter, type FullscreenController } from '../fullscreen';
+import { FullscreenButton } from './FullscreenButton';
 import { KEY_MAP, KeyInput } from './input';
 import { isBlockedByOverlay, openSettings } from './openSettings';
 import { addTestBadge } from './testBadge';
@@ -36,6 +38,7 @@ export class TitleScene extends Phaser.Scene {
     this.drawLogo();
     this.drawStartButton();
     this.drawSettings();
+    new FullscreenButton(this, FULLSCREEN_LAYOUT.title, 'icon');
     this.drawMotes();
     addTestBadge(this);
     this.cameras.main.fadeIn(220, 5, 17, 23);
@@ -92,7 +95,8 @@ export class TitleScene extends Phaser.Scene {
     const hit = this.add.zone(x, y, w, h).setOrigin(0).setInteractive({ useHandCursor: true });
     hit.on('pointerover', () => draw(true));
     hit.on('pointerout', () => draw(false));
-    hit.on('pointerdown', () => this.start());
+    // 터치에서 전체화면 요청이 제스처로 인정되도록 손을 뗄 때 시작한다
+    hit.on('pointerup', (pointer: Phaser.Input.Pointer) => this.start(pointerTypeOf(pointer)));
     this.tweens.add({ targets: arrow, x: arrow.x + 4, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
     this.add.text(x + w / 2, y + h + 15, 'ENTER / SPACE', {
       fontFamily: HUD_FONT, fontSize: '11px', color: '#8dada5', letterSpacing: 2,
@@ -100,7 +104,7 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private drawSettings(): void {
-    const x = 840, y = 18, w = 100, h = 66;
+    const { x, y, w, h } = TITLE_SETTINGS;
     const g = this.add.graphics();
     const text = this.add.text(x + w / 2, y + h / 2, '설정', {
       fontFamily: HUD_FONT, fontSize: '16px', color: '#e8dfc6', fontStyle: 'bold',
@@ -126,9 +130,12 @@ export class TitleScene extends Phaser.Scene {
     }
   }
 
-  private start(): void {
+  /** 터치로 시작 버튼을 눌렀을 때만 전체화면도 함께 시도한다 (실패해도 진행한다). 키보드는 pointerType이 없다 */
+  private start(pointerType?: string): void {
     if (this.launching || isBlockedByOverlay(this)) return;
     this.launching = true;
+    const fullscreen = this.registry.get(FULLSCREEN_KEY) as FullscreenController | undefined;
+    if (shouldAutoEnter(pointerType) && fullscreen?.isSupported && !fullscreen.isActive) void fullscreen.enter();
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => this.scene.start('Map'));
     this.cameras.main.fadeOut(180, 5, 17, 23);
   }
@@ -138,4 +145,10 @@ export class TitleScene extends Phaser.Scene {
     if ((KEY_MAP.confirm as readonly string[]).includes(code)) this.start();
     else if (code === KEY_MAP.openSettings) openSettings(this);
   }
+}
+
+/** Phaser 포인터의 종류. 브라우저 이벤트가 없으면 wasTouch로 touch만 판정한다 */
+function pointerTypeOf(pointer: Phaser.Input.Pointer): string | undefined {
+  const type = (pointer.event as PointerEvent | undefined)?.pointerType;
+  return type || (pointer.wasTouch ? 'touch' : undefined);
 }

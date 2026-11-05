@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   battleButtons, battleDisplays, BATTLE_LAYOUT, centeredRow, GAME_HEIGHT, GAME_WIDTH, GROUND_Y, MAP_LAYOUT,
   MIN_TOUCH, minimapX, frontlineTrack, PAUSE_BUTTON, RESULT_LAYOUT, type Rect,
+  FULLSCREEN_LAYOUT, PAUSE_FULLSCREEN, PAUSE_PANEL, SETTINGS_PANEL, TITLE_SETTINGS,
 } from './layout';
 
 const overlaps = (a: Rect, b: Rect) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
@@ -135,5 +136,46 @@ describe('미니맵 좌표', () => {
     expect(minimapX(1200, 2400, map)).toBe(map.x + map.w / 2);
     expect(minimapX(-50, 2400, map)).toBe(map.x);
     expect(minimapX(9999, 2400, map)).toBe(map.x + map.w);
+  });
+});
+
+describe('전체화면 버튼 배치', () => {
+  const F = FULLSCREEN_LAYOUT;
+  const settingsPanel: Rect = {
+    x: (GAME_WIDTH - SETTINGS_PANEL.w) / 2, y: (GAME_HEIGHT - SETTINGS_PANEL.h) / 2, w: SETTINGS_PANEL.w, h: SETTINGS_PANEL.h,
+  };
+
+  it('모든 버튼이 66x66 이상이고 화면 안에 있다', () => {
+    for (const [name, r] of Object.entries(F)) {
+      expect(r.w, name).toBeGreaterThanOrEqual(MIN_TOUCH);
+      expect(r.h, name).toBeGreaterThanOrEqual(MIN_TOUCH);
+      expect(inside(r, screen), name).toBe(true);
+    }
+  });
+
+  it('타이틀: 설정 버튼과 겹치지 않는다', () => {
+    expect(overlaps(F.title, TITLE_SETTINGS)).toBe(false);
+  });
+
+  it('지도: 별 합계 글자·챕터 버튼·위쪽 띠와 겹치지 않는다', () => {
+    expect(overlaps(F.map, MAP_LAYOUT.starText)).toBe(false);
+    for (const c of MAP_LAYOUT.chapters) expect(overlaps(F.map, c)).toBe(false);
+    expect(F.map.y + F.map.h).toBeLessThanOrEqual(70);
+  });
+
+  it('설정: 패널 밖 구석에 있고 뒤쪽 타이틀 설정 버튼·아이콘과 겹치지 않는다', () => {
+    expect(overlaps(F.settings, settingsPanel)).toBe(false);
+    expect(overlaps(F.settings, TITLE_SETTINGS)).toBe(false);
+    expect(overlaps(F.settings, F.title)).toBe(false);
+  });
+
+  it('일시정지: 패널 안에서 계속·지도 버튼과 겹치지 않는다', () => {
+    const row = centeredRow(2, PAUSE_BUTTON.w, PAUSE_BUTTON.gap, PAUSE_BUTTON.y);
+    expect(inside(PAUSE_FULLSCREEN, PAUSE_PANEL)).toBe(true);
+    for (const r of row) {
+      expect(inside(r, PAUSE_PANEL)).toBe(true);
+      expect(overlaps(PAUSE_FULLSCREEN, r)).toBe(false);
+    }
+    expect(F.pause).toBe(PAUSE_FULLSCREEN);
   });
 });
