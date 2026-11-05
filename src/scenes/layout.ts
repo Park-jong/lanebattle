@@ -1,4 +1,3 @@
-import { MAX_TIER, nodesOfTree, possessionNodeId, YOGOE_UNIT_IDS, yogoeNodeIds, type TreeId } from '../data/upgrades';
 import { DEFAULT_UI } from '../ui/default/tokens';
 
 // 화면 배치 상수 (도형 그래픽 단계용)
@@ -149,89 +148,7 @@ export const MAP_LAYOUT = {
 
 // ----- 빌드 화면 -----
 
-const BUILD_TOP = 176;
-const BUILD_ROW_STEP = MIN_TOUCH + 4;
-const BUILD_SLOT_TAB_X = 490;
-const BUILD_TREE_TAB_STEP = 134;
-
-export const BUILD_LAYOUT = {
-  /** 위쪽 띠 배경 */
-  strip: { x: 0, y: 0, w: GAME_WIDTH, h: 72 } as Rect,
-  back: { x: 8, y: 4, w: 96, h: MIN_TOUCH } as Rect,
-  /** 신명·엽전 글자 */
-  wallet: { x: 112, y: 6, w: 216, h: 60 } as Rect,
-  buy: { x: 332, y: 4, w: 150, h: MIN_TOUCH } as Rect,
-  slotTabs: Array.from({ length: 3 }, (_, i) => ({ x: BUILD_SLOT_TAB_X + i * 84, y: 4, w: 80, h: MIN_TOUCH })) as Rect[],
-  copy: { x: 742, y: 4, w: 100, h: MIN_TOUCH } as Rect,
-  reset: { x: 848, y: 4, w: 104, h: MIN_TOUCH } as Rect,
-  /** 지도에서 고른 보스 스테이지의 보스 이름·약점·저항 */
-  boss: { x: 8, y: 74, w: 944, h: 28 } as Rect,
-  /** 트리 탭 4개 + 소환 순서 */
-  treeTabs: Array.from({ length: 5 }, (_, i) => ({ x: 8 + i * BUILD_TREE_TAB_STEP, y: 104, w: 130, h: MIN_TOUCH })) as Rect[],
-  nodeArea: { x: 8, y: BUILD_TOP, w: 684, h: 360 } as Rect,
-  /** 노드 상세 패널과 안의 요소 */
-  detail: { x: 700, y: 104, w: 252, h: 432 } as Rect,
-  detailText: { x: 708, y: 110, w: 236, h: 284 } as Rect,
-  allocate: { x: 704, y: 400, w: 120, h: MIN_TOUCH } as Rect,
-  deallocate: { x: 828, y: 400, w: 120, h: MIN_TOUCH } as Rect,
-  message: { x: 708, y: 472, w: 236, h: 60 } as Rect,
-  /** 소환 순서 탭: 10칸(2줄 x 5칸), 기본 순서 버튼, 안내 글 */
-  orderCells: Array.from({ length: 10 }, (_, i) => ({
-    x: 8 + (i % 5) * 134, y: BUILD_TOP + Math.floor(i / 5) * BUILD_ROW_STEP, w: 128, h: MIN_TOUCH,
-  })) as Rect[],
-  orderReset: { x: 8, y: 330, w: 170, h: MIN_TOUCH } as Rect,
-  orderHint: { x: 186, y: 340, w: 500, h: 46 } as Rect,
-  /** 확인창(초기화·복사 대상 고르기): 패널과 버튼 줄 y */
-  dialogPanel: { x: 230, y: 150, w: 500, h: 240 } as Rect,
-  dialogButtonY: 300,
-} as const;
-
-/** 확인창 버튼 줄 (버튼 수 2~3) */
-export function dialogButtons(count: number): Rect[] {
-  return centeredRow(count, 140, 12, BUILD_LAYOUT.dialogButtonY);
-}
-
-const NODE_GAP_PAIR = 2;
-const NODE_GAP_GROUP = 10;
-
-/** 단 번호(1~4) 줄의 y */
-export function tierRowY(tier: number): number {
-  return BUILD_TOP + (tier - 1) * BUILD_ROW_STEP;
-}
-
-/** 단 이름표(표시만). 해금 조건 문구가 들어간다 */
-export function tierLabelRect(tier: number): Rect {
-  return { x: 8, y: tierRowY(tier), w: 68, h: MIN_TOUCH };
-}
-
-/**
- * 트리의 노드 칸 배치.
- * 무당·연계·살림은 단별 줄, 배타 갈래 쌍은 붙여서 놓는다. 요괴는 유닛 10종 x ①②③④(빙의) (2열 x 5줄)
- */
-export function nodeCells(tree: TreeId): { nodeId: string; rect: Rect }[] {
-  if (tree === 'yogoe') {
-    return YOGOE_UNIT_IDS.flatMap((unitId, i) => {
-      const ids = yogoeNodeIds(unitId);
-      const col = Math.floor(i / 5);
-      const row = i % 5;
-      return [ids.basic, ids.core, ids.awaken, possessionNodeId(unitId)].map((nodeId, k) => ({
-        nodeId,
-        rect: { x: 8 + col * 342 + k * 84, y: BUILD_TOP + row * BUILD_ROW_STEP, w: 80, h: MIN_TOUCH },
-      }));
-    });
-  }
-  const out: { nodeId: string; rect: Rect }[] = [];
-  for (let tier = 1; tier <= MAX_TIER; tier++) {
-    const nodes = nodesOfTree(tree).filter((n) => n.tier === tier);
-    let x = 84;
-    nodes.forEach((n, i) => {
-      if (i > 0) x += n.exclusiveGroup && n.exclusiveGroup === nodes[i - 1].exclusiveGroup ? NODE_GAP_PAIR : NODE_GAP_GROUP;
-      out.push({ nodeId: n.id, rect: { x, y: tierRowY(tier), w: 92, h: MIN_TOUCH } });
-      x += 92;
-    });
-  }
-  return out;
-}
+export { BUILD_LAYOUT, dialogButtons, nodeCells, tierLabelRect, tierRowY } from '../ui/build/layout';
 
 // ----- 툴팁 (마우스를 올렸을 때 뜨는 설명 상자) -----
 export const TOOLTIP_LAYOUT = {

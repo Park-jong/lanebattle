@@ -41,6 +41,7 @@ export class ScrollText {
     this.text.setText(text).setColor(color).setY(this.rect.y);
     this.text.setCrop(0, 0, this.rect.w, this.rect.h);
     this.hint.setText(this.text.height > this.rect.h ? '↕ 드래그 / 휠로 자세히 보기' : '');
+    this.hint.setColor(color).setAlpha(0.75);
   }
 
   private scroll(delta: number): void {
