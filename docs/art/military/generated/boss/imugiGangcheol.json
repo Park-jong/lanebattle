@@ -1,0 +1,34 @@
+{
+  "subject_key": "boss:imugiGangcheol",
+  "name": "멜트다운",
+  "checkpoint": "partial",
+  "generated": 1,
+  "planned": 58,
+  "required_generated": 1,
+  "required_planned": 35,
+  "tool": "built-in image_gen",
+  "delivery_state": "Raw generated assets; alignment and runtime integration pending",
+  "items": [
+    {
+      "id": "boss:imugiGangcheol:idle_00",
+      "output": "output/art-generation/source-assets/boss/imugiGangcheol/military/idle_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [],
+      "execution_prompt": "Create ONE complete full-body 2D anime GAME SPRITE in a neutral idle pose appropriate for this character. SIDE VIEW facing RIGHT, natural adult proportions where humanoid, actual TRANSPARENT alpha. Clean anime line art, consistent 2-3-tone cel shading. Exact design: MELTDOWN, gigantic INDUSTRIAL MUTANT BOSS. Glowing ORANGE HIGH-TEMPERATURE CORE inside upper torso, dark MOLTEN-METAL SLAG ARMOR, embedded industrial pipes and panels, massive metal-plated striking arms, heavy grounded legs. Dark iron grey with restrained orange core light. No serpent body, no dragon, no fire landscape, no weapon held, no floor lava.. Entire body, feet, hair, weapon or machine silhouette visible within canvas 1536x1536. Do not substitute a generic rifle soldier or traditional ghost. No SD/chibi, no text, no logo, no watermark, no scenery, no floor shadow, no additional person or creature except explicitly requested companion drones. One complete design, one pose.",
+      "visual_qa": "accepted reference: Inspected full-body reference: faction, main silhouette, equipment and creature/machine role match concept; animation and final pivot alignment pending."
+    }
+  ]
+}
