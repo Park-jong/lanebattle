@@ -1,0 +1,617 @@
+{
+  "subject_key": "ally:oneLegGoblin",
+  "name": "하야테 (ハヤテ)",
+  "checkpoint": "required",
+  "generated": 26,
+  "planned": 49,
+  "required_generated": 26,
+  "required_planned": 26,
+  "tool": "built-in image_gen",
+  "delivery_state": "Raw generated assets; alignment and runtime integration pending",
+  "items": [
+    {
+      "id": "ally:oneLegGoblin:idle_00",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [],
+      "execution_prompt": "Create ONE complete full-body 2D anime GAME SPRITE in a neutral standing/hovering idle pose. SIDE VIEW facing RIGHT, natural adult 7-8 head proportions where humanoid, actual TRANSPARENT alpha. Clean anime line art, consistent 2-3-tone cel shading. Exact character design: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.. Entire head, feet, hair and weapon or machine outline visible within canvas 768x1024. Do not substitute a generic rifle soldier. No SD/chibi, no text, no logo, no watermark, no scenery, no floor shadow, no additional person. One character design, one pose.",
+      "visual_qa": "accepted reference: Inspected full-body reference: designated hairstyle, military uniform, weapon and role match concept; final canvas alignment pending."
+    },
+    {
+      "id": "ally:oneLegGoblin:idle_01",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:walk_00",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/walk_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: in-place WALK CYCLE: near leg contacts in front, far leg trails. Clearly different leg pose from neutral standing; planted foot does not slide. File walk_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:walk_01",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/walk_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png",
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: in-place WALK CYCLE: weight passes over planted near leg while far leg swings. Clearly different leg pose from neutral standing; planted foot does not slide. File walk_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:walk_02",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/walk_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png",
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/walk_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: in-place WALK CYCLE: far leg contacts in front, near leg trails. Clearly different leg pose from neutral standing; planted foot does not slide. File walk_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:walk_03",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/walk_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png",
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/walk_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: in-place WALK CYCLE: weight passes over planted far leg while near leg swings. Clearly different leg pose from neutral standing; planted foot does not slide. File walk_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:attack_00",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/attack_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: a short forward TACTICAL DAGGER THRUST, mechanical legs planted; current phase: short preparation. File attack_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:attack_01",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/attack_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png",
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/attack_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: a short forward TACTICAL DAGGER THRUST, mechanical legs planted; current phase: ACTUAL STRIKE OR FIRING MOMENT. File attack_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:attack_02",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/attack_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png",
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/attack_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: a short forward TACTICAL DAGGER THRUST, mechanical legs planted; current phase: immediate recoil/follow-through. File attack_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:attack_03",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/attack_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png",
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/attack_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: a short forward TACTICAL DAGGER THRUST, mechanical legs planted; current phase: recover toward guard. File attack_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:hit_00",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/hit_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: short initial reaction to a hit. File hit_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:hit_01",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/hit_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png",
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/hit_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: recover original balance. File hit_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:spawn_00",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/spawn_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: preparation to enter idle stance. File spawn_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:spawn_01",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/spawn_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png",
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/spawn_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: legs or fuselage settle into stable support. File spawn_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:spawn_02",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/spawn_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png",
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/spawn_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: nearly neutral stance with slight hair/fabric/cable follow-through. File spawn_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:death_00",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/death_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: initial loss of strength, knees begin bending. File death_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:death_01",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/death_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png",
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/death_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: DOWN ON ONE KNEE, torso low, free hand supports body near ground. File death_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:death_02",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/death_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png",
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/death_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: DOWN ON BOTH KNEES, torso and head LOWER than previous kneeling frame, weapon lowered, DO NOT stand up. File death_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:death_03",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/death_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png",
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/death_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nPOSE FOR THIS SINGLE FRAME: remain COLLAPSED ON BOTH KNEES, head bowed and torso low, same support as previous frame, still visibly drawn; DO NOT stand up; game handles final opacity fade. File death_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:preview",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/preview.png",
+      "kind": "portrait",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1024,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse attached approved reference, preserve exact face/hair/body/uniform/equipment. HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nONE full-body representative pose, whole head-to-feet/machine silhouette and weapon visible, fit by empty padding without squashing proportions. Target 1024x1024. Actual transparent alpha. No scenery, frame, text, numbers, UI, extra person, or redesign.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:icon",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/icon.png",
+      "kind": "portrait",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        128,
+        128
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse attached approved reference, preserve exact face/hair/body/uniform/equipment. HAYATE, adult woman age23 height165cm, slim small A-cup adult build. SILVER-GREY SHORT PIXIE HAIRCUT, no ponytail. BLACK SLEEVELESS military uniform top, cropped dark tactical jacket, ASYMMETRIC MINISKIRT. Visible MECHANICAL BOOSTER PROSTHETIC LEGS with articulated knees and feet. ONE SHORT TACTICAL DAGGER held low. Reserved cold expression. Both feet planted. NO rifle, no long hair, no extra arms.\n\nOne readable HEAD-AND-SHOULDERS portrait including a small distinctive weapon/equipment detail. Crop the camera, do not change body proportions. Target 128x128. Actual transparent alpha. No scenery, frame, text, numbers, UI, extra person, or redesign.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:fx_boost_trail_00",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/fx_boost_trail_00.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1774,
+        887
+      ],
+      "target_size": [
+        512,
+        256
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of BOOST TRAIL, phase 0. One SHORT PALE-CYAN booster exhaust streak trailing LEFT, tapered and detached from mechanical legs; no large ground aura. Keep the origin fixed at canvas center and ample transparent padding on all sides. Use ONLY the specific palette stated in the design above. Target 512x256, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_boost_trail_00.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 하야테 (ハヤテ) (ally:oneLegGoblin). 효과 정의: 부스터 추진 잔상. 이동 좌표는 실제 돌진 이벤트 사용\n\n목표 512×256px, 실제 투명 알파, 피벗은 중앙. 캐릭터 팔레트와 재질을 기준으로 하되 효과 중심과 주변 윤곽을 구별한다.\n\n발생·전개·감쇠 애니메이션 3컷 중 1번째, 정규화 진행 0.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:fx_boost_trail_01",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/fx_boost_trail_01.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1774,
+        887
+      ],
+      "target_size": [
+        512,
+        256
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/fx_boost_trail_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of BOOST TRAIL, phase 1. One SHORT PALE-CYAN booster exhaust streak trailing LEFT, tapered and detached from mechanical legs; no large ground aura. Keep the origin fixed at canvas center and ample transparent padding on all sides. Use ONLY the specific palette stated in the design above. Target 512x256, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_boost_trail_01.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 하야테 (ハヤテ) (ally:oneLegGoblin). 효과 정의: 부스터 추진 잔상. 이동 좌표는 실제 돌진 이벤트 사용\n\n목표 512×256px, 실제 투명 알파, 피벗은 중앙. 캐릭터 팔레트와 재질을 기준으로 하되 효과 중심과 주변 윤곽을 구별한다.\n\n발생·전개·감쇠 애니메이션 3컷 중 2번째, 정규화 진행 0.50. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:fx_boost_trail_02",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/fx_boost_trail_02.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1774,
+        887
+      ],
+      "target_size": [
+        512,
+        256
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/fx_boost_trail_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of BOOST TRAIL, phase 2. One SHORT PALE-CYAN booster exhaust streak trailing LEFT, tapered and detached from mechanical legs; no large ground aura. Keep the origin fixed at canvas center and ample transparent padding on all sides. Use ONLY the specific palette stated in the design above. Target 512x256, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_boost_trail_02.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 하야테 (ハヤテ) (ally:oneLegGoblin). 효과 정의: 부스터 추진 잔상. 이동 좌표는 실제 돌진 이벤트 사용\n\n목표 512×256px, 실제 투명 알파, 피벗은 중앙. 캐릭터 팔레트와 재질을 기준으로 하되 효과 중심과 주변 윤곽을 구별한다.\n\n발생·전개·감쇠 애니메이션 3컷 중 3번째, 정규화 진행 1.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:fx_dagger_cut_00",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/fx_dagger_cut_00.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of DAGGER CUT, phase 0. One SHORT WHITE/SILVER dagger slash arc sweeping RIGHT, no physical knife, character or additional damage field. Keep the origin fixed at canvas center and ample transparent padding on all sides. Use ONLY the specific palette stated in the design above. Target 256x256, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_dagger_cut_00.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 하야테 (ハヤテ) (ally:oneLegGoblin). 효과 정의: 단검 타격의 짧은 궤적\n\n목표 256×256px, 실제 투명 알파, 피벗은 중앙. 캐릭터 팔레트와 재질을 기준으로 하되 효과 중심과 주변 윤곽을 구별한다.\n\n발생·전개·감쇠 애니메이션 2컷 중 1번째, 정규화 진행 0.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:oneLegGoblin:fx_dagger_cut_01",
+      "output": "output/art-generation/source-assets/ally/oneLegGoblin/military/fx_dagger_cut_01.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/oneLegGoblin/military/fx_dagger_cut_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of DAGGER CUT, phase 1. One SHORT WHITE/SILVER dagger slash arc sweeping RIGHT, no physical knife, character or additional damage field. Keep the origin fixed at canvas center and ample transparent padding on all sides. Use ONLY the specific palette stated in the design above. Target 256x256, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_dagger_cut_01.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 하야테 (ハヤテ) (ally:oneLegGoblin). 효과 정의: 단검 타격의 짧은 궤적\n\n목표 256×256px, 실제 투명 알파, 피벗은 중앙. 캐릭터 팔레트와 재질을 기준으로 하되 효과 중심과 주변 윤곽을 구별한다.\n\n발생·전개·감쇠 애니메이션 2컷 중 2번째, 정규화 진행 1.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    }
+  ]
+}
