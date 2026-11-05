@@ -112,6 +112,17 @@ export function purchaseText(result: PurchaseResult): string {
     : '엽전이 부족합니다';
 }
 
+/** 신명 구매 버튼 문구: 가격과 남은 횟수 (다 샀으면 완료 표시). purchases는 지금까지 산 횟수 */
+export function purchaseButtonText(purchases: number): string {
+  const { price, maxPurchases } = SINMYEONG_PURCHASE;
+  if (purchases >= maxPurchases) return `신명 구매
+최대 ${maxPurchases}회
+구매 완료`;
+  return `신명 구매
+엽전 ${price}
+남은 ${maxPurchases - purchases}/${maxPurchases}회`;
+}
+
 /** 노드 칸의 상태. 이미 찍었으면 allocated, 아니면 찍기 가능 여부로 나눈다 */
 export function nodeStatus(build: Build, node: UpgradeNode, check: AllocateCheck): NodeStatus {
   if (build.getLevel(node.id) > 0) return 'allocated';

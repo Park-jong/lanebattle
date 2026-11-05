@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { UPGRADE_NODES, getUpgradeNode, possessionNodeId } from '../data/upgrades';
+import { SINMYEONG_PURCHASE } from '../data/rewards';
 import { Build } from './build';
-import { allocateFailureText, deallocateFailureText, nodeStatus, purchaseText, tierUnlockText } from './buildText';
+import { allocateFailureText, deallocateFailureText, nodeStatus, purchaseButtonText, purchaseText, tierUnlockText } from './buildText';
 
 const node = (id: string) => getUpgradeNode(id)!;
 const ctx = (build: Build, available = 0) => ({ build, available, allNodes: UPGRADE_NODES });
@@ -75,5 +76,32 @@ describe('그 밖의 문구와 상태', () => {
     expect(st('mudangAwakening', 9)).toBe('locked');
     expect(st('blessingGrandRite', 9)).toBe('available');
     expect(st('blessingGrandRite', 0)).toBe('available');
+  });
+});
+
+describe('신명 구매 버튼 문구', () => {
+  const { price, maxPurchases } = SINMYEONG_PURCHASE;
+  const remaining = (purchases: number) => `신명 구매
+엽전 ${price}
+남은 ${maxPurchases - purchases}/${maxPurchases}회`;
+
+  it('0회: 남은 횟수가 상한과 같다', () => {
+    expect(purchaseButtonText(0)).toBe(remaining(0));
+  });
+
+  it('중간: 남은 횟수가 줄어든다', () => {
+    const mid = Math.floor(maxPurchases / 2);
+    expect(purchaseButtonText(mid)).toBe(remaining(mid));
+  });
+
+  it('상한 직전: 남은 1회', () => {
+    expect(purchaseButtonText(maxPurchases - 1)).toBe(remaining(maxPurchases - 1));
+    expect(purchaseButtonText(maxPurchases - 1)).toContain(`남은 1/${maxPurchases}회`);
+  });
+
+  it('상한: 구매 완료를 분명히 알린다', () => {
+    expect(purchaseButtonText(maxPurchases)).toBe(`신명 구매
+최대 ${maxPurchases}회
+구매 완료`);
   });
 });

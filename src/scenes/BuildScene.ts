@@ -4,7 +4,7 @@ import { getBossById } from '../data/bosses';
 import { STAGES } from '../data/stages';
 import { getUpgradeNode, MAX_TIER, TREE_NAMES, UPGRADE_NODES, type TreeId, type UpgradeNode } from '../data/upgrades';
 import {
-  allocateFailureText, BUILD_TABS, deallocateFailureText, HIDDEN_NODE_NAME, hiddenNodeDetailText, nodeStatus, purchaseText, tabName,
+  allocateFailureText, BUILD_TABS, deallocateFailureText, HIDDEN_NODE_NAME, hiddenNodeDetailText, nodeStatus, purchaseButtonText, purchaseText, tabName,
   tierUnlockText, type BuildTab, type NodeStatus,
 } from '../game/buildText';
 import { builds, summonOrder, wallet } from '../game/session';
@@ -113,7 +113,7 @@ export class BuildScene extends Phaser.Scene {
     this.walletText = this.add.text(L.wallet.x, L.wallet.y, '', {
       fontFamily: HUD_FONT, fontSize: '16px', color: '#f3ead4', lineSpacing: 6, wordWrap: { width: L.wallet.w },
     });
-    this.buyButton = this.button(L.buy, '', () => this.buy(), 15);
+    this.buyButton = this.button(L.buy, '', () => this.buy(), 13);
     L.slotTabs.forEach((rect, i) => {
       this.slotButtons.push(this.button(rect, '', () => this.selectSlot(i), 14));
     });
@@ -163,8 +163,7 @@ export class BuildScene extends Phaser.Scene {
 
   private renderStrip(): void {
     this.walletText.setText(`신명 ${builds.availableSinmyeong()} / ${wallet.totalSinmyeong()}\n엽전 ${wallet.yeopjeon}`);
-    const price = wallet.nextPrice();
-    this.buyButton.setText(price === null ? '신명 구매\n(최대)' : `신명 구매\n(엽전 ${price})`);
+    this.buyButton.setText(purchaseButtonText(wallet.purchases));
     this.slotButtons.forEach((btn, i) => {
       const active = i === builds.activeIndex;
       btn.setText(`칸 ${i + 1}\n${active ? '사용 중' : `${builds.getSlot(i).spent()}점`}`);
