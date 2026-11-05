@@ -1,10 +1,10 @@
 {
   "subject_key": "enemy:waterGhostThrower",
   "name": "스피터",
-  "checkpoint": "partial",
-  "generated": 22,
+  "checkpoint": "required",
+  "generated": 26,
   "planned": 49,
-  "required_generated": 22,
+  "required_generated": 26,
   "required_planned": 26,
   "tool": "built-in image_gen",
   "delivery_state": "Raw generated assets; alignment and runtime integration pending",
@@ -101,6 +101,54 @@
       "visual_qa": "pending"
     },
     {
+      "id": "enemy:waterGhostThrower:walk_02",
+      "output": "output/art-generation/source-assets/enemy/waterGhostThrower/military/walk_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/enemy/waterGhostThrower/military/idle_00.png",
+        "output/art-generation/source-assets/enemy/waterGhostThrower/military/walk_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SPITTER, adult humanoid MUTANT ZOMBIE. Enlarged swollen THROAT AND LOWER JAW, grey-green skin, green infection-fluid sac at neck, hunched torso, torn dirty clothes. Two arms, two legs, no weapon. Throat sac is main identifier. NO large back sac.\n\nPOSE FOR THIS SINGLE FRAME: in-place WALK CYCLE: far leg contacts in front, near leg trails. Clearly different leg pose from neutral standing; planted foot does not slide. File walk_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "enemy:waterGhostThrower:walk_03",
+      "output": "output/art-generation/source-assets/enemy/waterGhostThrower/military/walk_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/enemy/waterGhostThrower/military/idle_00.png",
+        "output/art-generation/source-assets/enemy/waterGhostThrower/military/walk_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SPITTER, adult humanoid MUTANT ZOMBIE. Enlarged swollen THROAT AND LOWER JAW, grey-green skin, green infection-fluid sac at neck, hunched torso, torn dirty clothes. Two arms, two legs, no weapon. Throat sac is main identifier. NO large back sac.\n\nPOSE FOR THIS SINGLE FRAME: in-place WALK CYCLE: weight passes over planted far leg while near leg swings. Clearly different leg pose from neutral standing; planted foot does not slide. File walk_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
       "id": "enemy:waterGhostThrower:attack_00",
       "output": "output/art-generation/source-assets/enemy/waterGhostThrower/military/attack_00.png",
       "kind": "body",
@@ -121,6 +169,30 @@
         "output/art-generation/source-assets/enemy/waterGhostThrower/military/idle_00.png"
       ],
       "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SPITTER, adult humanoid MUTANT ZOMBIE. Enlarged swollen THROAT AND LOWER JAW, grey-green skin, green infection-fluid sac at neck, hunched torso, torn dirty clothes. Two arms, two legs, no weapon. Throat sac is main identifier. NO large back sac.\n\nPOSE FOR THIS SINGLE FRAME: infection-fluid SPIT from enlarged throat and jaw; current phase: short preparation. File attack_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "enemy:waterGhostThrower:attack_01",
+      "output": "output/art-generation/source-assets/enemy/waterGhostThrower/military/attack_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/enemy/waterGhostThrower/military/idle_00.png",
+        "output/art-generation/source-assets/enemy/waterGhostThrower/military/attack_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SPITTER, adult humanoid MUTANT ZOMBIE. Enlarged swollen THROAT AND LOWER JAW, grey-green skin, green infection-fluid sac at neck, hunched torso, torn dirty clothes. Two arms, two legs, no weapon. Throat sac is main identifier. NO large back sac.\n\nPOSE FOR THIS SINGLE FRAME: SPIT-RELEASE BODY MOTION: enlarged throat compresses, jaw opens, neck and torso thrust forward; no expelled liquid is drawn; current phase: ACTUAL STRIKE OR FIRING MOMENT. File attack_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
       "visual_qa": "pending"
     },
     {
@@ -145,6 +217,30 @@
         "output/art-generation/source-assets/enemy/waterGhostThrower/military/attack_01.png"
       ],
       "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SPITTER, adult humanoid MUTANT ZOMBIE. Enlarged swollen THROAT AND LOWER JAW, grey-green skin, green infection-fluid sac at neck, hunched torso, torn dirty clothes. Two arms, two legs, no weapon. Throat sac is main identifier. NO large back sac.\n\nPOSE FOR THIS SINGLE FRAME: infection-fluid SPIT from enlarged throat and jaw; current phase: immediate recoil/follow-through. File attack_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "enemy:waterGhostThrower:attack_03",
+      "output": "output/art-generation/source-assets/enemy/waterGhostThrower/military/attack_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/enemy/waterGhostThrower/military/idle_00.png",
+        "output/art-generation/source-assets/enemy/waterGhostThrower/military/attack_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SPITTER, adult humanoid MUTANT ZOMBIE. Enlarged swollen THROAT AND LOWER JAW, grey-green skin, green infection-fluid sac at neck, hunched torso, torn dirty clothes. Two arms, two legs, no weapon. Throat sac is main identifier. NO large back sac.\n\nPOSE FOR THIS SINGLE FRAME: SPIT-RELEASE BODY MOTION: enlarged throat compresses, jaw opens, neck and torso thrust forward; no expelled liquid is drawn; current phase: recover toward guard. File attack_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
       "visual_qa": "pending"
     },
     {
