@@ -1,0 +1,707 @@
+{
+  "subject_key": "ally:samjokgo",
+  "name": "레이카 (レイカ)",
+  "checkpoint": "required",
+  "generated": 30,
+  "planned": 53,
+  "required_generated": 30,
+  "required_planned": 30,
+  "tool": "built-in image_gen",
+  "delivery_state": "Raw generated assets; alignment and runtime integration pending",
+  "items": [
+    {
+      "id": "ally:samjokgo:idle_00",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [],
+      "execution_prompt": "Create ONE complete full-body 2D anime GAME SPRITE in a neutral idle pose appropriate for this character. SIDE VIEW facing RIGHT, natural adult proportions where humanoid, actual TRANSPARENT alpha. Clean anime line art, consistent 2-3-tone cel shading. Exact design: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.. Entire body, feet, hair, weapon or machine silhouette visible within canvas 768x1024. Do not substitute a generic rifle soldier or traditional ghost. No SD/chibi, no text, no logo, no watermark, no scenery, no floor shadow, no additional person or creature except explicitly requested companion drones. One complete design, one pose.",
+      "visual_qa": "accepted reference: Inspected full-body reference: faction, main silhouette, equipment and creature/machine role match concept; animation and final pivot alignment pending."
+    },
+    {
+      "id": "ally:samjokgo:idle_01",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/idle_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:walk_00",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/walk_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: flight movement loop, slight forward fuselage/formation tilt and stabilizing propulsion; no walking feet added. File walk_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:walk_01",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/walk_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png",
+        "output/art-generation/source-assets/ally/samjokgo/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: flight movement loop, slight forward fuselage/formation tilt and stabilizing propulsion; no walking feet added. File walk_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:walk_02",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/walk_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png",
+        "output/art-generation/source-assets/ally/samjokgo/military/walk_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: flight movement loop, slight forward fuselage/formation tilt and stabilizing propulsion; no walking feet added. File walk_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:walk_03",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/walk_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png",
+        "output/art-generation/source-assets/ally/samjokgo/military/walk_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: flight movement loop, slight forward fuselage/formation tilt and stabilizing propulsion; no walking feet added. File walk_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:attack_00",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/attack_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: a command-tablet gesture and fire from one of her EXACTLY THREE DRONES; current phase: short preparation. File attack_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:attack_01",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/attack_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png",
+        "output/art-generation/source-assets/ally/samjokgo/military/attack_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: a command-tablet gesture and fire from one of her EXACTLY THREE DRONES; current phase: ACTUAL STRIKE OR FIRING MOMENT. File attack_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:attack_02",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/attack_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png",
+        "output/art-generation/source-assets/ally/samjokgo/military/attack_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: a command-tablet gesture and fire from one of her EXACTLY THREE DRONES; current phase: immediate recoil/follow-through. File attack_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:attack_03",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/attack_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png",
+        "output/art-generation/source-assets/ally/samjokgo/military/attack_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: a command-tablet gesture and fire from one of her EXACTLY THREE DRONES; current phase: recover toward guard. File attack_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:hit_00",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/hit_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: short initial reaction to a hit. File hit_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:hit_01",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/hit_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png",
+        "output/art-generation/source-assets/ally/samjokgo/military/hit_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: recover original balance. File hit_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:spawn_00",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/spawn_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: preparation to enter idle stance. File spawn_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:spawn_01",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/spawn_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png",
+        "output/art-generation/source-assets/ally/samjokgo/military/spawn_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: legs or fuselage settle into stable support. File spawn_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:spawn_02",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/spawn_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png",
+        "output/art-generation/source-assets/ally/samjokgo/military/spawn_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: nearly neutral stance with slight hair/fabric/cable follow-through. File spawn_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:death_00",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/death_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: commander loses strength, drones tilt. File death_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:death_01",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/death_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png",
+        "output/art-generation/source-assets/ally/samjokgo/military/death_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: body and formation lower into defeated posture. File death_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:death_02",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/death_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png",
+        "output/art-generation/source-assets/ally/samjokgo/military/death_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: same defeated airborne formation sags, keep exactly three drones. File death_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:death_03",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/death_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png",
+        "output/art-generation/source-assets/ally/samjokgo/military/death_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nPOSE FOR THIS SINGLE FRAME: stable defeated commander and three-drone formation; game handles fade. File death_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.5]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets and missiles are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:preview",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/preview.png",
+      "kind": "portrait",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1024,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse attached approved reference, preserve exact face/hair/body/uniform/equipment. REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nONE full-body representative pose, whole head-to-feet/machine silhouette and weapon visible, fit by empty padding without squashing proportions. Target 1024x1024. Actual transparent alpha. No scenery, frame, text, numbers, UI, extra person, or redesign.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:icon",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/icon.png",
+      "kind": "portrait",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        128,
+        128
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse attached approved reference, preserve exact face/hair/body/uniform/equipment. REIKA, adult woman age29 height174cm, mature E-cup build. LONG LOOSE BLACK HAIR, GOLDEN EYES, BLACK officer cap, BLACK officer uniform with deep-neck shirt, fitted short black skirt, GOLD epaulets, black boots. Holds tactical COMMAND TABLET. One compact wearable BACK LIFT MODULE supports her in the air. Exactly THREE medium ATTACK DRONES in a triangle around her, face and whole body visible. ONE woman plus exactly3 drones form ONE airborne unit. NO extra drone, no gun held by woman.\n\nONE HEAD-AND-SHOULDERS PORTRAIT ONLY, with the face large and readable. Frame from top of head to upper chest. The input is a full-body reference but the OUTPUT MUST BE A CLOSE-UP. Omit lower torso, skirt, legs, drones and equipment outside this crop. NO full-body figure, no inset portrait, no circular badge, no collage, no second copy of the subject. Crop the camera, do not change body proportions. Target 128x128. Actual transparent alpha. No scenery, frame, text, numbers, UI, extra person, or redesign.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:projectile_drone_incendiary_00",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/projectile_drone_incendiary_00.png",
+      "kind": "projectile",
+      "priority": "required",
+      "actual_size": [
+        1774,
+        887
+      ],
+      "target_size": [
+        256,
+        128
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of DRONE INCENDIARY, phase 0. One compact ORANGE incendiary tracer round pointing RIGHT with a short tail, no drone, missile or extra rounds. Keep the origin fixed at canvas center and ample transparent padding on all sides. Depict the projectile IN FLIGHT after leaving its weapon: no cartridge casing, primer rim, hand-grenade pin, pull ring or safety lever. Use ONLY the specific palette stated in the design above. Target 256x128, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 projectile_drone_incendiary_00.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 레이카 (レイカ) (ally:samjokgo). 효과 정의: 공격 주기에 맞춘 대표 편대 탄도\n\n목표 256×128px, 실제 투명 알파, 피벗은 중앙. 소이·고열 계열: 주황 #E89A4B, 고열 미색 #F0CD8B, 짙은 주황의 낮은 대비 윤곽.\n\n반복 애니메이션 2컷 중 1번째다. 중심·외곽 크기·진행 방향은 유지하고 내부 빛·회전·선의 위상만 조금 바꾼다. 마지막과 첫 컷이 자연스럽게 연결되며 투사체를 사라지게 만들지 않는다.\n\n투사체 중심은 캔버스 중앙이고 오른쪽을 향한다. 실제 화면 이동은 게임이 처리하므로 컷마다 좌표를 옮기지 않는다. 짧은 꼬리와 안전 여백을 두고 발사자·대상·총기·배경은 그리지 않는다.\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:projectile_drone_incendiary_01",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/projectile_drone_incendiary_01.png",
+      "kind": "projectile",
+      "priority": "required",
+      "actual_size": [
+        1774,
+        887
+      ],
+      "target_size": [
+        256,
+        128
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/projectile_drone_incendiary_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of DRONE INCENDIARY, phase 1. One compact ORANGE incendiary tracer round pointing RIGHT with a short tail, no drone, missile or extra rounds. Keep the origin fixed at canvas center and ample transparent padding on all sides. Depict the projectile IN FLIGHT after leaving its weapon: no cartridge casing, primer rim, hand-grenade pin, pull ring or safety lever. Use ONLY the specific palette stated in the design above. Target 256x128, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 projectile_drone_incendiary_01.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 레이카 (レイカ) (ally:samjokgo). 효과 정의: 공격 주기에 맞춘 대표 편대 탄도\n\n목표 256×128px, 실제 투명 알파, 피벗은 중앙. 소이·고열 계열: 주황 #E89A4B, 고열 미색 #F0CD8B, 짙은 주황의 낮은 대비 윤곽.\n\n반복 애니메이션 2컷 중 2번째다. 중심·외곽 크기·진행 방향은 유지하고 내부 빛·회전·선의 위상만 조금 바꾼다. 마지막과 첫 컷이 자연스럽게 연결되며 투사체를 사라지게 만들지 않는다.\n\n투사체 중심은 캔버스 중앙이고 오른쪽을 향한다. 실제 화면 이동은 게임이 처리하므로 컷마다 좌표를 옮기지 않는다. 짧은 꼬리와 안전 여백을 두고 발사자·대상·총기·배경은 그리지 않는다.\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:fx_command_aura_00",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/fx_command_aura_00.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of COMMAND AURA, phase 0. One restrained GOLD/CYAN command aura with a hollow ground ellipse rim and sparse upward chevrons, no drone or commander. Keep the origin fixed at canvas center and ample transparent padding on all sides. Use ONLY the specific palette stated in the design above. Target 512x512, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_command_aura_00.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 레이카 (レイカ) (ally:samjokgo). 효과 정의: 실제 공격력 오라\n\n목표 512×512px, 실제 투명 알파, 피벗은 중앙. 캐릭터 팔레트와 재질을 기준으로 하되 효과 중심과 주변 윤곽을 구별한다.\n\n반복 애니메이션 3컷 중 1번째다. 중심·외곽 크기·진행 방향은 유지하고 내부 빛·회전·선의 위상만 조금 바꾼다. 마지막과 첫 컷이 자연스럽게 연결되며 투사체를 사라지게 만들지 않는다.\n\n전장에 살짝 내려다보이는 원·반원 또는 파동이다. 지면 효과는 납작한 타원 투영을 사용하고 본체를 가리지 않게 중심을 비운다. 실제 피해·지원 범위는 게임에서 맞춘다.\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:fx_command_aura_01",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/fx_command_aura_01.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/fx_command_aura_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of COMMAND AURA, phase 1. One restrained GOLD/CYAN command aura with a hollow ground ellipse rim and sparse upward chevrons, no drone or commander. Keep the origin fixed at canvas center and ample transparent padding on all sides. Use ONLY the specific palette stated in the design above. Target 512x512, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_command_aura_01.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 레이카 (レイカ) (ally:samjokgo). 효과 정의: 실제 공격력 오라\n\n목표 512×512px, 실제 투명 알파, 피벗은 중앙. 캐릭터 팔레트와 재질을 기준으로 하되 효과 중심과 주변 윤곽을 구별한다.\n\n반복 애니메이션 3컷 중 2번째다. 중심·외곽 크기·진행 방향은 유지하고 내부 빛·회전·선의 위상만 조금 바꾼다. 마지막과 첫 컷이 자연스럽게 연결되며 투사체를 사라지게 만들지 않는다.\n\n전장에 살짝 내려다보이는 원·반원 또는 파동이다. 지면 효과는 납작한 타원 투영을 사용하고 본체를 가리지 않게 중심을 비운다. 실제 피해·지원 범위는 게임에서 맞춘다.\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:fx_command_aura_02",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/fx_command_aura_02.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/fx_command_aura_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of COMMAND AURA, phase 2. One restrained GOLD/CYAN command aura with a hollow ground ellipse rim and sparse upward chevrons, no drone or commander. Keep the origin fixed at canvas center and ample transparent padding on all sides. Use ONLY the specific palette stated in the design above. Target 512x512, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_command_aura_02.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 레이카 (レイカ) (ally:samjokgo). 효과 정의: 실제 공격력 오라\n\n목표 512×512px, 실제 투명 알파, 피벗은 중앙. 캐릭터 팔레트와 재질을 기준으로 하되 효과 중심과 주변 윤곽을 구별한다.\n\n반복 애니메이션 3컷 중 3번째다. 중심·외곽 크기·진행 방향은 유지하고 내부 빛·회전·선의 위상만 조금 바꾼다. 마지막과 첫 컷이 자연스럽게 연결되며 투사체를 사라지게 만들지 않는다.\n\n전장에 살짝 내려다보이는 원·반원 또는 파동이다. 지면 효과는 납작한 타원 투영을 사용하고 본체를 가리지 않게 중심을 비운다. 실제 피해·지원 범위는 게임에서 맞춘다.\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:fx_incendiary_support_00",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/fx_incendiary_support_00.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of INCENDIARY SUPPORT, phase 0. One ORANGE incendiary support impact bloom with short embers, no aircraft, drone, projectile or character. Keep the origin fixed at canvas center and ample transparent padding on all sides. Use ONLY the specific palette stated in the design above. Target 512x512, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_incendiary_support_00.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 레이카 (レイカ) (ally:samjokgo). 효과 정의: 각성·직접 통제 광역 화상 지원\n\n목표 512×512px, 실제 투명 알파, 피벗은 중앙. 소이·고열 계열: 주황 #E89A4B, 고열 미색 #F0CD8B, 짙은 주황의 낮은 대비 윤곽.\n\n발생·전개·감쇠 애니메이션 4컷 중 1번째, 정규화 진행 0.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:fx_incendiary_support_01",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/fx_incendiary_support_01.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/fx_incendiary_support_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of INCENDIARY SUPPORT, phase 1. One ORANGE incendiary support impact bloom with short embers, no aircraft, drone, projectile or character. Keep the origin fixed at canvas center and ample transparent padding on all sides. Use ONLY the specific palette stated in the design above. Target 512x512, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_incendiary_support_01.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 레이카 (レイカ) (ally:samjokgo). 효과 정의: 각성·직접 통제 광역 화상 지원\n\n목표 512×512px, 실제 투명 알파, 피벗은 중앙. 소이·고열 계열: 주황 #E89A4B, 고열 미색 #F0CD8B, 짙은 주황의 낮은 대비 윤곽.\n\n발생·전개·감쇠 애니메이션 4컷 중 2번째, 정규화 진행 0.33. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:fx_incendiary_support_02",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/fx_incendiary_support_02.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/fx_incendiary_support_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of INCENDIARY SUPPORT, phase 2. One ORANGE incendiary support impact bloom with short embers, no aircraft, drone, projectile or character. Keep the origin fixed at canvas center and ample transparent padding on all sides. Use ONLY the specific palette stated in the design above. Target 512x512, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_incendiary_support_02.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 레이카 (レイカ) (ally:samjokgo). 효과 정의: 각성·직접 통제 광역 화상 지원\n\n목표 512×512px, 실제 투명 알파, 피벗은 중앙. 소이·고열 계열: 주황 #E89A4B, 고열 미색 #F0CD8B, 짙은 주황의 낮은 대비 윤곽.\n\n발생·전개·감쇠 애니메이션 4컷 중 3번째, 정규화 진행 0.67. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:samjokgo:fx_incendiary_support_03",
+      "output": "output/art-generation/source-assets/ally/samjokgo/military/fx_incendiary_support_03.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/samjokgo/military/fx_incendiary_support_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of INCENDIARY SUPPORT, phase 3. One ORANGE incendiary support impact bloom with short embers, no aircraft, drone, projectile or character. Keep the origin fixed at canvas center and ample transparent padding on all sides. Use ONLY the specific palette stated in the design above. Target 512x512, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_incendiary_support_03.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 레이카 (レイカ) (ally:samjokgo). 효과 정의: 각성·직접 통제 광역 화상 지원\n\n목표 512×512px, 실제 투명 알파, 피벗은 중앙. 소이·고열 계열: 주황 #E89A4B, 고열 미색 #F0CD8B, 짙은 주황의 낮은 대비 윤곽.\n\n발생·전개·감쇠 애니메이션 4컷 중 4번째, 정규화 진행 1.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    }
+  ]
+}
