@@ -1,8 +1,8 @@
 {
   "subject_key": "boss:chasaKing",
   "name": "타이런트",
-  "checkpoint": "required",
-  "generated": 29,
+  "checkpoint": "all",
+  "generated": 52,
   "planned": 52,
   "required_generated": 29,
   "required_planned": 29,
@@ -685,6 +685,564 @@
         "output/art-generation/source-assets/boss/chasaKing/military/fx_tyrant_pulse_00.png"
       ],
       "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of TYRANT PULSE, phase 3. One restrained DARK-PURPLE suppression pulse with a hollow expanding ellipse and short black/purple broken arcs, no boss body. Keep the origin fixed at canvas center and ample transparent padding on all sides. Use ONLY the specific palette stated in the design above. Target 768x768, actual transparent alpha. The EMPTY BACKGROUND must be alpha zero. Never paint white paper, a checkerboard transparency grid, a noise texture or any full-canvas haze. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_tyrant_pulse_03.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 타이런트 (boss:chasaKing). 효과 정의: 실제 강화 억제·피해 펄스\n\n목표 768×768px, 실제 투명 알파, 피벗은 중앙. 캐릭터 팔레트와 재질을 기준으로 하되 효과 중심과 주변 윤곽을 구별한다.\n\n발생·전개·감쇠 애니메이션 4컷 중 4번째, 정규화 진행 1.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n전장에 살짝 내려다보이는 원·반원 또는 파동이다. 지면 효과는 납작한 타원 투영을 사용하고 본체를 가리지 않게 중심을 비운다. 실제 피해·지원 범위는 게임에서 맞춘다.\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:idle_02",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/idle_02.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_02.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:idle_03",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/idle_03.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_03.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:idle_04",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/idle_04.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_04.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:idle_05",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/idle_05.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_05.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:idle_06",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/idle_06.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_06.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:idle_07",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/idle_07.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_07.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:walk_04",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/walk_04.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: intermediate WALK pose between the attached neighboring reference poses; support foot stays planted, swing leg advances, pelvis and opposite shoulder balance. Not an identical copy of idle. File walk_04.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:walk_05",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/walk_05.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_01.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: intermediate WALK pose between the attached neighboring reference poses; support foot stays planted, swing leg advances, pelvis and opposite shoulder balance. Not an identical copy of idle. File walk_05.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:walk_06",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/walk_06.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_02.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: intermediate WALK pose between the attached neighboring reference poses; support foot stays planted, swing leg advances, pelvis and opposite shoulder balance. Not an identical copy of idle. File walk_06.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:walk_07",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/walk_07.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_03.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: intermediate WALK pose between the attached neighboring reference poses; support foot stays planted, swing leg advances, pelvis and opposite shoulder balance. Not an identical copy of idle. File walk_07.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:attack_04",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/attack_04.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/attack_02.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/attack_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: one forward MELEE ARM STRIKE with body weight support; current phase: intermediate between recoil and recovery. File attack_04.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:attack_05",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/attack_05.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/attack_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: one forward MELEE ARM STRIKE with body weight support; current phase: finish settling into neutral guard. File attack_05.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:hit_02",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/hit_02.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/hit_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/hit_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: intermediate recoil-to-recovery reaction. File hit_02.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:hit_03",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/hit_03.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/hit_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: settle back to neutral guard. File hit_03.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:start_00",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/start_00.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: lean into first step or propulsion. File start_00.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:start_01",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/start_01.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: accelerate hips/fuselage while hair/fabric/cables lag. File start_01.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:start_02",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/start_02.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: connect into first movement-loop contact. File start_02.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:stop_00",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/stop_00.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: begin deceleration from movement. File stop_00.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:stop_01",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/stop_01.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: torso stops while loose parts continue briefly. File stop_01.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:stop_02",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/stop_02.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: settle into neutral guard. File stop_02.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:turn_00",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/turn_00.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: decelerate to prepare direction change. File turn_00.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:turn_01",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/turn_01.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: counter-rotate torso slightly while keeping source facing right. File turn_01.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:chasaKing:turn_02",
+      "output": "output/art-generation/source-assets/boss/chasaKing/military/turn_02.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/chasaKing/military/idle_00.png",
+        "output/art-generation/source-assets/boss/chasaKing/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: TYRANT, top-tier adult HUMANOID MUTANT BOSS. BLACK reinforced muscles, DARK ARMOR-LIKE SKIN, tall adult limb proportions, extremely broad shoulders, controlled UPRIGHT posture, muted PURPLE suppression-energy seams within dark armored tissue. Large fists down at sides. No weapon, no crown, no robes, no skull staff, no extra creature.\n\nPOSE FOR THIS SINGLE FRAME: settle into right-facing compensation guard; actual flip is handled by game. File turn_02.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
       "visual_qa": "pending"
     }
   ]
