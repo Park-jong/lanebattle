@@ -1,8 +1,8 @@
 {
   "subject_key": "ally:bulgasari",
   "name": "쿠로가네 (クロガネ)",
-  "checkpoint": "required",
-  "generated": 30,
+  "checkpoint": "all",
+  "generated": 53,
   "planned": 53,
   "required_generated": 30,
   "required_planned": 30,
@@ -701,6 +701,564 @@
         "output/art-generation/source-assets/ally/bulgasari/military/fx_exosuit_repair_00.png"
       ],
       "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of EXOSUIT REPAIR, phase 2. One isolated impact, status mark or ground-plane pulse appropriate to this effect. Ground circles project as flat ellipses. Keep origin fixed and visible margins. Use clean warm orange for incendiary/heat, cyan-white for saber/pressure, mint for support/EMP, green for slow spit and purple for blight/suppression. Target 256x256, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_exosuit_repair_02.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 쿠로가네 (クロガネ) (ally:bulgasari). 효과 정의: 갑옷 적 처치 회복·출력 상승\n\n목표 256×256px, 실제 투명 알파, 피벗은 중앙. 회복·지원 계열: 청록 #5BC9C3와 흰색, 절제된 밝기.\n\n발생·전개·감쇠 애니메이션 3컷 중 3번째, 정규화 진행 1.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:idle_02",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/idle_02.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:idle_03",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/idle_03.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:idle_04",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/idle_04.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_04.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:idle_05",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/idle_05.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_05.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:idle_06",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/idle_06.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_06.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:idle_07",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/idle_07.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_07.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:walk_04",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/walk_04.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: intermediate WALK pose between the attached neighboring reference poses; support foot stays planted, swing leg advances, pelvis and opposite shoulder balance. Not an identical copy of idle. File walk_04.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:walk_05",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/walk_05.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_01.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: intermediate WALK pose between the attached neighboring reference poses; support foot stays planted, swing leg advances, pelvis and opposite shoulder balance. Not an identical copy of idle. File walk_05.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:walk_06",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/walk_06.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_02.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: intermediate WALK pose between the attached neighboring reference poses; support foot stays planted, swing leg advances, pelvis and opposite shoulder balance. Not an identical copy of idle. File walk_06.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:walk_07",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/walk_07.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_03.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: intermediate WALK pose between the attached neighboring reference poses; support foot stays planted, swing leg advances, pelvis and opposite shoulder balance. Not an identical copy of idle. File walk_07.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:attack_04",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/attack_04.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/attack_02.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/attack_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: a heavy HYDRAULIC SLEDGEHAMMER STRIKE, both hands keep gripping the same shaft; current phase: intermediate between recoil and recovery. File attack_04.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:attack_05",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/attack_05.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/attack_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: a heavy HYDRAULIC SLEDGEHAMMER STRIKE, both hands keep gripping the same shaft; current phase: finish settling into neutral guard. File attack_05.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:hit_02",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/hit_02.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/hit_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/hit_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: intermediate recoil-to-recovery reaction. File hit_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:hit_03",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/hit_03.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/hit_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: settle back to neutral guard. File hit_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:start_00",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/start_00.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: lean into first step or propulsion. File start_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:start_01",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/start_01.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: accelerate hips/fuselage while hair/fabric/cables lag. File start_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:start_02",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/start_02.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: connect into first movement-loop contact. File start_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:stop_00",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/stop_00.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: begin deceleration from movement. File stop_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:stop_01",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/stop_01.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: torso stops while loose parts continue briefly. File stop_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:stop_02",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/stop_02.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: settle into neutral guard. File stop_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:turn_00",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/turn_00.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: decelerate to prepare direction change. File turn_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:turn_01",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/turn_01.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: counter-rotate torso slightly while keeping source facing right. File turn_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "ally:bulgasari:turn_02",
+      "output": "output/art-generation/source-assets/ally/bulgasari/military/turn_02.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/ally/bulgasari/military/idle_00.png",
+        "output/art-generation/source-assets/ally/bulgasari/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: KUROGANE, adult woman age26 height173cm, muscular mature F-cup build. GREY SHORT BOB HAIRCUT, absolutely no ponytail. Sleeveless white military shirt, BLACK NECKTIE, SHORT BLACK TACTICAL SKIRT, combat boots. Huge MECHANICAL ARMORED FOREARMS, reinforced exoskeleton. Both hands hold ONE LARGE HYDRAULIC SLEDGEHAMMER low in front. NO rifle, no gun.\n\nPOSE FOR THIS SINGLE FRAME: settle into right-facing compensation guard; actual flip is handled by game. File turn_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
       "visual_qa": "pending"
     }
   ]
