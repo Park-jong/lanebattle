@@ -31,9 +31,9 @@ export class MemoryPurse implements PurseStore {
   }
 }
 
-/** n번째(1부터) 신명 구매 가격 */
-export function purchasePrice(n: number): number {
-  return SINMYEONG_PURCHASE.basePrice + SINMYEONG_PURCHASE.priceStep * (n - 1);
+/** n번째(1부터) 신명 구매 가격. 횟수와 관계없이 고정 */
+export function purchasePrice(_n: number): number {
+  return SINMYEONG_PURCHASE.price;
 }
 
 export type PurchaseResult =

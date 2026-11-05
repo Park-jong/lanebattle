@@ -4,6 +4,8 @@ import { getAllyDef } from '../data/allies';
 import { STATUS } from '../data/status';
 import type { AllyDef, AttackType, EnemyTrait, Tag } from '../data/types';
 import { upgradeAbility, upgradeAllyDef } from '../battle/unitUpgrades';
+import { GHOST_GATE_TUNING } from '../data/finalStage';
+import { applyGhostGate } from '../battle/finalStage';
 import type { BattleModifiers, UnitModifiers } from '../battle/modifiers';
 import { fmt, pct, type TooltipStatus, type TooltipText } from './tooltipText';
 
@@ -72,7 +74,7 @@ function upgradeMarks(m: UnitModifiers | undefined): string {
  */
 export function describeUnit(allyId: string, mods: BattleModifiers, key: string): TooltipText {
   const unitMods = mods.units[allyId];
-  const def = upgradeAllyDef(getAllyDef(allyId), unitMods);
+  const def = applyGhostGate(upgradeAllyDef(getAllyDef(allyId), unitMods), mods);
   const ability = upgradeAbility(getAbility(allyId), allyId, unitMods);
   // 각성만 빼고 계산해, 각성으로 새로 생긴 줄을 구분한다
   const withoutAwaken = unitMods ? { ...unitMods, awaken: null } : undefined;
@@ -90,11 +92,16 @@ export function describeUnit(allyId: string, mods: BattleModifiers, key: string)
   lines.push(...(body.length > 0 ? body : ['고유 능력 없음']));
   const marks = upgradeMarks(unitMods);
   if (marks) lines.push(`강화: ${marks}`);
+  if (mods.ghostGate) {
+    lines.push(`귀문개방: 비용 ${GHOST_GATE_TUNING.summonCost} 고정, 쿨타임 ${pct(GHOST_GATE_TUNING.summonCooldownMultiplier)}`);
+  }
   return { title: `${def.name} (${key})`, lines };
 }
 
 /** 소환 상태 판정에 필요한 현재 값 */
 export interface SummonStatusInput {
+  /** 강림 중이면 소환할 수 없다 */
+  descent?: boolean;
   allyCount: number;
   maxAllies: number;
   /** 남은 쿨타임(초) */
@@ -103,8 +110,9 @@ export interface SummonStatusInput {
   cost: number;
 }
 
-/** Battle.summon 실패 판정과 같은 순서: 아군 상한 -> 쿨타임 -> 부적 */
+/** Battle.summon 실패 판정과 같은 순서: 강림 -> 아군 상한 -> 쿨타임 -> 부적 */
 export function summonStatus(input: SummonStatusInput): TooltipStatus {
+  if (input.descent) return { text: '강림 중에는 소환할 수 없습니다', ok: false };
   if (input.allyCount >= input.maxAllies) return { text: `아군 최대(${input.maxAllies})`, ok: false };
   if (input.cooldown > 0) return { text: `쿨타임 ${input.cooldown.toFixed(1)}초`, ok: false };
   if (input.talisman < input.cost) {

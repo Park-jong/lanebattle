@@ -6,6 +6,7 @@ import {
   nodesOfTree,
   TREE_IDS,
   TIER_UNLOCK_SPENT,
+  allUpgradesTotalCost,
   treeTotalCost,
   UPGRADE_NODES,
   YOGOE_UNIT_IDS,
@@ -13,13 +14,14 @@ import {
 } from './upgrades';
 
 describe('업그레이드 트리 데이터', () => {
-  it('트리별 합계 31/150/46/21, 전체 248 (빙의 50은 배타 그룹이라 하나만 센다)', () => {
-    expect(treeTotalCost('mudang')).toBe(31);
-    expect(treeTotalCost('yogoe')).toBe(150);
-    expect(treeTotalCost('yeongye')).toBe(46);
+  it('트리별 합계(트리 안 배타 그룹은 하나) 71/150/47/21, 전체 248 (최종 단계는 트리를 넘는 한 그룹이라 가장 비싼 빙의 50만 센다)', () => {
+    expect(treeTotalCost('mudang')).toBe(31 + 40); // + 강림 40
+    expect(treeTotalCost('yogoe')).toBe(150); // 빙의 50 포함
+    expect(treeTotalCost('yeongye')).toBe(46 + 1); // + 귀문개방 1
     expect(treeTotalCost('salim')).toBe(21);
-    const all = TREE_IDS.reduce((s, t) => s + treeTotalCost(t), 0);
-    expect(all).toBe(248);
+    // 트리별 합계를 더하면 최종 단계가 겹쳐 세어지므로 전체는 따로 센다
+    expect(TREE_IDS.reduce((s, t) => s + treeTotalCost(t), 0)).toBe(289);
+    expect(allUpgradesTotalCost()).toBe(248);
   });
 
   it('노드 id는 중복이 없다', () => {
@@ -27,7 +29,7 @@ describe('업그레이드 트리 데이터', () => {
   });
 
   it('연계 노드와 synergy id가 1:1이다', () => {
-    const ids = nodesOfTree('yeongye').map((n) => n.id).sort();
+    const ids = nodesOfTree('yeongye').filter((n) => !n.finalStage).map((n) => n.id).sort();
     expect(ids).toEqual([...ALL_SYNERGY_IDS].sort());
   });
 

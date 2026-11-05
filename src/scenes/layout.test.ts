@@ -211,6 +211,17 @@ describe('빌드 화면 배치', () => {
     expect(pairGap).toBeLessThan(groupGap);
   });
 
+  it('무당 탭에 강림, 연계 탭에 귀문개방 칸이 4단 줄 끝에 하나씩 있다', () => {
+    const last = (tree: 'mudang' | 'yeongye', id: string) => {
+      const row = nodeCells(tree).filter((c) => c.rect.y === nodeCells(tree).find((x) => x.nodeId === id)!.rect.y);
+      return row.sort((a, b) => a.rect.x - b.rect.x)[row.length - 1].nodeId;
+    };
+    expect(last('mudang', 'descent')).toBe('descent');
+    expect(last('yeongye', 'ghostGate')).toBe('ghostGate');
+    expect(nodeCells('mudang').filter((c) => c.rect.y === nodeCells('mudang').find((x) => x.nodeId === 'descent')!.rect.y)).toHaveLength(3);
+    expect(nodeCells('yeongye').filter((c) => c.rect.y === nodeCells('yeongye').find((x) => x.nodeId === 'ghostGate')!.rect.y)).toHaveLength(2);
+  });
+
   it('요괴 탭은 유닛마다 ①②③④ 4칸이 한 줄에 놓이고 ④는 빙의 노드다', () => {
     const cells = nodeCells('yogoe');
     for (const unitId of YOGOE_UNIT_IDS) {

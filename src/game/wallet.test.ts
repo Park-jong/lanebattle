@@ -23,23 +23,31 @@ describe('Wallet', () => {
     expect(wallet.totalSinmyeong()).toBe(6);
   });
 
-  it('모든 스테이지 별 3개 + 25회 구매면 최대 100', () => {
+  it('모든 스테이지 별 3개 + 50회 구매면 최대 125', () => {
     const { progress, wallet } = setup();
     for (const s of STAGES) progress.recordResult(s.number, 3);
     expect(wallet.totalSinmyeong()).toBe(75);
     wallet.addYeopjeon(1e6);
-    for (let i = 0; i < 25; i++) expect(wallet.buySinmyeong().ok).toBe(true);
-    expect(wallet.totalSinmyeong()).toBe(100);
+    for (let i = 0; i < 50; i++) expect(wallet.buySinmyeong().ok).toBe(true);
+    expect(wallet.totalSinmyeong()).toBe(125);
   });
 
-  it('구매 가격 수열 100, 150, 200', () => {
-    expect([1, 2, 3, 25].map(purchasePrice)).toEqual([100, 150, 200, 1300]);
+  it('구매 가격은 횟수와 관계없이 100 고정', () => {
+    expect([1, 2, 3, 25, 50].map(purchasePrice)).toEqual([100, 100, 100, 100, 100]);
     const { wallet } = setup();
     wallet.addYeopjeon(1000);
     expect(wallet.buySinmyeong()).toEqual({ ok: true, price: 100 });
-    expect(wallet.buySinmyeong()).toEqual({ ok: true, price: 150 });
-    expect(wallet.nextPrice()).toBe(200);
-    expect(wallet.yeopjeon).toBe(750);
+    expect(wallet.buySinmyeong()).toEqual({ ok: true, price: 100 });
+    expect(wallet.nextPrice()).toBe(100);
+    expect(wallet.yeopjeon).toBe(800);
+  });
+
+  it('50번째 구매의 가격도 100이고 엽전이 정확히 5000이면 50회를 모두 산다', () => {
+    const { wallet } = setup();
+    wallet.addYeopjeon(5000);
+    for (let i = 0; i < 50; i++) expect(wallet.buySinmyeong()).toEqual({ ok: true, price: 100 });
+    expect(wallet.yeopjeon).toBe(0);
+    expect(wallet.purchases).toBe(50);
   });
 
   it('엽전이 부족하면 실패하고 아무것도 바뀌지 않는다', () => {
@@ -50,10 +58,10 @@ describe('Wallet', () => {
     expect(wallet.purchases).toBe(0);
   });
 
-  it('26번째 구매는 횟수 초과로 실패', () => {
+  it('51번째 구매는 횟수 초과로 실패', () => {
     const { wallet } = setup();
     wallet.addYeopjeon(1e6);
-    for (let i = 0; i < 25; i++) wallet.buySinmyeong();
+    for (let i = 0; i < 50; i++) wallet.buySinmyeong();
     expect(wallet.nextPrice()).toBeNull();
     expect(wallet.buySinmyeong()).toEqual({ ok: false, reason: 'maxPurchases' });
   });

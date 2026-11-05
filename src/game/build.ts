@@ -1,6 +1,8 @@
+import { GHOST_GATE_TUNING } from '../data/finalStage';
 import { BUILD_SLOTS } from '../data/rewards';
 import {
   getUpgradeNode,
+  YOGOE_UNIT_IDS,
   MAX_TIER,
   nodesOfTree,
   TIER_UNLOCK_SPENT,
@@ -12,7 +14,10 @@ import {
 } from '../data/upgrades';
 import type { SinmyeongSource } from './wallet';
 
-export type AllocateFailure = 'unknownNode' | 'maxLevel' | 'notEnoughSinmyeong' | 'tierLocked' | 'prerequisite' | 'exclusive' | 'mudangIncomplete';
+/** 최종 단계(빙의·강림·귀문개방) 해금 조건 실패 */
+export type FinalStageFailure = 'mudangIncomplete' | 'salimIncomplete' | 'yeongyeIncomplete' | 'yogoeUnitsIncomplete';
+export type AllocateFailure =
+  | 'unknownNode' | 'maxLevel' | 'notEnoughSinmyeong' | 'tierLocked' | 'prerequisite' | 'exclusive' | FinalStageFailure;
 export type DeallocateFailure = 'unknownNode' | 'notAllocated' | DependencyFailure;
 /** 빼면 다른 노드의 단 해금이 깨짐 / 선행이 깨짐 (이때 dependentId에 필요로 하는 노드 id가 담긴다) */
 export type DependencyFailure = 'tierDependency' | 'prerequisiteDependency';
@@ -77,6 +82,11 @@ export class Build {
     return this.spentIn(tree, tier) >= (TIER_UNLOCK_SPENT[tier] ?? Infinity);
   }
 
+  /** 노드의 단이 열려 있는가. 최종 단계 노드는 단 기준 대신 자기 해금 조건만 쓴다 */
+  private isNodeTierOpen(node: UpgradeNode): boolean {
+    return node.finalStage !== undefined || this.isTierUnlocked(node.tree, node.tier);
+  }
+
   /** 해금된 가장 높은 단 (1~4) */
   unlockedTier(tree: TreeId): number {
     let top = 1;
@@ -89,9 +99,10 @@ export class Build {
     const node = getUpgradeNode(nodeId);
     if (!node) return { ok: false, reason: 'unknownNode' };
     if (this.getLevel(nodeId) >= node.maxLevel) return { ok: false, reason: 'maxLevel' };
-    if (!this.isTierUnlocked(node.tree, node.tier)) return { ok: false, reason: 'tierLocked' };
+    if (!this.isNodeTierOpen(node)) return { ok: false, reason: 'tierLocked' };
     if (node.requires && this.getLevel(node.requires) < 1) return { ok: false, reason: 'prerequisite' };
-    if (node.possessionOf && !this.isTreeComplete('mudang')) return { ok: false, reason: 'mudangIncomplete' };
+    const finalFailure = this.finalStageFailure(node);
+    if (finalFailure) return { ok: false, reason: finalFailure };
     if (this.exclusiveConflict(node)) return { ok: false, reason: 'exclusive' };
     if (available < node.costPerLevel) return { ok: false, reason: 'notEnoughSinmyeong' };
     return { ok: true };
@@ -119,10 +130,14 @@ export class Build {
     return check;
   }
 
-  /** 트리를 다 찍었는가: 레벨 노드는 최대 레벨, 배타 갈래는 각 그룹에서 한쪽 (빙의 해금 조건) */
+  /**
+   * 트리를 다 찍었는가: 레벨 노드는 최대 레벨, 배타 갈래는 각 그룹에서 한쪽 (최종 단계 해금 조건).
+   * 최종 단계 노드(강림·귀문개방)는 자기 해금 조건에 쓰이므로 세지 않는다
+   */
   isTreeComplete(tree: TreeId): boolean {
     const groupPicked = new Map<string, boolean>();
     for (const n of nodesOfTree(tree)) {
+      if (n.finalStage) continue;
       const lv = this.getLevel(n.id);
       if (n.exclusiveGroup) groupPicked.set(n.exclusiveGroup, (groupPicked.get(n.exclusiveGroup) ?? false) || lv > 0);
       else if (lv < n.maxLevel) return false;
@@ -130,14 +145,43 @@ export class Build {
     return [...groupPicked.values()].every(Boolean);
   }
 
+  /** ①②③을 모두 찍은 요괴 유닛 수 (귀문개방 해금 조건) */
+  awakenedUnitCount(): number {
+    return YOGOE_UNIT_IDS.filter((unitId) => this.isUnitAwakened(unitId)).length;
+  }
+
+  private isUnitAwakened(unitId: string): boolean {
+    const ids = yogoeNodeIds(unitId);
+    return this.getLevel(ids.basic) > 0 && this.getLevel(ids.core) > 0 && this.getLevel(ids.awaken) > 0;
+  }
+
   /**
-   * 빙의 노드가 드러나는가: 그 유닛 ①②③과 무당 트리를 모두 찍었을 때 (신명은 보지 않는다).
-   * 빙의가 아닌 노드는 항상 true
+   * 최종 단계 해금 조건 중 신명·선행 노드(requires)를 뺀 나머지가 깨졌으면 그 사유, 아니면 null.
+   * 최종 단계가 아닌 노드는 항상 null
+   */
+  finalStageFailure(node: UpgradeNode): FinalStageFailure | null {
+    switch (node.finalStage) {
+      case 'possession':
+        return this.isTreeComplete('mudang') ? null : 'mudangIncomplete';
+      case 'descent':
+        if (!this.isTreeComplete('mudang')) return 'mudangIncomplete';
+        return this.isTreeComplete('salim') ? null : 'salimIncomplete';
+      case 'ghostGate':
+        if (this.awakenedUnitCount() < GHOST_GATE_TUNING.minAwakenedUnits) return 'yogoeUnitsIncomplete';
+        return this.isTreeComplete('yeongye') ? null : 'yeongyeIncomplete';
+      default:
+        return null;
+    }
+  }
+
+  /**
+   * 최종 단계 노드가 드러나는가: 해금 조건을 모두 채웠을 때 (신명은 보지 않는다).
+   * 빙의는 그 유닛 ①②③ + 무당 트리. 최종 단계가 아닌 노드는 항상 true
    */
   isRevealed(node: UpgradeNode): boolean {
-    if (!node.possessionOf) return true;
-    const ids = yogoeNodeIds(node.possessionOf);
-    return this.getLevel(ids.basic) > 0 && this.getLevel(ids.core) > 0 && this.getLevel(ids.awaken) > 0 && this.isTreeComplete('mudang');
+    if (!node.finalStage) return true;
+    if (node.possessionOf && !this.isUnitAwakened(node.possessionOf)) return false;
+    return this.finalStageFailure(node) === null;
   }
 
   /** 전부 비운다. 돌려받은 신명 수를 반환 */
@@ -152,10 +196,10 @@ export class Build {
     for (const [id, lv] of this.levels) {
       const node = getUpgradeNode(id);
       if (!node || lv > node.maxLevel) return false;
-      if (!this.isTierUnlocked(node.tree, node.tier)) return false;
+      if (!this.isNodeTierOpen(node)) return false;
       if (node.requires && this.getLevel(node.requires) < 1) return false;
       if (this.exclusiveConflict(node)) return false;
-      if (node.possessionOf && !this.isTreeComplete('mudang')) return false;
+      if (this.finalStageFailure(node)) return false;
     }
     return true;
   }
@@ -167,9 +211,9 @@ export class Build {
       const node = getUpgradeNode(id);
       if (!node) continue;
       if (node.requires && this.getLevel(node.requires) < 1) return { reason: 'prerequisiteDependency', dependentId: id };
-      // 빙의를 찍은 동안에는 무당 트리 노드를 뺄 수 없다
-      if (node.possessionOf && !this.isTreeComplete('mudang')) return { reason: 'prerequisiteDependency', dependentId: id };
-      if (tierBroken === null && !this.isTierUnlocked(node.tree, node.tier)) tierBroken = id;
+      // 최종 단계를 찍은 동안에는 그 해금 조건(무당·살림·연계 트리, 요괴 5종)을 깰 수 없다
+      if (this.finalStageFailure(node)) return { reason: 'prerequisiteDependency', dependentId: id };
+      if (tierBroken === null && !this.isNodeTierOpen(node)) tierBroken = id;
     }
     return tierBroken === null ? null : { reason: 'tierDependency', dependentId: tierBroken };
   }

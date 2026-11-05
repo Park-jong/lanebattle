@@ -226,13 +226,14 @@ export class BattleScene extends Phaser.Scene {
     this.infoText = small({ ...r, x: r.x + r.w - 9, y: r.y + 7 }, 12, U.text).setOrigin(1, 0).setFontStyle('bold');
   }
 
-  /** 빙의 중이면 영웅 머리 위에 금색 이름표를 둔다 */
+  /** 빙의·강림 중이면 영웅 머리 위에 금색 이름표를 둔다 */
   private createPossessionLabel(): void {
     const form = this.battle.heroForm;
     this.possessionLabel = undefined;
-    if (!form) return;
+    const label = form ? `빙의: ${form.name}` : this.modifiers.hero.descent ? '강림' : null;
+    if (!label) return;
     this.possessionLabel = this.add
-      .text(0, 0, `빙의: ${form.name}`, {
+      .text(0, 0, label, {
         fontFamily: HUD_FONT, fontSize: '12px', fontStyle: 'bold', color: '#ffe48a', backgroundColor: '#1b1e33cc', padding: { x: 4, y: 1 },
       })
       .setOrigin(0.5, 1).setDepth(60);
@@ -395,7 +396,7 @@ export class BattleScene extends Phaser.Scene {
     const def = b.allyDef(allyIndex);
     const status = summonStatus({
       allyCount: b.allies.length, maxAllies: COMBAT.maxAllies, cooldown: b.summonCooldown(allyIndex),
-      talisman: b.resources.talisman, cost: def.cost,
+      talisman: b.resources.talisman, cost: def.cost, descent: this.modifiers.hero.descent,
     });
     if (this.tooltipShown !== key) {
       const keyLabel = String((hover.index + 1) % 10);
@@ -642,8 +643,9 @@ export class BattleScene extends Phaser.Scene {
       const base = ALLIES[allyIndex];
       const def = b.allyDef(allyIndex); // 업그레이드로 바뀐 비용·쿨타임
       const cd = b.summonCooldown(allyIndex);
-      const enabled = cd <= 0 && b.resources.talisman >= def.cost && b.allies.length < COMBAT.maxAllies;
-      const reason = cd > 0 ? `${cd.toFixed(1)}초` : b.allies.length >= COMBAT.maxAllies ? '정원 가득' : b.resources.talisman < def.cost ? '부적 부족' : '준비';
+      const descent = this.modifiers.hero.descent; // 강림 중에는 소환 불가
+      const enabled = !descent && cd <= 0 && b.resources.talisman >= def.cost && b.allies.length < COMBAT.maxAllies;
+      const reason = descent ? '강림' : cd > 0 ? `${cd.toFixed(1)}초` : b.allies.length >= COMBAT.maxAllies ? '정원 가득' : b.resources.talisman < def.cost ? '부적 부족' : '준비';
       this.summonButtons[i].setTexts(unitShortName(base.id, base.name), `${def.cost}`);
       this.summonButtons[i].setState(cd / def.cooldown, enabled, reason);
     });
