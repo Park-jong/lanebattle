@@ -8,8 +8,8 @@ describe('computeBuildEffects', () => {
     expect(computeBuildEffects({})).toEqual(noModifiers());
   });
 
-  it('노드 73개 모두 찍으면 효과 없음과 달라진다', () => {
-    expect(UPGRADE_NODES).toHaveLength(73);
+  it('노드 75개 모두 찍으면 효과 없음과 달라진다', () => {
+    expect(UPGRADE_NODES).toHaveLength(75);
     for (const node of UPGRADE_NODES) {
       expect(computeBuildEffects({ [node.id]: node.maxLevel }), node.id).not.toEqual(noModifiers());
     }

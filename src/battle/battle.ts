@@ -1,6 +1,7 @@
 import { ALLIES } from '../data/allies';
 import { BOSS_RULES, getBossById } from '../data/bosses';
 import { COMBAT } from '../data/combat';
+import { DESCENT_TUNING } from '../data/finalStage';
 import { HERO } from '../data/hero';
 import { getSkill, SKILL_EFFECTS, type SkillId } from '../data/skills';
 import { POSSESSION_COMMON, POSSESSION_TUNING, possessionSkillsOf, type PossessionSkillSet } from '../data/possession';
@@ -15,6 +16,7 @@ import { DamageFeed, type DamageEvent, type HitKind } from './damageEvents';
 import { Base, Body, Fighter, Projectile, type ProjectilePayload } from './entities';
 import type { AuraDef, BuffEffect } from './status';
 import { createEnemy } from './enemyFactory';
+import { applyGhostGate, descentCooldown, descentDamageMultiplier, descentSpiritCost } from './finalStage';
 import { Hero } from './hero';
 import { buildHeroForm, PossessionSkillRunner, type HeroForm, type PossessionHost } from './possession';
 import { noModifiers, type BattleModifiers } from './modifiers';
@@ -28,7 +30,7 @@ import { upgradeAbility, upgradeAllyDef } from './unitUpgrades';
 import { WaveDirector } from './wave';
 
 export type BattleResult = 'playing' | 'victory' | 'defeat';
-export type SummonResult = 'ok' | 'ended' | 'invalidIndex' | 'full' | 'cooldown' | 'noTalisman';
+export type SummonResult = 'ok' | 'ended' | 'invalidIndex' | 'full' | 'cooldown' | 'noTalisman' | 'descent';
 
 export interface BattleOptions {
   /** 스테이지 번호 0~24 */
@@ -133,14 +135,17 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
     this.rng = rng;
     const mods = options.modifiers ?? noModifiers();
     this.mods = mods;
-    this.allyDefs = ALLIES.map((d) => upgradeAllyDef(d, mods.units[d.id]));
+    this.allyDefs = ALLIES.map((d) => applyGhostGate(upgradeAllyDef(d, mods.units[d.id]), mods));
     this.allyAbilities = new Map(ALLIES.map((d) => [d.id, upgradeAbility(getAbility(d.id), d.id, mods.units[d.id])]));
     this.resources = new Resources({
       ...mods.economy,
-      spiritChargeMultiplier: mods.hero.spiritChargeMultiplier,
+      // 강림: 신력 샘 배율과 곱
+      spiritChargeMultiplier: mods.hero.spiritChargeMultiplier * (mods.hero.descent ? DESCENT_TUNING.spiritChargeMultiplier : 1),
       maxSpiritBonus: mods.hero.maxSpiritBonus,
     });
-    this.hero = new Hero(HERO.maxHp * mods.hero.hpMultiplier, mods.hero.reviveReduction);
+    // 강림: 단단한 몸 등 다른 체력 배율과 곱
+    const hpFactor = mods.hero.hpMultiplier * (mods.hero.descent ? DESCENT_TUNING.hpMultiplier : 1);
+    this.hero = new Hero(HERO.maxHp * hpFactor, mods.hero.reviveReduction);
     const possessedIndex = ALLIES.findIndex((d) => d.id === mods.hero.possession);
     this.heroForm =
       possessedIndex >= 0 ? buildHeroForm(this.allyDefs[possessedIndex], this.allyAbilities.get(ALLIES[possessedIndex].id)!) : null;
@@ -234,6 +239,7 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
   /** 아군 소환 */
   summon(index: number): SummonResult {
     if (this.result !== 'playing') return 'ended';
+    if (this.mods.hero.descent) return 'descent'; // 강림 중에는 요괴를 소환할 수 없다
     const def = this.allyDefs[index];
     if (!def) return 'invalidIndex';
     if (this.allies.length >= COMBAT.maxAllies) return 'full';
@@ -259,12 +265,13 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
   skillCooldownMax(id: SkillId): number {
     if (this.possessionSkills) return POSSESSION_COMMON[id].cooldown; // 신내림 등 무당 쿨타임 감소는 적용하지 않는다
     const base = getSkill(id).cooldown;
-    return id === 'bladeDance' ? base * this.mods.skills.bladeDance.cooldownMultiplier : base;
+    // 강림은 쿨타임 감소(신내림)보다 우선하는 고정값이다
+    return descentCooldown(this.mods, id, id === 'bladeDance' ? base * this.mods.skills.bladeDance.cooldownMultiplier : base);
   }
 
   /** 지금 스킬 슬롯의 신력 비용 (빙의 스킬이면 빙의 공통 비용) */
   skillSpiritCost(id: SkillId): number {
-    return this.possessionSkills ? POSSESSION_COMMON[id].spiritCost : getSkill(id).spiritCost;
+    return this.possessionSkills ? POSSESSION_COMMON[id].spiritCost : descentSpiritCost(this.mods, id, getSkill(id).spiritCost);
   }
 
   /** 지금 스킬 슬롯의 이름 (빙의 스킬이면 빙의 스킬 이름) */
@@ -879,6 +886,8 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
    * 최소 피해는 지속 피해(dot)가 아니면 1, 면역(피해 0)이면 0.
    */
   private resolveHit(target: Body, base: number, info: AttackInfo, options: DamageOptions): void {
+    // 강림: 영웅이 주는 모든 피해는 상성 계산 전 고정 피해 단계에서 배율을 곱한다
+    if (info.source === 'hero') base *= descentDamageMultiplier(this.mods);
     const wasAlive = target.alive;
     const damage = calcDamage(base, info, target.damageTarget, options);
     this.applyDamage(target, damage, damage === 0 || options.dot ? 0 : undefined);

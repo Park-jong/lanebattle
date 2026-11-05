@@ -1,4 +1,5 @@
 import { ALLIES } from './allies';
+import { DESCENT_TUNING, FINAL_STAGE_GROUP, GHOST_GATE_TUNING, type FinalStageId } from './finalStage';
 import { POSSESSION_SLOTS, possessionSkillsOf } from './possession';
 import type { SynergyId } from './synergy';
 
@@ -33,6 +34,8 @@ export interface UpgradeNode {
   requires?: string;
   /** 상호 배타 그룹: 같은 그룹에서는 한 노드만 찍을 수 있다 */
   exclusiveGroup?: string;
+  /** 최종 단계 노드면 종류 (빙의·강림·귀문개방). 셋은 한 배타 그룹이고 트리 단 해금 기준을 받지 않는다 */
+  finalStage?: FinalStageId;
   /** 빙의 노드면 빙의하는 유닛 id (해금: 그 유닛 ①②③ + 무당 트리 전부 + 신명 50) */
   possessionOf?: string;
   /** 전투에 적용할 때 쓰는 수치 (B 묶음) */
@@ -61,7 +64,17 @@ const MUDANG_INITS: NodeInit[] = [
   { id: 'mudangAwakening', tier: 4, name: '무당 각성', description: '기본 공격 3번째마다 반경 80 충격파 (공격력 x1.5)', cost: 5, params: { everyNth: 3, radius: 80, attackMultiplier: 1.5 } },
   { id: 'deepSpirit', tier: 4, name: '깊은 신기', description: '신력 최대 +50', cost: 3, params: { maxSpiritBonus: 50 } },
 ];
-const MUDANG_NODES: UpgradeNode[] = MUDANG_INITS.map((n) => make('mudang', n));
+// 강림 (numbers.md 11장): 무당 트리 ④단 칸. 해금 조건은 game/build.ts가 판정한다
+const DESCENT_INIT: NodeInit = {
+  id: DESCENT_TUNING.nodeId,
+  tier: 4,
+  name: '강림',
+  description: '요괴를 소환할 수 없다. 영웅 최대 체력 x3, 신력 충전 x3, 영웅이 주는 모든 피해 x3. 스킬 쿨타임 Q 0.1초·W 1초·E 5초, Q 신력 소모 없음',
+  cost: DESCENT_TUNING.cost,
+  finalStage: 'descent',
+  exclusiveGroup: FINAL_STAGE_GROUP,
+};
+const MUDANG_NODES: UpgradeNode[] = [...MUDANG_INITS, DESCENT_INIT].map((n) => make('mudang', n));
 
 // ── 요괴 (유닛 10종 x 10 = 합계 100) ──
 interface UnitUpgradeText {
@@ -126,8 +139,8 @@ const YOGOE_BASE_NODES: UpgradeNode[] = UNIT_UPGRADES.flatMap((u) => {
 /** 요괴 노드가 속한 유닛 id 목록 (표시·검증용) */
 export const YOGOE_UNIT_IDS: readonly string[] = UNIT_UPGRADES.map((u) => u.unitId);
 
-// ── 빙의 (numbers.md 10장): 유닛마다 ④ 노드 하나, 10개가 한 배타 그룹 ──
-export const POSSESSION_GROUP = 'possession';
+// ── 빙의 (numbers.md 10장): 유닛마다 ④ 노드 하나. 강림·귀문개방과 함께 한 배타 그룹(최종 단계) ──
+export const POSSESSION_GROUP = FINAL_STAGE_GROUP;
 export const POSSESSION_COST = 50;
 
 /** 빙의 노드 id 규칙: <유닛id>Possess */
@@ -151,6 +164,7 @@ const POSSESSION_NODES: UpgradeNode[] = UNIT_UPGRADES.map((u) => {
     cost: POSSESSION_COST,
     requires: yogoeNodeIds(u.unitId).awaken,
     exclusiveGroup: POSSESSION_GROUP,
+    finalStage: 'possession',
     possessionOf: u.unitId,
   });
 });
@@ -172,7 +186,17 @@ const SYNERGY_INITS: (NodeInit & { id: SynergyId })[] = [
   { id: 'linkRing', tier: 3, name: '연계의 고리', description: '두 태그 유닛이 태그 수를 2로 셈', cost: 4 },
   { id: 'hundredDemons', tier: 4, name: '백귀야행', description: '4가지 태그가 모두 전장에 있으면 모든 아군 공격력 +20%, 받는 피해 -10%', cost: 6 },
 ];
-const YEONGYE_NODES: UpgradeNode[] = SYNERGY_INITS.map((n) => make('yeongye', n));
+// 귀문개방 (numbers.md 11장): 연계 트리 ④단 칸. 노드 id는 연계 id가 아니므로 연계 효과 계산에서 걸러진다
+const GHOST_GATE_INIT: NodeInit = {
+  id: GHOST_GATE_TUNING.nodeId,
+  tier: 4,
+  name: '귀문개방',
+  description: '모든 유닛 소환 비용이 30으로 고정되고, 소환 쿨타임이 절반이 된다',
+  cost: GHOST_GATE_TUNING.cost,
+  finalStage: 'ghostGate',
+  exclusiveGroup: FINAL_STAGE_GROUP,
+};
+const YEONGYE_NODES: UpgradeNode[] = [...SYNERGY_INITS, GHOST_GATE_INIT].map((n) => make('yeongye', n));
 
 // ── 살림 (합계 21) ──
 const SALIM_INITS: NodeInit[] = [
@@ -209,7 +233,19 @@ export function nodeTotalCost(node: UpgradeNode): number {
   return node.maxLevel * node.costPerLevel;
 }
 
-/** 트리를 최대로 찍는 데 드는 비용. 배타 그룹은 둘 중 하나만 센다 */
+/** 전체 노드를 최대로 찍는 데 드는 비용. 배타 그룹은 트리와 관계없이 가장 비싼 노드 하나만 센다 */
+export function allUpgradesTotalCost(): number {
+  let sum = 0;
+  const groupBest = new Map<string, number>();
+  for (const n of UPGRADE_NODES) {
+    if (!n.exclusiveGroup) sum += nodeTotalCost(n);
+    else groupBest.set(n.exclusiveGroup, Math.max(groupBest.get(n.exclusiveGroup) ?? 0, nodeTotalCost(n)));
+  }
+  for (const v of groupBest.values()) sum += v;
+  return sum;
+}
+
+/** 트리를 최대로 찍는 데 드는 비용. 배타 그룹은 그 트리 안에서 하나만 센다 (트리별 합계는 서로 겹칠 수 있다) */
 export function treeTotalCost(tree: TreeId): number {
   let sum = 0;
   const groupBest = new Map<string, number>();

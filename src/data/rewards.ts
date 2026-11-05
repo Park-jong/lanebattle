@@ -13,8 +13,8 @@ export const CLEAR_REWARD = {
   yeopjeon: { base: 30, perChapter: 10, perStar: 10, bossMultiplier: 1.5 },
 } as const;
 
-/** 신명 구매: n번째 가격 = basePrice + priceStep x (n-1) 엽전 */
-export const SINMYEONG_PURCHASE = { basePrice: 100, priceStep: 50, maxPurchases: 25 } as const;
+/** 신명 구매: 횟수와 관계없이 1회 price 엽전 고정, 최대 maxPurchases회 (numbers.md 8장) */
+export const SINMYEONG_PURCHASE = { price: 100, maxPurchases: 50 } as const;
 
 /** 빌드 저장 칸 수와 이름 길이 */
 export const BUILD_SLOTS = { count: 3, maxNameLength: 12 } as const;

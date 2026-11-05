@@ -30,11 +30,11 @@ describe('찍기 실패 사유 문구', () => {
   });
 });
 
-describe('빙의 거부 문구', () => {
-  it('두 번째 빙의는 빙의 전용 문구, 스킬 갈래 문구는 그대로', () => {
+describe('최종 단계 거부 문구', () => {
+  it('두 번째 최종 단계는 최종 단계 문구, 스킬 갈래 문구는 그대로', () => {
     const b = new Build({ [possessionNodeId('foxfireArcher')]: 1 });
     const text = allocateFailureText('exclusive', node(possessionNodeId('sumoGoblin')), ctx(b));
-    expect(text).toBe('이미 "빙의: 여우불 사수"에 빙의했습니다. 한 유닛만 빙의할 수 있습니다');
+    expect(text).toBe('이미 최종 단계("빙의: 여우불 사수")를 골랐습니다. 최종 단계는 하나만 고를 수 있습니다');
     expect(text).not.toContain('갈래');
   });
 });

@@ -32,6 +32,8 @@ export interface HeroModifiers {
   awakening: { everyNth: number; radius: number; attackMultiplier: number } | null;
   /** 빙의한 유닛 id (없으면 null). 영웅이 그 유닛으로 변신한다 */
   possession: string | null;
+  /** 강림 (numbers.md 11장). 켜지면 수치는 data/finalStage.ts의 DESCENT_TUNING을 따른다 */
+  descent: boolean;
 }
 
 export interface SkillModifiers {
@@ -54,6 +56,8 @@ export interface BattleModifiers {
   synergies: readonly SynergyId[];
   /** 부적·기운 모으기 보정. 신력 충전·최대는 hero 쪽 값이 우선한다 */
   economy: ResourceModifiers;
+  /** 귀문개방 (numbers.md 11장). 켜지면 수치는 data/finalStage.ts의 GHOST_GATE_TUNING을 따른다 */
+  ghostGate: boolean;
 }
 
 export function noModifiers(): BattleModifiers {
@@ -66,6 +70,7 @@ export function noModifiers(): BattleModifiers {
       maxSpiritBonus: 0,
       awakening: null,
       possession: null,
+      descent: false,
     },
     skills: {
       fanWind: { rangeMultiplier: 1, damageMultiplier: 1, knockbackMultiplier: 1 },
@@ -79,5 +84,6 @@ export function noModifiers(): BattleModifiers {
     units: {},
     synergies: [],
     economy: noResourceModifiers(),
+    ghostGate: false,
   };
 }

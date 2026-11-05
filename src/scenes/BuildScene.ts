@@ -294,14 +294,15 @@ export class BuildScene extends Phaser.Scene {
       return;
     }
     if (!build.isRevealed(node)) {
-      // 빙의 노드는 ①②③과 무당 트리를 채우기 전까지 이름과 효과를 숨긴다
+      // 최종 단계 노드(빙의·강림·귀문개방)는 해금 조건을 채우기 전까지 이름과 효과를 숨긴다
       this.detailBody.setText(`${HIDDEN_NODE_NAME}\n\n${HIDDEN_NODE_TEXT}`, '#6b5a3a');
       this.primaryButton.setEnabled(false);
       this.secondaryButton.setEnabled(false);
       return;
     }
     const where =
-      node.tree === 'yogoe' ? `${unitNameOf(node)}  ${'①②③④'[node.tier - 1]}` : `${TREE_NAMES[node.tree]}  ${node.tier}단`;
+      node.tree === 'yogoe' ? `${unitNameOf(node)}  ${'①②③④'[node.tier - 1]}`
+        : node.finalStage ? `${TREE_NAMES[node.tree]}  최종 단계` : `${TREE_NAMES[node.tree]}  ${node.tier}단`;
     const level = build.getLevel(node.id);
     const add = builds.canAllocate(node.id);
     const remove = builds.canDeallocate(node.id);

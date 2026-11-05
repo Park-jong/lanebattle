@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { TEST_MODE } from '../data/testMode';
-import { TREE_IDS, UPGRADE_NODES, treeTotalCost } from '../data/upgrades';
+import { UPGRADE_NODES, allUpgradesTotalCost } from '../data/upgrades';
 import { KeyScopedStorage, SAVE_KEY, type StorageLike } from './save';
 import { createGameSave } from './session';
 
@@ -84,8 +84,8 @@ describe('테스트 모드 세션', () => {
 
   it('신명 총량이 전체 업그레이드 비용 이상이고 별은 0부터 시작한다', () => {
     const save = createGameSave('test', '', seeded());
-    // 배타 그룹(스킬 갈래, 빙의)은 하나만 센다: 198 + 빙의 50 = 248
-    const allCost = TREE_IDS.reduce((s, t) => s + treeTotalCost(t), 0);
+    // 배타 그룹(스킬 갈래, 최종 단계)은 하나만 센다: 198 + 가장 비싼 최종 단계(빙의) 50 = 248
+    const allCost = allUpgradesTotalCost();
     expect(allCost).toBe(248);
     expect(TEST_MODE.bonusSinmyeong).toBeGreaterThanOrEqual(248);
     expect(save.wallet.starSinmyeong()).toBe(0);
@@ -95,7 +95,7 @@ describe('테스트 모드 세션', () => {
 
   it('배타 갈래는 한쪽씩 두고 전체 트리를 다 찍을 수 있다', () => {
     const save = createGameSave('test', '', null);
-    const maxCost = TREE_IDS.reduce((s, t) => s + treeTotalCost(t), 0);
+    const maxCost = allUpgradesTotalCost();
     expect(save.wallet.totalSinmyeong()).toBeGreaterThanOrEqual(maxCost);
     const picked = new Set<string>();
     for (let guard = 0; guard < 1000; guard++) {

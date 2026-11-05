@@ -7,16 +7,23 @@ import {
 import { getSkill, SKILL_EFFECTS, type SkillId } from '../data/skills';
 import type { AttackType, Tag } from '../data/types';
 import { getUpgradeNode } from '../data/upgrades';
+import { DESCENT_TUNING } from '../data/finalStage';
+import { descentCooldown, descentDamageMultiplier, descentSpiritCost } from '../battle/finalStage';
 import type { BattleModifiers } from '../battle/modifiers';
 import { fmt, pct, type TooltipStatus, type TooltipText } from './tooltipText';
 
 /** 스킬 키 글자 (KEY_MAP.skills 순서와 같다) */
 const SKILL_KEYS: Record<SkillId, string> = { fanWind: 'Q', blessing: 'W', bladeDance: 'E' };
 
-/** 업그레이드를 반영한 쿨타임(초). Battle.skillCooldownMax와 같은 식 */
+/** 업그레이드를 반영한 쿨타임(초). Battle.skillCooldownMax와 같은 식 (강림이면 고정값) */
 export function skillCooldownOf(id: SkillId, mods: BattleModifiers): number {
   const base = getSkill(id).cooldown;
-  return id === 'bladeDance' ? base * mods.skills.bladeDance.cooldownMultiplier : base;
+  return descentCooldown(mods, id, id === 'bladeDance' ? base * mods.skills.bladeDance.cooldownMultiplier : base);
+}
+
+/** 업그레이드를 반영한 신력 소모. Battle.skillSpiritCost와 같은 식 (강림이면 Q 0) */
+export function skillSpiritCostOf(id: SkillId, mods: BattleModifiers): number {
+  return descentSpiritCost(mods, id, getSkill(id).spiritCost);
 }
 
 /** 고른 갈래의 노드 id (없으면 null). 갈래는 스킬마다 하나만 고를 수 있다 */
@@ -44,10 +51,11 @@ function branchName(nodeId: string): string {
 function effectLines(id: SkillId, mods: BattleModifiers): string[] {
   const fx = SKILL_EFFECTS;
   const m = mods.skills;
+  const dm = descentDamageMultiplier(mods); // 강림이면 영웅이 주는 모든 피해 배율
   if (id === 'fanWind') {
     return [
       `앞쪽 범위 ${fmt(fx.fanWind.range * m.fanWind.rangeMultiplier)}`,
-      `피해 ${fmt(fx.fanWind.damage * m.fanWind.damageMultiplier)}, 넉백 ${fmt(fx.fanWind.knockback * m.fanWind.knockbackMultiplier)}`,
+      `피해 ${fmt(fx.fanWind.damage * m.fanWind.damageMultiplier * dm)}, 넉백 ${fmt(fx.fanWind.knockback * m.fanWind.knockbackMultiplier)}`,
     ];
   }
   if (id === 'blessing') {
@@ -56,9 +64,9 @@ function effectLines(id: SkillId, mods: BattleModifiers): string[] {
       `공격력 +${pct(m.blessing.attackBonus)}(${fmt(fx.blessing.duration)}초)`,
     ];
   }
-  const lines = [`반경 ${fmt(fx.bladeDance.radius)}, 피해 ${fmt(fx.bladeDance.damage)}, 기절 ${fmt(fx.bladeDance.stun)}초`];
+  const lines = [`반경 ${fmt(fx.bladeDance.radius)}, 피해 ${fmt(fx.bladeDance.damage * dm)}, 기절 ${fmt(fx.bladeDance.stun)}초`];
   if (m.bladeDance.extraDuration > 0) {
-    lines.push(`${fmt(m.bladeDance.extraDuration)}초간 초당 ${fmt(m.bladeDance.extraDamagePerSec)} 추가 피해`);
+    lines.push(`${fmt(m.bladeDance.extraDuration)}초간 초당 ${fmt(m.bladeDance.extraDamagePerSec * dm)} 추가 피해`);
   }
   return lines;
 }
@@ -71,9 +79,10 @@ const RULES: Record<SkillId, string> = {
 
 export function describeSkill(id: SkillId, mods: BattleModifiers): TooltipText {
   const def = getSkill(id);
-  const lines = [`신력 ${def.spiritCost} / 쿨타임 ${fmt(skillCooldownOf(id, mods))}초`, ...effectLines(id, mods)];
+  const lines = [`신력 ${skillSpiritCostOf(id, mods)} / 쿨타임 ${fmt(skillCooldownOf(id, mods))}초`, ...effectLines(id, mods)];
   const branch = branchNodeId(id, mods);
   if (branch) lines.push(`갈래: ${branchName(branch)}`);
+  if (mods.hero.descent) lines.push(`강림: 영웅이 주는 모든 피해 ${pct(DESCENT_TUNING.damageMultiplier)}, 쿨타임 고정`);
   lines.push(RULES[id]);
   return { title: `${def.name} (${SKILL_KEYS[id]})`, lines };
 }

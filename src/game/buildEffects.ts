@@ -1,5 +1,6 @@
 import { noModifiers, type BattleModifiers, type UnitModifiers } from '../battle/modifiers';
 import { isSynergyId, type SynergyId } from '../data/synergy';
+import { DESCENT_TUNING, GHOST_GATE_TUNING } from '../data/finalStage';
 import { getUpgradeNode, nodesOfTree, possessionNodeId, YOGOE_UNIT_IDS, yogoeNodeIds } from '../data/upgrades';
 import type { BuildLevels } from './build';
 
@@ -53,6 +54,10 @@ export function computeBuildEffects(levels: Readonly<BuildLevels>): BattleModifi
 
   // ── 빙의: 한 유닛만 (배타 그룹). 여럿이 들어와도 앞쪽 유닛 하나만 쓴다 ──
   m.hero.possession = YOGOE_UNIT_IDS.find((unitId) => level(possessionNodeId(unitId)) > 0) ?? null;
+
+  // ── 강림·귀문개방: 최종 단계는 하나만 쓴다. ?upg= 처럼 여럿이 들어오면 빙의 > 강림 > 귀문개방 순 ──
+  m.hero.descent = m.hero.possession === null && level(DESCENT_TUNING.nodeId) > 0;
+  m.ghostGate = m.hero.possession === null && !m.hero.descent && level(GHOST_GATE_TUNING.nodeId) > 0;
 
   // ── 요괴 ──
   const units: Record<string, UnitModifiers> = {};
