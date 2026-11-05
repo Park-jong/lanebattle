@@ -2,7 +2,7 @@
   "subject_key": "boss:imugiGangcheol",
   "name": "멜트다운",
   "checkpoint": "required",
-  "generated": 42,
+  "generated": 45,
   "planned": 58,
   "required_generated": 35,
   "required_planned": 35,
@@ -919,6 +919,31 @@
       "visual_qa": "pending"
     },
     {
+      "id": "boss:imugiGangcheol:walk_05",
+      "output": "output/art-generation/source-assets/boss/imugiGangcheol/military/walk_05.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/imugiGangcheol/military/idle_00.png",
+        "output/art-generation/source-assets/boss/imugiGangcheol/military/walk_01.png",
+        "output/art-generation/source-assets/boss/imugiGangcheol/military/walk_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: MELTDOWN, gigantic INDUSTRIAL MUTANT BOSS. Glowing ORANGE HIGH-TEMPERATURE CORE inside upper torso, dark MOLTEN-METAL SLAG ARMOR, embedded industrial pipes and panels, massive metal-plated striking arms, heavy grounded legs. Dark iron grey with restrained orange core light. No serpent body, no dragon, no fire landscape, no weapon held, no floor lava.\n\nPOSE FOR THIS SINGLE FRAME: intermediate WALK pose between the attached neighboring reference poses; support foot stays planted, swing leg advances, pelvis and opposite shoulder balance. Not an identical copy of idle. File walk_05.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
       "id": "boss:imugiGangcheol:walk_06",
       "output": "output/art-generation/source-assets/boss/imugiGangcheol/military/walk_06.png",
       "kind": "body",
@@ -969,6 +994,30 @@
       "visual_qa": "pending"
     },
     {
+      "id": "boss:imugiGangcheol:attack_05",
+      "output": "output/art-generation/source-assets/boss/imugiGangcheol/military/attack_05.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/imugiGangcheol/military/idle_00.png",
+        "output/art-generation/source-assets/boss/imugiGangcheol/military/attack_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: MELTDOWN, gigantic INDUSTRIAL MUTANT BOSS. Glowing ORANGE HIGH-TEMPERATURE CORE inside upper torso, dark MOLTEN-METAL SLAG ARMOR, embedded industrial pipes and panels, massive metal-plated striking arms, heavy grounded legs. Dark iron grey with restrained orange core light. No serpent body, no dragon, no fire landscape, no weapon held, no floor lava.\n\nPOSE FOR THIS SINGLE FRAME: a heavy ARMORED ARM STRIKE, orange core stays the same size; current phase: finish settling into neutral guard. File attack_05.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
       "id": "boss:imugiGangcheol:start_00",
       "output": "output/art-generation/source-assets/boss/imugiGangcheol/military/start_00.png",
       "kind": "body",
@@ -990,6 +1039,30 @@
         "output/art-generation/source-assets/boss/imugiGangcheol/military/walk_00.png"
       ],
       "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: MELTDOWN, gigantic INDUSTRIAL MUTANT BOSS. Glowing ORANGE HIGH-TEMPERATURE CORE inside upper torso, dark MOLTEN-METAL SLAG ARMOR, embedded industrial pipes and panels, massive metal-plated striking arms, heavy grounded legs. Dark iron grey with restrained orange core light. No serpent body, no dragon, no fire landscape, no weapon held, no floor lava.\n\nPOSE FOR THIS SINGLE FRAME: lean into first step or propulsion. File start_00.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:imugiGangcheol:turn_01",
+      "output": "output/art-generation/source-assets/boss/imugiGangcheol/military/turn_01.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/imugiGangcheol/military/idle_00.png",
+        "output/art-generation/source-assets/boss/imugiGangcheol/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: MELTDOWN, gigantic INDUSTRIAL MUTANT BOSS. Glowing ORANGE HIGH-TEMPERATURE CORE inside upper torso, dark MOLTEN-METAL SLAG ARMOR, embedded industrial pipes and panels, massive metal-plated striking arms, heavy grounded legs. Dark iron grey with restrained orange core light. No serpent body, no dragon, no fire landscape, no weapon held, no floor lava.\n\nPOSE FOR THIS SINGLE FRAME: counter-rotate torso slightly while keeping source facing right. File turn_01.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
       "visual_qa": "pending"
     }
   ]
