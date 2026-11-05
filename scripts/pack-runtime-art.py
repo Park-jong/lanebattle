@@ -33,7 +33,7 @@ def main():
             shutil.move(str(current), str(source))
         skin = json.loads((source / 'skin.json').read_text(encoding='utf-8'))
         images = {}
-        body_limit = 192 if group == 'boss' else 128 if group == 'hero' else 96
+        body_limit = skin.get('runtimeLimit', 192 if group == 'boss' else 128 if group == 'hero' else 96)
         for name in [*{f + '.png' for c in skin['clips'].values() for f in c['frames']}, 'icon.png', 'preview.png']:
             im = Image.open(source / name).convert('RGBA')
             limit = 96 if name == 'icon.png' else 192 if name == 'preview.png' else body_limit
@@ -68,10 +68,15 @@ def main():
         box = reference.getchannel('A').point(lambda a: 255 if a >= 48 else 0).getbbox()
         if not box:
             raise ValueError(f'Empty reference: {ident}')
+        body_box = skin.get('bodyBounds')
+        body_ratio = min(1, body_limit / max(skin['canvas']['width'], skin['canvas']['height']))
+        appearance = {name: skin[name] for name in ('displayHeight', 'displayTop') if name in skin}
         characters.append({'subjectKey': entry['subjectKey'], 'skinId': 'default', 'texture': key,
             'image': 'runtime/' + key + '.png', 'atlas': 'runtime/' + key + '.json',
-            'origin': skin['origin'], 'bodyHeight': box[3] - box[1], 'bodyWidth': box[2] - box[0],
-            'canvas': {'width': reference.width, 'height': reference.height}, 'clips': skin['clips']})
+            'origin': skin['origin'],
+            'bodyHeight': body_box['height'] * body_ratio if body_box else box[3] - box[1],
+            'bodyWidth': body_box['width'] * body_ratio if body_box else box[2] - box[0],
+            'canvas': {'width': reference.width, 'height': reference.height}, 'clips': skin['clips'], **appearance})
     (PUBLIC / 'manifest.json').write_text(json.dumps({'version': 2, 'scope': 'default', 'rendererIntegration': True,
         'characters': characters}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(f'Packed {len(characters)} characters; runtime PNG bytes: {sum(p.stat().st_size for p in runtime.glob("*.png"))}')

@@ -93,7 +93,7 @@ class CharacterView {
       else if (body instanceof Fighter && body.visualMoving && this.actionAge >= this.actionLength) this.facing = body.direction;
       else if (body instanceof Hero && this.actionAge >= this.actionLength) this.facing = body.facing;
       this.lastX = body.x;
-      const height = body instanceof Fighter ? body.stats.height * body.sizeScale : HERO.height;
+      const height = field.height(body);
       // 비행 유닛 그림(중심 기준)으로 빙의한 영웅도 땅 위에 서 있도록 몸 절반만큼 올린다
       this.lastY = ground - lift - ((body.flying || body instanceof Hero) && this.art.origin.y === 0.5 ? height / 2 : 0);
     }
@@ -113,7 +113,7 @@ class CharacterView {
     this.sprite.setVisible(this.drawn && !this.finished);
     if (!this.drawn) return;
     this.sprite.setFrame(frame!);
-    const height = body instanceof Fighter ? body.stats.height * body.sizeScale : HERO.height;
+    const height = field.height(body);
     this.sprite.setScale(height / this.art.bodyHeight).setFlipX(this.facing < 0);
     if (dt > 0) this.jitter = this.hitLeft > 0 ? Math.sin(this.hitLeft * 130) * 1.5 : 0;
     this.sprite.setPosition(this.lastX + this.jitter, this.lastY);

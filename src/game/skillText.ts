@@ -144,7 +144,7 @@ function effectText(e: PossessionEffect): string {
       return `${fmt(e.duration)}초간 반경 ${fmt(e.radius)} 아군(영웅 포함) ${buffText(e.effect)}${miss} 오라`;
     }
     case 'shrineHeal':
-      return `서낭당 최대 체력 ${pct(e.ratio)} 회복`;
+      return `굿당 최대 체력 ${pct(e.ratio)} 회복`;
   }
 }
 

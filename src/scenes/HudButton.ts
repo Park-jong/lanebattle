@@ -2,12 +2,14 @@ import Phaser from 'phaser';
 import { HUD_FONT, type Rect } from './layout';
 import { addArtImage } from '../render/CharacterRenderer';
 import { DEFAULT_UI as U } from '../ui/default/tokens';
+import { commandFace, summonTile, type CommandKind, type SkillMark } from '../ui/default/commandDock';
 
 export interface HudButtonStyle {
   fill?: number;
   border?: number;
   borderWidth?: number;
   shape?: 'rect' | 'round';
+  compact?: boolean;
   center?: boolean;
   labelSize?: number;
   bigLabel?: boolean;
@@ -16,6 +18,8 @@ export interface HudButtonStyle {
   glyph?: string;
   /** A single large portrait with only a cost badge and optional cooldown. */
   portraitTile?: boolean;
+  command?: CommandKind;
+  mark?: SkillMark;
 }
 
 export interface HudButtonHandlers {
@@ -45,6 +49,8 @@ export class HudButton {
   private reason = '';
   private portrait?: Phaser.GameObjects.Image;
   private readonly overlay: Phaser.GameObjects.Graphics;
+  private level = -1;
+  private maxLevel = 5;
 
   constructor(scene: Phaser.Scene, rect: Rect, private readonly style: HudButtonStyle, private readonly handlers: HudButtonHandlers) {
     this.rect = { ...rect };
@@ -89,6 +95,13 @@ export class HudButton {
   }
 
   get isHeld(): boolean { return this.held; }
+  setProgress(level: number, maxLevel: number): void {
+    if (this.level === level && this.maxLevel === maxLevel) return;
+    this.level = level;
+    this.maxLevel = maxLevel;
+    this.glyph.setText(String(level));
+    this.redraw();
+  }
   release(): void {
     if (!this.held) return;
     this.held = false;
@@ -149,6 +162,21 @@ export class HudButton {
       this.badge.setOrigin(0.5).setPosition(x + 11, y + 11);
       this.sub.setOrigin(0.5).setPosition(x + w - 20, y + h - 12);
       this.stateText.setOrigin(0.5).setPosition(x + w / 2, y + h / 2 - 4);
+    } else if (s.command) {
+      this.badge.setOrigin(0.5).setPosition(s.command === 'move' ? x + 12.5 : x + w - 12.5, y + 12.5);
+      this.label.setColor(s.command === 'skill' ? '#473b2b' : U.text);
+      if (s.command === 'move') {
+        this.label.setOrigin(0.5).setPosition(x + w / 2, y + h / 2 + 1).setColor(U.goldText);
+      } else if (s.command === 'inspect') {
+        this.label.setOrigin(0.5).setPosition(x + w / 2 + 12, y + 26).setWordWrapWidth(w - 52, true);
+        this.stateText.setOrigin(0.5).setPosition(x + w / 2 + 12, y + 49).setFontSize(11);
+      } else {
+        this.label.setOrigin(0.5, 0).setPosition(x + w / 2, y + (s.command === 'skill' ? 58 : 63))
+          .setWordWrapWidth(w - 14, true);
+        this.sub.setOrigin(0.5).setPosition(x + w / 2, y + 106).setFontSize(14);
+        this.stateText.setOrigin(0.5).setPosition(x + w / 2, y + h - 11).setFontSize(11);
+        this.glyph.setOrigin(0.5).setPosition(x + w / 2, y + 35).setFontSize(22);
+      }
     } else if (s.bigLabel) {
       this.label.setOrigin(0.5).setPosition(x + w / 2, y + h / 2);
       this.sub.setOrigin(0.5).setPosition(x + w / 2, y + h - 16);
@@ -168,25 +196,33 @@ export class HudButton {
     const g = this.gfx.clear(), overlay = this.overlay.clear();
     const border = this.hovered || this.held ? U.gold : s.border ?? U.edge;
     const fill = this.held ? U.panelRaised : s.fill ?? U.panel;
-    if (s.portraitTile) {
-      const radius = 13;
-      g.fillStyle(0x070e19, 0.6).fillRoundedRect(x, y + 3, w, h, radius);
-      g.fillStyle(fill).fillRoundedRect(x, y, w, h, radius);
-      g.fillStyle(border, 0.18).fillCircle(x + w / 2, y + h / 2 - 2, h / 2 - 2);
-      g.lineStyle(this.hovered || this.held ? 2 : 1, border, this.enabled ? 0.9 : 0.45)
-        .strokeRoundedRect(x + 0.5, y + 0.5, w - 1, h - 1, radius);
-      if (this.cooldown > 0) {
-        overlay.fillStyle(0x091221, 0.72).slice(x + w / 2, y + h / 2 - 2, h / 2 - 1,
-          -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * this.cooldown, false).fillPath();
+    if (s.shape === 'round') {
+      const cx = x + w / 2, cy = y + h / 2, radius = s.compact ? 22 : Math.min(w, h) / 2 - 2;
+      g.fillStyle(0x080f12, 0.8).fillCircle(cx, cy + 3, radius + 1);
+      g.fillStyle(0xb28c4d, 1).fillCircle(cx, cy, radius);
+      g.fillStyle(fill, 1).fillCircle(cx, cy, radius - 3);
+      g.lineStyle(this.hovered ? 2 : 1, border, 0.8).strokeCircle(cx, cy, radius - 6);
+      g.lineStyle(1, 0x85b89a, 0.35).strokeCircle(cx, cy, radius - 9);
+      for (let i = 0; i < 4; i++) {
+        const angle = i * Math.PI / 2;
+        const px = cx + Math.cos(angle) * (radius - 1), py = cy + Math.sin(angle) * (radius - 1);
+        g.fillStyle(0x9d4b37, 1).fillCircle(px, py, 2);
       }
-      // Badges sit above the portrait and cooldown, as part of the icon frame.
-      overlay.fillStyle(0x0b1424, 0.95).fillRoundedRect(x + 2, y + 2, 19, 19, 6);
-      if (!this.enabled && this.cooldown <= 0) overlay.fillStyle(0x0b1424, 0.95).fillCircle(x + w - 11, y + 11, 9);
-      overlay.fillStyle(0x0b1424, 0.96).fillRoundedRect(x + w - 39, y + h - 24, 37, 22, 8);
-      overlay.lineStyle(1, U.gold, 0.25).strokeRoundedRect(x + w - 39, y + h - 24, 37, 22, 8);
-      const costColor = this.enabled || this.cooldown > 0 ? U.goldText : U.dangerText;
+      return;
+    }
+    if (s.portraitTile) {
+      summonTile(g, overlay, this.rect, { accent: s.border ?? U.gold, enabled: this.enabled,
+        active: this.hovered || this.held, cooldown: this.cooldown });
+      const costColor = this.enabled || this.cooldown > 0 ? '#403321' : '#963c2e';
       if (this.sub.style.color !== costColor) this.sub.setColor(costColor);
-      this.portrait?.setAlpha(this.enabled || this.cooldown > 0 ? 1 : 0.55);
+      this.portrait?.setAlpha(this.enabled || this.cooldown > 0 ? 1 : 0.7);
+      return;
+    }
+    if (s.command) {
+      commandFace(g, overlay, this.rect, { kind: s.command, mark: s.mark, accent: s.border ?? U.gold,
+        enabled: this.enabled, active: this.hovered || this.held, cooldown: this.cooldown,
+        level: Math.max(0, this.level), maxLevel: this.maxLevel });
+      this.label.setAlpha(this.enabled ? 1 : 0.85);
       return;
     }
     g.fillStyle(0x050b15, 0.6).fillRoundedRect(x, y + 3, w, h, 9);

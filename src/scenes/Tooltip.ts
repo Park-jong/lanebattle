@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { placeTooltip } from '../game/tooltipPlacement';
 import type { TooltipStatus, TooltipText } from '../game/tooltipText';
-import { GAME_HEIGHT, GAME_WIDTH, HUD_FONT, TOOLTIP_LAYOUT as T, type Rect } from './layout';
+import { BATTLE_LAYOUT, GAME_HEIGHT, GAME_WIDTH, HUD_FONT, TOOLTIP_LAYOUT as T, type Rect } from './layout';
 import { DEFAULT_UI as U } from '../ui/default/tokens';
 
 /** Scrollable detail panel. Status remains visible even for long awakened abilities. */
@@ -59,7 +59,7 @@ export class Tooltip {
     this.body.setText(content.lines.join('\n'));
     const footer = 76;
     // Keep every summon row and the close button exposed, including lower-row details.
-    const anchorTop = Math.min(anchor.y, 390);
+    const anchorTop = Math.min(anchor.y, BATTLE_LAYOUT.summonFlange.y);
     const available = anchorTop - T.gap - T.margin - p * 2 - this.title.height - 12 - footer;
     const bodyHeight = Math.min(this.body.height, 260, Math.max(80, available));
     this.maxScroll = Math.max(0, this.body.height - bodyHeight);

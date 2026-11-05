@@ -9,7 +9,7 @@ export function addTestBadge(scene: Phaser.Scene, corner: 'right' | 'left' = 'ri
   const left = corner === 'left';
   const battle = scene.sys.settings.key === 'Battle';
   scene.add
-    .text(battle ? 12 : left ? 8 : GAME_WIDTH - 8, battle ? 80 : GAME_HEIGHT - 4, TEST_MODE.label, {
+    .text(battle ? 12 : left ? 8 : GAME_WIDTH - 8, battle ? 92 : GAME_HEIGHT - 4, TEST_MODE.label, {
       fontFamily: HUD_FONT, fontSize: '13px', fontStyle: 'bold', color: '#ffffff',
       backgroundColor: '#b3302a', padding: { x: 6, y: 2 },
     })

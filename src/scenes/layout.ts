@@ -58,8 +58,11 @@ const skillRects: Rect[] = Array.from({ length: 3 }, (_, i) => ({
 export const BATTLE_LAYOUT = {
   /** 아래 패널 (전장과 구분되는 배경) */
   panel: { x: 0, y: PANEL_Y, w: GAME_WIDTH, h: GAME_HEIGHT - PANEL_Y } as Rect,
-  /** 위쪽 띠 배경 */
-  topStrip: { x: 0, y: 0, w: GAME_WIDTH, h: 88 } as Rect,
+  /** 상단 표시의 배치 영역. 전체 폭 배경은 그리지 않는다. */
+  topStrip: { x: 0, y: 0, w: GAME_WIDTH, h: 72 } as Rect,
+  /** 소환패·스킬 패널과 이어지는 자원 돌출부 */
+  summonFlange: { x: 169, y: 350, w: 434, h: 42 } as Rect,
+  skillFlange: { x: 719, y: 350, w: 234, h: 42 } as Rect,
   // 눌러서 쓰는 버튼
   moveLeft: { x: 12, y: ROW1_Y, w: 70, h: MIN_TOUCH } as Rect,
   moveRight: { x: 88, y: ROW1_Y, w: 70, h: MIN_TOUCH } as Rect,
@@ -67,21 +70,14 @@ export const BATTLE_LAYOUT = {
   summon: summonRects,
   gather: { x: 610, y: ROW1_Y, w: 100, h: ROW_H * 2 + ROW_GAP } as Rect,
   skills: skillRects,
-  pause: { x: GAME_WIDTH - 8 - MIN_TOUCH, y: 10, w: MIN_TOUCH, h: MIN_TOUCH } as Rect,
+  pause: { x: 8, y: 4, w: MIN_TOUCH, h: MIN_TOUCH } as Rect,
   // 보이기만 하는 표시
-  talismanBar: { x: 14, y: 8, w: 248, h: 32 } as Rect,
-  spiritBar: { x: 14, y: 44, w: 248, h: 32 } as Rect,
-  minimap: { x: 282, y: 8, w: 360, h: 20 } as Rect,
-  shrineBar: { x: 282, y: 36, w: 176, h: 26 } as Rect,
-  castleBar: { x: 466, y: 36, w: 176, h: 26 } as Rect,
-  /** 오른쪽 작은 글자 3줄: 스테이지, 웨이브·시간·위협, 적·아군 수 */
-  infoText: { x: 660, y: 8, w: 214, h: 70 } as Rect,
-  /** 왼쪽 아래 작은 글자 한 줄: 영웅 부활, 연계 목록 */
-  noteText: { x: 282, y: 68, w: 360, h: 16 } as Rect,
-  /** 보스 이름·체력바·칩 (위쪽 띠 바로 아래) */
-  bossName: { x: 280, y: 94, w: 400, h: 24 } as Rect,
-  bossBar: { x: 280, y: 122, w: 400, h: 10 } as Rect,
-  bossChips: { x: 180, y: 140, w: 600, h: 24 } as Rect,
+  talismanBar: { x: 174, y: 354, w: 424, h: 36 } as Rect,
+  spiritBar: { x: 724, y: 354, w: 224, h: 36 } as Rect,
+  /** 양쪽 기지 체력과 전선 거리·현재 시야를 하나의 띠에 겹쳐 표시한다. */
+  frontline: { x: 232, y: 8, w: 496, h: 48 } as Rect,
+  /** 오른쪽 위 작은 관문 표지 */
+  infoText: { x: 746, y: 10, w: 204, h: 30 } as Rect,
 } as const;
 
 /** 전투 중 눌러서 쓰는 버튼 이름과 사각형 */
@@ -104,15 +100,14 @@ export function battleDisplays(): { name: string; rect: Rect }[] {
   return [
     { name: 'talismanBar', rect: L.talismanBar },
     { name: 'spiritBar', rect: L.spiritBar },
-    { name: 'minimap', rect: L.minimap },
-    { name: 'shrineBar', rect: L.shrineBar },
-    { name: 'castleBar', rect: L.castleBar },
+    { name: 'frontline', rect: L.frontline },
     { name: 'infoText', rect: L.infoText },
-    { name: 'noteText', rect: L.noteText },
-    { name: 'bossName', rect: L.bossName },
-    { name: 'bossBar', rect: L.bossBar },
-    { name: 'bossChips', rect: L.bossChips },
   ];
+}
+
+/** 체력·거리가 공유하는 띠. 수치와 양 끝 문장의 여백을 남긴다. */
+export function frontlineTrack(frame: Rect = BATTLE_LAYOUT.frontline): Rect {
+  return { x: frame.x + 40, y: frame.y + 20, w: frame.w - 80, h: 18 };
 }
 
 /** 일시정지·결과 화면의 버튼 줄 (가운데 정렬) */

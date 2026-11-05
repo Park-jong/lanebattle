@@ -12,6 +12,9 @@ export interface CharacterArt {
   origin: { x: number; y: number };
   bodyHeight: number;
   bodyWidth: number;
+  /** Screen body height and overhead extent; independent of combat dimensions. */
+  displayHeight?: number;
+  displayTop?: number;
   canvas: { width: number; height: number };
   clips: Record<string, ArtClip>;
 }
@@ -25,6 +28,8 @@ export function artList(raw: unknown): CharacterArt[] {
     typeof v.subjectKey === 'string' && typeof v.texture === 'string' && typeof v.image === 'string' &&
     typeof v.atlas === 'string' && Number.isFinite(v.bodyHeight) && v.bodyHeight > 0 &&
     Number.isFinite(v.bodyWidth) && v.bodyWidth > 0 && !!v.clips && !!v.origin && !!v.canvas &&
+    (v.displayHeight === undefined || Number.isFinite(v.displayHeight) && v.displayHeight > 0) &&
+    (v.displayTop === undefined || Number.isFinite(v.displayTop) && v.displayTop > 0) &&
     Number.isFinite(v.origin.x) && Number.isFinite(v.origin.y) &&
     Number.isFinite(v.canvas.width) && v.canvas.width > 0 && Number.isFinite(v.canvas.height) && v.canvas.height > 0);
 }

@@ -9,14 +9,13 @@ import { STAR_RULES } from '../data/rewards';
 import { getStageDef } from '../battle/stage';
 import { ALL_SYNERGY_IDS, Battle, type DamageEvent } from '../battle/battle';
 import { isSynergyId, SYNERGY, type SynergyId } from '../data/synergy';
-import { Base, Fighter, type Body } from '../battle/entities';
+import { Fighter, type Body } from '../battle/entities';
 import {
-  BATTLEFIELD, BATTLE_LAYOUT as L, centeredRow, GAME_HEIGHT, GAME_WIDTH, GROUND_Y, HUD_FONT, minimapX,
+  BATTLEFIELD, BATTLE_LAYOUT as L, centeredRow, frontlineTrack, GAME_HEIGHT, GAME_WIDTH, GROUND_Y, HUD_FONT, minimapX,
   PAUSE_BUTTON, RESULT_LAYOUT, type Rect,
 } from './layout';
 import {
-  BUTTON_FILL_ACTION, BUTTON_FILL_GATHER, colorForTags, ENEMY_COLOR, HERO_COLOR,
-  SHRINE_COLOR, SKILL_COLORS, TAG_COLORS,
+  colorForTags, ENEMY_COLOR, TAG_COLORS,
 } from './palette';
 import { builds, progress, summonOrder, wallet } from '../game/session';
 import { addTestBadge } from './testBadge';
@@ -33,12 +32,14 @@ import { KEY_MAP, KeyInput, skillIndexOf, summonIndexOf } from './input';
 import { describePossessionSkill, describeSkill, skillStatus } from '../game/skillText';
 import { describeUnit, summonStatus } from '../game/unitText';
 import { Tooltip } from './Tooltip';
-import { addArtImage, CharacterRenderer } from '../render/CharacterRenderer';
+import { artInScene, CharacterRenderer, subjectOf } from '../render/CharacterRenderer';
 import { DEFAULT_UI as U, skillShortName, unitShortName } from '../ui/default/tokens';
 import { festivalNight, panel } from '../ui/default/decor';
-import { meterFill, resourceMeter } from '../ui/default/meters';
+import { frontlineMeter, meterFill, resourceMeter } from '../ui/default/meters';
+import { battleHudFrame } from '../ui/default/battleHud';
 import { BattlefieldProjection } from '../render/battlefield';
 import { drawBattlefield } from './battlefieldDecor';
+import { BaseRenderer } from '../render/BaseRenderer';
 
 /** 보스 등장 연출 길이(초): 화면이 어두워지고 이름이 나타났다 사라진다 */
 const BOSS_INTRO_SECONDS = 1.6;
@@ -71,6 +72,7 @@ export class BattleScene extends Phaser.Scene {
   private world!: Phaser.GameObjects.Graphics;
   private groundFx!: Phaser.GameObjects.Graphics;
   private field!: BattlefieldProjection;
+  private baseViews: BaseRenderer[] = [];
   private characters!: CharacterRenderer;
   private hud!: Phaser.GameObjects.Graphics;
   private summonButtons: HudButton[] = [];
@@ -115,7 +117,6 @@ export class BattleScene extends Phaser.Scene {
   private shrineText!: Phaser.GameObjects.Text;
   private castleText!: Phaser.GameObjects.Text;
   private infoText!: Phaser.GameObjects.Text;
-  private noteText!: Phaser.GameObjects.Text;
   /** 영웅 머리 위 "빙의: ○○" 이름표 (빙의했을 때만 만든다) */
   private possessionLabel?: Phaser.GameObjects.Text;
   /** 이번 전투에 적용하는 빌드 효과 (사용 중인 빌드 또는 ?upg=) */
@@ -126,12 +127,8 @@ export class BattleScene extends Phaser.Scene {
   /** 보스 등장 연출 남은 시간(초). 0이면 연출 없음 */
   private bossIntroLeft = 0;
   private bossSeen = false;
-  private bossNameText!: Phaser.GameObjects.Text;
   private bossIntroText!: Phaser.GameObjects.Text;
-  private bossStateText!: Phaser.GameObjects.Text;
-  private bossChips: Phaser.GameObjects.Text[] = [];
   private castleShieldText!: Phaser.GameObjects.Text;
-  private bossPortrait?: Phaser.GameObjects.Image;
 
   constructor() {
     super('Battle');
@@ -151,8 +148,6 @@ export class BattleScene extends Phaser.Scene {
     this.recorder = new ResultRecorder(progress, wallet);
     this.bossIntroLeft = 0;
     this.bossSeen = false;
-    this.bossPortrait = undefined;
-    this.bossChips = [];
     this.paused = false;
     this.pauseShown = false;
     this.resultLaidOut = false;
@@ -165,6 +160,7 @@ export class BattleScene extends Phaser.Scene {
     this.tooltipShown = null;
     this.inspecting = false;
     this.meterValues.clear();
+    this.baseViews = [];
   }
 
   create(): void {
@@ -173,14 +169,19 @@ export class BattleScene extends Phaser.Scene {
     this.cameras.main.fadeIn(180, 17, 26, 43);
     festivalNight(this, COMBAT.battlefieldLength, BATTLEFIELD.backY - 12, 0);
     drawBattlefield(this);
-    this.field = new BattlefieldProjection((body) => body instanceof Fighter ? this.liftOf(body) : 0);
+    this.field = new BattlefieldProjection((body) => body instanceof Fighter ? this.liftOf(body) : 0, (body) => {
+      if (body.kind !== 'hero') return undefined;
+      const art = artInScene(this, subjectOf(body));
+      return art?.displayHeight ? { height: art.displayHeight, top: art.displayTop ?? art.displayHeight } : undefined;
+    });
     this.groundFx = this.add.graphics().setDepth(5);
     this.world = this.add.graphics().setDepth(50);
-    this.drawBase(this.battle.shrine, 0xe0b52e);
-    this.drawBase(this.battle.castle, ENEMY_COLOR);
+    this.baseViews = [this.battle.shrine, this.battle.castle]
+      .map((base) => new BaseRenderer(this, base, this.field, this.battle.stage));
     this.characters = new CharacterRenderer(this, this.field);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.characters.destroy());
     this.hud = this.add.graphics().setScrollFactor(0).setDepth(90);
+    battleHudFrame(this);
     this.floaters = new DamageFloaters(this);
     this.createHudTexts();
     this.createPossessionLabel();
@@ -193,20 +194,26 @@ export class BattleScene extends Phaser.Scene {
     this.tooltip = new Tooltip(this);
   }
 
-  /** HUD 글자: 바 안의 숫자, 오른쪽 정보 3줄, 아래 한 줄 */
+  /** 자원은 해당 행동 바로 위, 기지 수치는 중앙 통합 띠에 둔다. */
   private createHudTexts(): void {
     const small = (r: Rect, size: number, color = '#ffffff') =>
       this.add
         .text(r.x, r.y, '', { fontFamily: HUD_FONT, fontSize: `${size}px`, color, lineSpacing: -2 })
         .setScrollFactor(0)
         .setDepth(95);
-    const inBar = (r: Rect) => small({ ...r, x: r.x + 36, y: r.y + 1 }, r.h > 26 ? 16 : 14, U.text);
-    this.talismanText = inBar(L.talismanBar);
-    this.spiritText = inBar(L.spiritBar);
-    this.shrineText = inBar(L.shrineBar);
-    this.castleText = inBar(L.castleBar);
-    this.infoText = small(L.infoText, 14, U.muted).setWordWrapWidth(L.infoText.w, true).setLineSpacing(2);
-    this.noteText = small(L.noteText, 12, U.goldText);
+    const inBar = (r: Rect, label: string, size: number) => {
+      small({ ...r, x: r.x + 43, y: r.y + 3 }, 13, U.goldText).setText(label).setFontStyle('bold');
+      return small({ ...r, x: r.x + r.w - 9, y: r.y + 1 }, size, U.text)
+        .setOrigin(1, 0).setFontStyle('bold');
+    };
+    this.talismanText = inBar(L.talismanBar, '부적', 17);
+    this.spiritText = inBar(L.spiritBar, '신력', 17);
+    const track = frontlineTrack();
+    this.shrineText = small({ ...L.frontline, x: track.x, y: L.frontline.y + 2 }, 12, '#b8e2cc').setFontStyle('bold');
+    this.castleText = small({ ...L.frontline, x: track.x + track.w, y: L.frontline.y + 2 }, 12, '#f2c5b4')
+      .setOrigin(1, 0).setFontStyle('bold');
+    const r = L.infoText;
+    this.infoText = small({ ...r, x: r.x + r.w - 9, y: r.y + 7 }, 12, U.text).setOrigin(1, 0).setFontStyle('bold');
   }
 
   /** 빙의 중이면 영웅 머리 위에 금색 이름표를 둔다 */
@@ -221,20 +228,14 @@ export class BattleScene extends Phaser.Scene {
       .setOrigin(0.5, 1).setDepth(60);
   }
 
-  /** 보스 이름·상태·연출 글자와 성 무적 표시 (처음엔 숨김) */
+  /** 보스 등장 연출과 기지 봉인 표시. 체력은 중앙 통합 띠를 공유한다. */
   private createBossUi(): void {
     const style = { fontFamily: HUD_FONT, color: '#ffffff' };
-    this.bossNameText = this.add
-      .text(GAME_WIDTH / 2, L.bossName.y, '', { ...style, fontSize: '18px', fontStyle: 'bold' })
-      .setOrigin(0.5, 0).setScrollFactor(0).setDepth(95).setVisible(false);
-    this.bossStateText = this.add
-      .text(L.bossBar.x + L.bossBar.w + 8, L.bossBar.y - 1, '', { ...style, fontSize: '13px' })
-      .setScrollFactor(0).setDepth(95).setVisible(false);
     this.bossIntroText = this.add
       .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 60, '', { ...style, fontSize: '64px', fontStyle: 'bold' })
       .setOrigin(0.5).setScrollFactor(0).setDepth(150).setVisible(false);
     this.castleShieldText = this.add
-      .text(0, 0, '무적', { ...style, fontSize: '16px', fontStyle: 'bold', backgroundColor: '#3a6fd4cc', padding: { x: 6, y: 2 } })
+      .text(0, 0, '봉인', { ...style, fontSize: '15px', fontStyle: 'bold', color: '#ead7ff', backgroundColor: '#4c3654dd', padding: { x: 6, y: 2 } })
       .setOrigin(0.5, 1).setDepth(60).setVisible(false);
   }
 
@@ -310,6 +311,7 @@ export class BattleScene extends Phaser.Scene {
       this.bossIntroLeft = Math.max(0, this.bossIntroLeft - delta / 1000);
     }
     this.watchBossAppearance();
+    for (const view of this.baseViews) view.update(this.paused ? 0 : this.uiDelta);
     this.characters.update(active ? delta / 1000 : 0, [this.battle.hero, ...this.battle.allies, ...this.battle.enemies]);
     this.characters.pruneProjectiles(this.battle.projectiles);
     if (!playing) this.resultElapsed += delta / 1000;
@@ -332,16 +334,23 @@ export class BattleScene extends Phaser.Scene {
     if (this.paused || this.battle.result !== 'playing') this.closeInspection();
     if (this.inspecting && !hover) {
       const ids = this.battle.synergy.activeIds();
-      const overviewKey = `overview:${ids.join(',')}`;
+      const b = this.battle, enc = b.encounter;
+      const overviewKey = `overview:${ids.join(',')}:${b.allies.length}:${b.enemyCount}:${b.pendingSpawns}:${!!enc?.boss?.alive}:${enc?.statusLabel}`;
+      const status = { text: b.hero.alive ? `웨이브 ${b.waveCount} · 위협 ${b.threatLevel} · ${formatTime(b.elapsed)}`
+        : `영웅 부활 ${Math.ceil(b.hero.respawnTimer)}초 · 웨이브 ${b.waveCount} · 위협 ${b.threatLevel}`, ok: true };
       if (this.tooltipShown !== overviewKey) {
         const synergies = ids.map((id) => `✓ ${SYNERGY[id].name}`);
         this.tooltip.show(L.inspect, { title: '전투 정보', lines: [
+          `${getStageDef(b.stage).code} ${getStageDef(b.stage).name}`,
+          `아군 ${b.allies.length}/${COMBAT.maxAllies} · 적 ${b.enemyCount}/${COMBAT.maxEnemies}${b.pendingSpawns ? ` · 대기 ${b.pendingSpawns}` : ''}`,
+          ...(b.heroForm ? [`빙의: ${b.heroForm.name}`] : []),
+          ...(enc?.boss?.alive ? [enc.def.name, bossChipSpecs(enc.def).map((spec) => spec.text).join(' / '), enc.statusLabel] : []),
           '카드 또는 1~0 / Q W E 키로 유닛과 스킬 설명을 확인하세요.',
           '설명 모드에서는 이동·소환·스킬·기운 모으기가 실행되지 않습니다.',
           '', '현재 활성 연계', ...(synergies.length ? synergies : ['활성화된 연계가 없습니다.']),
-        ] }, { text: '전투는 계속 진행됩니다 · I로 닫기', ok: true });
+        ] }, status);
         this.tooltipShown = overviewKey;
-      }
+      } else this.tooltip.setStatus(status);
       return;
     }
     if (!hover || this.paused || this.battle.result !== 'playing') {
@@ -405,47 +414,24 @@ export class BattleScene extends Phaser.Scene {
 
   private spawnFloater(e: DamageEvent): void {
     const t = e.target;
-    const y = this.field.top(t) - 14;
+    const baseView = this.baseViews.find((view) => view.base === t);
+    const y = (baseView?.top ?? this.field.top(t)) - 14;
     this.floaters.spawn(e.x + (Math.random() - 0.5) * 16, y, floaterStyle(e));
   }
 
   // ----- 보스 -----
 
-  /** 보스가 처음 등장한 프레임에 연출을 시작하고 약점·저항 칩을 만든다 */
+  /** 보스가 처음 등장한 프레임에 이름 연출을 시작한다. */
   private watchBossAppearance(): void {
     const enc = this.battle.encounter;
     if (!enc || this.bossSeen || enc.state === 'pending') return;
     this.bossSeen = true;
-    this.bossPortrait = addArtImage(this, `boss:${enc.def.id}`, 'icon', L.bossBar.x - 25, L.bossBar.y + 6, 34, 34)
-      ?.setScrollFactor(0).setDepth(95);
     this.bossIntroLeft = BOSS_INTRO_SECONDS;
     this.bossIntroText.setText(enc.def.name);
-    this.bossNameText.setText(enc.def.name);
-    this.bossChips = bossChipSpecs(enc.def).map((spec) =>
-      this.add
-        .text(0, L.bossChips.y, spec.text, {
-          fontFamily: HUD_FONT, fontSize: '13px', color: spec.color, backgroundColor: spec.background, padding: { x: 6, y: 2 },
-        })
-        .setScrollFactor(0).setDepth(95),
-    );
-    const gap = 6;
-    const total = this.bossChips.reduce((sum, c) => sum + c.width, 0) + gap * (this.bossChips.length - 1);
-    let x = (GAME_WIDTH - total) / 2;
-    for (const c of this.bossChips) {
-      c.setX(x);
-      x += c.width + gap;
-    }
   }
 
-  /** 보스 등장 연출 / 체력바 / 상태 글자. 보스가 죽으면 숨긴다 */
+  /** 보스 등장 연출. 보스 체력도 상단의 한 막대에 통합한다. */
   private drawBossHud(g: Phaser.GameObjects.Graphics): void {
-    const enc = this.battle.encounter;
-    const boss = enc?.boss;
-    const show = !!enc && !!boss && boss.alive;
-    this.bossNameText.setVisible(show);
-    this.bossStateText.setVisible(show);
-    this.bossPortrait?.setVisible(show);
-    for (const c of this.bossChips) c.setVisible(show);
 
     // 등장 연출: 화면이 어두워졌다가 풀리고, 이름이 나타났다 사라진다
     if (this.bossIntroLeft > 0) {
@@ -456,9 +442,6 @@ export class BattleScene extends Phaser.Scene {
     } else {
       this.bossIntroText.setVisible(false);
     }
-    if (!enc || !boss || !show) return;
-    this.bar(g, L.bossBar, boss.hp / boss.maxHp, 0xc23b3b);
-    this.bossStateText.setText(enc.statusLabel);
   }
 
   // ----- 입력 -----
@@ -581,24 +564,24 @@ export class BattleScene extends Phaser.Scene {
   // ----- 버튼 -----
 
   private createButtons(): void {
-    const arrow = { center: true, bigLabel: true, labelSize: 30, fill: BUTTON_FILL_ACTION };
+    const arrow = { command: 'move' as const, labelSize: 28 };
     this.moveLeftButton = new HudButton(this, L.moveLeft, arrow, { onPress: () => {}, onInspect: () => this.inspecting });
     this.moveLeftButton.setTexts('◀', '');
     this.moveRightButton = new HudButton(this, L.moveRight, arrow, { onPress: () => {}, onInspect: () => this.inspecting });
     this.moveRightButton.setTexts('▶', '');
     this.pauseButton = new HudButton(
-      this, L.pause, { center: true, bigLabel: true, labelSize: 26, fill: BUTTON_FILL_ACTION },
+      this, L.pause, { center: true, bigLabel: true, labelSize: 22, shape: 'round', compact: true, fill: 0x28483e, border: U.gold },
       { onPress: () => this.setPaused(!this.paused) },
     );
-    this.pauseButton.setTexts('⏸', '');
-    this.inspectButton = new HudButton(this, L.inspect, { center: true, bigLabel: true, labelSize: 15, border: U.teal },
+    this.pauseButton.setTexts('Ⅱ', '');
+    this.inspectButton = new HudButton(this, L.inspect, { command: 'inspect', labelSize: 14, border: U.teal },
       { onPress: () => this.toggleInspection() });
-    this.inspectButton.setTexts('설명 보기 (I)', '');
+    this.inspectButton.setTexts('설명 보기', '');
 
     this.slotAlly.forEach((allyIndex, i) => {
       const def = ALLIES[allyIndex];
       const btn = new HudButton(
-        this, L.summon[i], { fill: U.panel, border: colorForTags(def.tags), portraitTile: true, key: String((i + 1) % 10) },
+        this, L.summon[i], { fill: U.panel, border: colorForTags(def.tags), portraitTile: true },
         {
           onInspect: () => this.inspectCard('summon', i),
           onPress: () => { if (!this.paused) this.battle.summon(allyIndex); },
@@ -612,8 +595,8 @@ export class BattleScene extends Phaser.Scene {
     });
     SKILLS.forEach((def, i) => {
       const btn = new HudButton(
-        this, L.skills[i], { center: true, labelSize: 13, fill: U.panel, border: SKILL_COLORS[def.id], borderWidth: 3,
-          key: KEY_MAP.skills[i].slice(3), glyph: ['≋', '✦', '✧'][i] },
+        this, L.skills[i], { command: 'skill', labelSize: 13, border: [0x36796f, 0x987129, 0xa44f39][i],
+          mark: (['fan', 'blessing', 'blade'] as const)[i] },
         {
           onInspect: () => this.inspectCard('skill', i),
           onPress: () => { if (!this.paused) this.battle.castSkill(def.id); },
@@ -625,7 +608,7 @@ export class BattleScene extends Phaser.Scene {
       this.skillButtons.push(btn);
     });
     this.gatherButton = new HudButton(
-      this, L.gather, { center: true, labelSize: 15, fill: BUTTON_FILL_GATHER, border: U.gold, key: 'R', glyph: '◈' },
+      this, L.gather, { command: 'gather', labelSize: 14, border: U.gold },
       { onPress: () => { if (!this.paused) this.battle.gather(); }, onInspect: () => this.inspecting },
     );
   }
@@ -652,13 +635,14 @@ export class BattleScene extends Phaser.Scene {
     const gatherCost = b.resources.nextGatherCost;
     const r = b.resources;
     this.gatherButton.setTexts(
-      `기운 모으기\n${r.gatherLevel}/${r.maxGatherLevel}단계`,
+      '기운 모으기',
       gatherCost === null ? '최대' : `부적 ${gatherCost}`,
     );
+    this.gatherButton.setProgress(r.gatherLevel, r.maxGatherLevel);
     this.gatherButton.setState(0, gatherCost !== null && r.talisman >= gatherCost,
       gatherCost === null ? '최대 단계' : r.talisman >= gatherCost ? '충전 강화' : '부적 부족');
-    this.inspectButton.setTexts(this.inspecting ? '설명 닫기 (I)' : '설명 보기 (I)', '');
-    this.inspectButton.setState(0, true, this.inspecting ? '카드·숫자키로 확인' : '유닛 · 스킬 정보');
+    this.inspectButton.setTexts(this.inspecting ? '설명 닫기' : '설명 보기', '');
+    this.inspectButton.setState(0, true, this.inspecting ? '카드 선택 · 닫기' : '유닛 · 스킬 정보');
     this.moveLeftButton.setState(0, true);
     this.moveRightButton.setState(0, true);
     this.pauseButton.setState(0, true);
@@ -743,14 +727,15 @@ export class BattleScene extends Phaser.Scene {
       floor.fillStyle(0xfff2a8, 0.1).fillEllipse(a.x, y, a.radius * 2, a.radius * 2 * BATTLEFIELD.groundScaleY);
       floor.lineStyle(1, 0xfff2a8, 0.4).strokeEllipse(a.x, y, a.radius * 2, a.radius * 2 * BATTLEFIELD.groundScaleY);
     }
-    for (const base of [b.shrine, b.castle]) {
-      floor.fillStyle(0x090e18, 0.4).fillEllipse(base.x + 6, this.field.ground(base) + 4, base.width + 38, 22);
-      this.drawHpBar(base.x, this.field.top(base) - 17, base.width + 20, base.hp / base.maxHp,
+    for (const view of this.baseViews) {
+      const base = view.base;
+      floor.fillStyle(0x090e18, 0.4).fillEllipse(view.centerX + 6, view.groundY + 4, view.appearance.width + 12, 28);
+      this.drawHpBar(view.centerX, view.top - 7, view.appearance.width * 0.72, base.hp / base.maxHp,
         base === b.shrine ? U.teal : 0xef9b97);
     }
     this.castleShieldText
       .setVisible(b.castle.invulnerable)
-      .setPosition(b.castle.x, this.field.top(b.castle) - 24);
+      .setPosition(this.baseViews[1].centerX, this.baseViews[1].groundY - 61);
     for (const f of b.allies) this.drawFighter(f, colorForTags(f.stats.tags));
     for (const f of b.enemies) this.drawFighter(f, ENEMY_COLOR);
 
@@ -760,8 +745,11 @@ export class BattleScene extends Phaser.Scene {
       const w = HERO.width, ht = HERO.height;
       const ground = this.field.ground(h), top = this.field.top(h);
       const form = b.heroForm;
-      floor.fillStyle(0x081b1c, 0.4).fillEllipse(h.x + 2, ground + 2, w + 9, 10);
-      floor.lineStyle(1.5, U.gold, 0.7).strokeEllipse(h.x, ground + 1, w + 16, 13);
+      const art = artInScene(this, subjectOf(h));
+      const footprint = this.characters.shows(h) && art?.displayHeight
+        ? Math.max(w, art.bodyWidth / art.bodyHeight * art.displayHeight * 0.7) : w;
+      floor.fillStyle(0x081b1c, 0.4).fillEllipse(h.x + 2, ground + 2, footprint + 9, 10);
+      floor.lineStyle(1.5, U.gold, 0.7).strokeEllipse(h.x, ground + 1, footprint + 16, 13);
       if (form) {
         // 빙의 표시: 금색 후광과 테두리
         floor.fillStyle(POSSESSION_GOLD, 0.18).fillEllipse(h.x, ground, w + 40, 18);
@@ -787,28 +775,6 @@ export class BattleScene extends Phaser.Scene {
       const point = this.field.projectile(p);
       g.fillStyle(color, 1).fillCircle(point.x, point.y, p.attackType === 'magic' ? 6 : 4);
     }
-  }
-
-  private drawBase(base: Base, color: number): void {
-    const g = this.add.graphics().setDepth(this.field.depth(base));
-    const ground = this.field.ground(base);
-    const x = base.x - base.width / 2, y = this.field.top(base);
-    const friendly = base === this.battle.shrine;
-    const polygon = (color: number, points: number[][]) => g.fillStyle(color, 1)
-      .fillPoints(points.map(([x, y]) => new Phaser.Math.Vector2(x, y)), true);
-    // 단과 측벽, 지붕 윗면을 함께 보여 주는 약한 사선 구도.
-    polygon(0x51554b, [[x - 8, ground - 7], [x + 4, ground - 17], [x + base.width + 17, ground - 13], [x + base.width + 10, ground + 5], [x - 8, ground + 5]]);
-    polygon(friendly ? 0x493c30 : 0x292637,
-      [[x + base.width, y + 16], [x + base.width + 14, y + 7], [x + base.width + 14, ground - 11], [x + base.width, ground]]);
-    g.fillStyle(friendly ? 0x73533a : 0x39324c, 1).fillRoundedRect(x, y + 16, base.width, base.height - 16, 3);
-    polygon(friendly ? 0x49676a : 0x494159,
-      [[x - 12, y + 22], [base.x, y - 9], [base.x + 15, y - 19], [x + base.width + 25, y + 12], [x + base.width + 12, y + 22]]);
-    g.fillStyle(friendly ? 0x344c50 : 0x302a40, 1).fillTriangle(x - 12, y + 22, base.x, y - 9, x + base.width + 12, y + 22);
-    g.lineStyle(1.5, friendly ? 0x8ba295 : 0x82728d, 0.7).lineBetween(base.x, y - 9, base.x + 15, y - 19);
-    g.lineStyle(3, friendly ? U.gold : 0x94719b, 1).lineBetween(x - 12, y + 22, x + base.width + 12, y + 22);
-    g.fillStyle(color, 0.9).fillRoundedRect(base.x - 9, y + 36, 18, Math.max(12, base.height - 36), 3);
-    g.fillStyle(0xffefb1, 0.9).fillRoundedRect(base.x - 5, y + 40, 10, 14, 2);
-    g.fillStyle(0x9b8d77, 1).fillRect(x - 5, ground - 5, base.width + 10, 5);
   }
 
   private drawFighter(f: Fighter, color: number): void {
@@ -882,85 +848,53 @@ export class BattleScene extends Phaser.Scene {
     const b = this.battle;
     const r = b.resources;
     g.clear();
-    // 위쪽 띠와 아래 패널 배경
-    g.fillStyle(U.night, 0.96).fillRect(L.topStrip.x, L.topStrip.y, L.topStrip.w, L.topStrip.h);
-    g.fillStyle(U.night, 1).fillRect(L.panel.x, L.panel.y, L.panel.w, L.panel.h);
-    g.lineStyle(1, U.gold, 0.4).lineBetween(0, L.panel.y, GAME_WIDTH, L.panel.y);
-    for (const x of [166, 604, 716]) g.lineStyle(1, U.edge, 0.25).lineBetween(x, 402, x, 524);
+    // 상·하단 장식과 조작판은 캐시된 틀을 사용한다.
     this.drawBossHud(g);
 
-    resourceMeter(g, L.talismanBar, this.meterRatio('talisman', r.talisman / r.maxTalisman), U.gold, 'talisman');
-    resourceMeter(g, L.spiritBar, this.meterRatio('spirit', r.spirit / r.maxSpirit), 0x80c9e9, 'spirit');
-    resourceMeter(g, L.shrineBar, this.meterRatio('shrine', b.shrine.hp / b.shrine.maxHp), U.teal, 'shrine');
-    const shielded = b.castle.invulnerable;
-    resourceMeter(g, L.castleBar, this.meterRatio('castle', b.castle.hp / b.castle.maxHp), shielded ? 0x9aa5c0 : 0xef9b97, 'castle');
-    this.talismanText.setText(`부적  ${Math.floor(r.talisman)} / ${r.maxTalisman}`);
-    this.spiritText.setText(`신력  ${Math.floor(r.spirit)} / ${r.maxSpirit}`);
-    this.shrineText.setText(`서낭당 ${Math.ceil(b.shrine.hp)}`);
-    this.castleText.setText(shielded ? '원귀성 · 봉인' : `원귀성 ${Math.ceil(b.castle.hp)}`);
-    this.drawMinimap(g);
+    resourceMeter(g, L.talismanBar, this.meterRatio('talisman', r.talisman / r.maxTalisman), 0xe7b348, 'talisman');
+    resourceMeter(g, L.spiritBar, this.meterRatio('spirit', r.spirit / r.maxSpirit), 0x49b9b4, 'spirit');
+    this.talismanText.setText(`${Math.floor(r.talisman)} / ${r.maxTalisman}`);
+    this.spiritText.setText(`${Math.floor(r.spirit)} / ${r.maxSpirit}`);
+    const boss = b.encounter?.boss, bossAlive = !!boss?.alive;
+    const target = bossAlive ? boss : b.castle;
+    const shielded = !bossAlive && b.castle.invulnerable;
+    frontlineMeter(g, L.frontline, this.meterRatio('shrine', b.shrine.hp / b.shrine.maxHp),
+      this.meterRatio(bossAlive ? 'boss' : 'castle', target.hp / target.maxHp), shielded);
+    this.shrineText.setText(`굿당 ${Math.ceil(b.shrine.hp)}`);
+    this.castleText.setText(`${bossAlive ? b.encounter!.def.name : this.baseViews[1].appearance.shortName} ${shielded ? '봉인' : Math.ceil(target.hp)}`);
+    this.drawFrontline(g);
 
     const def = getStageDef(b.stage);
-    this.infoText.setText(
-      `${def.code} ${def.name}\n` +
-        `웨이브 ${b.waveCount}  ${formatTime(b.elapsed)}  위협 ${b.threatLevel}\n` +
-        `${this.enemyLine()}  아군 ${b.allies.length}/${COMBAT.maxAllies}`,
-    );
-    const hero = b.hero;
-    const heroLine = hero.alive ? '' : `영웅 부활 ${Math.ceil(hero.respawnTimer)}초  `;
-    const note = heroLine + this.possessionLine() + this.synergyLine();
-    this.noteText.setText(this.inspecting ? '설명 모드 · 카드 선택 · I로 닫기' : note.length > 29 ? `${note.slice(0, 28)}…` : note);
+    this.infoText.setText(`${def.code}  ${def.name}`);
   }
 
-  /** 미니맵: 전장 전체를 가로로 줄여 아군·적·영웅·보스 점과 현재 카메라 범위를 보여 준다 */
-  private drawMinimap(g: Phaser.GameObjects.Graphics): void {
+  /** 체력이 채워진 같은 띠 위에 전장 거리·개체·현재 카메라 범위를 표시한다. */
+  private drawFrontline(g: Phaser.GameObjects.Graphics): void {
     const b = this.battle;
-    const m = L.minimap;
+    const m = frontlineTrack();
     const len = COMBAT.battlefieldLength;
     const at = (x: number) => minimapX(x, len, m);
-    g.fillStyle(0x081323, 0.8).fillRoundedRect(m.x, m.y, m.w, m.h, m.h / 2);
     const mid = m.y + m.h / 2;
-    g.lineStyle(1, U.edge, 0.3).lineBetween(m.x + 8, mid, m.x + m.w - 8, mid);
-    g.fillStyle(SHRINE_COLOR, 1).fillRect(at(b.shrine.x) - 2, m.y + 3, 4, m.h - 6);
-    g.fillStyle(b.castle.invulnerable ? 0x9aa5c0 : 0xdd5555, 1).fillRect(at(b.castle.x) - 3, m.y + 3, 6, m.h - 6);
-    for (const f of b.allies) g.fillStyle(colorForTags(f.stats.tags), 1).fillRect(at(f.x) - 1, mid + 2, 3, 3);
+    g.lineStyle(1, 0xe9d7a7, 0.25).lineBetween(m.x + 3, mid, m.x + m.w - 3, mid);
+    for (let i = 1; i < 5; i++) g.lineStyle(1, 0xe9d7a7, 0.4).lineBetween(m.x + m.w * i / 5, mid - 2, m.x + m.w * i / 5, mid + 2);
+    for (const f of b.allies) g.fillStyle(0xb9e5ca, 1).fillRect(at(f.x) - 1, mid + 3, 3, 3);
     for (const f of b.enemies) {
       if (f.isBoss) continue;
-      g.fillStyle(0xb58cff, 1).fillRect(at(f.x) - 1, mid - 5, 3, 3);
+      g.fillStyle(0xf5c1b6, 1).fillRect(at(f.x) - 1, mid - 5, 3, 3);
     }
     const boss = b.encounter?.boss;
-    if (boss?.alive) g.fillStyle(0xff4040, 1).fillCircle(at(boss.x), mid, 4);
+    if (boss?.alive) {
+      g.fillStyle(0x331b25, 1).fillCircle(at(boss.x), mid, 5);
+      g.fillStyle(0xf2a6ca, 1).fillCircle(at(boss.x), mid, 3);
+    }
     if (b.hero.alive) {
       const hx = at(b.hero.x);
-      g.fillStyle(HERO_COLOR, 1).fillTriangle(hx, mid - 5, hx - 4, mid + 5, hx + 4, mid + 5);
+      g.fillStyle(0x4a3027, 1).fillTriangle(hx, mid - 6, hx - 4, mid + 5, hx + 4, mid + 5);
+      g.fillStyle(0xffde76, 1).fillTriangle(hx, mid - 3, hx - 2, mid + 4, hx + 2, mid + 4);
     }
     const camW = (GAME_WIDTH / len) * m.w;
-    g.fillStyle(0xffffff, 0.05).fillRoundedRect(at(this.cameras.main.scrollX), m.y + 2, camW, m.h - 4, 5);
-    g.lineStyle(1, 0xffffff, 0.25).strokeRoundedRect(at(this.cameras.main.scrollX), m.y + 2, camW, m.h - 4, 5);
-  }
-
-  /** 적 수 표시. 상한에 닿으면 대기 수도 보여 준다 */
-  private enemyLine(): string {
-    const b = this.battle;
-    const pending = b.pendingSpawns > 0 ? ` (대기 ${b.pendingSpawns})` : '';
-    return `적 ${b.enemyCount}/${COMBAT.maxEnemies}${pending}`;
-  }
-
-  /** 빙의 중이면 "빙의: ○○" */
-  private possessionLine(): string {
-    const form = this.battle.heroForm;
-    if (!form) return '';
-    return `빙의: ${form.name}  `;
-  }
-
-  /** 활성 연계 이름 (켜진 것이 없으면 빈 문자열) */
-  private synergyLine(): string {
-    const names = this.battle.synergy.activeIds().map((id) => SYNERGY[id].name);
-    return names.length > 0 ? `연계 ${names.length}개 · ${names.slice(0, 2).join(', ')}${names.length > 2 ? ' 외' : ''}` : '';
-  }
-
-  private bar(g: Phaser.GameObjects.Graphics, r: Rect, ratio: number, color: number): void {
-    meterFill(g, r, this.meterRatio(`bar:${r.x}:${r.y}`, ratio), color);
+    g.fillStyle(0xffedbc, 0.08).fillRect(at(this.cameras.main.scrollX), m.y + 1, camW, m.h - 2);
+    g.lineStyle(1, 0xf2daa1, 0.75).strokeRect(at(this.cameras.main.scrollX), m.y + 1, camW, m.h - 2);
   }
 
   private meterRatio(key: string, ratio: number): number {
@@ -1020,9 +954,9 @@ export class BattleScene extends Phaser.Scene {
     this.resultBody.setText(
       [
         `${def.code} ${def.name}`,
-        `걸린 시간 ${formatTime(this.battle.elapsed)}    서낭당 체력 ${hpPercent}%`,
+        `걸린 시간 ${formatTime(this.battle.elapsed)}    굿당 체력 ${hpPercent}%`,
         `${mark(res.conditions.clear)} ★1  클리어`,
-        `${mark(res.conditions.shrineHp)} ★2  서낭당 체력 ${STAR_RULES.shrineHpRatio * 100}% 이상`,
+        `${mark(res.conditions.shrineHp)} ★2  굿당 체력 ${STAR_RULES.shrineHpRatio * 100}% 이상`,
         `${mark(res.conditions.time)} ★3  ★2 조건 + ${formatTime(def.threeStarSeconds)} 안에 클리어`,
         `엽전 +${res.yeopjeon}    신명 +${res.sinmyeong}`,
       ].join('\n'),

@@ -43,3 +43,18 @@
 이 검증은 픽셀 내용 전체의 최종 아트 승인을 의미하지 않는다. 생성 모델이 표현한 꼬리·팔다리 개수, 공격 소품의 일관성, 일부 프레임의 잔여 조각과 동작 연결은 추가 육안 검수가 필요하다. 구미호는 꼬리 수 보정도 시도했으나 모든 자세에서 아홉 꼬리가 명확하게 구분된 상태는 확인하지 못해 추가 보정 대상으로 기록했다.
 
 기본 이미지의 UI 연결은 위 v0.8.0 항목을 따르며, 생성 원화 전체에 대한 세부 아트 승인을 의미하지 않는다.
+
+## 동자 해태 탑승형 (2026-11-05)
+
+전투 중 영웅을 구별하기 위해 `hero:kkomaMudang`을 청백색 몸·청록 갈기 해태에 탄 모습으로 교체했다. 붉은 안장 덮개와 금테 깃발을 추가했으며 기존 `ally:haetae` 이미지와 전투 수치는 변경하지 않았다.
+
+- [제작 명세](hero/kkomaMudang-haetae.md), [편집용 프롬프트](hero/kkomaMudang-haetae-prompts.md), [실행한 생성 프롬프트](../../../scripts/mounted-hero-generation.json).
+- 내장 `image_gen`으로 기준 원화·걷기·대기/전투·스킬 3종·퇴장 시트·아이콘, 총 8개 원본 이미지를 생성했다. 각 이미지와 프롬프트는 프로젝트의 `output/art-generation/revisions/mounted-haetae/`에 보존했다.
+- 최종 신규 PNG 32장: 공통 본체 19 + 스킬 본체 11 + 미리보기·아이콘 2. 기존 효과 10장을 재사용해 총 42개 프레임을 패킹했다. 등장 프레임은 탑승 대기의 알파 변화이며, 마지막 퇴장 프레임은 완전 투명이다.
+- 최종 낱장은 `output/art-generation/revisions/mounted-haetae/hero/kkomaMudang/default/`와 정식 원본 폴더에 있다. 이전 도보형 원본은 `original-foot-hero/`에 보존했다.
+- [걷기 GIF](../../../output/art-generation/revisions/mounted-haetae/walk-preview.gif), [걷기 4장 비교](../../../output/art-generation/revisions/mounted-haetae/walk-contact-sheet.png), [프레임 정렬 기록](../../../output/art-generation/revisions/mounted-haetae/alignment.json).
+- 배포 파일: [PNG 아틀라스](../../../public/assets/characters/runtime/hero-kkomaMudang-mounted-haetae.png), [JSON 아틀라스](../../../public/assets/characters/runtime/hero-kkomaMudang-mounted-haetae.json). 원래 도보형 런타임 파일은 보관하고 manifest에서 새 파일을 선택한다.
+- [재구성 도구](../../../scripts/build-mounted-hero.mjs)는 Node sharp로 시트 분리·알파 노이즈 정리·클립 공통 배율·발 기준점 정렬·패킹을 수행한다. 그림의 재생성은 하지 않는다. `pack-runtime-art.py`도 의미상 몸체 경계와 표시 크기를 보존한다.
+- 표시 몸체 높이 64px, 머리 위 표시 기준 78px를 메타데이터로 분리했다. 체력바·피해 숫자는 깃발 위에 놓고 투사체는 깃발이 아닌 몸체 중심을 향한다. 영웅의 충돌·사거리·이동 속도는 유지한다. 빙의 이미지는 기존 규칙대로 선택한다.
+
+원본의 얼굴·색·장식, 걷기 4장의 서로 다른 발 자세, 공격·스킬·피격·퇴장 상태의 탑승 유지와 알파 여백을 육안 확인했다. 실제 테스트·빌드·브라우저 검사 결과는 로컬 `output/art-generation/revisions/mounted-haetae/validation.json`에 기록한다. 자동 생성 애니메이션에는 작은 갈기·깃천 모양 변화가 남을 수 있다.

@@ -7,17 +7,17 @@
       "subjectKey": "hero:kkomaMudang",
       "skinId": "default",
       "texture": "hero-kkomaMudang",
-      "image": "runtime/hero-kkomaMudang.png",
-      "atlas": "runtime/hero-kkomaMudang.json",
+      "image": "runtime/hero-kkomaMudang-mounted-haetae.png",
+      "atlas": "runtime/hero-kkomaMudang-mounted-haetae.json",
       "origin": {
         "x": 0.5,
         "y": 0.875
       },
-      "bodyHeight": 92,
-      "bodyWidth": 65,
+      "bodyHeight": 129,
+      "bodyWidth": 156,
       "canvas": {
-        "width": 107,
-        "height": 128
+        "width": 192,
+        "height": 192
       },
       "clips": {
         "idle": {
@@ -138,7 +138,9 @@
           "fps": 6,
           "loop": false
         }
-      }
+      },
+      "displayHeight": 64,
+      "displayTop": 78
     },
     {
       "subjectKey": "ally:clubGoblin",

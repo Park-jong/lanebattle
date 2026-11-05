@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { MAX_TIER, TREE_IDS, nodesOfTree, possessionNodeId, YOGOE_UNIT_IDS, yogoeNodeIds } from '../data/upgrades';
 import {
   battleButtons, battleDisplays, BATTLE_LAYOUT, centeredRow, GAME_HEIGHT, GAME_WIDTH, GROUND_Y, MAP_LAYOUT,
-  MIN_TOUCH, minimapX, BUILD_LAYOUT, dialogButtons, nodeCells, tierLabelRect, PAUSE_BUTTON, RESULT_LAYOUT, type Rect,
+  MIN_TOUCH, minimapX, frontlineTrack, BUILD_LAYOUT, dialogButtons, nodeCells, tierLabelRect, PAUSE_BUTTON, RESULT_LAYOUT, type Rect,
 } from './layout';
 
 const overlaps = (a: Rect, b: Rect) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
@@ -43,15 +43,10 @@ describe('전투 HUD 배치', () => {
     expect(overlapPairs(buttons)).toEqual([]);
   });
 
-  it('표시끼리, 버튼과 표시도 겹치지 않는다 (보스 표시는 위쪽 띠 아래)', () => {
+  it('표시끼리, 버튼과 표시도 겹치지 않는다', () => {
     const displays = battleDisplays();
     expect(overlapPairs(displays)).toEqual([]);
     for (const b of buttons) for (const d of displays) expect(overlaps(b.rect, d.rect), `${b.name}/${d.name}`).toBe(false);
-    const strip = BATTLE_LAYOUT.topStrip;
-    for (const name of ['bossName', 'bossBar', 'bossChips']) {
-      const d = displays.find((x) => x.name === name)!;
-      expect(d.rect.y, name).toBeGreaterThanOrEqual(strip.y + strip.h);
-    }
   });
 
   it('소환 버튼은 2줄 x 5칸, 아래 패널 안에 있다', () => {
@@ -61,13 +56,30 @@ describe('전투 HUD 배치', () => {
     for (const { name, rect } of buttons.filter((b) => b.name !== 'pause')) expect(inside(rect, BATTLE_LAYOUT.panel), name).toBe(true);
   });
 
-  it('위쪽 띠 안에 위쪽 표시와 일시정지가 들어가고, 땅은 아래 패널 위에 있다', () => {
+  it('상단에는 중앙 통합 띠와 작은 관문 표시·일시정지만 둔다', () => {
     const strip = BATTLE_LAYOUT.topStrip;
-    for (const r of [BATTLE_LAYOUT.talismanBar, BATTLE_LAYOUT.spiritBar, BATTLE_LAYOUT.minimap, BATTLE_LAYOUT.pause]) {
+    for (const r of [BATTLE_LAYOUT.frontline, BATTLE_LAYOUT.infoText, BATTLE_LAYOUT.pause]) {
       expect(inside(r, strip)).toBe(true);
     }
     expect(overlaps(strip, BATTLE_LAYOUT.panel)).toBe(false);
     expect(GROUND_Y).toBeLessThanOrEqual(BATTLE_LAYOUT.panel.y);
+  });
+
+  it('부적·신력은 각각 소환패·스킬의 돌출부 안에서 버튼 바로 위에 정렬된다', () => {
+    const L = BATTLE_LAYOUT;
+    for (const [meter, flange] of [[L.talismanBar, L.summonFlange], [L.spiritBar, L.skillFlange]]) {
+      expect(inside(meter, flange)).toBe(true);
+      expect(inside(flange, screen)).toBe(true);
+      expect(flange.y).toBeLessThan(L.panel.y);
+      expect(flange.y + flange.h).toBeGreaterThanOrEqual(L.panel.y);
+      for (const { rect } of buttons) expect(overlaps(meter, rect)).toBe(false);
+    }
+    expect(L.talismanBar.x).toBe(L.summon[0].x);
+    expect(L.talismanBar.x + L.talismanBar.w).toBe(L.summon[4].x + L.summon[4].w);
+    expect(L.spiritBar.x).toBe(L.skills[0].x);
+    expect(L.spiritBar.x + L.spiritBar.w).toBe(L.skills[2].x + L.skills[2].w);
+    expect(inside(frontlineTrack(), L.frontline)).toBe(true);
+    expect(L.frontline.x + L.frontline.w / 2).toBe(GAME_WIDTH / 2);
   });
 });
 
@@ -117,7 +129,7 @@ describe('장과 관문 선택', () => {
 });
 
 describe('미니맵 좌표', () => {
-  const map = BATTLE_LAYOUT.minimap;
+  const map = frontlineTrack();
   it('전장 양 끝이 미니맵 양 끝이고 범위 밖은 잘린다', () => {
     expect(minimapX(0, 2400, map)).toBe(map.x);
     expect(minimapX(2400, 2400, map)).toBe(map.x + map.w);

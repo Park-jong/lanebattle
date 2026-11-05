@@ -10,6 +10,9 @@
 
 - [26종 명세·아트 가이드](default/README.md)
 - [이미지 생성·적용 기록](default/GENERATED.md)
+- [굿당·장별 적 기지와 파손 표현](default/bases.md)
+- [동자 해태 탑승형 제작 명세](default/hero/kkomaMudang-haetae.md): 기존 해태와 구별되는 외형·마구·깃발·걷기 4프레임·전체 이미지 목록.
+- [동자 해태 탑승형 이미지 프롬프트](default/hero/kkomaMudang-haetae-prompts.md): 기준 원화, 걷기와 나머지 동작, 아이콘·수정 지시.
 
 ## 폴더 구성
 

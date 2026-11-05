@@ -4,6 +4,8 @@
 
 [전체 목록과 공통 규격](../README.md) · [기본 스킨·애니메이션 구조](../../../skins-and-animation.md)
 
+2026-11-05 추가: 동자의 전투 중 식별성을 높이는 [해태 탑승형](kkomaMudang-haetae.md)을 생성해 게임에 연결했다. [이미지·걷기 프롬프트](kkomaMudang-haetae-prompts.md)와 [적용 기록](../GENERATED.md)을 참고한다. 아래는 보존용 도보형 명세다.
+
 ## 식별과 제작 범위
 
 - 분류: 영웅

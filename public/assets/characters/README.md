@@ -1,5 +1,7 @@
 # 캐릭터 기본 이미지
 
+2026-11-05 영웅 탑승형 추가: manifest의 `hero:kkomaMudang`은 `runtime/hero-kkomaMudang-mounted-haetae.png`와 JSON을 사용한다. 기존 해태 아군은 그대로다. [제작·적용 기록](../../../docs/art/default/GENERATED.md#동자-해태-탑승형-2026-11-05)과 [재구성 도구](../../../scripts/build-mounted-hero.mjs)를 참고한다. 도보형 런타임 파일은 보관본으로 남아 있다.
+
 2026-11-04에 `docs/art/default/`의 기본 캐릭터 26종 명세를 바탕으로 생성한 SD 캐릭터 이미지다.
 
 - `manifest.json`: 대상 키·텍스처 경로·기준점·기준 몸체 크기·프레임 순서와 재생 속도.

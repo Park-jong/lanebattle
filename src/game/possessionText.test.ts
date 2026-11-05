@@ -63,7 +63,7 @@ describe('빙의 스킬 툴팁 (유닛 6~10)', () => {
     expect(line('bulgasari', 'blessing')).toBe('6초간 영웅 받는 피해 -50%, 반경 150 다른 아군 받는 피해 -25%');
     expect(line('bulgasari', 'bladeDance')).toContain('방어 파괴 최대 중첩 + 처치 1마리당 체력 10% 회복');
     expect(line('haetae', 'blessing')).toBe('8초간 반경 200 아군(영웅 포함) 받는 피해 -35% 오라');
-    expect(describePossessionSkill('haetae', 'bladeDance')!.lines[3]).toBe('서낭당 최대 체력 10% 회복');
+    expect(describePossessionSkill('haetae', 'bladeDance')!.lines[3]).toBe('굿당 최대 체력 10% 회복');
     expect(line('magpieFlock', 'fanWind')).toContain('앞쪽 400 범위 가까운 적 5명');
     expect(line('magpieFlock', 'fanWind')).toContain('비행 적에게 ×2');
     expect(describePossessionSkill('magpieFlock', 'bladeDance')!.lines[3]).toContain('반경 600 비행 적');

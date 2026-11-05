@@ -6,6 +6,22 @@ import { BATTLEFIELD, BATTLE_LAYOUT } from '../scenes/layout';
 import { BattlefieldProjection } from './battlefield';
 
 describe('battlefield display projection', () => {
+  it('sizes a mounted hero and overhead labels without changing combat or aiming at its flag', () => {
+    const hero = new Hero();
+    const original = { radius: hero.radius, hp: hero.hp, x: hero.x };
+    const field = new BattlefieldProjection(() => 0, body =>
+      body === hero && !hero.possessedId ? { height: 64, top: 78 } : undefined);
+    expect(field.height(hero)).toBe(64);
+    expect(field.top(hero)).toBe(field.ground(hero) - 78);
+    const enemy = createEnemy('eggGhost', 0, false, 400);
+    const shot = new Projectile('enemy', hero.x, hero, 10, 420, 'ranged',
+      { attacker: enemy, tags: [], source: 'hero', attackBonus: 0, burnPerSec: 0, areaRadius: 0 });
+    expect(field.projectile(shot).y).toBeCloseTo(field.ground(hero) - 64 * 0.55);
+    expect({ radius: hero.radius, hp: hero.hp, x: hero.x }).toEqual(original);
+    hero.possessedId = 'haetae';
+    expect(field.height(hero)).toBe(40);
+    expect(field.top(hero)).toBe(field.ground(hero) - 40);
+  });
   it('keeps each unit on its row through movement, removal and new spawns without changing combat state', () => {
     const field = new BattlefieldProjection();
     const bodies = Array.from({ length: 7 }, (_, i) => createEnemy('eggGhost', 0, false, 400 + i * 25));

@@ -31,7 +31,7 @@ export const ENEMIES: readonly EnemyDef[] = [
     width: 34, height: 44, ability: '불 피해와 화상 무효' },
   { id: 'dueoksini', name: '두억시니', traits: [], attackType: 'melee',
     maxHp: 260, attack: 30, attackInterval: 1.5, range: 24, speed: 55, killTalisman: 15, waveScore: 5,
-    width: 32, height: 48, ability: '유닛과 영웅에 막히지 않고 서낭당으로 직진, 서낭당에 피해 x2' },
+    width: 32, height: 48, ability: '유닛과 영웅에 막히지 않고 굿당으로 직진, 굿당에 피해 x2' },
 ];
 
 export function getEnemyDef(id: string): EnemyDef {

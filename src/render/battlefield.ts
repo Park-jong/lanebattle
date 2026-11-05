@@ -8,7 +8,8 @@ export class BattlefieldProjection {
   private readonly nextRow = { ally: 0, enemy: 2 };
   private readonly launches = new WeakMap<Projectile, { x: number; y: number }>();
 
-  constructor(private readonly lift: (body: Body) => number = () => 0) {}
+  constructor(private readonly lift: (body: Body) => number = () => 0,
+    private readonly visualSize: (body: Body) => { height: number; top: number } | undefined = () => undefined) {}
 
   ground(body: Body): number {
     if (body.kind === 'base') return GROUND_Y - 8;
@@ -24,12 +25,16 @@ export class BattlefieldProjection {
   }
 
   height(body: Body): number {
+    const visual = this.visualSize(body);
+    if (visual) return visual.height;
     if (body instanceof Fighter) return body.stats.height * body.sizeScale;
     return body instanceof Base ? body.height : HERO.height;
   }
 
   elevation(body: Body): number { return body.flying ? this.lift(body) : 0; }
-  top(body: Body): number { return this.ground(body) - this.height(body) - this.elevation(body); }
+  top(body: Body): number {
+    return this.ground(body) - (this.visualSize(body)?.top ?? this.height(body)) - this.elevation(body);
+  }
 
   /** 발이 앞에 있는 캐릭터가 뒤쪽 캐릭터를 가린다. 비행 높이는 정렬 기준에서 제외한다. */
   depth(body: Body): number { return 20 + (this.ground(body) - BATTLEFIELD.backY) * 0.1; }
@@ -39,10 +44,10 @@ export class BattlefieldProjection {
     let launch = this.launches.get(p);
     if (!launch) {
       const shooter = p.payload.attacker;
-      launch = { x: p.x, y: shooter ? this.top(shooter) + this.height(shooter) * 0.45 : GROUND_Y - 24 };
+      launch = { x: p.x, y: shooter ? this.ground(shooter) - this.elevation(shooter) - this.height(shooter) * 0.55 : GROUND_Y - 24 };
       this.launches.set(p, launch);
     }
-    const targetY = this.top(p.target) + this.height(p.target) * 0.45;
+    const targetY = this.ground(p.target) - this.elevation(p.target) - this.height(p.target) * 0.55;
     const dx = p.target.x - launch.x;
     const t = Math.abs(dx) < 0.001 ? 1 : Math.max(0, Math.min(1, (p.x - launch.x) / dx));
     return { x: p.x, y: launch.y + (targetY - launch.y) * t,

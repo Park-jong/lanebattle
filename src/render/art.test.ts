@@ -14,7 +14,8 @@ describe('character asset resolution', () => {
     expect(artAssetUrl('manifest.json', './')).toBe('./assets/characters/manifest.json');
   });
   it('keeps malformed or unavailable manifests on the shape fallback path', () => {
-    for (const raw of [null, {}, { characters: 'bad' }, { characters: [{ ...art, bodyHeight: 0 }] }]) expect(artList(raw)).toEqual([]);
+    for (const raw of [null, {}, { characters: 'bad' }, { characters: [{ ...art, bodyHeight: 0 }] },
+      { characters: [{ ...art, displayHeight: -1 }] }, { characters: [{ ...art, displayTop: NaN }] }]) expect(artList(raw)).toEqual([]);
     expect(artFor({ characters: [art] }, 'enemy:clubGoblin')).toBeUndefined();
   });
   it('loops movement, holds the last death frame, and falls back to idle for a missing clip', () => {
