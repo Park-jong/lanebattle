@@ -272,8 +272,8 @@
       "kind": "body",
       "priority": "required",
       "actual_size": [
-        1024,
-        1536
+        1254,
+        1254
       ],
       "target_size": [
         1536,
@@ -281,13 +281,13 @@
       ],
       "alpha_range": [
         0,
-        254
+        255
       ],
       "references": [
         "output/art-generation/source-assets/boss/ironJangseung/military/idle_00.png",
         "output/art-generation/source-assets/boss/ironJangseung/military/hit_00.png"
       ],
-      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: JUGGERNAUT, gigantic HUMAN SOLDIER ZOMBIE BOSS. Massive SQUARE SHOULDERS, very thick military metal CHEST ARMOR fused with infected tissue, armored fists, thick armored boots, dark steel-grey and olive palette with muted yellow warning accents. Heavy grounded stance, no gun, no small ordinary soldier.\n\nPOSE FOR THIS SINGLE FRAME: recover original balance. File hit_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: JUGGERNAUT, gigantic HUMAN SOLDIER ZOMBIE BOSS. Massive SQUARE SHOULDERS, very thick military metal CHEST ARMOR fused with infected tissue, armored fists, thick armored boots, dark steel-grey and olive palette with muted yellow warning accents. Heavy grounded stance, no gun, no small ordinary soldier.\n\nPOSE FOR THIS SINGLE FRAME: recover original balance. File hit_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
       "visual_qa": "pending"
     },
     {
@@ -343,8 +343,8 @@
       "kind": "body",
       "priority": "required",
       "actual_size": [
-        1024,
-        1536
+        1199,
+        1312
       ],
       "target_size": [
         1536,
@@ -352,14 +352,13 @@
       ],
       "alpha_range": [
         0,
-        254
+        255
       ],
       "references": [
-        "output/art-generation/source-assets/boss/ironJangseung/military/idle_00.png",
-        "output/art-generation/source-assets/boss/ironJangseung/military/spawn_01.png"
+        "output/art-generation/source-assets/boss/ironJangseung/military/idle_00.png"
       ],
-      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: JUGGERNAUT, gigantic HUMAN SOLDIER ZOMBIE BOSS. Massive SQUARE SHOULDERS, very thick military metal CHEST ARMOR fused with infected tissue, armored fists, thick armored boots, dark steel-grey and olive palette with muted yellow warning accents. Heavy grounded stance, no gun, no small ordinary soldier.\n\nPOSE FOR THIS SINGLE FRAME: nearly neutral stance with slight hair/fabric/cable follow-through. File spawn_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
-      "visual_qa": "pending"
+      "execution_prompt": "Using the attached CLEAN TRANSPARENT reference as identity, create a new single isolated animation frame of this EXACT huge armored infected male soldier. Spawn recovery pose: slightly bent knees settling weight, both huge armored fists lowered, head looking RIGHT. Keep sandy short hair, gray purple skin, olive dark gray heavy armor, yellow hazard stripes, fused tendons, green trousers and plated boots unchanged. Crisp solid cel colors on all physical parts, full opacity inside silhouette. Outside silhouette is completely empty alpha=0. Maintain reference absolute transparency. No spawn effect, glow, gradient, atmosphere, ground, haze or shadow. Whole body, head, boots inside frame with transparent margin.",
+      "visual_qa": "Clean full silhouette and transparency visually reviewed"
     },
     {
       "id": "boss:ironJangseung:death_00",
@@ -555,8 +554,8 @@
       "kind": "body",
       "priority": "required",
       "actual_size": [
-        1254,
-        1254
+        1086,
+        1448
       ],
       "target_size": [
         1536,
@@ -567,11 +566,10 @@
         255
       ],
       "references": [
-        "output/art-generation/source-assets/boss/ironJangseung/military/idle_00.png",
-        "output/art-generation/source-assets/boss/ironJangseung/military/armor_01.png"
+        "C:/Users/axgatge/Desktop/lanebattle/output/art-generation/source-assets/boss/ironJangseung/military/armor_02.png"
       ],
-      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: JUGGERNAUT, gigantic HUMAN SOLDIER ZOMBIE BOSS. Massive SQUARE SHOULDERS, very thick military metal CHEST ARMOR fused with infected tissue, armored fists, thick armored boots, dark steel-grey and olive palette with muted yellow warning accents. Heavy grounded stance, no gun, no small ordinary soldier.\n\nPOSE FOR THIS SINGLE FRAME: settle into original armored guard. File armor_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
-      "visual_qa": "pending"
+      "execution_prompt": "Correct ONLY the FRAMING of this attached 2D anime game sprite. Keep exactly the same character identity, adult age, facial features, hair color/style, outfit, equipment, body proportions, pose, facing RIGHT and cel-shaded art style. Show ONE COMPLETE figure including ALL hair wisps above the crown and BOTH complete shoes and their bottom soles. The whole silhouette must occupy at most 75% of canvas height and width. Add generous EMPTY TRANSPARENT padding above the hair and BELOW the soles, and at both sides. Nothing touches or crosses any image edge. Reconstruct any tiny hair or shoe tips previously clipped. Keep opaque cel shading on the character and alpha ZERO everywhere outside the silhouette. No shadows, fog, aura, glow, scenery, floor, writing, duplicate limbs or extra subjects.",
+      "visual_qa": "Visually checked complete hair and shoe silhouette with clear padding, same character, equipment and original pose; alignment pending."
     },
     {
       "id": "boss:ironJangseung:fx_armor_stack_00",
