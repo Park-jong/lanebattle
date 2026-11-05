@@ -13,9 +13,12 @@ import { bossChipSpecs } from './bossChips';
 import { KEY_MAP, KeyInput } from './input';
 import { BUILD_LAYOUT as L, dialogButtons, HUD_FONT, nodeCells, tierLabelRect, type Rect } from './layout';
 import { MenuButton } from './MenuButton';
-import { HUD_STRIP, INK, PAPER } from './palette';
+import { HUD_STRIP, PAPER } from './palette';
 import { addTestBadge } from './testBadge';
 import { addArtImage } from '../render/CharacterRenderer';
+import { DEFAULT_UI as U, unitShortName } from '../ui/default/tokens';
+import { panel } from '../ui/default/decor';
+import { ScrollText } from '../ui/default/ScrollText';
 
 const GOLD = 0xe0b52e;
 const DEPTH = { dim: 290, panel: 295, button: 300 } as const;
@@ -24,8 +27,8 @@ const DEPTH = { dim: 290, panel: 295, button: 300 } as const;
 const STATUS_STYLE: Record<NodeStatus, { fill: number; text: string }> = {
   allocated: { fill: GOLD, text: '#2b2622' },
   available: { fill: PAPER, text: '#2b2622' },
-  locked: { fill: 0x3a3f58, text: '#9aa0b8' },
-  blocked: { fill: 0x6a3535, text: '#e6b0b0' },
+  locked: { fill: 0x293c50, text: '#c0ccd5' },
+  blocked: { fill: 0x573b41, text: '#ffd0bf' },
 };
 
 type Dialog = 'reset' | 'copy' | null;
@@ -49,6 +52,7 @@ export class BuildScene extends Phaser.Scene {
   private secondaryButton!: MenuButton; // 빼기(−) / 뒤로 ▶
   private walletText!: Phaser.GameObjects.Text;
   private messageText!: Phaser.GameObjects.Text;
+  private detailBody!: ScrollText;
 
   // 다시 그릴 때마다 지우고 만드는 요소
   private dynamicObjects: Phaser.GameObjects.GameObject[] = [];
@@ -75,8 +79,11 @@ export class BuildScene extends Phaser.Scene {
 
   create(): void {
     drawNightSky(this);
+    panel(this, 4, 172, 690, 364, true, -3);
     this.add.rectangle(L.strip.x, L.strip.y, L.strip.w, L.strip.h, HUD_STRIP).setOrigin(0).setDepth(-5);
-    this.add.rectangle(L.detail.x, L.detail.y, L.detail.w, L.detail.h, PAPER).setOrigin(0).setStrokeStyle(3, INK);
+    panel(this, L.detail.x, L.detail.y, L.detail.w, L.detail.h);
+    this.add.text(L.detail.x + 16, L.detail.y + 14, '성 장   상 세', { fontFamily: HUD_FONT, fontSize: '14px', color: '#7b633d' });
+    this.detailBody = new ScrollText(this, { x: L.detailText.x + 4, y: 146, w: L.detailText.w - 8, h: 232 }, 2);
 
     this.createStrip();
     addTestBadge(this, 'left');
@@ -111,7 +118,8 @@ export class BuildScene extends Phaser.Scene {
       this.slotButtons.push(this.button(rect, '', () => this.selectSlot(i), 14));
     });
     this.button(L.copy, '칸 복사', () => this.openDialog('copy'), 15);
-    this.button(L.reset, '초기화', () => this.openDialog('reset'), 16);
+    new MenuButton(this, L.reset.x + L.reset.w / 2, L.reset.y + L.reset.h / 2, L.reset.w, L.reset.h,
+      '초기화', () => this.openDialog('reset'), { fontSize: 16, tone: 'danger' });
   }
 
   private createTabs(): void {
@@ -202,14 +210,16 @@ export class BuildScene extends Phaser.Scene {
     const cx = rect.x + rect.w / 2;
     const cy = rect.y + rect.h / 2;
     const bg = this.track(this.add.rectangle(cx, cy, rect.w, rect.h, look.fill, look.alpha));
-    bg.setStrokeStyle(look.selected ? 4 : 2, look.selected ? 0xffffff : INK);
+    bg.setStrokeStyle(look.selected ? 3 : 1, look.selected ? U.gold : 0x8b8c7b);
     bg.setInteractive({ useHandCursor: true }).on('pointerdown', onClick);
-    const portrait = subject ? addArtImage(this, subject, 'icon', rect.x + 25, cy, 40, 40) : undefined;
+    const compact = !!subject && rect.w < 100;
+    const portrait = subject ? addArtImage(this, subject, 'icon', compact ? cx : rect.x + 25,
+      compact ? rect.y + 20 : cy, compact ? 30 : 40, compact ? 30 : 40) : undefined;
     if (portrait) this.track(portrait.setAlpha(look.alpha));
     this.track(
-      this.add.text(cx + (portrait ? 20 : 0), cy, text, {
+      this.add.text(cx + (portrait && !compact ? 20 : 0), compact && portrait ? rect.y + 50 : cy, text, {
         fontFamily: HUD_FONT, fontSize: '12px', fontStyle: 'bold', color: look.text, align: 'center',
-        wordWrap: { width: rect.w - (portrait ? 48 : 8), useAdvancedWrap: true },
+        wordWrap: { width: rect.w - (portrait && !compact ? 48 : 8), useAdvancedWrap: true }, lineSpacing: 1,
       }).setOrigin(0.5).setAlpha(look.alpha),
     );
   }
@@ -217,6 +227,25 @@ export class BuildScene extends Phaser.Scene {
   private renderTreeTab(tree: TreeId): void {
     const build = builds.current;
     const available = builds.availableSinmyeong();
+    const cells = nodeCells(tree);
+    const links = this.track(this.add.graphics().setDepth(-0.5));
+    for (const cell of cells) {
+      const node = getUpgradeNode(cell.nodeId)!;
+      const parent = cells.find((other) => other.nodeId === node.requires);
+      if (parent && build.isRevealed(node)) {
+        links.lineStyle(2, build.getLevel(parent.nodeId) > 0 ? U.teal : U.edge, 0.8);
+        links.lineBetween(parent.rect.x + parent.rect.w, parent.rect.y + parent.rect.h / 2,
+          cell.rect.x, cell.rect.y + cell.rect.h / 2);
+      }
+      if (node.exclusiveGroup && tree !== 'yogoe') {
+        const group = cells.filter((other) => getUpgradeNode(other.nodeId)?.exclusiveGroup === node.exclusiveGroup);
+        if (group[0] === cell && group.length > 1) {
+          const last = group[group.length - 1].rect;
+          links.lineStyle(1, U.gold, 0.6).strokeRoundedRect(cell.rect.x - 2, cell.rect.y - 2,
+            last.x + last.w - cell.rect.x + 4, cell.rect.h + 4, 6);
+        }
+      }
+    }
     if (tree !== 'yogoe') {
       for (let tier = 1; tier <= MAX_TIER; tier++) {
         const r = tierLabelRect(tier);
@@ -235,16 +264,20 @@ export class BuildScene extends Phaser.Scene {
       const status = nodeStatus(build, node, build.canAllocate(nodeId, available));
       const tierOpen = build.isTierUnlocked(tree, node.tier);
       const revealed = build.isRevealed(node);
-      const title = !revealed ? HIDDEN_NODE_NAME : tree === 'yogoe' && node.tier === 1 ? unitNameOf(node) : node.name;
+      const ally = ALLIES.find((a) => node.id.startsWith(a.id));
+      const title = !revealed ? HIDDEN_NODE_NAME : tree === 'yogoe' && node.tier === 1 && ally
+        ? unitShortName(ally.id, ally.name) : node.possessionOf ? '빙의' : node.name.replace(': ', '\n');
+      const mark = { allocated: '✓', available: '+', locked: '·', blocked: '×' }[status];
       this.drawCell(
         rect,
-        `${title}\nLv ${build.getLevel(nodeId)}/${node.maxLevel}`,
-        { ...STATUS_STYLE[status], alpha: tierOpen ? 1 : 0.55, selected: nodeId === this.selectedNode },
+        `${title}\n${mark} ${build.getLevel(nodeId)}/${node.maxLevel}`,
+        { ...STATUS_STYLE[status], alpha: tierOpen ? 1 : 0.85, selected: nodeId === this.selectedNode },
         () => {
           this.selectedNode = nodeId;
           this.message = ''; // 옛 결과 문구 지움
           this.dirty = true;
         },
+        tree === 'yogoe' && node.tier === 1 && ally ? `ally:${ally.id}` : undefined,
       );
     }
     this.renderNodeDetail(this.selectedNode ? getUpgradeNode(this.selectedNode) : undefined);
@@ -255,26 +288,21 @@ export class BuildScene extends Phaser.Scene {
     this.primaryButton.setText('찍기 (+)');
     this.secondaryButton.setText('빼기 (−)');
     if (!node) {
-      this.track(this.detailText('칸을 눌러 자세히 보세요.', '#6b5a3a'));
+      this.detailBody.setText('나만의 축제 준비\n\n성장 노드를 선택하면 효과와 다음 투자 비용을 확인할 수 있습니다.\n\n✓ 투자함  + 투자 가능\n· 잠김  × 다른 갈래 선택\n\n연결선은 선행 성장, 금색 묶음은 하나만 고르는 갈래입니다.', '#6b5a3a');
       this.primaryButton.setEnabled(false);
       this.secondaryButton.setEnabled(false);
       return;
     }
     if (!build.isRevealed(node)) {
       // 빙의 노드는 ①②③과 무당 트리를 채우기 전까지 이름과 효과를 숨긴다
-      this.track(this.detailText(`${HIDDEN_NODE_NAME}\n\n${HIDDEN_NODE_TEXT}`, '#6b5a3a'));
+      this.detailBody.setText(`${HIDDEN_NODE_NAME}\n\n${HIDDEN_NODE_TEXT}`, '#6b5a3a');
       this.primaryButton.setEnabled(false);
       this.secondaryButton.setEnabled(false);
       return;
     }
     const where =
       node.tree === 'yogoe' ? `${unitNameOf(node)}  ${'①②③④'[node.tier - 1]}` : `${TREE_NAMES[node.tree]}  ${node.tier}단`;
-    const info = this.track(
-      this.detailText(
-        `${node.name}\n${where}\n\n${node.description}\n\n레벨 ${build.getLevel(node.id)}/${node.maxLevel}\n레벨당 비용 ${node.costPerLevel}`,
-        '#2b2622',
-      ),
-    );
+    const level = build.getLevel(node.id);
     const add = builds.canAllocate(node.id);
     const remove = builds.canDeallocate(node.id);
     const lines: string[] = [];
@@ -283,21 +311,15 @@ export class BuildScene extends Phaser.Scene {
     }
     const removeText = build.getLevel(node.id) > 0 ? deallocateFailureText(remove) : null;
     if (removeText) lines.push(removeText);
-    if (lines.length > 0) {
-      this.track(
-        this.add.text(L.detailText.x, info.y + info.height + 10, lines.join('\n'), {
-          fontFamily: HUD_FONT, fontSize: '13px', color: '#b3302a', wordWrap: { width: L.detailText.w, useAdvancedWrap: true },
-        }),
-      );
-    }
+    const prerequisite = node.requires ? getUpgradeNode(node.requires)?.name : null;
+    this.detailBody.setText([
+      node.name, where, '', node.description, '',
+      `현재 ${level}/${node.maxLevel}${level < node.maxLevel ? ` → 다음 ${level + 1}/${node.maxLevel}` : ' · 최대'}`,
+      `투자 비용  신명 ${node.costPerLevel}`, prerequisite ? `선행 성장  ${prerequisite}` : '',
+      ...lines.map((line) => `• ${line}`),
+    ].filter((line) => line !== null).join('\n'));
     this.primaryButton.setEnabled(add.ok);
     this.secondaryButton.setEnabled(remove.ok);
-  }
-
-  private detailText(text: string, color: string): Phaser.GameObjects.Text {
-    return this.add.text(L.detailText.x, L.detailText.y, text, {
-      fontFamily: HUD_FONT, fontSize: '14px', color, lineSpacing: 3, wordWrap: { width: L.detailText.w, useAdvancedWrap: true },
-    });
   }
 
   // ----- 소환 순서 -----
@@ -336,16 +358,14 @@ export class BuildScene extends Phaser.Scene {
     this.secondaryButton.setText('뒤로 ▶');
     const index = this.selectedUnit ? order.indexOf(this.selectedUnit) : -1;
     if (index < 0) {
-      this.track(this.detailText('유닛 칸을 눌러 고르세요.', '#6b5a3a'));
+      this.detailBody.setText('소환 순서\n\n유닛 카드를 선택하고 아래의 앞으로 / 뒤로 버튼으로 옮기세요.\n\n전투 카드와 1~0 단축키에 같은 순서가 적용됩니다.', '#6b5a3a');
       this.primaryButton.setEnabled(false);
       this.secondaryButton.setEnabled(false);
       return;
     }
     const ally = ALLIES.find((a) => a.id === this.selectedUnit)!;
     const key = (index + 1) % 10;
-    this.track(this.detailText(`${ally.name}\n\n지금 ${key}번 (키 ${key})\n\n${ally.ability}`, '#2b2622'));
-    const portrait = addArtImage(this, `ally:${ally.id}`, 'preview', L.detailText.x + L.detailText.w / 2, 332, 110, 110);
-    if (portrait) this.track(portrait);
+    this.detailBody.setText(`${ally.name}\n\n현재 소환 위치  ${key}번\n단축키  ${key}\n\n${ally.ability}\n\n순서를 바꾸어도 유닛의 능력과 비용은 유지됩니다.`);
     this.primaryButton.setEnabled(index > 0);
     this.secondaryButton.setEnabled(index < order.length - 1);
   }
@@ -356,7 +376,7 @@ export class BuildScene extends Phaser.Scene {
     const P = L.dialogPanel;
     const dim = this.track(this.add.rectangle(0, 0, 960, 540, 0x000000, 0.65).setOrigin(0).setDepth(DEPTH.dim));
     dim.setInteractive(); // 뒤쪽 버튼이 눌리지 않게 막는다
-    this.track(this.add.rectangle(P.x, P.y, P.w, P.h, PAPER).setOrigin(0).setStrokeStyle(3, INK).setDepth(DEPTH.panel));
+    this.track(panel(this, P.x, P.y, P.w, P.h, false, DEPTH.panel));
     const active = builds.activeIndex;
     const body =
       kind === 'reset'

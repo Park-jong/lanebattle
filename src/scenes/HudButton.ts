@@ -1,214 +1,205 @@
 import Phaser from 'phaser';
-import { fitFontSize } from './labelFit';
 import { HUD_FONT, type Rect } from './layout';
-import { BUTTON_FILL } from './palette';
 import { addArtImage } from '../render/CharacterRenderer';
+import { DEFAULT_UI as U } from '../ui/default/tokens';
 
 export interface HudButtonStyle {
   fill?: number;
-  /** 테두리 색 (태그 오방색 등) */
   border?: number;
   borderWidth?: number;
-  /** round면 둥근 버튼 (눌림 영역은 그대로 사각형 전체) */
   shape?: 'rect' | 'round';
-  /** 글자를 가운데 정렬 (기본은 왼쪽 위) */
   center?: boolean;
   labelSize?: number;
-  /** 글자만 크게 가운데 하나 (이동 화살표 등) */
   bigLabel?: boolean;
   depth?: number;
+  key?: string;
+  glyph?: string;
+  /** A single large portrait with only a cost badge and optional cooldown. */
+  portraitTile?: boolean;
 }
 
 export interface HudButtonHandlers {
   onPress: () => void;
-  /** 손가락·마우스를 떼거나 버튼 밖으로 나갔을 때 (누르고 있는 동안 동작하는 버튼용) */
   onRelease?: () => void;
-  /** 마우스를 올렸을 때 / 벗어났을 때 (툴팁용) */
   onHover?: () => void;
   onHoverOut?: () => void;
+  /** Return true when detail mode consumed this input, including unavailable cards. */
+  onInspect?: () => boolean;
 }
 
-/** HUD 버튼: 도형 한 장 + 글자 두 줄 + 쿨타임 덮개. 눌림 영역은 항상 rect 전체 */
 export class HudButton {
   private readonly gfx: Phaser.GameObjects.Graphics;
   private readonly zone: Phaser.GameObjects.Zone;
   private readonly label: Phaser.GameObjects.Text;
   private readonly sub: Phaser.GameObjects.Text;
+  private readonly badge: Phaser.GameObjects.Text;
+  private readonly stateText: Phaser.GameObjects.Text;
+  private readonly glyph: Phaser.GameObjects.Text;
   private rect: Rect;
   private cooldown = 0;
   private enabled = true;
   private visible = true;
   private held = false;
-  private fitKey = '';
+  private heldPointer: number | null = null;
+  private hovered = false;
+  private reason = '';
   private portrait?: Phaser.GameObjects.Image;
-  private readonly cooldownOverlay: Phaser.GameObjects.Graphics;
+  private readonly overlay: Phaser.GameObjects.Graphics;
 
-  constructor(
-    scene: Phaser.Scene,
-    rect: Rect,
-    private readonly style: HudButtonStyle,
-    private readonly handlers: HudButtonHandlers,
-  ) {
+  constructor(scene: Phaser.Scene, rect: Rect, private readonly style: HudButtonStyle, private readonly handlers: HudButtonHandlers) {
     this.rect = { ...rect };
-    const depth = style.depth ?? 100;
-    this.gfx = scene.add.graphics().setScrollFactor(0).setDepth(depth);
-    this.cooldownOverlay = scene.add.graphics().setScrollFactor(0).setDepth(depth + 0.8);
-    const font = { fontFamily: HUD_FONT, color: '#ffffff' };
-    const round = style.shape === 'round';
-    const wrap = { width: rect.w - (round ? 16 : 6) };
-    this.label = scene.add
-      .text(0, 0, '', {
-        ...font,
-        fontSize: `${style.labelSize ?? 11}px`,
-        wordWrap: wrap,
-        align: style.center ? 'center' : 'left',
-        fontStyle: style.bigLabel ? 'bold' : 'normal',
-      })
-      .setScrollFactor(0).setDepth(depth + 1);
-    this.sub = scene.add
-      .text(0, 0, '', { ...font, fontSize: '12px', color: '#ffd166', align: style.center ? 'center' : 'left' })
-      .setScrollFactor(0).setDepth(depth + 1);
-    this.zone = scene.add
-      .zone(rect.x, rect.y, rect.w, rect.h)
-      .setOrigin(0).setScrollFactor(0).setDepth(depth + 2)
-      .setInteractive({ useHandCursor: true });
-    this.zone.on('pointerdown', () => {
-      if (!this.visible) return;
+    const d = style.depth ?? 100;
+    this.gfx = scene.add.graphics().setScrollFactor(0).setDepth(d);
+    this.overlay = scene.add.graphics().setScrollFactor(0).setDepth(d + 0.8);
+    const text = (size: number, color: string) => scene.add.text(0, 0, '', {
+      fontFamily: HUD_FONT, fontSize: String(size) + 'px', fontStyle: 'bold', color, align: 'center',
+    }).setScrollFactor(0).setDepth(d + 1);
+    this.label = text(style.labelSize ?? 13, U.text).setWordWrapWidth(rect.w - 12, true);
+    this.sub = text(style.portraitTile ? 18 : 14, U.goldText);
+    this.badge = text(12, U.goldText).setText(style.key ?? '');
+    this.stateText = text(style.portraitTile ? 24 : 12, U.muted);
+    this.glyph = text(30, U.goldText).setText(style.glyph ?? '');
+    this.zone = scene.add.zone(rect.x, rect.y, rect.w, rect.h)
+      .setOrigin(0).setScrollFactor(0).setDepth(d + 2).setInteractive({ useHandCursor: true });
+    this.zone.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+      if (!this.visible || this.handlers.onInspect?.()) return;
+      if (!this.enabled || this.heldPointer !== null) return;
+      this.heldPointer = pointer.id;
       this.held = true;
       this.redraw();
       this.handlers.onPress();
     });
-    this.zone.on('pointerover', () => { if (this.visible) this.handlers.onHover?.(); });
-    this.zone.on('pointerout', () => this.handlers.onHoverOut?.());
-    for (const ev of ['pointerup', 'pointerout', 'pointerupoutside']) this.zone.on(ev, () => this.release());
+    this.zone.on('pointerover', () => {
+      this.hovered = true;
+      this.redraw();
+      if (this.visible) this.handlers.onHover?.();
+    });
+    this.zone.on('pointerout', () => {
+      this.hovered = false;
+      this.handlers.onHoverOut?.();
+      this.redraw();
+    });
+    for (const ev of ['pointerup', 'pointerout', 'pointerupoutside']) {
+      this.zone.on(ev, (pointer: Phaser.Input.Pointer) => {
+        if (pointer.id === this.heldPointer) this.release();
+      });
+    }
     this.layout();
     this.redraw();
   }
 
-  /** 지금 눌려 있는지 */
-  get isHeld(): boolean {
-    return this.held;
-  }
-
-  /** 누름 상태를 강제로 푼다 (일시정지·화면 숨김 때) */
+  get isHeld(): boolean { return this.held; }
   release(): void {
     if (!this.held) return;
     this.held = false;
+    this.heldPointer = null;
     this.handlers.onRelease?.();
     this.redraw();
   }
-
-  /** 버튼을 다른 위치로 옮긴다 */
   moveTo(x: number, y: number): void {
-    this.rect.x = x;
-    this.rect.y = y;
+    this.rect.x = x; this.rect.y = y;
     this.zone.setPosition(x, y);
-    this.layout();
-    this.redraw();
+    this.layout(); this.redraw();
   }
-
   setTexts(label: string, sub: string): void {
-    this.label.setText(label);
-    // 둥근 버튼은 이름이 길면 두 줄 안에 들어가게 글자를 줄여 비용 줄과 겹치지 않게 한다.
-    // 줄 수는 getWrappedText로 실측하며, 글자(또는 기본 크기·폭)가 바뀔 때만 계산한다
-    if (this.style.shape === 'round' && !this.portrait) {
-      const base = this.style.labelSize ?? 11;
-      const key = `${label}|${base}|${this.rect.w}`;
-      if (key !== this.fitKey) {
-        this.fitKey = key;
-        const size = fitFontSize(2, base, 8, (s) => {
-          this.label.setFontSize(s);
-          return this.label.getWrappedText().length;
-        });
-        this.label.setFontSize(size);
-      }
-    }
-    this.sub.setText(sub);
+    if (this.style.portraitTile) label = this.portrait ? '' : label.slice(0, 2);
+    if (this.label.text !== label) this.label.setText(label);
+    if (this.sub.text !== sub) this.sub.setText(sub);
   }
-
-
-  /** Portrait sits between the background and cooldown mask; text stays readable. */
   setPortrait(subject: string): void {
     this.portrait?.destroy();
-    this.portrait = addArtImage(this.gfx.scene, subject, 'icon', 0, 0, 28, 28)
+    const size = this.style.portraitTile ? Math.min(this.rect.w - 8, this.rect.h - 2) : 34;
+    this.portrait = addArtImage(this.gfx.scene, subject, 'icon', 0, 0, size, size)
       ?.setScrollFactor(0).setDepth((this.style.depth ?? 100) + 0.5);
+    if (this.style.portraitTile && this.portrait) this.label.setText('');
     this.layout();
-    this.redraw();
   }
-
   setVisible(visible: boolean): void {
     if (visible === this.visible) return;
     this.visible = visible;
-    for (const o of [this.gfx, this.label, this.sub, this.cooldownOverlay, this.portrait]) o?.setVisible(visible);
+    for (const o of [this.gfx, this.label, this.sub, this.badge, this.stateText, this.glyph, this.overlay, this.portrait]) o?.setVisible(visible);
     if (this.zone.input) this.zone.input.enabled = visible;
-    if (!visible) this.release();
+    if (!visible) { this.hovered = false; this.release(); }
     else this.redraw();
   }
-
-  /** cooldownRatio 0~1: 쿨타임 비율, enabled=false면 흐리게 */
-  setState(cooldownRatio: number, enabled: boolean): void {
+  setState(cooldownRatio: number, enabled: boolean, reason = ''): void {
     const ratio = Math.max(0, Math.min(1, cooldownRatio));
-    if (ratio === this.cooldown && enabled === this.enabled && !this.held) return;
-    this.cooldown = ratio;
-    this.enabled = enabled;
+    if (ratio === this.cooldown && enabled === this.enabled && reason === this.reason) return;
+    this.cooldown = ratio; this.enabled = enabled; this.reason = reason;
+    const state = this.style.portraitTile ? this.cooldown > 0 ? reason.replace('초', '') : enabled ? '' : '!' : reason;
+    if (this.stateText.text !== state) this.stateText.setText(state);
+    const color = enabled ? U.goodText : this.cooldown > 0 ? U.muted : U.dangerText;
+    if (this.stateText.style.color !== color) this.stateText.setColor(color);
+    if (this.style.portraitTile) {
+      this.stateText.setOrigin(0.5).setPosition(this.rect.x + (this.cooldown > 0 ? this.rect.w / 2 : this.rect.w - 11),
+        this.rect.y + (this.cooldown > 0 ? this.rect.h / 2 - 4 : 11));
+      this.stateText.setFontSize(this.cooldown > 0 ? 24 : 16).setStroke('#0b1324', 4);
+    }
+    if (!enabled) this.release();
     this.redraw();
   }
-
   private layout(): void {
     const { x, y, w, h } = this.rect;
     const s = this.style;
-    if (s.bigLabel) {
+    this.badge.setOrigin(0.5).setPosition(x + w - 12, y + 12);
+    this.stateText.setOrigin(0.5).setPosition(x + w / 2, y + h - 10);
+    if (s.portraitTile) {
+      this.portrait?.setPosition(x + w / 2, y + h / 2 - 2);
+      this.label.setOrigin(0.5).setFontSize(24).setPosition(x + w / 2, y + h / 2 - 4);
+      this.badge.setOrigin(0.5).setPosition(x + 11, y + 11);
+      this.sub.setOrigin(0.5).setPosition(x + w - 20, y + h - 12);
+      this.stateText.setOrigin(0.5).setPosition(x + w / 2, y + h / 2 - 4);
+    } else if (s.bigLabel) {
       this.label.setOrigin(0.5).setPosition(x + w / 2, y + h / 2);
-      this.sub.setPosition(x + 3, y + h - 16);
-    } else if (s.center) {
-      const round = s.shape === 'round';
-      this.label.setOrigin(0.5, 0).setPosition(x + w / 2, y + (round ? 8 : 4));
-      this.sub.setOrigin(0.5, 0).setPosition(x + w / 2, y + h - (round ? 22 : 18));
+      this.sub.setOrigin(0.5).setPosition(x + w / 2, y + h - 16);
+    } else if (s.key && h <= 72) {
+      this.label.setOrigin(0, 0).setPosition(x + 5, y + 4).setWordWrapWidth(w - 21, true).setFontSize(12);
+      this.portrait?.setPosition(x + 23, y + 37);
+      this.sub.setOrigin(1, 0.5).setPosition(x + w - 7, y + 38);
     } else {
-      this.label.setOrigin(0).setPosition(x + 3, y + 3);
-      this.sub.setOrigin(0).setPosition(x + 3, y + h - 16);
-    }
-    if (this.portrait) {
-      this.label.setFontSize(9).setWordWrapWidth(w - 6).setPosition(x + 3, y + 2);
-      this.portrait.setPosition(x + 20, y + h - 21);
-      this.sub.setOrigin(1, 0).setPosition(x + w - 4, y + h - 16);
+      this.glyph.setOrigin(0.5).setPosition(x + w / 2, y + 35);
+      this.label.setOrigin(0.5, 0).setPosition(x + w / 2, y + (s.glyph ? 59 : 20));
+      this.sub.setOrigin(0.5).setPosition(x + w / 2, y + h - 32);
     }
   }
-
   private redraw(): void {
-    const g = this.gfx;
     const { x, y, w, h } = this.rect;
     const s = this.style;
-    const alpha = this.enabled ? 1 : 0.5;
-    const fill = this.held ? lighten(s.fill ?? BUTTON_FILL) : (s.fill ?? BUTTON_FILL);
-    const bw = s.borderWidth ?? 2;
-    const border = s.border ?? 0x000000;
-    g.clear();
-    const overlay = this.cooldownOverlay.clear();
-    this.label.setAlpha(alpha);
-    this.sub.setAlpha(alpha);
-    this.portrait?.setAlpha(alpha);
-    if (s.shape === 'round') {
-      const cx = x + w / 2, cy = y + h / 2, r = Math.min(w, h) / 2 - 1;
-      g.fillStyle(fill, alpha).fillCircle(cx, cy, r);
+    const g = this.gfx.clear(), overlay = this.overlay.clear();
+    const border = this.hovered || this.held ? U.gold : s.border ?? U.edge;
+    const fill = this.held ? U.panelRaised : s.fill ?? U.panel;
+    if (s.portraitTile) {
+      const radius = 13;
+      g.fillStyle(0x070e19, 0.6).fillRoundedRect(x, y + 3, w, h, radius);
+      g.fillStyle(fill).fillRoundedRect(x, y, w, h, radius);
+      g.fillStyle(border, 0.18).fillCircle(x + w / 2, y + h / 2 - 2, h / 2 - 2);
+      g.lineStyle(this.hovered || this.held ? 2 : 1, border, this.enabled ? 0.9 : 0.45)
+        .strokeRoundedRect(x + 0.5, y + 0.5, w - 1, h - 1, radius);
       if (this.cooldown > 0) {
-        // 남은 쿨타임만큼 위에서 시계 방향으로 어둡게 덮는다
-        const start = -Math.PI / 2;
-        overlay.fillStyle(0x000000, 0.6).slice(cx, cy, r, start, start + Math.PI * 2 * this.cooldown, false).fillPath();
+        overlay.fillStyle(0x091221, 0.72).slice(x + w / 2, y + h / 2 - 2, h / 2 - 1,
+          -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * this.cooldown, false).fillPath();
       }
-      g.lineStyle(bw, border, alpha).strokeCircle(cx, cy, r);
+      // Badges sit above the portrait and cooldown, as part of the icon frame.
+      overlay.fillStyle(0x0b1424, 0.95).fillRoundedRect(x + 2, y + 2, 19, 19, 6);
+      if (!this.enabled && this.cooldown <= 0) overlay.fillStyle(0x0b1424, 0.95).fillCircle(x + w - 11, y + 11, 9);
+      overlay.fillStyle(0x0b1424, 0.96).fillRoundedRect(x + w - 39, y + h - 24, 37, 22, 8);
+      overlay.lineStyle(1, U.gold, 0.25).strokeRoundedRect(x + w - 39, y + h - 24, 37, 22, 8);
+      const costColor = this.enabled || this.cooldown > 0 ? U.goldText : U.dangerText;
+      if (this.sub.style.color !== costColor) this.sub.setColor(costColor);
+      this.portrait?.setAlpha(this.enabled || this.cooldown > 0 ? 1 : 0.55);
       return;
     }
-    g.fillStyle(fill, alpha).fillRoundedRect(x, y, w, h, 6);
+    g.fillStyle(0x050b15, 0.6).fillRoundedRect(x, y + 3, w, h, 9);
+    g.fillStyle(fill, 1).fillRoundedRect(x, y, w, h, 9);
+    g.fillStyle(border, this.enabled ? 0.14 : 0.05).fillRoundedRect(x + 2, y + 2, w - 4, h - 4, 8);
+    g.lineStyle(this.hovered ? 2 : 1, border, this.enabled ? 0.9 : 0.45).strokeRoundedRect(x, y, w, h, 9);
+    if (s.borderWidth) g.fillStyle(border, 0.85).fillRoundedRect(x + 8, y, w - 16, 3, 1);
+    if (s.key) g.fillStyle(0x0c1422, 0.85).fillRoundedRect(x + w - 21, y + 3, 18, 18, 4);
     if (this.cooldown > 0) {
-      overlay.fillStyle(0x000000, 0.6).fillRect(x + 1, y + h - h * this.cooldown, w - 2, h * this.cooldown - 1);
+      const height = (h - 4) * this.cooldown;
+      overlay.fillStyle(0x070d1a, 0.5).fillRect(x + 2, y + h - 2 - height, w - 4, height);
     }
-    g.lineStyle(bw, border, alpha).strokeRoundedRect(x, y, w, h, 6);
+    this.label.setAlpha(this.enabled ? 1 : 0.8);
+    this.portrait?.setAlpha(this.enabled ? 1 : 0.65);
   }
-}
-
-/** 눌렀을 때 살짝 밝게 */
-function lighten(color: number): number {
-  const ch = (shift: number) => Math.min(255, ((color >> shift) & 0xff) + 40);
-  return (ch(16) << 16) | (ch(8) << 8) | ch(0);
 }

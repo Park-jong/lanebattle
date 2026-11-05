@@ -7,6 +7,8 @@ import { FIVE_COLORS } from './palette';
 import { isBlockedByOverlay, openSettings } from './openSettings';
 import { addTestBadge } from './testBadge';
 import { addArtImage } from '../render/CharacterRenderer';
+import { DEFAULT_UI as U } from '../ui/default/tokens';
+import { panel } from '../ui/default/decor';
 
 /** 등불 위치(x)와 줄 길이 */
 const LANTERNS = [
@@ -31,11 +33,12 @@ export class TitleScene extends Phaser.Scene {
     this.drawLanterns();
     addTestBadge(this);
     this.drawTexts();
-    addArtImage(this, 'hero:kkomaMudang', 'preview', 250, 364, 160, 160);
-    addArtImage(this, 'ally:clubGoblin', 'preview', 710, 364, 150, 150);
+    panel(this, 326, 298, 308, 176, true);
+    addArtImage(this, 'hero:kkomaMudang', 'preview', 218, 366, 210, 210);
+    addArtImage(this, 'ally:clubGoblin', 'preview', 742, 378, 194, 194);
 
-    new MenuButton(this, GAME_WIDTH / 2, 322, 220, 66, '시작', () => this.start(), { fontSize: 24 });
-    new MenuButton(this, GAME_WIDTH / 2, 398, 220, 66, `설정 (${KEY_MAP.openSettings.slice(3)})`, () => openSettings(this), { fontSize: 18 });
+    new MenuButton(this, GAME_WIDTH / 2, 342, 276, 66, '축제 지키러 가기', () => this.start(), { fontSize: 23, tone: 'primary' });
+    new MenuButton(this, GAME_WIDTH / 2, 426, 276, 66, `설정 · 조작 안내 (${KEY_MAP.openSettings.slice(3)})`, () => openSettings(this), { fontSize: 17 });
 
     this.keyInput = new KeyInput(window, (code) => this.onKeyDown(code));
     this.keyInput.attach();
@@ -44,15 +47,18 @@ export class TitleScene extends Phaser.Scene {
 
   private drawTexts(): void {
     const cx = GAME_WIDTH / 2;
+    this.add.text(cx, 126, '요 괴 마 을 의   한 밤 축 제', {
+      fontFamily: HUD_FONT, fontSize: '15px', color: U.goldText,
+    }).setOrigin(0.5);
     this.add
-      .text(cx, 170, '꼬마 무당 대소동', {
-        fontFamily: HUD_FONT, fontSize: '68px', fontStyle: 'bold', color: '#f3ead4',
+      .text(cx, 188, '꼬마 무당 대소동', {
+        fontFamily: HUD_FONT, fontSize: '62px', fontStyle: 'bold', color: U.text,
         stroke: '#1b1d26', strokeThickness: 8,
       })
       .setOrigin(0.5);
     this.add
-      .text(cx, 236, '도깨비들과 함께 한밤의 원귀를 막아라', {
-        fontFamily: HUD_FONT, fontSize: '20px', color: '#e0b52e',
+      .text(cx, 246, '부적 한 장, 요괴 친구들과 지키는 우리 마을', {
+        fontFamily: HUD_FONT, fontSize: '18px', color: U.muted,
       })
       .setOrigin(0.5);
     this.add

@@ -2,250 +2,212 @@ import Phaser from 'phaser';
 import { STAGES } from '../data/stages';
 import { getBossById } from '../data/bosses';
 import { STAR_RULES } from '../data/rewards';
-import { MAP_ROWS, gridPosition, moveSelection, stageAt } from '../game/mapGrid';
+import { gridPosition, moveSelection, stageAt } from '../game/mapGrid';
 import { TEST_MODE } from '../data/testMode';
-import { builds, gameSave, isTestMode, progress, wallet } from '../game/session';
+import { builds, gameSave, isTestMode, progress } from '../game/session';
 import { drawNightSky } from './background';
 import { bossChipSpecs } from './bossChips';
-import { HUD_FONT, MAP_LAYOUT } from './layout';
+import { HUD_FONT, MAP_LAYOUT as L } from './layout';
 import { KEY_MAP, KeyInput, mapDirectionOf } from './input';
 import { MenuButton } from './MenuButton';
-import { chapterColor, INK, PAPER } from './palette';
+import { chapterColor } from './palette';
+import { DEFAULT_UI as U } from '../ui/default/tokens';
+import { CHAPTER_TITLES, recommendedStage } from '../ui/default/journey';
+import { panel } from '../ui/default/decor';
+import { addArtImage } from '../render/CharacterRenderer';
 import { addTestBadge } from './testBadge';
 import { isBlockedByOverlay, openSettings } from './openSettings';
 
-const L = MAP_LAYOUT;
-const BOSS_RED = 0xd9473b;
-
-interface CellView {
-  rect: Phaser.GameObjects.Rectangle;
-}
-
-/** 지도: 5장 × 5스테이지 선택, 정보 패널, 출전 */
+/** One chapter and five large gates, with the selected destination always in view. */
 export class MapScene extends Phaser.Scene {
   private selected = 0;
-  private cells: CellView[] = [];
-  private infoObjects: Phaser.GameObjects.GameObject[] = [];
+  private launching = false;
+  private chapterButtons: MenuButton[] = [];
+  private routeObjects: Phaser.GameObjects.GameObject[] = [];
+  private previewObjects: Phaser.GameObjects.GameObject[] = [];
   private keyInput!: KeyInput;
 
-  constructor() {
-    super('Map');
-  }
+  constructor() { super('Map'); }
 
-  /** 전투에서 돌아오면 방금 한 스테이지를 선택해 둔다 */
-  init(data: { stage?: number }): void {
-    this.selected = Math.max(0, Math.min(STAGES.length - 1, Math.floor(data.stage ?? 0) || 0));
-    this.cells = [];
-    this.infoObjects = [];
+  init(data: { stage?: number } = {}): void {
+    const resume = recommendedStage(STAGES.map(s => progress.getBestStars(s.number)));
+    const requested = data.stage ?? resume;
+    this.selected = Number.isFinite(requested) ? Math.max(0, Math.min(STAGES.length - 1, Math.floor(requested))) : resume;
+    this.launching = false;
+    this.chapterButtons = [];
+    this.routeObjects = [];
+    this.previewObjects = [];
   }
 
   create(): void {
     drawNightSky(this);
-    this.add.text(24, 20, '지도', { fontFamily: HUD_FONT, fontSize: '28px', fontStyle: 'bold', color: '#f3ead4' });
-    this.add.text(100, 30, '어느 밤을 지킬까', { fontFamily: HUD_FONT, fontSize: '16px', color: '#e0b52e' });
-    this.createGrid();
-    this.createInfoPanel();
-    this.createBottomButtons();
-    addTestBadge(this);
-    this.refreshSelection();
+    this.add.graphics().setDepth(-1).fillStyle(U.night, 0.95).fillRoundedRect(18, 70, 924, 78, 16);
+    this.add.text(24, 19, '축제의 여정', { fontFamily: HUD_FONT, fontSize: '30px', fontStyle: 'bold', color: U.text });
+    this.add.text(214, 32, '오늘은 어느 밤을 지킬까요?', { fontFamily: HUD_FONT, fontSize: '16px', color: U.muted });
+    const total = STAGES.reduce((sum, s) => sum + progress.getBestStars(s.number), 0);
+    this.add.text(930, 30, '★ ' + total + ' / ' + STAGES.length * STAR_RULES.maxStars, {
+      fontFamily: HUD_FONT, fontSize: '21px', fontStyle: 'bold', color: U.goldText,
+    }).setOrigin(1, 0);
 
-    this.keyInput = new KeyInput(window, (code) => this.onKeyDown(code));
+    L.chapters.forEach((r, i) => {
+      this.chapterButtons.push(new MenuButton(this, r.x + r.w / 2, r.y + r.h / 2, r.w, r.h,
+        (i + 1) + '장  ' + CHAPTER_TITLES[i], () => {
+          if (!this.launching) this.select(stageAt(i, gridPosition(this.selected).col));
+        }, { fontSize: 17 }));
+    });
+    panel(this, L.route.x, L.route.y, L.route.w, L.route.h, true, -2);
+    panel(this, L.preview.x, L.preview.y, L.preview.w, L.preview.h);
+    const p = L.preview, cy = p.y + p.h - 41;
+    new MenuButton(this, p.x + 70, cy, 116, 66, '빌드 바꾸기', () => this.openBuild(), { fontSize: 16 });
+    new MenuButton(this, p.x + 222, cy, 172, 66, '출전  →', () => this.launch(), { fontSize: 25, tone: 'primary' });
+    new MenuButton(this, 104, 490, 160, 66, '타이틀 (Esc)', () => { if (!this.launching) this.scene.start('Title'); }, { fontSize: 16 });
+    new MenuButton(this, 284, 490, 160, 66, '설정 (O)', () => { if (!this.launching) openSettings(this); }, { fontSize: 16 });
+    if (isTestMode) new MenuButton(this, 460, 490, 160, 66, TEST_MODE.resetButton, () => this.resetTestData(), { fontSize: 14 });
+    addTestBadge(this);
+    this.refresh();
+    this.keyInput = new KeyInput(window, code => this.onKeyDown(code));
     this.keyInput.attach();
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.keyInput.detach());
   }
 
-  // ----- 칸 -----
-
-  private cellCenter(stage: number): { x: number; y: number } {
-    const { row, col } = gridPosition(stage);
-    return {
-      x: L.gridX + col * (L.cellW + L.gap) + L.cellW / 2,
-      y: L.gridY + row * (L.cellH + L.gap) + L.cellH / 2,
-    };
+  private select(stage: number): void {
+    this.selected = stage;
+    this.refresh();
   }
 
-  private createGrid(): void {
-    for (let row = 0; row < MAP_ROWS; row++) {
-      const chapter = row + 1;
-      const first = this.cellCenter(stageAt(row, 0));
-      this.add.rectangle(24, first.y, 6, L.cellH, chapterColor(chapter)).setOrigin(0, 0.5);
-      this.add
-        .text(38, first.y, `${chapter}장`, { fontFamily: HUD_FONT, fontSize: '20px', fontStyle: 'bold', color: '#f3ead4' })
-        .setOrigin(0, 0.5);
+  private refresh(): void {
+    const row = gridPosition(this.selected).row;
+    this.chapterButtons.forEach((button, i) => button.setFill(i === row ? U.gold : U.paper));
+    this.drawRoute(row);
+    this.drawPreview();
+  }
+
+  private drawRoute(row: number): void {
+    for (const object of this.routeObjects) object.destroy();
+    this.routeObjects = [];
+    const track = <T extends Phaser.GameObjects.GameObject>(object: T): T => { this.routeObjects.push(object); return object; };
+    const color = chapterColor(row + 1);
+    const completed = STAGES.filter(s => s.chapter === row + 1 && progress.getBestStars(s.number) > 0).length;
+    track(this.add.text(48, 181, (row + 1) + '장 · ' + CHAPTER_TITLES[row], {
+      fontFamily: HUD_FONT, fontSize: '26px', fontStyle: 'bold', color: U.text,
+    }));
+    track(this.add.text(48, 221, '다섯 관문을 지나, 축제의 등불을 되찾으세요.', {
+      fontFamily: HUD_FONT, fontSize: '15px', color: U.muted,
+    }));
+    track(this.add.text(566, 189, completed + ' / 5 완료', {
+      fontFamily: HUD_FONT, fontSize: '15px', color: U.goldText,
+    }).setOrigin(1, 0));
+    const path = track(this.add.graphics());
+    path.lineStyle(6, color, 0.12);
+    for (let i = 0; i < 4; i++) {
+      const a = L.nodes[i], b = L.nodes[i + 1];
+      path.lineBetween(a.x + a.w / 2, a.y + 35, b.x + b.w / 2, b.y + 35);
     }
-    for (const def of STAGES) {
-      const { x, y } = this.cellCenter(def.number);
-      const rect = this.add.rectangle(x, y, L.cellW, L.cellH, PAPER);
-      rect.setInteractive({ useHandCursor: true }).on('pointerdown', () => {
-        this.selected = def.number;
-        this.refreshSelection();
-      });
-      // 코드·별은 왼쪽 정렬, 보스 배지는 오른쪽 위라 서로 겹치지 않는다
-      const left = x - L.cellW / 2 + 8;
-      this.add
-        .text(left, y - 8, def.code, { fontFamily: HUD_FONT, fontSize: '20px', fontStyle: 'bold', color: '#2b2622' })
-        .setOrigin(0, 0.5);
-      this.add
-        .text(left, y + 18, starText(progress.getBestStars(def.number)), {
-          fontFamily: HUD_FONT, fontSize: '16px', color: '#b8860b',
-        })
-        .setOrigin(0, 0.5);
-      if (def.isBossStage) {
-        this.add
-          .text(x + L.cellW / 2 - 3, y - L.cellH / 2 + 3, '보스', {
-            fontFamily: HUD_FONT, fontSize: '11px', fontStyle: 'bold', color: '#ffffff',
-            backgroundColor: '#d9473b', padding: { x: 3, y: 1 },
-          })
-          .setOrigin(1, 0);
-      }
-      this.cells.push({ rect });
+    path.lineStyle(1, color, 0.4);
+    for (let i = 0; i < 4; i++) {
+      const a = L.nodes[i], b = L.nodes[i + 1];
+      path.lineBetween(a.x + a.w / 2, a.y + 35, b.x + b.w / 2, b.y + 35);
     }
+    L.nodes.forEach((r, i) => {
+      const number = stageAt(row, i), def = STAGES[number], stars = progress.getBestStars(number);
+      const selected = number === this.selected, cx = r.x + r.w / 2, cy = r.y + 35;
+      const g = track(this.add.graphics());
+      if (selected) g.fillStyle(U.gold, 0.1).fillCircle(cx, cy, 42);
+      g.fillStyle(0x091524).fillCircle(cx, cy + 3, 34);
+      g.fillStyle(selected ? U.gold : stars ? 0x345953 : U.panelRaised).fillCircle(cx, cy, 34);
+      g.lineStyle(selected ? 2 : 1, selected ? U.gold : stars ? U.teal : U.edge, 0.8).strokeCircle(cx, cy, 34);
+      if (selected) g.lineStyle(1, U.gold, 0.4).strokeCircle(cx, cy, 40);
+      const portrait = def.bossId ? addArtImage(this, 'boss:' + def.bossId, 'icon', cx, cy, 58, 58) : undefined;
+      if (portrait) track(portrait);
+      else track(this.add.text(cx, cy, String(i + 1).padStart(2, '0'), {
+        fontFamily: HUD_FONT, fontSize: '27px', fontStyle: 'bold', color: selected ? U.darkText : U.text,
+      }).setOrigin(0.5));
+      track(this.add.text(cx, cy + 45, starText(stars), {
+        fontFamily: HUD_FONT, fontSize: '19px', color: stars ? U.goldText : '#718798',
+      }).setOrigin(0.5));
+      if (def.isBossStage) track(this.add.text(cx, cy - 48, '보스', {
+        fontFamily: HUD_FONT, fontSize: '14px', color: '#f0aba0', fontStyle: 'bold',
+      }).setOrigin(0.5));
+      const hit = track(this.add.zone(r.x, r.y, r.w, r.h).setOrigin(0).setInteractive({ useHandCursor: true }));
+      hit.on('pointerdown', () => { if (!this.launching) this.select(number); });
+    });
+    track(this.add.text(48, 413, '← → 관문 선택    ↑ ↓ 장 변경    Enter 출전', {
+      fontFamily: HUD_FONT, fontSize: '14px', color: U.muted,
+    }));
   }
 
-  /** 선택 칸 강조와 정보 패널 갱신 */
-  private refreshSelection(): void {
-    STAGES.forEach((def, i) => {
-      const rect = this.cells[i].rect;
-      const isSelected = i === this.selected;
-      rect.setFillStyle(isSelected ? 0xfff6dc : PAPER);
-      if (isSelected) rect.setStrokeStyle(4, 0xe0b52e);
-      else if (def.isBossStage) rect.setStrokeStyle(3, BOSS_RED);
-      else rect.setStrokeStyle(2, INK);
-    });
-    this.refreshInfo();
-  }
-
-  // ----- 정보 패널 -----
-
-  private createInfoPanel(): void {
-    this.add.rectangle(L.infoX, L.infoY, L.infoW, L.infoH, PAPER).setOrigin(0).setStrokeStyle(3, INK);
-    const cx = L.infoX + L.infoW / 2;
-    const bottom = L.infoY + L.infoH;
-    new MenuButton(this, cx, bottom - 118, L.infoW - 32, 66, `빌드 바꾸기 (${KEY_MAP.openBuild.slice(3)})`, () => this.openBuild(), {
-      fontSize: 18,
-    });
-    new MenuButton(this, cx, bottom - 40, L.infoW - 32, 66, '출전', () => this.launch(), {
-      fontSize: 22, fill: 0xe0b52e,
-    });
-  }
-
-  /** 정보 패널의 바뀌는 글자와 칩을 다시 만든다 */
-  private refreshInfo(): void {
-    for (const o of this.infoObjects) o.destroy();
-    this.infoObjects = [];
-    const def = STAGES[this.selected];
-    const x = L.infoX + 16;
-    let y = L.infoY + 14;
-    const font = { fontFamily: HUD_FONT, color: '#2b2622' };
-    const add = (obj: Phaser.GameObjects.GameObject) => {
-      this.infoObjects.push(obj);
-      return obj;
-    };
-
-    const title = this.add.text(x, y, `${def.code} ${def.name}`, {
-      ...font, fontSize: '20px', fontStyle: 'bold', wordWrap: { width: L.infoW - 32 },
-    });
-    add(title);
-    y += title.height + 10;
-    add(
-      this.add.text(
-        x, y,
-        [
-          `${def.chapter}장`,
-          `★3 제한 시간  ${formatTime(def.threeStarSeconds)}`,
-          `최고 별  ${starText(progress.getBestStars(def.number))}`,
-        ].join('\n'),
-        { ...font, fontSize: '15px', lineSpacing: 6 },
-      ),
-    );
-    y += 84;
-
-    add(
-      this.add.text(
-        x, L.infoY + L.infoH - 178,
-        `엽전 ${wallet.yeopjeon}  신명 ${builds.availableSinmyeong()}/${wallet.totalSinmyeong()}`,
-        { ...font, fontSize: '13px', color: '#6b5a3a' },
-      ),
-    );
-
+  private drawPreview(): void {
+    for (const object of this.previewObjects) object.destroy();
+    this.previewObjects = [];
+    const track = <T extends Phaser.GameObjects.GameObject>(object: T): T => { this.previewObjects.push(object); return object; };
+    const def = STAGES[this.selected], p = L.preview, x = p.x + 20, color = chapterColor(def.chapter);
+    const scenery = track(this.add.graphics());
+    scenery.fillStyle(0x203749).fillRoundedRect(p.x + 12, p.y + 12, p.w - 24, 108, 12);
+    scenery.fillStyle(color, 0.08).fillCircle(p.x + p.w - 64, p.y + 64, 46);
+    scenery.fillStyle(0x344f60).fillTriangle(p.x + 90, p.y + 120, p.x + 175, p.y + 37, p.x + 260, p.y + 120);
+    scenery.fillStyle(0x172b3b).fillTriangle(p.x + 150, p.y + 120, p.x + 230, p.y + 60, p.x + 300, p.y + 120);
+    track(this.add.text(x + 4, p.y + 26, 'STAGE ' + def.code, {
+      fontFamily: HUD_FONT, fontSize: '18px', fontStyle: 'bold', color: U.goldText,
+    }));
+    track(this.add.text(x + 4, p.y + 62, def.isBossStage ? '보스와의 한판' : '마을의 등불 지키기', {
+      fontFamily: HUD_FONT, fontSize: '15px', color: U.text,
+    }));
+    const portrait = addArtImage(this, def.bossId ? 'boss:' + def.bossId : 'hero:kkomaMudang', 'icon',
+      p.x + p.w - 68, p.y + 67, 86, 86);
+    if (portrait) track(portrait);
+    track(this.add.text(x, p.y + 132, def.name, {
+      fontFamily: HUD_FONT, fontSize: '22px', fontStyle: 'bold', color: U.darkText,
+      wordWrap: { width: p.w - 40, useAdvancedWrap: true },
+    }));
+    track(this.add.text(x, p.y + 184, '최고 기록  ' + starText(progress.getBestStars(def.number)), {
+      fontFamily: HUD_FONT, fontSize: '17px', color: '#77623b',
+    }));
+    track(this.add.text(x, p.y + 213, '★3 목표 ' + formatTime(def.threeStarSeconds) + ' · 빌드 ' + (builds.activeIndex + 1), {
+      fontFamily: HUD_FONT, fontSize: '15px', color: '#77623b',
+    }));
     if (def.bossId) {
-      const boss = getBossById(def.bossId);
-      add(this.add.text(x, y, `보스  ${boss.name}`, { ...font, fontSize: '16px', fontStyle: 'bold', color: '#b3302a' }));
-      y += 28;
-      this.placeChips(bossChipSpecs(boss), x, y, add);
-    } else {
-      add(this.add.text(x, y, '일반 스테이지', { ...font, fontSize: '15px', color: '#6b5a3a' }));
-    }
-  }
-
-  /** 칩을 가로로 늘어놓고 폭이 넘치면 줄을 바꾼다 */
-  private placeChips(
-    specs: { text: string; color: string; background: string }[],
-    startX: number,
-    startY: number,
-    add: (obj: Phaser.GameObjects.GameObject) => Phaser.GameObjects.GameObject,
-  ): void {
-    const maxX = L.infoX + L.infoW - 16;
-    const gap = 6;
-    let x = startX;
-    let y = startY;
-    for (const s of specs) {
-      const chip = this.add.text(x, y, s.text, {
-        fontFamily: HUD_FONT, fontSize: '13px', color: s.color, backgroundColor: s.background, padding: { x: 6, y: 2 },
-      });
-      if (x > startX && x + chip.width > maxX) {
-        x = startX;
-        y += 26;
-        chip.setPosition(x, y);
+      let chipX = x, chipY = p.y + 246;
+      for (const spec of bossChipSpecs(getBossById(def.bossId))) {
+        const chip = track(this.add.text(0, 0, spec.text, {
+          fontFamily: HUD_FONT, fontSize: '13px', color: spec.color,
+          backgroundColor: spec.background, padding: { x: 5, y: 2 },
+        }));
+        if (chipX + chip.width > p.x + p.w - 20) { chipX = x; chipY += 25; }
+        chip.setPosition(chipX, chipY); chipX += chip.width + 5;
       }
-      x += chip.width + gap;
-      add(chip);
-    }
+    } else track(this.add.text(x, p.y + 249, '요괴 친구들과 함께 도전하세요.', {
+      fontFamily: HUD_FONT, fontSize: '15px', color: '#77623b',
+    }));
   }
 
-  // ----- 아래 버튼 -----
-
-  private createBottomButtons(): void {
-    new MenuButton(this, 104, 490, 160, 66, '타이틀로 (Esc)', () => this.scene.start('Title'), { fontSize: 15 });
-    new MenuButton(this, 284, 490, 160, 66, `설정 (${KEY_MAP.openSettings.slice(3)})`, () => openSettings(this), { fontSize: 15 });
-    if (isTestMode) {
-      new MenuButton(this, 460, 490, 160, 66, TEST_MODE.resetButton, () => this.resetTestData(), { fontSize: 14 });
-    }
-    this.add.text(isTestMode ? 556 : 380, 480, '방향키 이동  ·  Enter 출전  ·  B 빌드', { fontFamily: HUD_FONT, fontSize: '14px', color: '#9aa5c0' });
-  }
-
-  // ----- 동작 -----
-
-  /** 테스트 저장만 지우고 처음 재화로 되돌린다 (새로 시작해 메모리 상태도 초기화) */
   private resetTestData(): void {
-    if (!window.confirm(TEST_MODE.resetConfirm)) return;
+    if (this.launching || !window.confirm(TEST_MODE.resetConfirm)) return;
     gameSave.clearStorage();
     window.location.reload();
   }
 
   private launch(): void {
-    this.scene.start('Battle', { stage: this.selected });
+    if (this.launching || isBlockedByOverlay(this)) return;
+    this.launching = true;
+    this.input.enabled = false;
+    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+      this.scene.start('Battle', { stage: this.selected });
+    });
+    this.cameras.main.fadeOut(180, 17, 26, 43);
   }
 
   private openBuild(): void {
-    this.scene.start('Build', { stage: this.selected });
+    if (!this.launching) this.scene.start('Build', { stage: this.selected });
   }
 
   private onKeyDown(code: string): void {
-    if (isBlockedByOverlay(this)) return;
-    const dir = mapDirectionOf(code);
-    if (dir) {
-      this.selected = moveSelection(this.selected, dir);
-      this.refreshSelection();
-    } else if (code === KEY_MAP.mapLaunch) {
-      this.launch();
-    } else if (code === KEY_MAP.back) {
-      this.scene.start('Title');
-    } else if (code === KEY_MAP.openBuild) {
-      this.openBuild();
-    } else if (code === KEY_MAP.openSettings) {
-      openSettings(this);
-    }
+    if (this.launching || isBlockedByOverlay(this)) return;
+    const direction = mapDirectionOf(code);
+    if (direction) this.select(moveSelection(this.selected, direction));
+    else if (code === KEY_MAP.mapLaunch) this.launch();
+    else if (code === KEY_MAP.back) this.scene.start('Title');
+    else if (code === KEY_MAP.openBuild) this.openBuild();
+    else if (code === KEY_MAP.openSettings) openSettings(this);
   }
 }
 
@@ -254,6 +216,6 @@ function starText(stars: number): string {
 }
 
 function formatTime(seconds: number): string {
-  const sec = Math.floor(seconds);
-  return `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`;
+  const secondsInt = Math.floor(seconds);
+  return String(Math.floor(secondsInt / 60)).padStart(2, '0') + ':' + String(secondsInt % 60).padStart(2, '0');
 }

@@ -1,9 +1,10 @@
 import { MAX_TIER, nodesOfTree, possessionNodeId, YOGOE_UNIT_IDS, yogoeNodeIds, type TreeId } from '../data/upgrades';
+import { DEFAULT_UI } from '../ui/default/tokens';
 
 // 화면 배치 상수 (도형 그래픽 단계용)
 export const GAME_WIDTH = 960;
 export const GAME_HEIGHT = 540;
-export const HUD_FONT = '"Malgun Gothic", system-ui, sans-serif';
+export const HUD_FONT = DEFAULT_UI.font;
 
 /** 사각형 (왼쪽 위 기준) */
 export interface Rect {
@@ -23,12 +24,20 @@ const ROW_H = MIN_TOUCH;
 const ROW_GAP = 6;
 const ROW1_Y = PANEL_Y + 6;
 const ROW2_Y = ROW1_Y + ROW_H + ROW_GAP;
-const SUMMON_W = 70;
-const SUMMON_GAP = 4;
-const SUMMON_X = 200;
+const SUMMON_W = 80;
+const SUMMON_GAP = 6;
+const SUMMON_X = 174;
 
-/** 땅 윗면 y. 아래 패널 바로 위에 놓는다 */
-export const GROUND_Y = PANEL_Y - 10;
+/** 전장 바닥의 위·아래 경계. 캐릭터는 이 사이에 서고 앞쪽 지면도 보인다. */
+export const BATTLEFIELD = {
+  backY: 250,
+  frontY: PANEL_Y - 16,
+  centerY: PANEL_Y - 70,
+  groundScaleY: 0.22,
+} as const;
+
+/** 레인 중앙의 발 위치. 지형의 경계와 분리한다. */
+export const GROUND_Y = BATTLEFIELD.centerY;
 
 /** 소환 버튼 10개: 2줄 x 5칸 (1~5 / 6~0) */
 const summonRects: Rect[] = Array.from({ length: 10 }, (_, i) => ({
@@ -40,38 +49,39 @@ const summonRects: Rect[] = Array.from({ length: 10 }, (_, i) => ({
 
 /** 스킬 Q/W/E: 아래 패널 오른쪽 위아래 가운데 */
 const skillRects: Rect[] = Array.from({ length: 3 }, (_, i) => ({
-  x: 738 + i * 74,
-  y: 432,
-  w: MIN_TOUCH,
-  h: MIN_TOUCH,
+  x: 724 + i * 76,
+  y: ROW1_Y,
+  w: 72,
+  h: ROW_H * 2 + ROW_GAP,
 }));
 
 export const BATTLE_LAYOUT = {
   /** 아래 패널 (전장과 구분되는 배경) */
   panel: { x: 0, y: PANEL_Y, w: GAME_WIDTH, h: GAME_HEIGHT - PANEL_Y } as Rect,
   /** 위쪽 띠 배경 */
-  topStrip: { x: 0, y: 0, w: GAME_WIDTH, h: 72 } as Rect,
+  topStrip: { x: 0, y: 0, w: GAME_WIDTH, h: 88 } as Rect,
   // 눌러서 쓰는 버튼
-  moveLeft: { x: 12, y: 432, w: 84, h: MIN_TOUCH } as Rect,
-  moveRight: { x: 104, y: 432, w: 84, h: MIN_TOUCH } as Rect,
+  moveLeft: { x: 12, y: ROW1_Y, w: 70, h: MIN_TOUCH } as Rect,
+  moveRight: { x: 88, y: ROW1_Y, w: 70, h: MIN_TOUCH } as Rect,
+  inspect: { x: 12, y: ROW2_Y, w: 146, h: MIN_TOUCH } as Rect,
   summon: summonRects,
-  gather: { x: 580, y: ROW1_Y, w: 150, h: ROW_H * 2 + ROW_GAP } as Rect,
+  gather: { x: 610, y: ROW1_Y, w: 100, h: ROW_H * 2 + ROW_GAP } as Rect,
   skills: skillRects,
-  pause: { x: GAME_WIDTH - 8 - MIN_TOUCH, y: 4, w: MIN_TOUCH, h: MIN_TOUCH } as Rect,
+  pause: { x: GAME_WIDTH - 8 - MIN_TOUCH, y: 10, w: MIN_TOUCH, h: MIN_TOUCH } as Rect,
   // 보이기만 하는 표시
-  talismanBar: { x: 8, y: 6, w: 230, h: 16 } as Rect,
-  spiritBar: { x: 8, y: 28, w: 230, h: 16 } as Rect,
-  minimap: { x: 300, y: 4, w: 360, h: 26 } as Rect,
-  shrineBar: { x: 300, y: 34, w: 176, h: 16 } as Rect,
-  castleBar: { x: 484, y: 34, w: 176, h: 16 } as Rect,
+  talismanBar: { x: 14, y: 8, w: 248, h: 32 } as Rect,
+  spiritBar: { x: 14, y: 44, w: 248, h: 32 } as Rect,
+  minimap: { x: 282, y: 8, w: 360, h: 20 } as Rect,
+  shrineBar: { x: 282, y: 36, w: 176, h: 26 } as Rect,
+  castleBar: { x: 466, y: 36, w: 176, h: 26 } as Rect,
   /** 오른쪽 작은 글자 3줄: 스테이지, 웨이브·시간·위협, 적·아군 수 */
-  infoText: { x: 676, y: 4, w: 200, h: 48 } as Rect,
+  infoText: { x: 660, y: 8, w: 214, h: 70 } as Rect,
   /** 왼쪽 아래 작은 글자 한 줄: 영웅 부활, 연계 목록 */
-  noteText: { x: 8, y: 54, w: 640, h: 16 } as Rect,
+  noteText: { x: 282, y: 68, w: 360, h: 16 } as Rect,
   /** 보스 이름·체력바·칩 (위쪽 띠 바로 아래) */
-  bossName: { x: 280, y: 74, w: 400, h: 20 } as Rect,
-  bossBar: { x: 280, y: 96, w: 400, h: 14 } as Rect,
-  bossChips: { x: 180, y: 114, w: 600, h: 24 } as Rect,
+  bossName: { x: 280, y: 94, w: 400, h: 24 } as Rect,
+  bossBar: { x: 280, y: 122, w: 400, h: 10 } as Rect,
+  bossChips: { x: 180, y: 140, w: 600, h: 24 } as Rect,
 } as const;
 
 /** 전투 중 눌러서 쓰는 버튼 이름과 사각형 */
@@ -80,6 +90,7 @@ export function battleButtons(): { name: string; rect: Rect }[] {
   return [
     { name: 'moveLeft', rect: L.moveLeft },
     { name: 'moveRight', rect: L.moveRight },
+    { name: 'inspect', rect: L.inspect },
     ...L.summon.map((rect, i) => ({ name: `summon${i}`, rect })),
     { name: 'gather', rect: L.gather },
     ...L.skills.map((rect, i) => ({ name: `skill${i}`, rect })),
@@ -131,15 +142,10 @@ export const FLOATER = { max: 60, seconds: 0.8, rise: 36 } as const;
 // ----- 지도 화면 -----
 
 export const MAP_LAYOUT = {
-  gridX: 104,
-  gridY: 84,
-  cellW: 88,
-  cellH: MIN_TOUCH,
-  gap: 8,
-  infoX: 616,
-  infoY: 74,
-  infoW: 320,
-  infoH: 396,
+  chapters: Array.from({ length: 5 }, (_, i) => ({ x: 24 + i * 184, y: 76, w: 174, h: MIN_TOUCH })) as Rect[],
+  route: { x: 24, y: 158, w: 568, h: 304 } as Rect,
+  nodes: Array.from({ length: 5 }, (_, i) => ({ x: 48 + i * 104, y: 250 + (i % 2 === 0 ? 20 : 0), w: 88, h: 112 })) as Rect[],
+  preview: { x: 612, y: 158, w: 324, h: 366 } as Rect,
 } as const;
 
 // ----- 빌드 화면 -----
@@ -230,14 +236,14 @@ export function nodeCells(tree: TreeId): { nodeId: string; rect: Rect }[] {
 
 // ----- 툴팁 (마우스를 올렸을 때 뜨는 설명 상자) -----
 export const TOOLTIP_LAYOUT = {
-  width: 280,
-  padding: 8,
+  width: 340,
+  padding: 14,
   /** 버튼과 상자 사이 간격 */
   gap: 6,
   /** 화면 가장자리 여백 */
-  margin: 4,
-  titleSize: 15,
-  bodySize: 12,
+  margin: 8,
+  titleSize: 18,
+  bodySize: 14,
   /** HUD(90~100)·일시정지·결과 덮개(180~195)·팝업 버튼(210) 위 */
   depth: 220,
 } as const;

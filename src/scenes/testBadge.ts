@@ -7,12 +7,13 @@ import { GAME_HEIGHT, GAME_WIDTH, HUD_FONT } from './layout';
 export function addTestBadge(scene: Phaser.Scene, corner: 'right' | 'left' = 'right'): void {
   if (!isTestMode) return;
   const left = corner === 'left';
+  const battle = scene.sys.settings.key === 'Battle';
   scene.add
-    .text(left ? 8 : GAME_WIDTH - 8, GAME_HEIGHT - 4, TEST_MODE.label, {
+    .text(battle ? 12 : left ? 8 : GAME_WIDTH - 8, battle ? 80 : GAME_HEIGHT - 4, TEST_MODE.label, {
       fontFamily: HUD_FONT, fontSize: '13px', fontStyle: 'bold', color: '#ffffff',
       backgroundColor: '#b3302a', padding: { x: 6, y: 2 },
     })
-    .setOrigin(left ? 0 : 1, 1)
+    .setOrigin(battle || left ? 0 : 1, battle ? 0 : 1)
     .setScrollFactor(0)
     .setDepth(1000);
 }

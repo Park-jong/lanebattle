@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { VOLUME } from '../data/settings';
 import { volumeFromRatio } from '../game/settings';
 import { HUD_FONT } from './layout';
-import { INK } from './palette';
+import { DEFAULT_UI as U } from '../ui/default/tokens';
 
 /** 0~100 가로 슬라이더. 클릭하거나 끌어서 값을 바꾼다 */
 export class Slider {
@@ -11,6 +11,8 @@ export class Slider {
   private readonly valueText: Phaser.GameObjects.Text;
   private dragging = false;
   private value: number;
+  private readonly objects: (Phaser.GameObjects.Rectangle | Phaser.GameObjects.Arc | Phaser.GameObjects.Text)[] = [];
+  private readonly hit: Phaser.GameObjects.Rectangle;
 
   constructor(
     scene: Phaser.Scene,
@@ -22,15 +24,16 @@ export class Slider {
     depth: number,
   ) {
     this.value = initial;
-    scene.add.rectangle(x, y, width, 8, 0xb9a97f).setOrigin(0, 0.5).setStrokeStyle(1, INK).setDepth(depth);
-    this.fill = scene.add.rectangle(x, y, 0, 8, 0xd9473b).setOrigin(0, 0.5).setDepth(depth + 1);
-    this.knob = scene.add.circle(x, y, 11, 0xf3ead4).setStrokeStyle(2, INK).setDepth(depth + 2);
+    this.objects.push(scene.add.rectangle(x, y, width, 8, 0xc9b992).setOrigin(0, 0.5).setDepth(depth));
+    this.fill = scene.add.rectangle(x, y, 0, 8, 0x477e73).setOrigin(0, 0.5).setDepth(depth + 1);
+    this.knob = scene.add.circle(x, y, 14, U.paper).setStrokeStyle(3, 0x477e73).setDepth(depth + 2);
     this.valueText = scene.add
       .text(x + width + 16, y, '', { fontFamily: HUD_FONT, fontSize: '18px', color: '#2b2622', fontStyle: 'bold' })
       .setOrigin(0, 0.5)
       .setDepth(depth);
     // 막대보다 넓은 눌림 영역
-    const hit = scene.add.rectangle(x + width / 2, y, width + 24, 32, 0x000000, 0).setDepth(depth + 3);
+    const hit = this.hit = scene.add.rectangle(x + width / 2, y, width + 24, 66, 0x000000, 0).setDepth(depth + 3);
+    this.objects.push(this.fill, this.knob, this.valueText, hit);
     hit.setInteractive({ useHandCursor: true }).on('pointerdown', (p: Phaser.Input.Pointer) => {
       this.dragging = true;
       this.setFromPointer(p.x);
@@ -43,6 +46,12 @@ export class Slider {
       this.dragging = false;
     });
     this.refresh();
+  }
+
+  setVisible(visible: boolean): void {
+    for (const object of this.objects) object.setVisible(visible);
+    if (this.hit.input) this.hit.input.enabled = visible;
+    if (!visible) this.dragging = false;
   }
 
   private setFromPointer(px: number): void {

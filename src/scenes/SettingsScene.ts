@@ -3,78 +3,84 @@ import { settings } from '../game/session';
 import { GAME_HEIGHT, GAME_WIDTH, HUD_FONT } from './layout';
 import { KEY_MAP, KeyInput } from './input';
 import { MenuButton } from './MenuButton';
-import { INK, PAPER } from './palette';
 import { Slider } from './Slider';
+import { DEFAULT_UI as U } from '../ui/default/tokens';
+import { panel } from '../ui/default/decor';
 
 const DEPTH = 1000;
-const PANEL = { w: 600, h: 440 };
-
-/** PC 조작표 (design.md 7번) */
+const PANEL = { w: 680, h: 476 };
 const CONTROLS: readonly (readonly [string, string])[] = [
-  ['이동', 'A / D 또는 ← / →'],
+  ['영웅 이동', 'A / D 또는 ← / →'],
   ['유닛 소환', '1 ~ 0'],
-  ['스킬 (부채 바람 / 축원 / 작두 타기)', 'Q / W / E'],
+  ['영웅 스킬', 'Q / W / E'],
   ['기운 모으기', 'R'],
-  ['일시정지', 'Esc 또는 P'],
-  ['결과 화면 (다시 / 다음 / 지도)', 'R / N / M'],
+  ['유닛 · 스킬 설명', 'I → 카드 또는 단축키'],
+  ['일시정지 / 계속', 'Esc 또는 P'],
+  ['결과: 다시 / 다음 / 지도', 'R / N / M'],
 ];
 
-/** 설정 오버레이: 소리 크기 슬라이더와 조작 안내. 부모 씬 위에 얹어 연다 */
 export class SettingsScene extends Phaser.Scene {
   private parentKey = '';
   private keyInput!: KeyInput;
 
-  constructor() {
-    super('Settings');
-  }
-
-  init(data: { parent?: string }): void {
-    this.parentKey = data.parent ?? '';
-  }
+  constructor() { super('Settings'); }
+  init(data: { parent?: string }): void { this.parentKey = data.parent ?? ''; }
 
   create(): void {
-    const cx = GAME_WIDTH / 2;
-    const left = cx - PANEL.w / 2;
-    const top = (GAME_HEIGHT - PANEL.h) / 2;
-    const font = { fontFamily: HUD_FONT, color: '#2b2622' };
+    const cx = GAME_WIDTH / 2, left = cx - PANEL.w / 2, top = (GAME_HEIGHT - PANEL.h) / 2;
+    const font = { fontFamily: HUD_FONT, color: U.darkText };
+    this.add.rectangle(cx, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x050c18, 0.8).setDepth(DEPTH).setInteractive();
+    panel(this, left, top, PANEL.w, PANEL.h, false, DEPTH + 1);
+    this.add.text(cx, top + 18, '잠깐, 축제 준비', { ...font, fontSize: '28px', fontStyle: 'bold' })
+      .setOrigin(0.5, 0).setDepth(DEPTH + 2);
 
-    // 뒤 화면을 어둡게. 클릭이 아래로 새지 않게 입력도 받는다
-    this.add.rectangle(cx, GAME_HEIGHT / 2, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.65).setDepth(DEPTH).setInteractive();
-    this.add.rectangle(cx, GAME_HEIGHT / 2, PANEL.w, PANEL.h, PAPER).setStrokeStyle(3, INK).setDepth(DEPTH + 1);
-    this.add.text(cx, top + 22, '설정', { ...font, fontSize: '30px', fontStyle: 'bold' }).setOrigin(0.5, 0).setDepth(DEPTH + 2);
-
-    const rows: [string, number, (v: number) => void][] = [
-      ['배경음', settings.musicVolume, (v) => settings.setMusicVolume(v)],
-      ['효과음', settings.sfxVolume, (v) => settings.setSfxVolume(v)],
+    const audioObjects: Phaser.GameObjects.Text[] = [];
+    const sliders: Slider[] = [];
+    const audioRows: [string, number, (v: number) => void][] = [
+      ['배경음', settings.musicVolume, v => settings.setMusicVolume(v)],
+      ['효과음', settings.sfxVolume, v => settings.setSfxVolume(v)],
     ];
-    rows.forEach(([name, value, onChange], i) => {
-      const y = top + 100 + i * 44;
-      this.add.text(left + 40, y, name, { ...font, fontSize: '18px' }).setOrigin(0, 0.5).setDepth(DEPTH + 2);
-      new Slider(this, left + 140, y, 300, value, onChange, DEPTH + 2);
+    audioRows.forEach(([name, value, update], i) => {
+      const y = top + 212 + i * 82;
+      audioObjects.push(this.add.text(left + 42, y, name, { ...font, fontSize: '20px', fontStyle: 'bold' })
+        .setOrigin(0, 0.5).setDepth(DEPTH + 2));
+      sliders.push(new Slider(this, left + 170, y, 370, value, update, DEPTH + 2));
     });
+    audioObjects.push(this.add.text(cx, top + 354, '원하는 소리 크기를 누르거나 끌어서 조절하세요.', {
+      ...font, fontSize: '14px', color: '#77623b',
+    }).setOrigin(0.5).setDepth(DEPTH + 2));
 
-    this.add.text(left + 40, top + 176, '조작 안내', { ...font, fontSize: '16px', fontStyle: 'bold' }).setDepth(DEPTH + 2);
-    const names = CONTROLS.map(([n]) => n).join('\n');
-    const keys = CONTROLS.map(([, k]) => k).join('\n');
-    this.add.text(left + 40, top + 204, names, { ...font, fontSize: '15px', lineSpacing: 8 }).setDepth(DEPTH + 2);
-    this.add.text(left + 380, top + 204, keys, { ...font, fontSize: '15px', lineSpacing: 8, fontStyle: 'bold' }).setDepth(DEPTH + 2);
-
-    new MenuButton(this, cx, top + PANEL.h - 36, 180, 66, '닫기 (Esc)', () => this.close()).setDepth(DEPTH + 2);
-
-    this.keyInput = new KeyInput(window, (code) => {
-      if (code === KEY_MAP.back) this.close();
-    });
+    const controls = [
+      this.add.text(left + 42, top + 174, CONTROLS.map(([n]) => n).join('\n'), {
+        ...font, fontSize: '16px', lineSpacing: 9,
+      }).setDepth(DEPTH + 2),
+      this.add.text(left + 338, top + 174, CONTROLS.map(([, k]) => k).join('\n'), {
+        ...font, fontSize: '16px', fontStyle: 'bold', lineSpacing: 9,
+      }).setDepth(DEPTH + 2),
+      this.add.text(cx, top + 382, '터치: 화면 버튼으로 조작 · 설명 모드에서는 카드 행동이 실행되지 않습니다.', {
+        ...font, fontSize: '13px', color: '#77623b',
+      }).setOrigin(0.5).setDepth(DEPTH + 2),
+    ];
+    const showTab = (audio: boolean) => {
+      for (const object of audioObjects) object.setVisible(audio);
+      for (const slider of sliders) slider.setVisible(audio);
+      for (const object of controls) object.setVisible(!audio);
+      soundTab.setFill(audio ? U.gold : U.paper);
+      controlsTab.setFill(audio ? U.paper : U.gold);
+    };
+    const soundTab = new MenuButton(this, cx - 148, top + 106, 280, 66, '소리', () => showTab(true), { fontSize: 18 }).setDepth(DEPTH + 2);
+    const controlsTab = new MenuButton(this, cx + 148, top + 106, 280, 66, '조작 안내', () => showTab(false), { fontSize: 18 }).setDepth(DEPTH + 2);
+    new MenuButton(this, cx, top + PANEL.h - 46, 250, 66, '축제로 돌아가기 (Esc)', () => this.close(), {
+      tone: 'primary', fontSize: 18,
+    }).setDepth(DEPTH + 2);
+    showTab(true);
+    this.keyInput = new KeyInput(window, code => { if (code === KEY_MAP.back) this.close(); });
     this.keyInput.attach();
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.keyInput.detach());
   }
 
-  /**
-   * 부모 씬을 다시 켜고 스스로 끝낸다.
-   * 부모의 keydown 리스너가 먼저 등록돼 있어 같은 Esc 입력에서는 부모가 아직 멈춘 상태로 먼저 처리된다.
-   */
   private close(): void {
-    const manager = this.game.scene;
-    if (this.parentKey) manager.resume(this.parentKey);
-    manager.stop('Settings');
+    if (this.parentKey) this.game.scene.resume(this.parentKey);
+    this.game.scene.stop('Settings');
   }
 }

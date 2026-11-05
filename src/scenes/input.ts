@@ -21,6 +21,7 @@ export const KEY_MAP = {
   openSettings: 'KeyO',
   /** 지도에서 빌드 화면 열기 */
   openBuild: 'KeyB',
+  inspect: 'KeyI',
   /** 지도 칸 이동 */
   mapLaunch: 'Enter',
   mapLeft: ['ArrowLeft'],

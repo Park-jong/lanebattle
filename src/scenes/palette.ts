@@ -1,5 +1,6 @@
 import type { Tag } from '../data/types';
 import type { SkillId } from '../data/skills';
+import { DEFAULT_UI as U } from '../ui/default/tokens';
 
 // docs/design.md 8번 오방색 규칙: 태그별 색
 export const TAG_COLORS: Record<Tag, number> = {
@@ -27,10 +28,10 @@ export function colorForTags(tags: readonly Tag[]): number {
 }
 
 // 메뉴 화면용 색 (한지 + 먹 + 오방색)
-export const PAPER = 0xf3ead4;
-export const PAPER_DARK = 0xd9cba6;
-export const INK = 0x2b2622;
-export const NIGHT = 0x14172b;
+export const PAPER = U.paper;
+export const PAPER_DARK = U.paperShade;
+export const INK = U.ink;
+export const NIGHT = U.night;
 /** 오방색: 청 적 황 백 흑 */
 export const FIVE_COLORS = [0x3b6fd4, 0xd9473b, 0xe0b52e, 0xf5f0e0, 0x1b1d26] as const;
 /** 장(1~5)별 포인트 색 */
@@ -39,11 +40,11 @@ export function chapterColor(chapter: number): number {
 }
 
 // 전투 HUD 색
-export const HUD_PANEL = 0x1a1e33;
-export const HUD_STRIP = 0x10142a;
-export const BUTTON_FILL = 0x2b2f48;
-export const BUTTON_FILL_ACTION = 0x4a4a6b;
-export const BUTTON_FILL_GATHER = 0x6b5a3a;
+export const HUD_PANEL = U.panel;
+export const HUD_STRIP = U.night;
+export const BUTTON_FILL = U.panelRaised;
+export const BUTTON_FILL_ACTION = 0x304257;
+export const BUTTON_FILL_GATHER = 0x554a32;
 export const SHRINE_COLOR = 0xe0b52e;
 export const HERO_COLOR = 0xf5f0e0;
 

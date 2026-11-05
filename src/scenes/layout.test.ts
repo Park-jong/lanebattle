@@ -22,8 +22,8 @@ function overlapPairs(items: { name: string; rect: Rect }[]): string[] {
 describe('전투 HUD 배치', () => {
   const buttons = battleButtons();
 
-  it('버튼은 소환 10 + 스킬 3 + 이동 2 + 기운 모으기 + 일시정지', () => {
-    expect(buttons).toHaveLength(17);
+  it('버튼은 소환 10 + 스킬 3 + 이동 2 + 기운 모으기 + 일시정지 + 설명', () => {
+    expect(buttons).toHaveLength(18);
     expect(BATTLE_LAYOUT.summon).toHaveLength(10);
     expect(BATTLE_LAYOUT.skills).toHaveLength(3);
   });
@@ -96,17 +96,23 @@ describe('일시정지·결과 화면 버튼', () => {
   });
 });
 
-describe('지도 칸', () => {
-  it('칸은 66x66 이상이고 화면 안에서 정보 패널과 겹치지 않는다', () => {
+describe('장과 관문 선택', () => {
+  it('장 탭과 다섯 관문의 터치 영역은 화면 안에 있고 서로 겹치지 않는다', () => {
     const M = MAP_LAYOUT;
-    expect(M.cellW).toBeGreaterThanOrEqual(MIN_TOUCH);
-    expect(M.cellH).toBeGreaterThanOrEqual(MIN_TOUCH);
-    const last: Rect = {
-      x: M.gridX + 4 * (M.cellW + M.gap), y: M.gridY + 4 * (M.cellH + M.gap), w: M.cellW, h: M.cellH,
-    };
-    expect(inside(last, screen)).toBe(true);
-    expect(last.x + last.w).toBeLessThan(M.infoX);
-    expect(M.gap).toBeGreaterThan(0);
+    expect(M.chapters).toHaveLength(5);
+    expect(M.nodes).toHaveLength(5);
+    const buttons = [...M.chapters, ...M.nodes].map((rect, i) => ({ name: String(i), rect }));
+    for (const { rect } of buttons) {
+      expect(rect.w).toBeGreaterThanOrEqual(MIN_TOUCH);
+      expect(rect.h).toBeGreaterThanOrEqual(MIN_TOUCH);
+      expect(inside(rect, screen)).toBe(true);
+      expect(overlaps(rect, M.preview)).toBe(false);
+    }
+    expect(overlapPairs(buttons)).toEqual([]);
+    for (const rect of M.nodes) expect(inside(rect, M.route)).toBe(true);
+    expect(inside(M.route, screen)).toBe(true);
+    expect(inside(M.preview, screen)).toBe(true);
+    expect(overlaps(M.route, M.preview)).toBe(false);
   });
 });
 

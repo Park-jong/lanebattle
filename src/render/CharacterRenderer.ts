@@ -4,6 +4,7 @@ import { Hero } from '../battle/hero';
 import { HERO } from '../data/hero';
 import type { SkillCastEvent } from '../battle/skills';
 import { ART_MANIFEST_KEY, artFor, clipFrame, clipSeconds, type CharacterArt } from './art';
+import { BattlefieldProjection } from './battlefield';
 
 export function subjectOf(body: Body): string {
   if (body instanceof Hero) return body.possessedId ? `ally:${body.possessedId}` : 'hero:kkomaMudang';
@@ -62,8 +63,10 @@ class CharacterView {
     }
   }
 
-  update(dt: number, present: boolean, ground: number, lift: number): void {
+  update(dt: number, present: boolean, field: BattlefieldProjection): void {
     const body = this.body;
+    const ground = field.ground(body), lift = field.elevation(body);
+    this.sprite.setDepth(field.depth(body));
     if (body.alive && !this.wasAlive) {
       this.dead = false;
       this.deathAge = 0;
@@ -130,9 +133,9 @@ export class CharacterRenderer {
   private readonly shots = new Map<Projectile, Phaser.GameObjects.Image>();
   private effects: Fx[] = [];
 
-  constructor(private readonly scene: Phaser.Scene) {}
+  constructor(private readonly scene: Phaser.Scene, private readonly field: BattlefieldProjection) {}
 
-  update(dt: number, bodies: Body[], ground: number, lift: (body: Body) => number): void {
+  update(dt: number, bodies: Body[]): void {
     const present = new Set(bodies);
     for (const body of bodies) {
       if (this.views.has(body) || !body.alive) continue;
@@ -140,7 +143,7 @@ export class CharacterRenderer {
       if (art && this.scene.textures.get(art.texture).has('idle_00')) this.views.set(body, new CharacterView(body, art, this.scene));
     }
     for (const [body, view] of this.views) {
-      view.update(dt, present.has(body), ground, lift(body));
+      view.update(dt, present.has(body), this.field);
       if (view.finished && body.kind !== 'hero') { view.destroy(); this.views.delete(body); }
     }
     for (const fx of this.effects) {
@@ -155,7 +158,7 @@ export class CharacterRenderer {
   shows(body: Body): boolean { return this.views.get(body)?.isDrawn ?? false; }
   hit(body: Body): void { this.views.get(body)?.hit(); }
 
-  cast(hero: Body, event: SkillCastEvent, ground: number): void {
+  cast(hero: Body, event: SkillCastEvent): void {
     // 빙의 스킬은 그 유닛의 공격 동작을 보여 준다
     const clip = event.possessed ? 'attack' : { fanWind: 'skill_fan', blessing: 'skill_blessing', bladeDance: 'skill_blade' }[event.id];
     this.views.get(hero)?.special(clip);
@@ -165,12 +168,12 @@ export class CharacterRenderer {
     if (!art?.clips[fx]) return;
     const frame = art.clips[fx].frames[0];
     if (!this.scene.textures.get(art.texture).has(frame)) return;
-    const image = this.scene.add.image(event.x, ground - 20, art.texture, frame).setDepth(25)
-      .setDisplaySize(Math.min(420, event.range * 1.6), Math.min(220, event.range)).setFlipX(event.facing < 0);
+    const image = this.scene.add.image(event.x, this.field.ground(hero) - 20, art.texture, frame).setDepth(55)
+      .setDisplaySize(Math.min(420, event.range * 1.6), Math.min(100, event.range * 0.45)).setFlipX(event.facing < 0);
     this.effects.push({ image, art, clip: fx, age: 0, duration: 0.35 });
   }
 
-  projectile(p: Projectile, ground: number, clock: number): boolean {
+  projectile(p: Projectile, clock: number): boolean {
     const shooter = p.payload.attacker;
     const art = shooter ? artInScene(this.scene, subjectOf(shooter)) : undefined;
     const clip = art && Object.keys(art.clips).find((key) => key.startsWith('projectile_'));
@@ -178,11 +181,12 @@ export class CharacterRenderer {
     if (!art || !frame || !this.scene.textures.get(art.texture).has(frame)) return false;
     let image = this.shots.get(p);
     if (!image) {
-      image = this.scene.add.image(p.x, ground - 24, art.texture, frame).setDepth(24);
+      image = this.scene.add.image(0, 0, art.texture, frame).setDepth(45);
       this.shots.set(p, image);
     }
-    image.setFrame(frame).setPosition(p.x, ground - 24).setDisplaySize(p.attackType === 'magic' ? 20 : 16, 14)
-      .setFlipX(p.target.x < p.x);
+    const point = this.field.projectile(p);
+    image.setFrame(frame).setPosition(point.x, point.y).setDisplaySize(p.attackType === 'magic' ? 20 : 16, 14)
+      .setFlipX(p.target.x < p.x).setRotation(point.angle);
     return true;
   }
 
