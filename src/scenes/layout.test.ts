@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { MAX_TIER, TREE_IDS, nodesOfTree, possessionNodeId, YOGOE_UNIT_IDS, yogoeNodeIds } from '../data/upgrades';
 import {
   battleButtons, battleDisplays, BATTLE_LAYOUT, centeredRow, GAME_HEIGHT, GAME_WIDTH, GROUND_Y, MAP_LAYOUT,
-  MIN_TOUCH, minimapX, frontlineTrack, BUILD_LAYOUT, dialogButtons, nodeCells, tierLabelRect, PAUSE_BUTTON, RESULT_LAYOUT, type Rect,
+  MIN_TOUCH, minimapX, frontlineTrack, BUILD_LAYOUT, dialogButtons, nodeCells, tierLabelRect, tierRowY, PAUSE_BUTTON, RESULT_LAYOUT, type Rect,
 } from './layout';
 
 const overlaps = (a: Rect, b: Rect) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
@@ -211,15 +211,19 @@ describe('빌드 화면 배치', () => {
     expect(pairGap).toBeLessThan(groupGap);
   });
 
-  it('무당 탭에 강림, 연계 탭에 귀문개방 칸이 4단 줄 끝에 하나씩 있다', () => {
-    const last = (tree: 'mudang' | 'yeongye', id: string) => {
-      const row = nodeCells(tree).filter((c) => c.rect.y === nodeCells(tree).find((x) => x.nodeId === id)!.rect.y);
-      return row.sort((a, b) => a.rect.x - b.rect.x)[row.length - 1].nodeId;
-    };
-    expect(last('mudang', 'descent')).toBe('descent');
-    expect(last('yeongye', 'ghostGate')).toBe('ghostGate');
-    expect(nodeCells('mudang').filter((c) => c.rect.y === nodeCells('mudang').find((x) => x.nodeId === 'descent')!.rect.y)).toHaveLength(3);
-    expect(nodeCells('yeongye').filter((c) => c.rect.y === nodeCells('yeongye').find((x) => x.nodeId === 'ghostGate')!.rect.y)).toHaveLength(2);
+  it('강림(무당)·귀문개방(연계)은 4단 줄 아래 이름표 없는 줄에 첫 칸 위치로 하나씩 놓인다', () => {
+    const cases = [['mudang', 'descent', 2], ['yeongye', 'ghostGate', 1]] as const;
+    for (const [tree, id, fourthCount] of cases) {
+      const cells = nodeCells(tree);
+      const cell = cells.find((c) => c.nodeId === id)!;
+      expect(cell.rect.y).toBe(tierRowY(MAX_TIER + 1));
+      expect(cell.rect.y).toBe(456);
+      expect(cell.rect.x).toBe(84);
+      expect(cells.filter((c) => c.rect.y === cell.rect.y)).toHaveLength(1);
+      expect(cells.filter((c) => c.rect.y === tierRowY(MAX_TIER))).toHaveLength(fourthCount);
+      expect(cell.rect.y).toBeGreaterThanOrEqual(tierLabelRect(MAX_TIER).y + tierLabelRect(MAX_TIER).h);
+      expect(cell.rect.y + cell.rect.h).toBeLessThanOrEqual(BUILD_LAYOUT.nodeArea.y + BUILD_LAYOUT.nodeArea.h);
+    }
   });
 
   it('요괴 탭은 유닛마다 ①②③④ 4칸이 한 줄에 놓이고 ④는 빙의 노드다', () => {

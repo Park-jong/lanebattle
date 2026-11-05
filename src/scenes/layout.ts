@@ -194,7 +194,7 @@ export function dialogButtons(count: number): Rect[] {
 const NODE_GAP_PAIR = 2;
 const NODE_GAP_GROUP = 10;
 
-/** 단 번호(1~4) 줄의 y */
+/** 단 번호(1~4) 줄의 y. MAX_TIER + 1은 이름표 없는 최종 단계 줄 */
 export function tierRowY(tier: number): number {
   return BUILD_TOP + (tier - 1) * BUILD_ROW_STEP;
 }
@@ -221,12 +221,13 @@ export function nodeCells(tree: TreeId): { nodeId: string; rect: Rect }[] {
     });
   }
   const out: { nodeId: string; rect: Rect }[] = [];
-  for (let tier = 1; tier <= MAX_TIER; tier++) {
-    const nodes = nodesOfTree(tree).filter((n) => n.tier === tier);
+  // 최종 단계 노드(강림·귀문개방)는 4단 줄 아래 한 줄(5단 위치)에 이름표 없이 놓는다
+  for (let row = 1; row <= MAX_TIER + 1; row++) {
+    const nodes = nodesOfTree(tree).filter((n) => (n.finalStage ? MAX_TIER + 1 : n.tier) === row);
     let x = 84;
     nodes.forEach((n, i) => {
       if (i > 0) x += n.exclusiveGroup && n.exclusiveGroup === nodes[i - 1].exclusiveGroup ? NODE_GAP_PAIR : NODE_GAP_GROUP;
-      out.push({ nodeId: n.id, rect: { x, y: tierRowY(tier), w: 92, h: MIN_TOUCH } });
+      out.push({ nodeId: n.id, rect: { x, y: tierRowY(row), w: 92, h: MIN_TOUCH } });
       x += 92;
     });
   }

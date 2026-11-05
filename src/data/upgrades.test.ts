@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ALLIES } from './allies';
+import { DESCENT_TUNING, GHOST_GATE_TUNING } from './finalStage';
 import { ALL_SYNERGY_IDS } from './synergy';
 import {
   getUpgradeNode,
@@ -64,5 +65,27 @@ describe('업그레이드 트리 데이터', () => {
 
   it('단 해금 기준 5/12/20', () => {
     expect(TIER_UNLOCK_SPENT).toEqual({ 1: 0, 2: 5, 3: 12, 4: 20 });
+  });
+});
+
+describe('최종 단계 설명은 수치 상수에서 만든다', () => {
+  it('귀문개방: 소환 비용 상수가 들어가고 옛 값 30은 없다', () => {
+    const d = getUpgradeNode(GHOST_GATE_TUNING.nodeId)!.description;
+    expect(d).toContain(`${GHOST_GATE_TUNING.summonCost}으로 고정`);
+    expect(d).not.toContain('30');
+  });
+
+  it('귀문개방: 쿨타임 배율 0.5는 절반으로 표시', () => {
+    expect(GHOST_GATE_TUNING.summonCooldownMultiplier).toBe(0.5);
+    expect(getUpgradeNode(GHOST_GATE_TUNING.nodeId)!.description).toContain('절반');
+  });
+
+  it('강림: 배율과 쿨타임 상수가 들어간다', () => {
+    const t = DESCENT_TUNING;
+    const d = getUpgradeNode(t.nodeId)!.description;
+    expect(d).toContain(`체력 x${t.hpMultiplier}`);
+    expect(d).toContain(`신력 충전 x${t.spiritChargeMultiplier}`);
+    expect(d).toContain(`피해 x${t.damageMultiplier}`);
+    expect(d).toContain(`Q ${t.cooldowns.fanWind}초·W ${t.cooldowns.blessing}초·E ${t.cooldowns.bladeDance}초`);
   });
 });

@@ -4,7 +4,7 @@ import { getBossById } from '../data/bosses';
 import { STAGES } from '../data/stages';
 import { getUpgradeNode, MAX_TIER, TREE_NAMES, UPGRADE_NODES, type TreeId, type UpgradeNode } from '../data/upgrades';
 import {
-  allocateFailureText, BUILD_TABS, deallocateFailureText, HIDDEN_NODE_NAME, HIDDEN_NODE_TEXT, nodeStatus, purchaseText, tabName,
+  allocateFailureText, BUILD_TABS, deallocateFailureText, HIDDEN_NODE_NAME, hiddenNodeDetailText, nodeStatus, purchaseText, tabName,
   tierUnlockText, type BuildTab, type NodeStatus,
 } from '../game/buildText';
 import { builds, summonOrder, wallet } from '../game/session';
@@ -295,7 +295,7 @@ export class BuildScene extends Phaser.Scene {
     }
     if (!build.isRevealed(node)) {
       // 최종 단계 노드(빙의·강림·귀문개방)는 해금 조건을 채우기 전까지 이름과 효과를 숨긴다
-      this.detailBody.setText(`${HIDDEN_NODE_NAME}\n\n${HIDDEN_NODE_TEXT}`, '#6b5a3a');
+      this.detailBody.setText(`${HIDDEN_NODE_NAME}\n\n${hiddenNodeDetailText(node, false)}`, '#6b5a3a');
       this.primaryButton.setEnabled(false);
       this.secondaryButton.setEnabled(false);
       return;

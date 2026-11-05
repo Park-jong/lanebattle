@@ -86,7 +86,8 @@ describe('소환', () => {
     expect(b.allies).toHaveLength(0);
   });
 
-  it('아군은 최대 30마리', () => {
+  it('아군 상한은 100마리, 100마리 다음 소환은 full', () => {
+    expect(COMBAT.maxAllies).toBe(100);
     const b = newBattle();
     for (let n = 0; n < COMBAT.maxAllies; n++) {
       resetCooldowns(b);
@@ -468,5 +469,23 @@ describe('승패', () => {
     const d = new Dummy();
     d.takeDamage(0);
     expect(d.hp).toBe(9);
+  });
+});
+
+describe('아군 100마리 전투 틱', () => {
+  it('아군 100 + 적 60으로 수천 틱을 돌려도 상한을 지키며 끝난다 (시간은 단언하지 않음)', () => {
+    const b = newBattle(10);
+    b.spawnFreeAllies('clubGoblin', COMBAT.maxAllies);
+    expect(b.allies).toHaveLength(COMBAT.maxAllies);
+    for (let i = 0; i < COMBAT.maxEnemies; i++) b.spawnEnemy('eggGhost', false, 600 + i * 20);
+    const t0 = performance.now();
+    const ticks = 3000;
+    for (let i = 0; i < ticks; i++) {
+      b.resources.addTalisman(1000);
+      b.step(0.05);
+    }
+    const ms = performance.now() - t0;
+    console.log(`[perf] ally100+enemy60 ${ticks} ticks: ${ms.toFixed(0)}ms (${(ms / ticks).toFixed(3)}ms/tick)`);
+    expect(b.allies.length).toBeLessThanOrEqual(COMBAT.maxAllies);
   });
 });

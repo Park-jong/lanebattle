@@ -65,11 +65,17 @@ const MUDANG_INITS: NodeInit[] = [
   { id: 'deepSpirit', tier: 4, name: '깊은 신기', description: '신력 최대 +50', cost: 3, params: { maxSpiritBonus: 50 } },
 ];
 // 강림 (numbers.md 11장): 무당 트리 ④단 칸. 해금 조건은 game/build.ts가 판정한다
+function descentDescription(): string {
+  const t = DESCENT_TUNING;
+  const cd = t.cooldowns;
+  return `요괴를 소환할 수 없다. 영웅 최대 체력 x${t.hpMultiplier}, 신력 충전 x${t.spiritChargeMultiplier}, 영웅이 주는 모든 피해 x${t.damageMultiplier}. 스킬 쿨타임 Q ${cd.fanWind}초·W ${cd.blessing}초·E ${cd.bladeDance}초, Q 신력 소모 없음`;
+}
+
 const DESCENT_INIT: NodeInit = {
   id: DESCENT_TUNING.nodeId,
   tier: 4,
   name: '강림',
-  description: '요괴를 소환할 수 없다. 영웅 최대 체력 x3, 신력 충전 x3, 영웅이 주는 모든 피해 x3. 스킬 쿨타임 Q 0.1초·W 1초·E 5초, Q 신력 소모 없음',
+  description: descentDescription(),
   cost: DESCENT_TUNING.cost,
   finalStage: 'descent',
   exclusiveGroup: FINAL_STAGE_GROUP,
@@ -187,11 +193,17 @@ const SYNERGY_INITS: (NodeInit & { id: SynergyId })[] = [
   { id: 'hundredDemons', tier: 4, name: '백귀야행', description: '4가지 태그가 모두 전장에 있으면 모든 아군 공격력 +20%, 받는 피해 -10%', cost: 6 },
 ];
 // 귀문개방 (numbers.md 11장): 연계 트리 ④단 칸. 노드 id는 연계 id가 아니므로 연계 효과 계산에서 걸러진다
+function ghostGateDescription(): string {
+  const m = GHOST_GATE_TUNING.summonCooldownMultiplier;
+  const cooldown = m === 0.5 ? '절반' : `${Math.round(m * 100)}%`;
+  return `모든 유닛 소환 비용이 ${GHOST_GATE_TUNING.summonCost}으로 고정되고, 소환 쿨타임이 ${cooldown}이 된다`;
+}
+
 const GHOST_GATE_INIT: NodeInit = {
   id: GHOST_GATE_TUNING.nodeId,
   tier: 4,
   name: '귀문개방',
-  description: '모든 유닛 소환 비용이 30으로 고정되고, 소환 쿨타임이 절반이 된다',
+  description: ghostGateDescription(),
   cost: GHOST_GATE_TUNING.cost,
   finalStage: 'ghostGate',
   exclusiveGroup: FINAL_STAGE_GROUP,

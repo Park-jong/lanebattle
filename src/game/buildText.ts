@@ -1,6 +1,6 @@
 import { ALLIES } from '../data/allies';
 import { SINMYEONG_PURCHASE } from '../data/rewards';
-import { GHOST_GATE_TUNING } from '../data/finalStage';
+import { FINAL_STAGE_HINTS, GHOST_GATE_TUNING } from '../data/finalStage';
 import { getUpgradeNode, POSSESSION_GROUP, TIER_UNLOCK_SPENT, TREE_IDS, TREE_NAMES, type TreeId, type UpgradeNode } from '../data/upgrades';
 import type { AllocateCheck, AllocateFailure, Build, DeallocateCheck } from './build';
 import type { PurchaseResult } from './wallet';
@@ -32,6 +32,14 @@ function unitNameOf(unitId: string): string {
 export const HIDDEN_NODE_NAME = '???';
 /** 숨겨진 빙의 노드의 상세 패널 문구 */
 export const HIDDEN_NODE_TEXT = '숨겨진 힘이 잠들어 있다…';
+
+/** 숨겨진 칸의 상세 패널 문구: 기본 문구 + 최종 단계 노드면 종류별 힌트 한 줄 */
+export function hiddenNodeDetailText(node: UpgradeNode, revealed: boolean): string {
+  if (revealed) return '';
+  const hint = node.finalStage ? FINAL_STAGE_HINTS[node.finalStage] : null;
+  return hint ? `${HIDDEN_NODE_TEXT}
+${hint}` : HIDDEN_NODE_TEXT;
+}
 
 /** 단 해금 조건 문구. 1단은 조건이 없어 null */
 export function tierUnlockText(tier: number): string | null {

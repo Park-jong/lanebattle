@@ -249,7 +249,7 @@ describe('요괴 방망이병', () => {
     expect(none.allies).toHaveLength(1);
   });
 
-  it('③ 뚝딱: 아군 30마리 상한을 넘지 않는다', () => {
+  it('③ 뚝딱: 아군 상한(COMBAT.maxAllies)을 넘지 않는다', () => {
     const b = newBattle({ clubGoblinAwaken: 1 }, { rng: constRng(0) });
     const first = ally(b, 'clubGoblin', 500);
     for (let i = 1; i < COMBAT.maxAllies; i++) ally(b, 'haetae', 200 + i);
