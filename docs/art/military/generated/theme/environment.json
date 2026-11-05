@@ -1,0 +1,424 @@
+{
+  "group": "environment",
+  "generated": 20,
+  "planned": 20,
+  "tool": "built-in image_gen",
+  "delivery_state": "Raw generated assets; alignment and runtime integration pending",
+  "items": [
+    {
+      "id": "shared:common:environment/chapter_01_rear",
+      "output": "output/art-generation/military-theme/environment/chapter_01_rear.png",
+      "kind": "background",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": null,
+      "references": [],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Opaque background layer. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n01장 봉쇄된 도심 외곽 배경의 rear 레이어 한 장. 폐쇄된 상가·바리케이드·군용 도로 표식, 청회색 도심. 먼 하늘·실내 먼 벽과 가장 먼 구조물만 포함한다. 가까운 건물·전투 유닛·지면을 그리지 않는다. 이 레이어만 불투명 배경이다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_01_middle",
+      "output": "output/art-generation/military-theme/environment/chapter_01_middle.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_01_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n01장 봉쇄된 도심 외곽 배경의 middle 레이어 한 장. 폐쇄된 상가·바리케이드·군용 도로 표식, 청회색 도심. 중거리 구조물·주변 시설만 투명 알파 위에 그린다. 실제 전투 길과 유닛 위치를 가리지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_01_lane",
+      "output": "output/art-generation/military-theme/environment/chapter_01_lane.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_01_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n01장 봉쇄된 도심 외곽 배경의 lane 레이어 한 장. 폐쇄된 상가·바리케이드·군용 도로 표식, 청회색 도심. 가로로 이어지는 넓고 평탄한 길 한 겹. 위쪽 경계 y=188, 아래쪽 경계 y=374의 전장 지면을 중심으로 살짝 내려다보는 타원 투영 느낌을 유지한다. 높은 장애물·엄폐 판정·갈림길을 넣지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_01_foreground",
+      "output": "output/art-generation/military-theme/environment/chapter_01_foreground.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_01_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n01장 봉쇄된 도심 외곽 배경의 foreground 레이어 한 장. 폐쇄된 상가·바리케이드·군용 도로 표식, 청회색 도심. 길 가장자리의 낮은 파편·케이블·짧은 풀·시설 잔해만 투명 알파 위에 배치한다. 발 위치·HUD를 덮는 큰 구조물은 넣지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_02_rear",
+      "output": "output/art-generation/military-theme/environment/chapter_02_rear.png",
+      "kind": "background",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": null,
+      "references": [],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Opaque background layer. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n02장 점거된 군사기지 배경의 rear 레이어 한 장. 낮은 격납고·군용 울타리·장비 창고, 회녹색 군사시설. 먼 하늘·실내 먼 벽과 가장 먼 구조물만 포함한다. 가까운 건물·전투 유닛·지면을 그리지 않는다. 이 레이어만 불투명 배경이다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_02_middle",
+      "output": "output/art-generation/military-theme/environment/chapter_02_middle.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_02_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n02장 점거된 군사기지 배경의 middle 레이어 한 장. 낮은 격납고·군용 울타리·장비 창고, 회녹색 군사시설. 중거리 구조물·주변 시설만 투명 알파 위에 그린다. 실제 전투 길과 유닛 위치를 가리지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_02_lane",
+      "output": "output/art-generation/military-theme/environment/chapter_02_lane.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_02_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n02장 점거된 군사기지 배경의 lane 레이어 한 장. 낮은 격납고·군용 울타리·장비 창고, 회녹색 군사시설. 가로로 이어지는 넓고 평탄한 길 한 겹. 위쪽 경계 y=188, 아래쪽 경계 y=374의 전장 지면을 중심으로 살짝 내려다보는 타원 투영 느낌을 유지한다. 높은 장애물·엄폐 판정·갈림길을 넣지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_02_foreground",
+      "output": "output/art-generation/military-theme/environment/chapter_02_foreground.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_02_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n02장 점거된 군사기지 배경의 foreground 레이어 한 장. 낮은 격납고·군용 울타리·장비 창고, 회녹색 군사시설. 길 가장자리의 낮은 파편·케이블·짧은 풀·시설 잔해만 투명 알파 위에 배치한다. 발 위치·HUD를 덮는 큰 구조물은 넣지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_03_rear",
+      "output": "output/art-generation/military-theme/environment/chapter_03_rear.png",
+      "kind": "background",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": null,
+      "references": [],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Opaque background layer. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n03장 과열된 산업단지 배경의 rear 레이어 한 장. 배관·냉각탑·용광로 구조의 먼 실루엣, 철회색과 절제된 고열 주황. 먼 하늘·실내 먼 벽과 가장 먼 구조물만 포함한다. 가까운 건물·전투 유닛·지면을 그리지 않는다. 이 레이어만 불투명 배경이다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_03_middle",
+      "output": "output/art-generation/military-theme/environment/chapter_03_middle.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_03_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n03장 과열된 산업단지 배경의 middle 레이어 한 장. 배관·냉각탑·용광로 구조의 먼 실루엣, 철회색과 절제된 고열 주황. 중거리 구조물·주변 시설만 투명 알파 위에 그린다. 실제 전투 길과 유닛 위치를 가리지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_03_lane",
+      "output": "output/art-generation/military-theme/environment/chapter_03_lane.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_03_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n03장 과열된 산업단지 배경의 lane 레이어 한 장. 배관·냉각탑·용광로 구조의 먼 실루엣, 철회색과 절제된 고열 주황. 가로로 이어지는 넓고 평탄한 길 한 겹. 위쪽 경계 y=188, 아래쪽 경계 y=374의 전장 지면을 중심으로 살짝 내려다보는 타원 투영 느낌을 유지한다. 높은 장애물·엄폐 판정·갈림길을 넣지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_03_foreground",
+      "output": "output/art-generation/military-theme/environment/chapter_03_foreground.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_03_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n03장 과열된 산업단지 배경의 foreground 레이어 한 장. 배관·냉각탑·용광로 구조의 먼 실루엣, 철회색과 절제된 고열 주황. 길 가장자리의 낮은 파편·케이블·짧은 풀·시설 잔해만 투명 알파 위에 배치한다. 발 위치·HUD를 덮는 큰 구조물은 넣지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_04_rear",
+      "output": "output/art-generation/military-theme/environment/chapter_04_rear.png",
+      "kind": "background",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": null,
+      "references": [],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Opaque background layer. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n04장 폐쇄된 항공시설 배경의 rear 레이어 한 장. 활주로 경계·낮은 항공 격납고·관제탑 실루엣, 차가운 회청색. 먼 하늘·실내 먼 벽과 가장 먼 구조물만 포함한다. 가까운 건물·전투 유닛·지면을 그리지 않는다. 이 레이어만 불투명 배경이다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_04_middle",
+      "output": "output/art-generation/military-theme/environment/chapter_04_middle.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_04_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n04장 폐쇄된 항공시설 배경의 middle 레이어 한 장. 활주로 경계·낮은 항공 격납고·관제탑 실루엣, 차가운 회청색. 중거리 구조물·주변 시설만 투명 알파 위에 그린다. 실제 전투 길과 유닛 위치를 가리지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_04_lane",
+      "output": "output/art-generation/military-theme/environment/chapter_04_lane.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_04_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n04장 폐쇄된 항공시설 배경의 lane 레이어 한 장. 활주로 경계·낮은 항공 격납고·관제탑 실루엣, 차가운 회청색. 가로로 이어지는 넓고 평탄한 길 한 겹. 위쪽 경계 y=188, 아래쪽 경계 y=374의 전장 지면을 중심으로 살짝 내려다보는 타원 투영 느낌을 유지한다. 높은 장애물·엄폐 판정·갈림길을 넣지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_04_foreground",
+      "output": "output/art-generation/military-theme/environment/chapter_04_foreground.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_04_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n04장 폐쇄된 항공시설 배경의 foreground 레이어 한 장. 활주로 경계·낮은 항공 격납고·관제탑 실루엣, 차가운 회청색. 길 가장자리의 낮은 파편·케이블·짧은 풀·시설 잔해만 투명 알파 위에 배치한다. 발 위치·HUD를 덮는 큰 구조물은 넣지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_05_rear",
+      "output": "output/art-generation/military-theme/environment/chapter_05_rear.png",
+      "kind": "background",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": null,
+      "references": [],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Opaque background layer. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n05장 변이 실험시설 배경의 rear 레이어 한 장. 밀폐된 연구동·두꺼운 외벽·실험 구획, 먹청색과 자주색 경고광. 먼 하늘·실내 먼 벽과 가장 먼 구조물만 포함한다. 가까운 건물·전투 유닛·지면을 그리지 않는다. 이 레이어만 불투명 배경이다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_05_middle",
+      "output": "output/art-generation/military-theme/environment/chapter_05_middle.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_05_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n05장 변이 실험시설 배경의 middle 레이어 한 장. 밀폐된 연구동·두꺼운 외벽·실험 구획, 먹청색과 자주색 경고광. 중거리 구조물·주변 시설만 투명 알파 위에 그린다. 실제 전투 길과 유닛 위치를 가리지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_05_lane",
+      "output": "output/art-generation/military-theme/environment/chapter_05_lane.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_05_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n05장 변이 실험시설 배경의 lane 레이어 한 장. 밀폐된 연구동·두꺼운 외벽·실험 구획, 먹청색과 자주색 경고광. 가로로 이어지는 넓고 평탄한 길 한 겹. 위쪽 경계 y=188, 아래쪽 경계 y=374의 전장 지면을 중심으로 살짝 내려다보는 타원 투영 느낌을 유지한다. 높은 장애물·엄폐 판정·갈림길을 넣지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "shared:common:environment/chapter_05_foreground",
+      "output": "output/art-generation/military-theme/environment/chapter_05_foreground.png",
+      "kind": "layer",
+      "actual_size": [
+        1672,
+        941
+      ],
+      "target_size": [
+        960,
+        540
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/military-theme/environment/chapter_05_rear.png"
+      ],
+      "execution_prompt": "Create exactly the game support art specified below. Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark. Match the attached references for identity or visual style if any. Output ONE asset, no unrelated character or extra objects. Actual transparent alpha background. Target canvas 960x540.\n\n현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n05장 변이 실험시설 배경의 foreground 레이어 한 장. 밀폐된 연구동·두꺼운 외벽·실험 구획, 먹청색과 자주색 경고광. 길 가장자리의 낮은 파편·케이블·짧은 풀·시설 잔해만 투명 알파 위에 배치한다. 발 위치·HUD를 덮는 큰 구조물은 넣지 않는다.\n\n목표 960×540. 횡스크롤 전투를 약간 내려다보는 동일 시점. 전투 인물·기지·투사체·문자·로고·완성된 HUD는 그리지 않는다. 하단 y=390~540은 HUD 영역이므로 중요한 풍경을 배치하지 않는다. 좌우 이어 붙일 때 높이·시점·명암이 갑자기 끊기지 않는 가장자리. 고해상도 재생성 시에도 화면 비율·좌표 비율을 유지한다. 배경보다 캐릭터의 실루엣이 잘 보이는 중간 이하 대비로 그린다.\n\n첨부한 같은 장의 rear 이미지는 시점·조명·팔레트 참조다. 후경 자체를 현재 레이어에 다시 그리지 않고 지정된 깊이의 요소만 출력한다.\n\n실제 투명 알파. 가짜 체크무늬·불필요한 불투명 바탕을 넣지 않는다.",
+      "visual_qa": "pending"
+    }
+  ]
+}
