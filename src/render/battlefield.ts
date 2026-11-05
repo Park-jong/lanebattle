@@ -32,7 +32,9 @@ export class BattlefieldProjection {
   }
 
   scale(body: Body): number {
-    return body.kind === 'base' ? 1 : body.isBoss ? BATTLEFIELD.bossScale : BATTLEFIELD.unitScale;
+    if (body.kind === 'base') return 1;
+    if (body.kind === 'hero') return BATTLEFIELD.heroScale;
+    return body.isBoss ? BATTLEFIELD.bossScale : BATTLEFIELD.unitScale;
   }
 
   width(body: Body): number {

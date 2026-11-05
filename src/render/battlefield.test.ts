@@ -6,16 +6,17 @@ import { BATTLEFIELD, BATTLE_LAYOUT } from '../scenes/layout';
 import { BattlefieldProjection } from './battlefield';
 
 describe('battlefield display projection', () => {
-  it('enlarges regular bodies by 20% and bosses by 10% while retaining combat sizes', () => {
+  it('enlarges units and emphasizes the hero while retaining combat sizes', () => {
     const field = new BattlefieldProjection();
     const enemy = createEnemy('eggGhost', 0, false, 900);
     const dimensions = { width: enemy.stats.width, height: enemy.stats.height, radius: enemy.radius };
-    expect(field.height(enemy)).toBeCloseTo(dimensions.height * 1.2);
-    expect(field.width(enemy)).toBeCloseTo(dimensions.width * 1.2);
+    expect(field.height(enemy)).toBeCloseTo(dimensions.height * 1.3);
+    expect(field.width(enemy)).toBeCloseTo(dimensions.width * 1.3);
     expect({ width: enemy.stats.width, height: enemy.stats.height, radius: enemy.radius }).toEqual(dimensions);
     const hero = new Hero();
-    expect(field.height(hero)).toBe(48);
-    expect(field.width(hero)).toBeCloseTo(28.8);
+    expect(field.height(hero)).toBe(60);
+    expect(field.width(hero)).toBe(36);
+    expect(field.scale(hero)).toBeGreaterThan(field.scale(enemy));
     expect(BATTLEFIELD.backY).toBeLessThan(200);
     expect(BATTLEFIELD.centerY + Math.max(...BATTLEFIELD.rows) + 14).toBeLessThan(BATTLE_LAYOUT.summonFlange.y);
   });
@@ -24,16 +25,16 @@ describe('battlefield display projection', () => {
     const original = { radius: hero.radius, hp: hero.hp, x: hero.x };
     const field = new BattlefieldProjection(() => 0, body =>
       body === hero && !hero.possessedId ? { height: 64, top: 78 } : undefined);
-    expect(field.height(hero)).toBeCloseTo(76.8);
-    expect(field.top(hero)).toBeCloseTo(field.ground(hero) - 93.6);
+    expect(field.height(hero)).toBe(96);
+    expect(field.top(hero)).toBe(field.ground(hero) - 117);
     const enemy = createEnemy('eggGhost', 0, false, 400);
     const shot = new Projectile('enemy', hero.x, hero, 10, 420, 'ranged',
       { attacker: enemy, tags: [], source: 'hero', attackBonus: 0, burnPerSec: 0, areaRadius: 0 });
-    expect(field.projectile(shot).y).toBeCloseTo(field.ground(hero) - 76.8 * 0.55);
+    expect(field.projectile(shot).y).toBeCloseTo(field.ground(hero) - 96 * 0.55);
     expect({ radius: hero.radius, hp: hero.hp, x: hero.x }).toEqual(original);
     hero.possessedId = 'haetae';
-    expect(field.height(hero)).toBe(48);
-    expect(field.top(hero)).toBe(field.ground(hero) - 48);
+    expect(field.height(hero)).toBe(60);
+    expect(field.top(hero)).toBe(field.ground(hero) - 60);
   });
   it('keeps each unit on its row through movement, removal and new spawns without changing combat state', () => {
     const field = new BattlefieldProjection();
