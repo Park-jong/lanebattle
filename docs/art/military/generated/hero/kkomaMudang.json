@@ -1,0 +1,1094 @@
+{
+  "subject_key": "hero:kkomaMudang",
+  "name": "시온 (シオン)",
+  "checkpoint": "required",
+  "generated": 47,
+  "planned": 70,
+  "required_generated": 47,
+  "required_planned": 47,
+  "tool": "built-in image_gen",
+  "delivery_state": "Raw generated assets; alignment and runtime integration pending",
+  "items": [
+    {
+      "id": "hero:kkomaMudang:idle_00",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [],
+      "execution_prompt": "Concise English military officer prompt used after first result deviated into shrine maiden.",
+      "visual_qa": "accepted reference: 23-year-old adult officer, purple ponytail, white uniform, purple cape, saber and command gauntlet."
+    },
+    {
+      "id": "hero:kkomaMudang:idle_01",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/idle_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:walk_00",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/walk_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: in-place WALK CYCLE: near leg contacts in front, far leg trails. Clearly different leg pose from neutral standing; planted foot does not slide. File walk_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:walk_01",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/walk_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: in-place WALK CYCLE: weight passes over planted near leg while far leg swings. Clearly different leg pose from neutral standing; planted foot does not slide. File walk_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:walk_02",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/walk_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: in-place WALK CYCLE: far leg contacts in front, near leg trails. Clearly different leg pose from neutral standing; planted foot does not slide. File walk_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:walk_03",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/walk_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: in-place WALK CYCLE: weight passes over planted far leg while near leg swings. Clearly different leg pose from neutral standing; planted foot does not slide. File walk_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:attack_00",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/attack_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: a single diagonal TACTICAL SABER CUT with torso and shoulder rotation; current phase: short preparation. File attack_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:attack_01",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/attack_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: a single diagonal TACTICAL SABER CUT with torso and shoulder rotation; current phase: ACTUAL STRIKE OR FIRING MOMENT. File attack_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:attack_02",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/attack_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: a single diagonal TACTICAL SABER CUT with torso and shoulder rotation; current phase: immediate recoil/follow-through. File attack_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:attack_03",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/attack_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: a single diagonal TACTICAL SABER CUT with torso and shoulder rotation; current phase: recover toward guard. File attack_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:hit_00",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/hit_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: short initial reaction to a hit. File hit_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:hit_01",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/hit_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: recover original balance. File hit_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:spawn_00",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/spawn_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: preparation to enter idle stance. File spawn_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:spawn_01",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/spawn_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: legs or fuselage settle into stable support. File spawn_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:spawn_02",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/spawn_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: nearly neutral stance with slight hair/fabric/cable follow-through. File spawn_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:death_00",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/death_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: initial loss of strength or machine power. File death_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:death_01",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/death_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: torso or fuselage lowers into supported collapse. File death_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:death_02",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/death_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: DOWN ON BOTH KNEES, torso and head LOWER than previous kneeling frame, weapon lowered, DO NOT stand up. File death_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:death_03",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/death_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png",
+        "output/art-generation/source-assets/hero/kkomaMudang/military/death_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: remain COLLAPSED ON BOTH KNEES, head bowed and torso low, same support as previous frame, still visibly drawn; DO NOT stand up; game handles final opacity fade. File death_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:preview",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/preview.png",
+      "kind": "portrait",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1024,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse attached approved reference, preserve exact face/hair/body/uniform/equipment. SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nONE full-body representative pose, whole head-to-feet/machine silhouette and weapon visible, fit by empty padding without squashing proportions. Target 1024x1024. Actual transparent alpha. No scenery, frame, text, numbers, UI, extra person, or redesign.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:icon",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/icon.png",
+      "kind": "portrait",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        128,
+        128
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse attached approved reference, preserve exact face/hair/body/uniform/equipment. SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nOne readable HEAD-AND-SHOULDERS portrait including a small distinctive weapon/equipment detail. Crop the camera, do not change body proportions. Target 128x128. Actual transparent alpha. No scenery, frame, text, numbers, UI, extra person, or redesign.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:skill_fan_00",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/skill_fan_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: ready the saber. File skill_fan_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:skill_fan_01",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/skill_fan_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png",
+        "output/art-generation/source-assets/hero/kkomaMudang/military/skill_fan_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: forward pressure-wave release slash. File skill_fan_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:skill_fan_02",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/skill_fan_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png",
+        "output/art-generation/source-assets/hero/kkomaMudang/military/skill_fan_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: absorb torso and arm recoil. File skill_fan_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:skill_fan_03",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/skill_fan_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png",
+        "output/art-generation/source-assets/hero/kkomaMudang/military/skill_fan_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: recover saber to low guard. File skill_fan_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:skill_blessing_00",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blessing_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: check left command gauntlet. File skill_blessing_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:skill_blessing_01",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blessing_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png",
+        "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blessing_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: activate support pulse, left forearm raised. File skill_blessing_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:skill_blessing_02",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blessing_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png",
+        "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blessing_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: lower left arm with cloth follow-through. File skill_blessing_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:skill_blessing_03",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blessing_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png",
+        "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blessing_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: return to guard. File skill_blessing_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:skill_blade_00",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blade_00.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: raise saber to open capacitor output. File skill_blade_00.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:skill_blade_01",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blade_01.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png",
+        "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blade_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: downward saber release strike. File skill_blade_01.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:skill_blade_02",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blade_02.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png",
+        "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blade_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: absorb downward strike weight through knees and hips. File skill_blade_02.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:skill_blade_03",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blade_03.png",
+      "kind": "body",
+      "priority": "required",
+      "actual_size": [
+        1086,
+        1448
+      ],
+      "target_size": [
+        768,
+        1024
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/idle_00.png",
+        "output/art-generation/source-assets/hero/kkomaMudang/military/skill_blade_02.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: SHION, adult woman age23 height172cm, F-cup mature build. Purple LOW PONYTAIL and teal eyes. WHITE double-breasted military officer jacket over BLACK top, purple necktie, asymmetric short tactical skirt with shorts, BLACK THIGH-HIGH MILITARY BOOTS, short PURPLE SHOULDER CAPE. Right hand ONE straight tactical SABER; left forearm SILVER COMMAND GAUNTLET. Walking commander, NO mount.\n\nPOSE FOR THIS SINGLE FRAME: recover saber and settle. File skill_blade_03.png.\n\nWhole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 768x1024; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. Clothed adult soft-tissue follow-through follows torso motion with restrained delayed settling; preserve body volume and garment support, never clip through clothing/armor. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:fx_fan_00",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_fan_00.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of FAN, phase 0. One isolated impact, status mark or ground-plane pulse appropriate to this effect. Ground circles project as flat ellipses. Keep origin fixed and visible margins. This is SHION pressure/saber energy: WHITE AND PALE CYAN ONLY, no flame, no fireball, no missile. Target 512x512, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n��ǥ ���� fx_fan_00.png. ���ӿ� ���� 2D ȿ�� �� �������� �����. ���� �и��͸��� �Ϻ� ������ó�� ������ ���ӿ� 2D �ִϸ��̼� �Ϸ���Ʈ. ��Ȯ�� �ܰ���, ������ �� ä���� �ϰ��� 2~3�ܰ� ����, ����ص� ������ ���� �Ƿ翧. �ǻ硤3D �������ȼ� ��Ʈ�� �ٲ��� �ʴ´�.\n\nȿ�� ������: �ÿ� (������) (hero:kkomaMudang). ȿ�� ����: ���� �ݿ� �з���. ��ü�� �и�\n\n��ǥ 512��512px, ���� ���� ����, �ǹ��� �߾�. �ÿ��� �з��ġ��� �ܻ�: û��������������. ȭ�������� ź���̻��ϡ���� ���⸦ �׸��� �ʴ´�.\n\n�߻������������� �ִϸ��̼� 4�� �� 1��°, ����ȭ ���� 0.00. ó������ ����, �߰����� ��Ȯ�� ȿ�� ����, ���������� �����ڸ� �ܱ��� �����. �ȼ� ũ��� ������ �����Ѵ�.\n\n���忡 ��¦ �����ٺ��̴� �����ݿ� �Ǵ� �ĵ��̴�. ���� ȿ���� ������ Ÿ�� ������ ����ϰ� ��ü�� ������ �ʰ� �߽��� ����. ���� ���ء����� ������ ���ӿ��� �����.\n\n���� ȿ���� ù �������� ������ ������ �β��������� �����Ѵ�. ȿ�� �ܰ��� ����� ������ �����. ��ü�Ҹ��� �߰� ź�������ߡ����������¸� �Ͻ����� �ʴ´�.\n\n��ü���ι����ա����⡤��������桤�ٸ� ȿ����UI ���ڡ����͸�ũ����¥ üũ���̸� �׸��� �ʴ´�. �� �忡 �� �����Ӹ� ����Ѵ�.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:fx_fan_01",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_fan_01.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/fx_fan_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of FAN, phase 1. One isolated impact, status mark or ground-plane pulse appropriate to this effect. Ground circles project as flat ellipses. Keep origin fixed and visible margins. This is SHION pressure/saber energy: WHITE AND PALE CYAN ONLY, no flame, no fireball, no missile. Target 512x512, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_fan_01.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 시온 (シオン) (hero:kkomaMudang). 효과 정의: 전방 반원 압력파. 본체와 분리\n\n목표 512×512px, 실제 투명 알파, 피벗은 중앙. 시온의 압력파·날 잔상: 청백색·흰색·은빛. 화염·폭발 탄·미사일·기계 병기를 그리지 않는다.\n\n발생·전개·감쇠 애니메이션 4컷 중 2번째, 정규화 진행 0.33. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n전장에 살짝 내려다보이는 원·반원 또는 파동이다. 지면 효과는 납작한 타원 투영을 사용하고 본체를 가리지 않게 중심을 비운다. 실제 피해·지원 범위는 게임에서 맞춘다.\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:fx_fan_02",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_fan_02.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/fx_fan_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of FAN, phase 2. One isolated impact, status mark or ground-plane pulse appropriate to this effect. Ground circles project as flat ellipses. Keep origin fixed and visible margins. This is SHION pressure/saber energy: WHITE AND PALE CYAN ONLY, no flame, no fireball, no missile. Target 512x512, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_fan_02.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 시온 (シオン) (hero:kkomaMudang). 효과 정의: 전방 반원 압력파. 본체와 분리\n\n목표 512×512px, 실제 투명 알파, 피벗은 중앙. 시온의 압력파·날 잔상: 청백색·흰색·은빛. 화염·폭발 탄·미사일·기계 병기를 그리지 않는다.\n\n발생·전개·감쇠 애니메이션 4컷 중 3번째, 정규화 진행 0.67. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n전장에 살짝 내려다보이는 원·반원 또는 파동이다. 지면 효과는 납작한 타원 투영을 사용하고 본체를 가리지 않게 중심을 비운다. 실제 피해·지원 범위는 게임에서 맞춘다.\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:fx_fan_03",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_fan_03.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/fx_fan_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of FAN, phase 3. One isolated impact, status mark or ground-plane pulse appropriate to this effect. Ground circles project as flat ellipses. Keep origin fixed and visible margins. This is SHION pressure/saber energy: WHITE AND PALE CYAN ONLY, no flame, no fireball, no missile. Target 512x512, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_fan_03.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 시온 (シオン) (hero:kkomaMudang). 효과 정의: 전방 반원 압력파. 본체와 분리\n\n목표 512×512px, 실제 투명 알파, 피벗은 중앙. 시온의 압력파·날 잔상: 청백색·흰색·은빛. 화염·폭발 탄·미사일·기계 병기를 그리지 않는다.\n\n발생·전개·감쇠 애니메이션 4컷 중 4번째, 정규화 진행 1.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n전장에 살짝 내려다보이는 원·반원 또는 파동이다. 지면 효과는 납작한 타원 투영을 사용하고 본체를 가리지 않게 중심을 비운다. 실제 피해·지원 범위는 게임에서 맞춘다.\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:fx_blessing_00",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blessing_00.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of BLESSING, phase 0. One isolated impact, status mark or ground-plane pulse appropriate to this effect. Ground circles project as flat ellipses. Keep origin fixed and visible margins. Use clean warm orange for incendiary/heat, cyan-white for saber/pressure, mint for support/EMP, green for slow spit and purple for blight/suppression. Target 512x512, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n��ǥ ���� fx_blessing_00.png. ���ӿ� ���� 2D ȿ�� �� �������� �����. ���� �и��͸��� �Ϻ� ������ó�� ������ ���ӿ� 2D �ִϸ��̼� �Ϸ���Ʈ. ��Ȯ�� �ܰ���, ������ �� ä���� �ϰ��� 2~3�ܰ� ����, ����ص� ������ ���� �Ƿ翧. �ǻ硤3D �������ȼ� ��Ʈ�� �ٲ��� �ʴ´�.\n\nȿ�� ������: �ÿ� (������) (hero:kkomaMudang). ȿ�� ����: û�ϻ� ���� �޽�. ��� ���� ǥ�ġ����� �ð��� ���� UI\n\n��ǥ 512��512px, ���� ���� ����, �ǹ��� �߾�. ȸ�������� �迭: û�� #5BC9C3�� ���, ������ ���.\n\n�߻������������� �ִϸ��̼� 4�� �� 1��°, ����ȭ ���� 0.00. ó������ ����, �߰����� ��Ȯ�� ȿ�� ����, ���������� �����ڸ� �ܱ��� �����. �ȼ� ũ��� ������ �����Ѵ�.\n\n\n\n���� ȿ���� ù �������� ������ ������ �β��������� �����Ѵ�. ȿ�� �ܰ��� ����� ������ �����. ��ü�Ҹ��� �߰� ź�������ߡ����������¸� �Ͻ����� �ʴ´�.\n\n��ü���ι����ա����⡤��������桤�ٸ� ȿ����UI ���ڡ����͸�ũ����¥ üũ���̸� �׸��� �ʴ´�. �� �忡 �� �����Ӹ� ����Ѵ�.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:fx_blessing_01",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blessing_01.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blessing_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of BLESSING, phase 1. One isolated impact, status mark or ground-plane pulse appropriate to this effect. Ground circles project as flat ellipses. Keep origin fixed and visible margins. Use clean warm orange for incendiary/heat, cyan-white for saber/pressure, mint for support/EMP, green for slow spit and purple for blight/suppression. Target 512x512, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_blessing_01.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 시온 (シオン) (hero:kkomaMudang). 효과 정의: 청록색 지원 펄스. 대상 상태 표식·지속 시간은 별도 UI\n\n목표 512×512px, 실제 투명 알파, 피벗은 중앙. 회복·지원 계열: 청록 #5BC9C3와 흰색, 절제된 밝기.\n\n발생·전개·감쇠 애니메이션 4컷 중 2번째, 정규화 진행 0.33. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:fx_blessing_02",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blessing_02.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blessing_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of BLESSING, phase 2. One isolated impact, status mark or ground-plane pulse appropriate to this effect. Ground circles project as flat ellipses. Keep origin fixed and visible margins. Use clean warm orange for incendiary/heat, cyan-white for saber/pressure, mint for support/EMP, green for slow spit and purple for blight/suppression. Target 512x512, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_blessing_02.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 시온 (シオン) (hero:kkomaMudang). 효과 정의: 청록색 지원 펄스. 대상 상태 표식·지속 시간은 별도 UI\n\n목표 512×512px, 실제 투명 알파, 피벗은 중앙. 회복·지원 계열: 청록 #5BC9C3와 흰색, 절제된 밝기.\n\n발생·전개·감쇠 애니메이션 4컷 중 3번째, 정규화 진행 0.67. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:fx_blessing_03",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blessing_03.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        512,
+        512
+      ],
+      "alpha_range": [
+        0,
+        254
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blessing_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of BLESSING, phase 3. One isolated impact, status mark or ground-plane pulse appropriate to this effect. Ground circles project as flat ellipses. Keep origin fixed and visible margins. Use clean warm orange for incendiary/heat, cyan-white for saber/pressure, mint for support/EMP, green for slow spit and purple for blight/suppression. Target 512x512, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_blessing_03.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 시온 (シオン) (hero:kkomaMudang). 효과 정의: 청록색 지원 펄스. 대상 상태 표식·지속 시간은 별도 UI\n\n목표 512×512px, 실제 투명 알파, 피벗은 중앙. 회복·지원 계열: 청록 #5BC9C3와 흰색, 절제된 밝기.\n\n발생·전개·감쇠 애니메이션 4컷 중 4번째, 정규화 진행 1.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:fx_blade_00",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blade_00.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        768,
+        768
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of GROUND-PLANE RADIAL PRESSURE RING, phase 0. Draw ONLY A THIN HOLLOW ELLIPTICAL OUTLINE, like a clean anime shockwave ring lying flat on the ground. Its center is at EXACT canvas center (50 percent, 50 percent); ellipse height is one third of its width. INITIAL COMPACT phase: one small clean ellipse rim, outer diameter 40 percent of canvas width. EVERY PIXEL INSIDE the ellipse must be completely transparent alpha zero, including the center. Keep at least 15 percent fully transparent padding on LEFT AND RIGHT sides. Only narrow white/cyan rim lines; NO fog, mist, cloud, smoke, filled disk, large glow, dust, vertical spike, sword, pillar or explosion. This is a simple hollow horizontal ring, not an environmental scene. Keep the ellipse center fixed. This is SHION pressure/saber energy: WHITE AND PALE CYAN ONLY, no flame, no fireball, no missile. Target 768x768, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_blade_00.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 시온 (シオン) (hero:kkomaMudang). 효과 정의: 지면을 따라 퍼지는 원형 압력파. 실제 범위와 동기화\n\n목표 768×768px, 실제 투명 알파, 피벗은 중앙. 시온의 압력파·날 잔상: 청백색·흰색·은빛. 화염·폭발 탄·미사일·기계 병기를 그리지 않는다.\n\n발생·전개·감쇠 애니메이션 4컷 중 1번째, 정규화 진행 0.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n전장에 살짝 내려다보이는 원·반원 또는 파동이다. 지면 효과는 납작한 타원 투영을 사용하고 본체를 가리지 않게 중심을 비운다. 실제 피해·지원 범위는 게임에서 맞춘다.\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "accepted reference: Inspected: small thin white/cyan ground ellipse, empty transparent center, clear padding, no vertical spike or fog."
+    },
+    {
+      "id": "hero:kkomaMudang:fx_blade_01",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blade_01.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        768,
+        768
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blade_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of GROUND-PLANE RADIAL PRESSURE RING, phase 1. Draw ONLY A THIN HOLLOW ELLIPTICAL OUTLINE, like a clean anime shockwave ring lying flat on the ground. Its center is at EXACT canvas center (50 percent, 50 percent); ellipse height is one third of its width. EXPANDING BRIGHT phase: two thin ellipse rims, outer diameter 60 percent of canvas width. EVERY PIXEL INSIDE the ellipse must be completely transparent alpha zero, including the center. Keep at least 15 percent fully transparent padding on LEFT AND RIGHT sides. Only narrow white/cyan rim lines; NO fog, mist, cloud, smoke, filled disk, large glow, dust, vertical spike, sword, pillar or explosion. This is a simple hollow horizontal ring, not an environmental scene. Keep the ellipse center fixed. This is SHION pressure/saber energy: WHITE AND PALE CYAN ONLY, no flame, no fireball, no missile. Target 768x768, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_blade_01.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 시온 (シオン) (hero:kkomaMudang). 효과 정의: 지면을 따라 퍼지는 원형 압력파. 실제 범위와 동기화\n\n목표 768×768px, 실제 투명 알파, 피벗은 중앙. 시온의 압력파·날 잔상: 청백색·흰색·은빛. 화염·폭발 탄·미사일·기계 병기를 그리지 않는다.\n\n발생·전개·감쇠 애니메이션 4컷 중 2번째, 정규화 진행 0.33. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n전장에 살짝 내려다보이는 원·반원 또는 파동이다. 지면 효과는 납작한 타원 투영을 사용하고 본체를 가리지 않게 중심을 비운다. 실제 피해·지원 범위는 게임에서 맞춘다.\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:fx_blade_02",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blade_02.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        768,
+        768
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blade_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of GROUND-PLANE RADIAL PRESSURE RING, phase 2. Draw ONLY A THIN HOLLOW ELLIPTICAL OUTLINE, like a clean anime shockwave ring lying flat on the ground. Its center is at EXACT canvas center (50 percent, 50 percent); ellipse height is one third of its width. EXPANDED DECAY phase: two thinning ellipse rims, outer diameter 70 percent of canvas width. EVERY PIXEL INSIDE the ellipse must be completely transparent alpha zero, including the center. Keep at least 15 percent fully transparent padding on LEFT AND RIGHT sides. Only narrow white/cyan rim lines; NO fog, mist, cloud, smoke, filled disk, large glow, dust, vertical spike, sword, pillar or explosion. This is a simple hollow horizontal ring, not an environmental scene. Keep the ellipse center fixed. This is SHION pressure/saber energy: WHITE AND PALE CYAN ONLY, no flame, no fireball, no missile. Target 768x768, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_blade_02.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 시온 (シオン) (hero:kkomaMudang). 효과 정의: 지면을 따라 퍼지는 원형 압력파. 실제 범위와 동기화\n\n목표 768×768px, 실제 투명 알파, 피벗은 중앙. 시온의 압력파·날 잔상: 청백색·흰색·은빛. 화염·폭발 탄·미사일·기계 병기를 그리지 않는다.\n\n발생·전개·감쇠 애니메이션 4컷 중 3번째, 정규화 진행 0.67. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n전장에 살짝 내려다보이는 원·반원 또는 파동이다. 지면 효과는 납작한 타원 투영을 사용하고 본체를 가리지 않게 중심을 비운다. 실제 피해·지원 범위는 게임에서 맞춘다.\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:fx_blade_03",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blade_03.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        768,
+        768
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/fx_blade_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of GROUND-PLANE RADIAL PRESSURE RING, phase 3. Draw ONLY A THIN HOLLOW ELLIPTICAL OUTLINE, like a clean anime shockwave ring lying flat on the ground. Its center is at EXACT canvas center (50 percent, 50 percent); ellipse height is one third of its width. FINAL FADING phase: sparse broken segments of a thin ellipse rim, outer diameter 70 percent of canvas width. EVERY PIXEL INSIDE the ellipse must be completely transparent alpha zero, including the center. Keep at least 15 percent fully transparent padding on LEFT AND RIGHT sides. Only narrow white/cyan rim lines; NO fog, mist, cloud, smoke, filled disk, large glow, dust, vertical spike, sword, pillar or explosion. This is a simple hollow horizontal ring, not an environmental scene. Keep the ellipse center fixed. This is SHION pressure/saber energy: WHITE AND PALE CYAN ONLY, no flame, no fireball, no missile. Target 768x768, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_blade_03.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 시온 (シオン) (hero:kkomaMudang). 효과 정의: 지면을 따라 퍼지는 원형 압력파. 실제 범위와 동기화\n\n목표 768×768px, 실제 투명 알파, 피벗은 중앙. 시온의 압력파·날 잔상: 청백색·흰색·은빛. 화염·폭발 탄·미사일·기계 병기를 그리지 않는다.\n\n발생·전개·감쇠 애니메이션 4컷 중 4번째, 정규화 진행 1.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n전장에 살짝 내려다보이는 원·반원 또는 파동이다. 지면 효과는 납작한 타원 투영을 사용하고 본체를 가리지 않게 중심을 비운다. 실제 피해·지원 범위는 게임에서 맞춘다.\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:fx_saber_edge_00",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_saber_edge_00.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of SABER EDGE, phase 0. One isolated impact, status mark or ground-plane pulse appropriate to this effect. Ground circles project as flat ellipses. Keep origin fixed and visible margins. This is SHION pressure/saber energy: WHITE AND PALE CYAN ONLY, no flame, no fireball, no missile. Target 256x256, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_saber_edge_00.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 시온 (シオン) (hero:kkomaMudang). 효과 정의: 기본 베기의 짧은 날 잔상. 추가 범위 판정 없음\n\n목표 256×256px, 실제 투명 알파, 피벗은 중앙. 시온의 압력파·날 잔상: 청백색·흰색·은빛. 화염·폭발 탄·미사일·기계 병기를 그리지 않는다.\n\n발생·전개·감쇠 애니메이션 2컷 중 1번째, 정규화 진행 0.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "hero:kkomaMudang:fx_saber_edge_01",
+      "output": "output/art-generation/source-assets/hero/kkomaMudang/military/fx_saber_edge_01.png",
+      "kind": "effect",
+      "priority": "required",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        256,
+        256
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/hero/kkomaMudang/military/fx_saber_edge_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nCreate ONLY a standalone 2D game VFX frame of SABER EDGE, phase 1. One isolated impact, status mark or ground-plane pulse appropriate to this effect. Ground circles project as flat ellipses. Keep origin fixed and visible margins. This is SHION pressure/saber energy: WHITE AND PALE CYAN ONLY, no flame, no fireball, no missile. Target 256x256, actual transparent alpha. Use attached first-effect reference if provided, preserving effect structure, palette and center. NO character, face, hand, weapon, building, scenery, UI text, watermark or sprite sheet. The visual does not add extra targets or damage.\n\nDetailed approved effect specification:\n목표 파일 fx_saber_edge_01.png. 게임용 독립 2D 효과 한 프레임을 만든다. 현대 밀리터리와 일본 서브컬처를 결합한 게임용 2D 애니메이션 일러스트. 명확한 외곽선, 정돈된 면 채색과 일관된 2~3단계 명암, 축소해도 읽히는 장비와 실루엣. 실사·3D 렌더·픽셀 아트로 바꾸지 않는다.\n\n효과 소유자: 시온 (シオン) (hero:kkomaMudang). 효과 정의: 기본 베기의 짧은 날 잔상. 추가 범위 판정 없음\n\n목표 256×256px, 실제 투명 알파, 피벗은 중앙. 시온의 압력파·날 잔상: 청백색·흰색·은빛. 화염·폭발 탄·미사일·기계 병기를 그리지 않는다.\n\n발생·전개·감쇠 애니메이션 2컷 중 2번째, 정규화 진행 1.00. 처음에는 응집, 중간에는 명확한 효과 형태, 마지막에는 가장자리 잔광만 남긴다. 픽셀 크기와 원점은 고정한다.\n\n\n\n같은 효과의 첫 프레임을 참조해 색·선 두께·구조를 유지한다. 효과 외곽에 충분한 여백을 남긴다. 정체불명의 추가 탄종·폭발·범위·상태를 암시하지 않는다.\n\n본체·인물·손·무기·기지·배경·다른 효과·UI 문자·워터마크·가짜 체크무늬를 그리지 않는다. 한 장에 한 프레임만 출력한다.",
+      "visual_qa": "pending"
+    }
+  ]
+}
