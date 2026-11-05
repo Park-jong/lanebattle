@@ -2,7 +2,7 @@
   "subject_key": "boss:giantWonGwi",
   "name": "하이브 마더",
   "checkpoint": "required",
-  "generated": 43,
+  "generated": 48,
   "planned": 52,
   "required_generated": 29,
   "required_planned": 29,
@@ -784,6 +784,54 @@
       "visual_qa": "pending"
     },
     {
+      "id": "boss:giantWonGwi:idle_06",
+      "output": "output/art-generation/source-assets/boss/giantWonGwi/military/idle_06.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/giantWonGwi/military/idle_00.png",
+        "output/art-generation/source-assets/boss/giantWonGwi/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HIVE MOTHER, gigantic MUTANT ZOMBIE BROODMOTHER. Huge infection sacs on BACK AND ABDOMEN, thick weight-bearing legs, two broad support/striking arms, grey-brown infected tissue and muted amber sacs. Low massive grounded stance. Monster biology without graphic exposed organs. NO babies, no extra zombies, no sexual pose, no weapon.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_06.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:giantWonGwi:idle_07",
+      "output": "output/art-generation/source-assets/boss/giantWonGwi/military/idle_07.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/giantWonGwi/military/idle_00.png",
+        "output/art-generation/source-assets/boss/giantWonGwi/military/idle_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HIVE MOTHER, gigantic MUTANT ZOMBIE BROODMOTHER. Huge infection sacs on BACK AND ABDOMEN, thick weight-bearing legs, two broad support/striking arms, grey-brown infected tissue and muted amber sacs. Low massive grounded stance. Monster biology without graphic exposed organs. NO babies, no extra zombies, no sexual pose, no weapon.\n\nPOSE FOR THIS SINGLE FRAME: small breathing/weight-shift idle pose, shoulders slightly settling; hair ends and loose fabric lag behind the torso. File idle_07.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
       "id": "boss:giantWonGwi:walk_06",
       "output": "output/art-generation/source-assets/boss/giantWonGwi/military/walk_06.png",
       "kind": "body",
@@ -883,6 +931,31 @@
       "visual_qa": "pending"
     },
     {
+      "id": "boss:giantWonGwi:hit_02",
+      "output": "output/art-generation/source-assets/boss/giantWonGwi/military/hit_02.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/giantWonGwi/military/idle_00.png",
+        "output/art-generation/source-assets/boss/giantWonGwi/military/hit_00.png",
+        "output/art-generation/source-assets/boss/giantWonGwi/military/hit_01.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HIVE MOTHER, gigantic MUTANT ZOMBIE BROODMOTHER. Huge infection sacs on BACK AND ABDOMEN, thick weight-bearing legs, two broad support/striking arms, grey-brown infected tissue and muted amber sacs. Low massive grounded stance. Monster biology without graphic exposed organs. NO babies, no extra zombies, no sexual pose, no weapon.\n\nPOSE FOR THIS SINGLE FRAME: intermediate recoil-to-recovery reaction. File hit_02.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
       "id": "boss:giantWonGwi:hit_03",
       "output": "output/art-generation/source-assets/boss/giantWonGwi/military/hit_03.png",
       "kind": "body",
@@ -979,6 +1052,30 @@
       "visual_qa": "pending"
     },
     {
+      "id": "boss:giantWonGwi:stop_00",
+      "output": "output/art-generation/source-assets/boss/giantWonGwi/military/stop_00.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/giantWonGwi/military/idle_00.png",
+        "output/art-generation/source-assets/boss/giantWonGwi/military/walk_03.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HIVE MOTHER, gigantic MUTANT ZOMBIE BROODMOTHER. Huge infection sacs on BACK AND ABDOMEN, thick weight-bearing legs, two broad support/striking arms, grey-brown infected tissue and muted amber sacs. Low massive grounded stance. Monster biology without graphic exposed organs. NO babies, no extra zombies, no sexual pose, no weapon.\n\nPOSE FOR THIS SINGLE FRAME: begin deceleration from movement. File stop_00.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
       "id": "boss:giantWonGwi:stop_01",
       "output": "output/art-generation/source-assets/boss/giantWonGwi/military/stop_01.png",
       "kind": "body",
@@ -1024,6 +1121,30 @@
         "output/art-generation/source-assets/boss/giantWonGwi/military/walk_03.png"
       ],
       "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HIVE MOTHER, gigantic MUTANT ZOMBIE BROODMOTHER. Huge infection sacs on BACK AND ABDOMEN, thick weight-bearing legs, two broad support/striking arms, grey-brown infected tissue and muted amber sacs. Low massive grounded stance. Monster biology without graphic exposed organs. NO babies, no extra zombies, no sexual pose, no weapon.\n\nPOSE FOR THIS SINGLE FRAME: settle into neutral guard. File stop_02.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
+      "visual_qa": "pending"
+    },
+    {
+      "id": "boss:giantWonGwi:turn_00",
+      "output": "output/art-generation/source-assets/boss/giantWonGwi/military/turn_00.png",
+      "kind": "body",
+      "priority": "motion_extension",
+      "actual_size": [
+        1254,
+        1254
+      ],
+      "target_size": [
+        1536,
+        1536
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        "output/art-generation/source-assets/boss/giantWonGwi/military/idle_00.png",
+        "output/art-generation/source-assets/boss/giantWonGwi/military/walk_00.png"
+      ],
+      "execution_prompt": "Clean 2D ANIME GAME ART, consistent crisp linework and 2-3-tone cel shading, no SD/chibi, no 3D render, no text or watermark.\n\nUse the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.\n\nEXACT DESIGN: HIVE MOTHER, gigantic MUTANT ZOMBIE BROODMOTHER. Huge infection sacs on BACK AND ABDOMEN, thick weight-bearing legs, two broad support/striking arms, grey-brown infected tissue and muted amber sacs. Low massive grounded stance. Monster biology without graphic exposed organs. NO babies, no extra zombies, no sexual pose, no weapon.\n\nPOSE FOR THIS SINGLE FRAME: decelerate to prepare direction change. File turn_00.png.\n\nSQUARE 1:1 composition with generous empty transparent margins on all four sides. Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas 1536x1536; normalized root [0.5, 0.875]. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. No allied breast-morph rule. Only material-appropriate tissue, fabric or cable follow-through; metal parts remain rigid. Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. Do not add a companion drone or any other character.",
       "visual_qa": "pending"
     }
   ]
