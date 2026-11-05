@@ -28,7 +28,7 @@ export class BaseRenderer {
     this.top = this.groundY - this.appearance.height;
     this.previousHp = base.hp;
     // 출입하는 소환 개체가 큰 정면 벽에 가려지지 않게 건축물은 뒤에 둔다.
-    this.structure = scene.add.graphics().setPosition(this.centerX, this.groundY).setDepth(field.depth(base) - 3);
+    this.structure = scene.add.graphics().setPosition(this.centerX, this.groundY).setDepth(field.depth(base) - 4);
     this.effects = scene.add.graphics().setPosition(this.centerX, this.groundY).setDepth(field.depth(base) + 0.1);
     this.nameplate = scene.add.text(this.centerX, this.top - 12, this.appearance.name, {
       fontFamily: HUD_FONT, fontSize: '13px', fontStyle: 'bold', color: base.team === 'ally' ? '#f6d58b' : '#e2c5ec',

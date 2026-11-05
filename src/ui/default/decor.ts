@@ -16,12 +16,14 @@ export function panel(
 /** Cached scene decoration: never rebuilt by the battle update loop. */
 export function festivalNight(scene: Phaser.Scene, width = 960, ground = 540, depth = -10): void {
   const g = scene.add.graphics().setDepth(depth);
+  const landscapeScale = Math.min(1, ground / 300);
+  const moonY = Math.min(112, ground * 0.36 + 15);
   g.fillGradientStyle(U.night, U.night, 0x304b60, 0x304b60, 1);
   g.fillRect(0, 0, width, ground);
-  g.fillStyle(U.gold, 0.035).fillCircle(width * 0.8, 112, 115);
-  g.fillStyle(U.gold, 0.05).fillCircle(width * 0.8, 112, 83);
-  g.fillStyle(0xffedbd, 0.85).fillCircle(width * 0.8, 112, 35);
-  g.fillStyle(0x253b50, 1).fillCircle(width * 0.8 + 15, 101, 31);
+  g.fillStyle(U.gold, 0.035).fillCircle(width * 0.8, moonY, 115 * Math.max(0.65, landscapeScale));
+  g.fillStyle(U.gold, 0.05).fillCircle(width * 0.8, moonY, 83 * Math.max(0.65, landscapeScale));
+  g.fillStyle(0xffedbd, 0.85).fillCircle(width * 0.8, moonY, 35);
+  g.fillStyle(0x253b50, 1).fillCircle(width * 0.8 + 15, moonY - 11, 31);
   for (let i = 0; i < Math.ceil(width / 18); i++) {
     const x = (i * 137) % width;
     const y = 24 + (i * 71) % Math.max(50, ground - 155);
@@ -29,15 +31,15 @@ export function festivalNight(scene: Phaser.Scene, width = 960, ground = 540, de
   }
   for (let i = 0; i < Math.ceil(width / 180); i++) {
     const x = i * 180;
-    g.fillStyle(0x20384a, 1).fillTriangle(x - 160, ground, x + 100, ground - 190 - (i % 3) * 25, x + 350, ground);
-    g.fillStyle(0x172c3b, 1).fillTriangle(x - 90, ground, x + 120, ground - 115, x + 330, ground);
+    g.fillStyle(0x20384a, 1).fillTriangle(x - 160, ground, x + 100, ground - (190 + (i % 3) * 25) * landscapeScale, x + 350, ground);
+    g.fillStyle(0x172c3b, 1).fillTriangle(x - 90, ground, x + 120, ground - 115 * landscapeScale, x + 330, ground);
   }
   for (let i = 0; i < Math.ceil(width / 105); i++) {
     const x = i * 105 + 18;
-    const y = ground - 50 - (i % 3) * 12;
+    const y = ground - (50 + (i % 3) * 12) * landscapeScale;
     g.fillStyle(0x122330, 1).fillRect(x, y, 76, ground - y);
-    g.fillTriangle(x - 9, y + 2, x + 38, y - 27, x + 85, y + 2);
-    g.fillStyle(U.gold, 0.32).fillRoundedRect(x + 18, y + 16, 10, 15, 2);
-    g.fillRoundedRect(x + 46, y + 16, 10, 15, 2);
+    g.fillTriangle(x - 9, y + 2, x + 38, y - 27 * landscapeScale, x + 85, y + 2);
+    g.fillStyle(U.gold, 0.32).fillRoundedRect(x + 18, y + 16 * landscapeScale, 10, 15 * landscapeScale, 2);
+    g.fillRoundedRect(x + 46, y + 16 * landscapeScale, 10, 15 * landscapeScale, 2);
   }
 }

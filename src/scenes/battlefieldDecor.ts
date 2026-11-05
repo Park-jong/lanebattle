@@ -26,11 +26,13 @@ export function drawBattlefield(scene: Phaser.Scene): void {
   }
 
   // 뒤쪽의 작은 돌과 앞쪽의 큰 돌로 지면의 깊이를 드러낸다.
-  for (let row = 0; row < 4; row++) {
-    const scale = 0.62 + row * 0.16;
+  const rows = 5;
+  for (let row = 0; row < rows; row++) {
+    const distance = row / (rows - 1);
+    const scale = 0.62 + distance * 0.62;
     for (let i = 0; i < Math.ceil(width / 72); i++) {
       const x = i * 72 + (row % 2) * 31 + (i * 13 % 19);
-      const y = backY + 25 + row * 27 + (i * 7 % 11);
+      const y = backY + 24 + distance * (frontY - backY - 40) + (i * 7 % 11);
       const w = (22 + i * 7 % 21) * scale, h = (8 + i % 5) * scale;
       patch(0x263a32, 0.22, [[x - w / 2, y + 2], [x - w / 3, y - h / 2], [x + w / 3, y - h / 2 + 1], [x + w / 2, y + 2], [x + w / 4, y + h / 2], [x - w / 4, y + h / 2]]);
       g.lineStyle(1, 0xc1b98a, 0.16).lineBetween(x - w / 3, y - h / 2, x + w / 3, y - h / 2 + 1);

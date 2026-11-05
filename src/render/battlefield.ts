@@ -9,7 +9,7 @@ export class BattlefieldProjection {
   private readonly launches = new WeakMap<Projectile, { x: number; y: number }>();
 
   constructor(private readonly lift: (body: Body) => number = () => 0,
-    private readonly visualSize: (body: Body) => { height: number; top: number } | undefined = () => undefined) {}
+    private readonly visualSize: (body: Body) => { height: number; top: number; width?: number } | undefined = () => undefined) {}
 
   ground(body: Body): number {
     if (body.kind === 'base') return GROUND_Y - 8;
@@ -17,7 +17,7 @@ export class BattlefieldProjection {
     if (body.isBoss) return GROUND_Y;
     let row = this.rows.get(body);
     if (row === undefined) {
-      const offsets = [-22, 2, 24, -10, 14];
+      const offsets = BATTLEFIELD.rows;
       row = offsets[this.nextRow[body.team]++ % offsets.length];
       this.rows.set(body, row);
     }
@@ -26,14 +26,26 @@ export class BattlefieldProjection {
 
   height(body: Body): number {
     const visual = this.visualSize(body);
-    if (visual) return visual.height;
-    if (body instanceof Fighter) return body.stats.height * body.sizeScale;
-    return body instanceof Base ? body.height : HERO.height;
+    if (visual) return visual.height * this.scale(body);
+    if (body instanceof Fighter) return body.stats.height * body.sizeScale * this.scale(body);
+    return body instanceof Base ? body.height : HERO.height * this.scale(body);
+  }
+
+  scale(body: Body): number {
+    return body.kind === 'base' ? 1 : body.isBoss ? BATTLEFIELD.bossScale : BATTLEFIELD.unitScale;
+  }
+
+  width(body: Body): number {
+    const visual = this.visualSize(body);
+    if (visual?.width) return visual.width * this.scale(body);
+    if (body instanceof Fighter) return body.stats.width * body.sizeScale * this.scale(body);
+    return body instanceof Base ? body.width : HERO.width * this.scale(body);
   }
 
   elevation(body: Body): number { return body.flying ? this.lift(body) : 0; }
   top(body: Body): number {
-    return this.ground(body) - (this.visualSize(body)?.top ?? this.height(body)) - this.elevation(body);
+    const visual = this.visualSize(body);
+    return this.ground(body) - (visual ? visual.top * this.scale(body) : this.height(body)) - this.elevation(body);
   }
 
   /** 발이 앞에 있는 캐릭터가 뒤쪽 캐릭터를 가린다. 비행 높이는 정렬 기준에서 제외한다. */

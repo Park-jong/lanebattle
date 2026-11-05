@@ -2,7 +2,6 @@ import Phaser from 'phaser';
 import { ALLIES } from '../data/allies';
 import type { Tag } from '../data/types';
 import { COMBAT } from '../data/combat';
-import { HERO } from '../data/hero';
 import { SKILLS, type SkillId } from '../data/skills';
 import { STAGE_COUNT } from '../data/waves';
 import { STAR_RULES } from '../data/rewards';
@@ -172,7 +171,8 @@ export class BattleScene extends Phaser.Scene {
     this.field = new BattlefieldProjection((body) => body instanceof Fighter ? this.liftOf(body) : 0, (body) => {
       if (body.kind !== 'hero') return undefined;
       const art = artInScene(this, subjectOf(body));
-      return art?.displayHeight ? { height: art.displayHeight, top: art.displayTop ?? art.displayHeight } : undefined;
+      return art?.displayHeight ? { height: art.displayHeight, top: art.displayTop ?? art.displayHeight,
+        width: art.bodyWidth / art.bodyHeight * art.displayHeight } : undefined;
     });
     this.groundFx = this.add.graphics().setDepth(5);
     this.world = this.add.graphics().setDepth(50);
@@ -742,12 +742,10 @@ export class BattleScene extends Phaser.Scene {
     // 영웅
     const h = b.hero;
     if (h.alive) {
-      const w = HERO.width, ht = HERO.height;
+      const w = this.field.width(h), ht = this.field.height(h);
       const ground = this.field.ground(h), top = this.field.top(h);
       const form = b.heroForm;
-      const art = artInScene(this, subjectOf(h));
-      const footprint = this.characters.shows(h) && art?.displayHeight
-        ? Math.max(w, art.bodyWidth / art.bodyHeight * art.displayHeight * 0.7) : w;
+      const footprint = w;
       floor.fillStyle(0x081b1c, 0.4).fillEllipse(h.x + 2, ground + 2, footprint + 9, 10);
       floor.lineStyle(1.5, U.gold, 0.7).strokeEllipse(h.x, ground + 1, footprint + 16, 13);
       if (form) {
@@ -779,8 +777,8 @@ export class BattleScene extends Phaser.Scene {
 
   private drawFighter(f: Fighter, color: number): void {
     const g = this.world;
-    const w = f.stats.width * f.sizeScale;
-    const h = f.stats.height * f.sizeScale;
+    const w = this.field.width(f);
+    const h = this.field.height(f);
     // 비행 유닛은 위쪽에 띄워 그린다
     const lift = this.field.elevation(f);
     const ground = this.field.ground(f), top = this.field.top(f);

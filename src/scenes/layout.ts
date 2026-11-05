@@ -30,10 +30,13 @@ const SUMMON_X = 174;
 
 /** 전장 바닥의 위·아래 경계. 캐릭터는 이 사이에 서고 앞쪽 지면도 보인다. */
 export const BATTLEFIELD = {
-  backY: 250,
+  backY: 188,
   frontY: PANEL_Y - 16,
-  centerY: PANEL_Y - 70,
-  groundScaleY: 0.22,
+  centerY: PANEL_Y - 90,
+  groundScaleY: 0.28,
+  unitScale: 1.2,
+  bossScale: 1.1,
+  rows: [-38, -8, 30, -22, 14] as readonly number[],
 } as const;
 
 /** 레인 중앙의 발 위치. 지형의 경계와 분리한다. */
