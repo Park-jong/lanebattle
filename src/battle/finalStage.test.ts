@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ALLIES } from '../data/allies';
+import { COMBAT } from '../data/combat';
 import { HERO } from '../data/hero';
 import { computeBuildEffects } from '../game/buildEffects';
 import type { BuildLevels } from '../game/build';
@@ -52,7 +53,7 @@ describe('강림: 요괴 소환 불가', () => {
   });
 
   it('툴팁 상태 줄은 "강림 중에는 소환할 수 없습니다"', () => {
-    const ok = { allyCount: 0, maxAllies: 30, cooldown: 0, talisman: 200, cost: 30 };
+    const ok = { allyCount: 0, maxAllies: COMBAT.maxAllies, cooldown: 0, talisman: 200, cost: 30 };
     expect(summonStatus({ ...ok, descent: true })).toEqual({ text: '강림 중에는 소환할 수 없습니다', ok: false });
     expect(summonStatus(ok).ok).toBe(true);
   });
