@@ -38,6 +38,7 @@ import { frontlineMeter, meterFill, resourceMeter } from '../ui/default/meters';
 import { battleHudFrame } from '../ui/default/battleHud';
 import { BattlefieldProjection } from '../render/battlefield';
 import { drawBattlefield } from './battlefieldDecor';
+import { drawBattleScenery } from './battleScenery';
 import { BaseRenderer } from '../render/BaseRenderer';
 
 /** 보스 등장 연출 길이(초): 화면이 어두워지고 이름이 나타났다 사라진다 */
@@ -168,6 +169,7 @@ export class BattleScene extends Phaser.Scene {
     this.cameras.main.fadeIn(180, 17, 26, 43);
     festivalNight(this, COMBAT.battlefieldLength, BATTLEFIELD.backY - 12, 0);
     drawBattlefield(this);
+    drawBattleScenery(this);
     this.field = new BattlefieldProjection((body) => body instanceof Fighter ? this.liftOf(body) : 0, (body) => {
       if (body.kind !== 'hero') return undefined;
       const art = artInScene(this, subjectOf(body));

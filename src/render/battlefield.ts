@@ -1,6 +1,7 @@
 import { Base, Fighter, type Body, type Projectile } from '../battle/entities';
 import { HERO } from '../data/hero';
 import { BATTLEFIELD, GROUND_Y } from '../scenes/layout';
+import { UNIT_DISPLAY_SCALES } from './unitSizes';
 
 /** 화면에서만 쓰는 앞뒤 배치. 개체가 이동하거나 배열 순서가 바뀌어도 발 위치를 유지한다. */
 export class BattlefieldProjection {
@@ -34,7 +35,10 @@ export class BattlefieldProjection {
   scale(body: Body): number {
     if (body.kind === 'base') return 1;
     if (body.kind === 'hero') return BATTLEFIELD.heroScale;
-    return body.isBoss ? BATTLEFIELD.bossScale : BATTLEFIELD.unitScale;
+    if (body.isBoss) return BATTLEFIELD.bossScale;
+    return body instanceof Fighter
+      ? UNIT_DISPLAY_SCALES[body.team][body.defId] ?? BATTLEFIELD.unitScale
+      : BATTLEFIELD.unitScale;
   }
 
   width(body: Body): number {

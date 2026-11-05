@@ -35,7 +35,7 @@ export const BATTLEFIELD = {
   centerY: PANEL_Y - 90,
   groundScaleY: 0.28,
   unitScale: 1.3,
-  heroScale: 1.5,
+  heroScale: 1.65,
   bossScale: 1.1,
   rows: [-38, -8, 30, -22, 14] as readonly number[],
 } as const;

@@ -25,19 +25,50 @@ export function drawBattlefield(scene: Phaser.Scene): void {
     patch(0x23392c, 1, [[x, backY + 4], [x + 7, backY - 9], [x + 12, backY + 4], [x + 21, backY - 4], [x + 26, backY + 7]]);
   }
 
-  // 뒤쪽의 작은 돌과 앞쪽의 큰 돌로 지면의 깊이를 드러낸다.
+  // 밝고 닳은 흙길을 불규칙하게 겹쳐 군데군데 패인 길을 만든다.
+  for (let i = 0; i < Math.ceil(width / 113); i++) {
+    const x = i * 113 + 31;
+    const y = BATTLEFIELD.centerY - 5 + Math.sin(i * 1.9) * 13;
+    g.fillStyle(0xc4ad74, 0.055).fillEllipse(x, y, 235 + i * 17 % 70, 103 + i * 11 % 25);
+    g.fillStyle(0xd8bb7c, 0.04).fillEllipse(x + 22, y + 7, 167, 65);
+    // 흐릿한 수레바퀴 자국은 레인 방향만 잡아 주고 발밑에서는 눈에 띄지 않는다.
+    for (const offset of [-28, 29]) {
+      const trackY = BATTLEFIELD.centerY + offset + Math.sin(i * 1.2) * 4;
+      g.lineStyle(2, 0x3c4534, 0.14).lineBetween(x - 43, trackY, x + 30, trackY + 1);
+      g.lineStyle(1, 0xb8a477, 0.12).lineBetween(x - 39, trackY + 3, x + 24, trackY + 4);
+    }
+  }
+
+  // 뒤쪽의 작은 돌과 앞쪽의 큰 돌. 일정한 격자 대신 흩어진 자갈과 풀을 둔다.
   const rows = 5;
   for (let row = 0; row < rows; row++) {
     const distance = row / (rows - 1);
     const scale = 0.62 + distance * 0.62;
     for (let i = 0; i < Math.ceil(width / 72); i++) {
-      const x = i * 72 + (row % 2) * 31 + (i * 13 % 19);
-      const y = backY + 24 + distance * (frontY - backY - 40) + (i * 7 % 11);
-      const w = (22 + i * 7 % 21) * scale, h = (8 + i % 5) * scale;
+      const x = i * 72 + (row % 2) * 31 + ((i * 31 + row * 17) % 43);
+      const y = backY + 24 + distance * (frontY - backY - 45) + ((i * 17 + row * 11) % 25);
+      const w = (8 + (i * 7 + row * 11) % 23) * scale, h = (4 + i % 5) * scale;
       patch(0x263a32, 0.22, [[x - w / 2, y + 2], [x - w / 3, y - h / 2], [x + w / 3, y - h / 2 + 1], [x + w / 2, y + 2], [x + w / 4, y + h / 2], [x - w / 4, y + h / 2]]);
       g.lineStyle(1, 0xc1b98a, 0.16).lineBetween(x - w / 3, y - h / 2, x + w / 3, y - h / 2 + 1);
       if ((i + row) % 3 === 0) g.fillStyle(0xb1a37a, 0.24).fillEllipse(x + 19, y - 4, 3 * scale, 1.4 * scale);
+      if ((i * 3 + row) % 5 === 0) {
+        g.lineStyle(1, 0x364b31, 0.45).lineBetween(x + 14, y + 3, x + 12, y - 3)
+          .lineBetween(x + 14, y + 3, x + 17, y - 5).lineBetween(x + 14, y + 3, x + 21, y - 1);
+      }
+      if ((i + row * 2) % 7 === 0) {
+        g.lineStyle(1, 0x343f30, 0.15).beginPath().moveTo(x - 15, y + 9)
+          .lineTo(x - 4, y + 7).lineTo(x + 4, y + 11).lineTo(x + 15, y + 8).strokePath();
+      }
     }
+  }
+
+  // 담장과 전투 영역 사이의 낮은 관목. 상단만 반짝여 전경과 구분한다.
+  for (let i = 0; i < Math.ceil(width / 173); i++) {
+    const x = i * 173 + 74, y = backY + 21 + i % 3 * 4;
+    g.fillStyle(0x2b4230, 0.7).fillEllipse(x, y, 56, 14);
+    patch(0x536747, 0.65, [[x - 24, y], [x - 12, y - 10], [x - 5, y - 3], [x + 4, y - 13],
+      [x + 13, y - 4], [x + 23, y - 8], [x + 26, y + 2]]);
+    g.lineStyle(1, 0x95a077, 0.35).lineBetween(x - 8, y - 7, x - 4, y - 3);
   }
 
   for (let i = 0; i < Math.ceil(width / 160); i++) {

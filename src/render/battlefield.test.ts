@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { Base, Projectile } from '../battle/entities';
+import { Base, Fighter, Projectile } from '../battle/entities';
 import { createEnemy } from '../battle/enemyFactory';
 import { Hero } from '../battle/hero';
+import { ALLIES } from '../data/allies';
+import { ENEMIES } from '../data/enemies';
 import { BATTLEFIELD, BATTLE_LAYOUT } from '../scenes/layout';
 import { BattlefieldProjection } from './battlefield';
 
@@ -14,27 +16,50 @@ describe('battlefield display projection', () => {
     expect(field.width(enemy)).toBeCloseTo(dimensions.width * 1.3);
     expect({ width: enemy.stats.width, height: enemy.stats.height, radius: enemy.radius }).toEqual(dimensions);
     const hero = new Hero();
-    expect(field.height(hero)).toBe(60);
-    expect(field.width(hero)).toBe(36);
+    expect(field.height(hero)).toBe(66);
+    expect(field.width(hero)).toBeCloseTo(39.6);
     expect(field.scale(hero)).toBeGreaterThan(field.scale(enemy));
     expect(BATTLEFIELD.backY).toBeLessThan(200);
     expect(BATTLEFIELD.centerY + Math.max(...BATTLEFIELD.rows) + 14).toBeLessThan(BATTLE_LAYOUT.summonFlange.y);
+  });
+  it('distinguishes heavy units without shrinking any unit or changing elite and growth multipliers', () => {
+    const field = new BattlefieldProjection();
+    const allies = ALLIES.map(def => new Fighter('ally', def.id,
+      { ...def, traits: [], killTalisman: 0, scale: 1, elite: false }, 500));
+    const enemies = ENEMIES.map(def => createEnemy(def.id, 0, false, 800));
+    for (const unit of [...allies, ...enemies]) {
+      const before = { width: unit.stats.width, height: unit.stats.height, radius: unit.radius, hp: unit.hp };
+      expect(field.height(unit)).toBeGreaterThanOrEqual(unit.stats.height * 1.3);
+      expect(field.width(unit) / field.height(unit)).toBeCloseTo(unit.stats.width / unit.stats.height);
+      expect({ width: unit.stats.width, height: unit.stats.height, radius: unit.radius, hp: unit.hp }).toEqual(before);
+    }
+    const height = (id: string) => field.height(allies.find(unit => unit.defId === id)!);
+    expect(height('sumoGoblin')).toBeGreaterThan(height('clubGoblin') * 1.5);
+    expect(height('bulgasari')).toBeGreaterThan(height('clubGoblin') * 1.5);
+    expect(height('haetae')).toBeGreaterThan(height('gumiho') * 1.5);
+    expect(height('samjokgo')).toBeGreaterThan(height('magpieFlock') * 1.7);
+    const normal = createEnemy('geuseundae', 0, false, 800);
+    const elite = createEnemy('geuseundae', 0, true, 800);
+    const eliteHeight = field.height(elite);
+    expect(eliteHeight / field.height(normal)).toBeCloseTo(elite.sizeScale);
+    elite.grow(1.15, 1.08);
+    expect(field.height(elite)).toBeCloseTo(eliteHeight * 1.08);
   });
   it('sizes a mounted hero and overhead labels without changing combat or aiming at its flag', () => {
     const hero = new Hero();
     const original = { radius: hero.radius, hp: hero.hp, x: hero.x };
     const field = new BattlefieldProjection(() => 0, body =>
       body === hero && !hero.possessedId ? { height: 64, top: 78 } : undefined);
-    expect(field.height(hero)).toBe(96);
-    expect(field.top(hero)).toBe(field.ground(hero) - 117);
+    expect(field.height(hero)).toBeCloseTo(105.6);
+    expect(field.top(hero)).toBeCloseTo(field.ground(hero) - 128.7);
     const enemy = createEnemy('eggGhost', 0, false, 400);
     const shot = new Projectile('enemy', hero.x, hero, 10, 420, 'ranged',
       { attacker: enemy, tags: [], source: 'hero', attackBonus: 0, burnPerSec: 0, areaRadius: 0 });
-    expect(field.projectile(shot).y).toBeCloseTo(field.ground(hero) - 96 * 0.55);
+    expect(field.projectile(shot).y).toBeCloseTo(field.ground(hero) - 105.6 * 0.55);
     expect({ radius: hero.radius, hp: hero.hp, x: hero.x }).toEqual(original);
     hero.possessedId = 'haetae';
-    expect(field.height(hero)).toBe(60);
-    expect(field.top(hero)).toBe(field.ground(hero) - 60);
+    expect(field.height(hero)).toBe(66);
+    expect(field.top(hero)).toBe(field.ground(hero) - 66);
   });
   it('keeps each unit on its row through movement, removal and new spawns without changing combat state', () => {
     const field = new BattlefieldProjection();
