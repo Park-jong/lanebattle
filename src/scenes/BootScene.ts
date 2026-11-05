@@ -25,6 +25,7 @@ export class BootScene extends Phaser.Scene {
       if (value > 0) meter.fillStyle(U.gold).fillRoundedRect(258, 310, 444 * value, 5, 2);
     };
     drawMeter(0);
+    this.load.binary('title-display-font', `${import.meta.env.BASE_URL}assets/fonts/black-han-title.ttf`);
     this.load.json(ART_MANIFEST_KEY, artAssetUrl('manifest.json', import.meta.env.BASE_URL));
     this.load.once('complete', () => {
       const entries = artList(this.cache.json.get(ART_MANIFEST_KEY));
@@ -42,7 +43,14 @@ export class BootScene extends Phaser.Scene {
     this.load.start();
   }
 
-  private startGame(): void {
+  private async startGame(): Promise<void> {
+    const fontData = this.cache.binary.get('title-display-font');
+    if (fontData && typeof FontFace !== 'undefined') {
+      try {
+        const face = await new FontFace('MidnightDisplay', fontData).load();
+        document.fonts.add(face);
+      } catch { /* 전용 글꼴을 못 읽어도 기본 글꼴로 플레이한다. */ }
+    }
     const devBattle = new URLSearchParams(window.location.search).has('stage');
     this.scene.start(devBattle ? 'Battle' : 'Title');
   }

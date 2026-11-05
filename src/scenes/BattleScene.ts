@@ -36,6 +36,7 @@ import { DEFAULT_UI as U, skillShortName, unitShortName } from '../ui/default/to
 import { festivalNight, panel } from '../ui/default/decor';
 import { frontlineMeter, meterFill, resourceMeter } from '../ui/default/meters';
 import { battleHudFrame } from '../ui/default/battleHud';
+import { resultBanner } from '../ui/default/resultBanner';
 import { BattlefieldProjection } from '../render/battlefield';
 import { drawBattlefield } from './battlefieldDecor';
 import { drawBattleScenery } from './battleScenery';
@@ -283,13 +284,14 @@ export class BattleScene extends Phaser.Scene {
     const style = { fontFamily: HUD_FONT, color: '#ffffff' };
     const depth = DEPTH.popupText;
     this.resultTitle = this.add
-      .text(cx, y + 14, '', { ...style, fontSize: '34px', fontStyle: 'bold' })
+      .text(cx, y + 15, '', { ...style, fontFamily: U.displayFont, fontSize: '43px',
+        color: '#ffe4ac', stroke: '#49271f', strokeThickness: 5, padding: { x: 5, y: 3 } })
       .setOrigin(0.5, 0).setScrollFactor(0).setDepth(depth).setVisible(false);
     this.resultStars = this.add
-      .text(cx, y + 62, '', { ...style, fontSize: '40px', color: '#ffd84a' })
+      .text(cx, y + 86, '', { ...style, fontSize: '36px', color: '#ffd84a' })
       .setOrigin(0.5, 0).setScrollFactor(0).setDepth(depth).setVisible(false);
     this.resultBody = this.add
-      .text(x + 40, y + 120, '', { ...style, fontSize: '15px', lineSpacing: 6 })
+      .text(x + 40, y + 140, '', { ...style, fontSize: '15px', lineSpacing: 5 })
       .setScrollFactor(0).setDepth(depth).setVisible(false);
 
     const { w: bw, gap, y: by } = RESULT_LAYOUT.button;
@@ -920,6 +922,7 @@ export class BattleScene extends Phaser.Scene {
     if (!this.resultLaidOut) {
       // 보이는 버튼을 왼쪽부터 다시 하기, (다음 스테이지), 지도로 순으로 가운데 정렬
       this.resultLaidOut = true;
+      resultBanner(this.resultPanel, GAME_WIDTH / 2, RESULT_LAYOUT.panel.y + 24, this.battle.result === 'victory');
       const row = next !== null ? [this.nextButton, this.restartButton, this.mapButton] : [this.restartButton, this.mapButton];
       const { w, gap, y } = RESULT_LAYOUT.button;
       centeredRow(row.length, w, gap, y).forEach((rect, i) => {
@@ -949,7 +952,8 @@ export class BattleScene extends Phaser.Scene {
     const def = getStageDef(this.battle.stage);
     const hpPercent = Math.floor((this.battle.shrine.hp / this.battle.shrine.maxHp) * 100);
     const mark = (ok: boolean) => (ok ? '✔' : '✘');
-    this.resultTitle.setText(res.victory ? '승리!' : '패배...');
+    this.resultTitle.setText(res.victory ? '퇴마 성공!' : '패배...')
+      .setColor(res.victory ? '#ffe4ac' : '#e6d2cc');
     this.resultStars.setText('★'.repeat(res.stars) + '☆'.repeat(STAR_RULES.maxStars - res.stars));
     this.resultBody.setText(
       [

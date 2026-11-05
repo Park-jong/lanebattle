@@ -16,13 +16,14 @@ import { CHAPTER_TITLES, recommendedStage } from '../ui/default/journey';
 import { panel } from '../ui/default/decor';
 import { addArtImage } from '../render/CharacterRenderer';
 import { addTestBadge } from './testBadge';
+import { ChapterSelector } from '../ui/default/ChapterSelector';
 import { isBlockedByOverlay, openSettings } from './openSettings';
 
 /** One chapter and five large gates, with the selected destination always in view. */
 export class MapScene extends Phaser.Scene {
   private selected = 0;
   private launching = false;
-  private chapterButtons: MenuButton[] = [];
+  private chapterButtons: ChapterSelector[] = [];
   private routeObjects: Phaser.GameObjects.GameObject[] = [];
   private previewObjects: Phaser.GameObjects.GameObject[] = [];
   private keyInput!: KeyInput;
@@ -41,7 +42,9 @@ export class MapScene extends Phaser.Scene {
 
   create(): void {
     drawNightSky(this);
-    this.add.graphics().setDepth(-1).fillStyle(U.night, 0.95).fillRoundedRect(18, 70, 924, 78, 16);
+    const journey = this.add.graphics().setDepth(-1);
+    journey.fillStyle(0x0c1c24, 0.82).fillRoundedRect(18, 70, 924, 78, 10);
+    journey.lineStyle(1, U.gold, 0.16).lineBetween(36, 148, 924, 148);
     this.add.text(24, 19, '축제의 여정', { fontFamily: HUD_FONT, fontSize: '30px', fontStyle: 'bold', color: U.text });
     this.add.text(214, 32, '오늘은 어느 밤을 지킬까요?', { fontFamily: HUD_FONT, fontSize: '16px', color: U.muted });
     const total = STAGES.reduce((sum, s) => sum + progress.getBestStars(s.number), 0);
@@ -50,10 +53,10 @@ export class MapScene extends Phaser.Scene {
     }).setOrigin(1, 0);
 
     L.chapters.forEach((r, i) => {
-      this.chapterButtons.push(new MenuButton(this, r.x + r.w / 2, r.y + r.h / 2, r.w, r.h,
-        (i + 1) + '장  ' + CHAPTER_TITLES[i], () => {
-          if (!this.launching) this.select(stageAt(i, gridPosition(this.selected).col));
-        }, { fontSize: 17 }));
+      const cleared = STAGES.filter(stage => stage.chapter === i + 1).map(stage => progress.getBestStars(stage.number) > 0);
+      this.chapterButtons.push(new ChapterSelector(this, r, i, CHAPTER_TITLES[i], cleared, () => {
+        if (!this.launching && !isBlockedByOverlay(this)) this.select(stageAt(i, gridPosition(this.selected).col));
+      }));
     });
     panel(this, L.route.x, L.route.y, L.route.w, L.route.h, true, -2);
     panel(this, L.preview.x, L.preview.y, L.preview.w, L.preview.h);
@@ -77,7 +80,7 @@ export class MapScene extends Phaser.Scene {
 
   private refresh(): void {
     const row = gridPosition(this.selected).row;
-    this.chapterButtons.forEach((button, i) => button.setFill(i === row ? U.gold : U.paper));
+    this.chapterButtons.forEach((button, i) => button.setSelected(i === row));
     this.drawRoute(row);
     this.drawPreview();
   }

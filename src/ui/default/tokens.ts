@@ -1,6 +1,7 @@
 /** Presentation tokens for the original mudang / folklore skin only. */
 export const DEFAULT_UI = {
   font: '"Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif',
+  displayFont: '"MidnightDisplay", "Malgun Gothic", system-ui, sans-serif',
   night: 0x111a2b,
   panel: 0x1c2a3c,
   panelRaised: 0x293c50,
