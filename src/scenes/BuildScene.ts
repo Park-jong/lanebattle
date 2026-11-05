@@ -3,7 +3,7 @@ import { ALLIES } from '../data/allies';
 import { STAGES } from '../data/stages';
 import { getBossById } from '../data/bosses';
 import { getUpgradeNode, nodesOfTree, TIER_UNLOCK_SPENT, UPGRADE_NODES, YOGOE_UNIT_IDS, yogoeNodeIds, type TreeId, type UpgradeNode } from '../data/upgrades';
-import { allocateFailureText, BUILD_TABS, deallocateFailureText, HIDDEN_NODE_NAME, HIDDEN_NODE_TEXT, nodeStatus, purchaseText, type BuildTab } from '../game/buildText';
+import { allocateFailureText, BUILD_TABS, deallocateFailureText, HIDDEN_NODE_NAME, HIDDEN_NODE_TEXT, hiddenNodeDetailText, nodeStatus, purchaseButtonText, purchaseText, type BuildTab } from '../game/buildText';
 import { builds, gameMode, summonOrder, wallet } from '../game/session';
 import { browserStorage } from '../game/save';
 import { HUD_FONT, type Rect } from './layout';
@@ -143,9 +143,14 @@ export class BuildScene extends Phaser.Scene {
     this.text(L.wallet.x, 31, String(builds.availableSinmyeong()), 29, t.accentText).setFontStyle('bold');
     this.text(L.wallet.x + 146, 59, this.copy(`엽전 ${wallet.yeopjeon.toLocaleString()}`), 12, t.muted).setOrigin(1, 0);
     const price = wallet.nextPrice();
-    this.button(L.buy, price === null ? '구매 완료' : `포인트 +1\n${price} ${this.skin === 'default' ? '엽전' : 'CR'}`, () => {
+    const buyLabel = purchaseButtonText(wallet.purchases).split('\n');
+    if (this.skin === 'military') {
+      buyLabel[0] = '포인트 +1';
+      buyLabel[1] = this.copy(buyLabel[1]).replace('크레딧', 'CR');
+    }
+    this.button(L.buy, buyLabel.join('\n'), () => {
       this.message = this.copy(purchaseText(wallet.buySinmyeong())); this.dirty = true;
-    }, { enabled: price !== null && wallet.yeopjeon >= price, size: 13 });
+    }, { enabled: price !== null && wallet.yeopjeon >= price, size: 12 });
     L.slotTabs.forEach((r, i) => this.button(r, `빌드 ${i + 1}\n${i === builds.activeIndex ? '사용 중' : `${builds.getSlot(i).spent()}점`}`, () => {
       builds.selectSlot(i); this.message = `빌드 ${i + 1} 적용`; this.dirty = true;
     }, { active: i === builds.activeIndex, size: 12 }));
@@ -185,10 +190,11 @@ export class BuildScene extends Phaser.Scene {
         const need = TIER_UNLOCK_SPENT[tier] ?? 0, spent = build.spentIn(tree, tier);
         const g = this.graphics();
         const ratio = Math.min(1, need ? spent / need : 1);
-        g.fillStyle(t.edge).fillRoundedRect(r.x + 7, r.y + 30, 4, 39, 2);
-        g.fillStyle(open ? t.glow : t.accent).fillRoundedRect(r.x + 7, r.y + 69 - 39 * ratio, 4, 39 * ratio, 2);
+        const barHeight = r.h - 38;
+        g.fillStyle(t.edge).fillRoundedRect(r.x + 7, r.y + 28, 4, barHeight, 2);
+        g.fillStyle(open ? t.glow : t.accent).fillRoundedRect(r.x + 7, r.y + 28 + barHeight * (1 - ratio), 4, barHeight * ratio, 2);
         this.text(r.x + 10, r.y + 4, ['Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ'][tier - 1], 15, open ? t.accentText : t.muted).setOrigin(0.5, 0);
-        if (!open) this.text(r.x + 13, r.y + 73, `${spent}/${need}`, 10, t.muted).setOrigin(0.5, 0);
+        if (!open) this.text(r.x + 13, r.y + r.h - 11, `${spent}/${need}`, 10, t.muted).setOrigin(0.5, 0);
       }
       const next = [2, 3, 4].find(tier => !build.isTierUnlocked(tree, tier) && nodesOfTree(tree).some(n => n.tier === tier));
       this.text(116, 139, next ? `${next}단 해금 · 낮은 단 투자 ${build.spentIn(tree, next)} / ${TIER_UNLOCK_SPENT[next]}점` : '성장 경로 개방', 11, t.muted);
@@ -224,10 +230,11 @@ export class BuildScene extends Phaser.Scene {
     const color = status === 'allocated' ? t.accent : status === 'available' ? fundsNeeded ? 0xba9c73 : t.glow : status === 'blocked' ? 0xc47d82 : t.edge;
     const g = this.graphics(1);
     buildFrame(g, r, t, status === 'allocated' ? (this.skin === 'default' ? 0x344039 : 0x263e4d) : t.panel, selected ? t.accent : color, selected);
-    const cx = r.x + r.w / 2, cy = r.y + 30;
-    g.fillStyle(color, 0.07).fillCircle(cx, cy, 24).lineStyle(1, color, 0.3).strokeCircle(cx, cy, 24);
-    this.icon(revealed ? nodeIcon(node, this.skin) : 'question', cx, cy, 36, status === 'locked' ? this.skin === 'default' ? 0x68817f : 0x6c7f96 : color);
-    this.text(cx, r.y + 57, revealed ? shortNodeName(node, this.skin) : HIDDEN_NODE_NAME, r.w > 100 ? 12 : 11, status === 'locked' ? t.muted : t.text, r.w - 6).setOrigin(0.5, 0).setAlign('center');
+    const compact = r.h < 80;
+    const cx = r.x + r.w / 2, cy = r.y + (compact ? 22 : 30), radius = compact ? 18 : 24;
+    g.fillStyle(color, 0.07).fillCircle(cx, cy, radius).lineStyle(1, color, 0.3).strokeCircle(cx, cy, radius);
+    this.icon(revealed ? nodeIcon(node, this.skin) : 'question', cx, cy, compact ? 28 : 36, status === 'locked' ? this.skin === 'default' ? 0x68817f : 0x6c7f96 : color);
+    this.text(cx, r.y + (compact ? 44 : 57), revealed ? shortNodeName(node, this.skin) : HIDDEN_NODE_NAME, r.w > 100 ? 12 : 11, status === 'locked' ? t.muted : t.text, r.w - 6).setOrigin(0.5, 0).setAlign('center');
     if (node.exclusiveGroup && !node.finalStage) this.text(r.x + 6, r.y + 5,
       node.exclusiveGroup === 'fanWind' ? 'Q' : node.exclusiveGroup === 'blessing' ? 'W' : 'E', 9, t.muted);
     const badge = status === 'allocated' ? level === node.maxLevel ? '✓' : `${level}` : status === 'available' ? fundsNeeded ? '!' : '+' : status === 'blocked' ? '×' : '';
@@ -289,8 +296,8 @@ export class BuildScene extends Phaser.Scene {
     this.text(774, 143, revealed ? buildNodeName(node, this.skin) : HIDDEN_NODE_NAME, 16, t.text, 158).setFontStyle('bold');
     this.text(698, 199, revealed ? `Lv. ${level} / ${node.maxLevel}${level < node.maxLevel ? `  →  ${level + 1}` : '  MAX'}` : '미지의 능력', 13, t.accentText);
     if (!revealed) {
-      this.detailBody.setText(this.skin === 'default' ? `${HIDDEN_NODE_TEXT}\n\n여정을 이어가면 새로운 힘이 모습을 드러냅니다.`
-        : '기밀 모듈이 잠겨 있습니다.\n\n전술 연구를 진행하면 새로운 장비가 공개됩니다.', t.muted);
+      const hidden = this.copy(hiddenNodeDetailText(node, false));
+      this.detailBody.setText(this.skin === 'default' ? hidden : hidden.replace(HIDDEN_NODE_TEXT, '기밀 모듈이 잠겨 있습니다.'), t.muted);
       this.detailActions(false, false); this.drawMessage(); return;
     }
     const add = builds.canAllocate(node.id), remove = builds.canDeallocate(node.id);

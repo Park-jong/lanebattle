@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { MAX_TIER, TREE_IDS, YOGOE_UNIT_IDS, nodesOfTree, yogoeNodeIds, possessionNodeId } from '../../data/upgrades';
 import { MIN_TOUCH, type Rect } from '../../scenes/layout';
-import { BUILD_LAYOUT as L, dialogButtons, nodeCells, tierLabelRect } from './layout';
+import { BUILD_LAYOUT as L, dialogButtons, nodeCells, tierLabelRect, tierRowY } from './layout';
 
 const screen = { x: 0, y: 0, w: 960, h: 540 };
 const inside = (a: Rect, b: Rect) => a.x >= b.x && a.y >= b.y && a.x + a.w <= b.x + b.w && a.y + a.h <= b.y + b.h;
@@ -48,6 +48,18 @@ describe('아이콘 성장 화면의 터치 배치', () => {
       noOverlap([...L.unitCells, ...cells.map(c => c.rect), ...fixed, ...displays]);
     }
     expect(nodeCells('yogoe', 'unknown')).toEqual([]);
+  });
+
+  it('강림·귀문개방은 4단 아래의 독립된 줄 첫 칸에 놓인다', () => {
+    for (const [tree, id] of [['mudang', 'descent'], ['yeongye', 'ghostGate']] as const) {
+      const cells = nodeCells(tree);
+      const final = cells.find(c => c.nodeId === id)!;
+      expect(final.rect.y).toBe(tierRowY(MAX_TIER + 1));
+      expect(final.rect.x).toBe(148);
+      expect(final.rect.y).toBeGreaterThanOrEqual(tierLabelRect(MAX_TIER).y + tierLabelRect(MAX_TIER).h);
+      expect(cells.filter(c => c.rect.y === final.rect.y)).toHaveLength(1);
+      expect(inside(final.rect, L.nodeArea)).toBe(true);
+    }
   });
 
   it('소환 순서 10칸과 모달은 터치 크기를 유지하고 화면 안에 배치된다', () => {

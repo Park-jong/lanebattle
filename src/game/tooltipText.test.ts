@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { noModifiers } from '../battle/modifiers';
 import { ALLIES } from '../data/allies';
+import { COMBAT } from '../data/combat';
 import { yogoeNodeIds } from '../data/upgrades';
 import { computeBuildEffects } from './buildEffects';
 import { placeTooltip } from './tooltipPlacement';
@@ -154,14 +155,14 @@ describe('describeUnit 키 표시', () => {
 });
 
 describe('summonStatus', () => {
-  const ok = { allyCount: 3, maxAllies: 30, cooldown: 0, talisman: 100, cost: 30 };
+  const ok = { allyCount: 3, maxAllies: COMBAT.maxAllies, cooldown: 0, talisman: 100, cost: 30 };
   it('소환 가능', () => expect(summonStatus(ok)).toEqual({ text: '소환 가능', ok: true }));
   it('부적 부족', () => {
     expect(summonStatus({ ...ok, talisman: 20.9 }).text).toBe('부적 부족 (현재 20/필요 30)');
   });
   it('쿨타임', () => expect(summonStatus({ ...ok, cooldown: 1.26 }).text).toBe('쿨타임 1.3초'));
   it('아군 최대', () => {
-    expect(summonStatus({ ...ok, allyCount: 30, cooldown: 2, talisman: 0 }).text).toBe('아군 최대(30)');
+    expect(summonStatus({ ...ok, allyCount: COMBAT.maxAllies, cooldown: 2, talisman: 0 }).text).toBe(`아군 최대(${COMBAT.maxAllies})`);
   });
 });
 

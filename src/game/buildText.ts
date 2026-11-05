@@ -1,6 +1,6 @@
 import { ALLIES } from '../data/allies';
 import { SINMYEONG_PURCHASE } from '../data/rewards';
-import { GHOST_GATE_TUNING } from '../data/finalStage';
+import { FINAL_STAGE_HINTS, GHOST_GATE_TUNING } from '../data/finalStage';
 import { getUpgradeNode, POSSESSION_GROUP, TIER_UNLOCK_SPENT, TREE_IDS, TREE_NAMES, type TreeId, type UpgradeNode } from '../data/upgrades';
 import type { AllocateCheck, AllocateFailure, Build, DeallocateCheck } from './build';
 import type { PurchaseResult } from './wallet';
@@ -32,6 +32,14 @@ function unitNameOf(unitId: string): string {
 export const HIDDEN_NODE_NAME = '???';
 /** 숨겨진 빙의 노드의 상세 패널 문구 */
 export const HIDDEN_NODE_TEXT = '숨겨진 힘이 잠들어 있다…';
+
+/** 숨겨진 칸의 상세 패널 문구: 기본 문구 + 최종 단계 노드면 종류별 힌트 한 줄 */
+export function hiddenNodeDetailText(node: UpgradeNode, revealed: boolean): string {
+  if (revealed) return '';
+  const hint = node.finalStage ? FINAL_STAGE_HINTS[node.finalStage] : null;
+  return hint ? `${HIDDEN_NODE_TEXT}
+${hint}` : HIDDEN_NODE_TEXT;
+}
 
 /** 단 해금 조건 문구. 1단은 조건이 없어 null */
 export function tierUnlockText(tier: number): string | null {
@@ -102,6 +110,17 @@ export function purchaseText(result: PurchaseResult): string {
   return result.reason === 'maxPurchases'
     ? `신명은 엽전으로 최대 ${SINMYEONG_PURCHASE.maxPurchases}번까지 살 수 있습니다`
     : '엽전이 부족합니다';
+}
+
+/** 신명 구매 버튼 문구: 가격과 남은 횟수 (다 샀으면 완료 표시). purchases는 지금까지 산 횟수 */
+export function purchaseButtonText(purchases: number): string {
+  const { price, maxPurchases } = SINMYEONG_PURCHASE;
+  if (purchases >= maxPurchases) return `신명 구매
+최대 ${maxPurchases}회
+구매 완료`;
+  return `신명 구매
+엽전 ${price}
+남은 ${maxPurchases - purchases}/${maxPurchases}회`;
 }
 
 /** 노드 칸의 상태. 이미 찍었으면 allocated, 아니면 찍기 가능 여부로 나눈다 */

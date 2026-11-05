@@ -32,7 +32,14 @@ export const GHOST_GATE_TUNING = {
   /** 해금에 필요한 ①②③을 모두 찍은 요괴 유닛 수 */
   minAwakenedUnits: 5,
   /** 모든 유닛 소환 비용 고정값 */
-  summonCost: 30,
+  summonCost: 10,
   /** 소환 쿨타임 배율 (유닛 업그레이드 반영 후 곱한다) */
   summonCooldownMultiplier: 0.5,
 } as const;
+
+/** 숨겨진 최종 단계 칸의 힌트 한 줄 (자세히 말하지 않는다) */
+export const FINAL_STAGE_HINTS: Readonly<Record<FinalStageId, string>> = {
+  possession: '이 요괴를 끝까지 깨우고 무당의 길을 모두 걸으면, 둘은 하나가 된다…',
+  descent: '무당의 길과 살림을 모두 갖추면, 하늘에서 무언가 내려온다…',
+  ghostGate: '여러 요괴를 깊이 깨우고 인연을 모두 이으면, 닫힌 문이 열린다…',
+};

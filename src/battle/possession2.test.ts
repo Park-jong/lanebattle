@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { COMBAT } from '../data/combat';
 import { POSSESSION_SKILLS } from '../data/possession';
 import { possessionNodeId } from '../data/upgrades';
 import { computeBuildEffects } from '../game/buildEffects';
@@ -313,9 +314,9 @@ describe('유닛 9 까치 떼 스킬', () => {
     expect(b.resources.talisman).toBe(77);
 
     const full = possess('magpieFlock');
-    full.spawnFreeAllies('clubGoblin', 28);
+    full.spawnFreeAllies('clubGoblin', COMBAT.maxAllies - 2);
     full.castSkill('bladeDance');
-    expect(full.allies).toHaveLength(30);
+    expect(full.allies).toHaveLength(COMBAT.maxAllies);
     expect(full.allies.filter((a) => a.defId === 'magpieFlock')).toHaveLength(2);
   });
 

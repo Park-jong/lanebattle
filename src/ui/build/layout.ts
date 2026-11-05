@@ -1,4 +1,4 @@
-import { nodesOfTree, possessionNodeId, YOGOE_UNIT_IDS, yogoeNodeIds, type TreeId } from '../../data/upgrades';
+import { MAX_TIER, nodesOfTree, possessionNodeId, YOGOE_UNIT_IDS, yogoeNodeIds, type TreeId } from '../../data/upgrades';
 import type { Rect } from '../../scenes/layout';
 
 export const BUILD_LAYOUT = {
@@ -28,8 +28,8 @@ export function dialogButtons(count: number): Rect[] {
   return Array.from({ length: count }, (_, i) => ({ x: start + i * (w + gap), y: BUILD_LAYOUT.dialogButtonY, w, h: 66 }));
 }
 
-export function tierRowY(tier: number): number { return 160 + (tier - 1) * 86; }
-export function tierLabelRect(tier: number): Rect { return { x: 110, y: tierRowY(tier), w: 32, h: 84 }; }
+export function tierRowY(tier: number): number { return 156 + (tier - 1) * 70; }
+export function tierLabelRect(tier: number): Rect { return { x: 110, y: tierRowY(tier), w: 32, h: 66 }; }
 
 /** Only the selected unit's chain is rendered. All ten units remain in the portrait picker. */
 export function nodeCells(tree: TreeId, unitId = YOGOE_UNIT_IDS[0]): { nodeId: string; rect: Rect }[] {
@@ -39,14 +39,14 @@ export function nodeCells(tree: TreeId, unitId = YOGOE_UNIT_IDS[0]): { nodeId: s
       nodeId, rect: { x: 128 + i * 133, y: 386, w: 112, h: 102 },
     }));
   }
-  return [1, 2, 3, 4].flatMap(tier => {
-    const nodes = nodesOfTree(tree).filter(n => n.tier === tier);
+  return Array.from({ length: MAX_TIER + 1 }, (_, i) => i + 1).flatMap(tier => {
+    const nodes = nodesOfTree(tree).filter(n => (n.finalStage ? MAX_TIER + 1 : n.tier) === tier);
     const gaps = nodes.slice(1).map((n, i) => n.exclusiveGroup && n.exclusiveGroup === nodes[i].exclusiveGroup ? 6 : 16);
     const width = nodes.length * 76 + gaps.reduce((a, b) => a + b, 0);
-    let x = 148 + (508 - width) / 2;
+    let x = tier === MAX_TIER + 1 ? 148 : 148 + (508 - width) / 2;
     return nodes.map((n, i) => {
       if (i > 0) x += gaps[i - 1];
-      const cell = { nodeId: n.id, rect: { x, y: tierRowY(tier), w: 76, h: 80 } };
+      const cell = { nodeId: n.id, rect: { x, y: tierRowY(tier), w: n.finalStage ? 112 : 76, h: 66 } };
       x += 76;
       return cell;
     });
