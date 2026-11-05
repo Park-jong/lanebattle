@@ -1,0 +1,223 @@
+{
+  "date": "2026-11-05",
+  "scope": "File readability, alpha presence and provenance only. Visual continuity, canvas alignment and runtime integration require separate review.",
+  "planned": 1476,
+  "generated": 1476,
+  "tracked_images": 1476,
+  "image_worktree_matches_HEAD": true,
+  "file_issues": [],
+  "body_border_flags": 0,
+  "border_rule": "More than 6 alpha>=128 pixels on any outermost edge; body images only; not a complete visual clipping test.",
+  "kinds": {
+    "body": 1135,
+    "portrait": 53,
+    "effect": 133,
+    "projectile": 18,
+    "background": 5,
+    "layer": 15,
+    "base": 40,
+    "ui": 77
+  },
+  "actual_sizes": {
+    "(1086, 1448)": 861,
+    "(1254, 1254)": 563,
+    "(1774, 887)": 24,
+    "(2172, 724)": 4,
+    "(1199, 1312)": 1,
+    "(1672, 941)": 21,
+    "(1381, 1139)": 1,
+    "(1536, 1024)": 1
+  },
+  "unit_images": 1336,
+  "shared_images": {
+    "environment": 20,
+    "bases": 42,
+    "ui": 78
+  },
+  "units": [
+    {
+      "subject_key": "hero:kkomaMudang",
+      "name": "시온 (シオン)",
+      "images": 70,
+      "manifest": "docs/art/military/generated/hero/kkomaMudang.json",
+      "commit": "dc21380"
+    },
+    {
+      "subject_key": "ally:bulgasari",
+      "name": "쿠로가네 (クロガネ)",
+      "images": 53,
+      "manifest": "docs/art/military/generated/ally/bulgasari.json",
+      "commit": "63eb5b8"
+    },
+    {
+      "subject_key": "ally:clubGoblin",
+      "name": "아카네 (アカネ)",
+      "images": 46,
+      "manifest": "docs/art/military/generated/ally/clubGoblin.json",
+      "commit": "c383efb"
+    },
+    {
+      "subject_key": "ally:foxfireArcher",
+      "name": "아오이 (アオイ)",
+      "images": 49,
+      "manifest": "docs/art/military/generated/ally/foxfireArcher.json",
+      "commit": "6366262"
+    },
+    {
+      "subject_key": "ally:gumiho",
+      "name": "쿠레하 (クレハ)",
+      "images": 53,
+      "manifest": "docs/art/military/generated/ally/gumiho.json",
+      "commit": "7a594c4"
+    },
+    {
+      "subject_key": "ally:haetae",
+      "name": "세이라 (セイラ)",
+      "images": 53,
+      "manifest": "docs/art/military/generated/ally/haetae.json",
+      "commit": "7d0b8d6"
+    },
+    {
+      "subject_key": "ally:magpieFlock",
+      "name": "히바리 (ヒバリ)",
+      "images": 51,
+      "manifest": "docs/art/military/generated/ally/magpieFlock.json",
+      "commit": "d6e01a7"
+    },
+    {
+      "subject_key": "ally:oneLegGoblin",
+      "name": "하야테 (ハヤテ)",
+      "images": 49,
+      "manifest": "docs/art/military/generated/ally/oneLegGoblin.json",
+      "commit": "e214cec"
+    },
+    {
+      "subject_key": "ally:samjokgo",
+      "name": "레이카 (レイカ)",
+      "images": 53,
+      "manifest": "docs/art/military/generated/ally/samjokgo.json",
+      "commit": "ff11fdf"
+    },
+    {
+      "subject_key": "ally:sumoGoblin",
+      "name": "미카 (ミカ)",
+      "images": 49,
+      "manifest": "docs/art/military/generated/ally/sumoGoblin.json",
+      "commit": "cea2485"
+    },
+    {
+      "subject_key": "ally:yeongdeungWind",
+      "name": "후우카 (フウカ)",
+      "images": 55,
+      "manifest": "docs/art/military/generated/ally/yeongdeungWind.json",
+      "commit": "4fab7e2"
+    },
+    {
+      "subject_key": "enemy:dueoksini",
+      "name": "브리처",
+      "images": 47,
+      "manifest": "docs/art/military/generated/enemy/dueoksini.json",
+      "commit": "3b72e58"
+    },
+    {
+      "subject_key": "enemy:eggGhost",
+      "name": "워커",
+      "images": 46,
+      "manifest": "docs/art/military/generated/enemy/eggGhost.json",
+      "commit": "79a9639"
+    },
+    {
+      "subject_key": "enemy:eodduksini",
+      "name": "호버",
+      "images": 49,
+      "manifest": "docs/art/military/generated/enemy/eodduksini.json",
+      "commit": "1f0544a"
+    },
+    {
+      "subject_key": "enemy:gangcheol",
+      "name": "아이언클래드",
+      "images": 47,
+      "manifest": "docs/art/military/generated/enemy/gangcheol.json",
+      "commit": "1bd7b3b"
+    },
+    {
+      "subject_key": "enemy:geuseundae",
+      "name": "그로워",
+      "images": 50,
+      "manifest": "docs/art/military/generated/enemy/geuseundae.json",
+      "commit": "1236682"
+    },
+    {
+      "subject_key": "enemy:grimReaper",
+      "name": "디스럽터",
+      "images": 51,
+      "manifest": "docs/art/military/generated/enemy/grimReaper.json",
+      "commit": "33a986c"
+    },
+    {
+      "subject_key": "enemy:jangseungSpirit",
+      "name": "아머드",
+      "images": 46,
+      "manifest": "docs/art/military/generated/enemy/jangseungSpirit.json",
+      "commit": "bc9c249"
+    },
+    {
+      "subject_key": "enemy:maidenGhost",
+      "name": "스토커",
+      "images": 49,
+      "manifest": "docs/art/military/generated/enemy/maidenGhost.json",
+      "commit": "00983c7"
+    },
+    {
+      "subject_key": "enemy:sonGakshi",
+      "name": "블라이터",
+      "images": 52,
+      "manifest": "docs/art/military/generated/enemy/sonGakshi.json",
+      "commit": "3d017b7"
+    },
+    {
+      "subject_key": "enemy:waterGhostThrower",
+      "name": "스피터",
+      "images": 49,
+      "manifest": "docs/art/military/generated/enemy/waterGhostThrower.json",
+      "commit": "3fcf3dc"
+    },
+    {
+      "subject_key": "boss:chasaKing",
+      "name": "타이런트",
+      "images": 52,
+      "manifest": "docs/art/military/generated/boss/chasaKing.json",
+      "commit": "9e82361"
+    },
+    {
+      "subject_key": "boss:eodduksiniKing",
+      "name": "오버로드",
+      "images": 57,
+      "manifest": "docs/art/military/generated/boss/eodduksiniKing.json",
+      "commit": "30705e0"
+    },
+    {
+      "subject_key": "boss:giantWonGwi",
+      "name": "하이브 마더",
+      "images": 52,
+      "manifest": "docs/art/military/generated/boss/giantWonGwi.json",
+      "commit": "1d8c67c"
+    },
+    {
+      "subject_key": "boss:imugiGangcheol",
+      "name": "멜트다운",
+      "images": 58,
+      "manifest": "docs/art/military/generated/boss/imugiGangcheol.json",
+      "commit": "0f7b541"
+    },
+    {
+      "subject_key": "boss:ironJangseung",
+      "name": "저거너트",
+      "images": 50,
+      "manifest": "docs/art/military/generated/boss/ironJangseung.json",
+      "commit": "21f0468"
+    }
+  ],
+  "excluded_revision": "shion-electromagnetic-v2 is managed separately; legacy Shion assets remain historical.",
+  "delivery_state": "Raw generated assets. Frame alignment, temporal continuity review and runtime integration remain pending."
+}

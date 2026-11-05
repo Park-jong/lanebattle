@@ -60,7 +60,8 @@ def status(db):
     generated=sum(r['status']=='generated_pending_qa' for r in rows.values())
     lines=['# 밀리터리 스킨 이미지 생성 기록', '', '생성 도구: 내장 image_gen · 전체 작업: '+str(len(DATA['items']))+'개', '',
            '현재 생성 파일 '+str(generated)+'개. 작업별 검수·원본 크기 정렬·애니메이션 연결은 별도 상태로 관리한다. 이 기록은 전체 제작 완료를 의미하지 않는다.', '',
-           '[전체 프롬프트](prompts/README.md) · [개별 컨셉 목록](README.md)', '',
+           '[전체 프롬프트](prompts/README.md) · [개별 컨셉 목록](README.md) · [파일 검증 기록](generated/VALIDATION.md)', '',
+           '시온의 이 표·기본 원본 폴더는 자주색 포니테일·세이버를 사용한 이전 디자인 이력이다. 분홍 장발·전류 대검 리비전은 `output/art-generation/revisions/shion-electromagnetic-v2/`에서 별도 관리하며, 아래 수량에 합산하지 않는다.', '',
            '## 종류별 생성 상태', '', '| 이름 | 대상 키 | 생성 수 | 기준 원화 검수 |', '| --- | --- | --- | --- |']
     for unit in DATA['units']:
         key=unit['subject_key']

@@ -30,6 +30,8 @@ for job in jobs:
                     issues.append({'id': job['id'], 'issue': 'missing alpha channel'})
                 elif image.getchannel('A').getextrema()[0] == 255:
                     issues.append({'id': job['id'], 'issue': 'fully opaque canvas'})
+                elif job['kind'] == 'body' and image.getchannel('A').getextrema()[1] < 255:
+                    issues.append({'id': job['id'], 'issue': 'body has no fully opaque pixels; inspect for unintended gradient matte'})
         metadata = json.loads(row['metadata'] or '{}')
         if not row['source'] or not Path(row['source']).is_file():
             issues.append({'id': job['id'], 'issue': 'missing preserved generator original'})

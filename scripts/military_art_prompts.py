@@ -4,7 +4,7 @@ import re
 
 
 ATTACKS={
- 'hero:kkomaMudang':'a single diagonal TACTICAL SABER CUT with torso and shoulder rotation',
+ 'hero:kkomaMudang':'a single TWO-HANDED DIAGONAL ELECTROMAGNETIC GREATSWORD CUT with torso and shoulder rotation; keep the broad black/silver blade, chamber-like guard and cyan-white core intact, with small local electric arcs',
  'ally:clubGoblin':'a single short ELECTRIC BATON STRIKE',
  'ally:oneLegGoblin':'a short forward TACTICAL DAGGER THRUST, mechanical legs planted',
  'ally:sumoGoblin':'a straight HYDRAULIC GAUNTLET PUNCH, balanced boxing footwork',
@@ -26,9 +26,9 @@ ATTACKS={
 
 
 EXTRAS={
- 'skill_fan':['ready the saber','forward pressure-wave release slash','absorb torso and arm recoil','recover saber to low guard'],
- 'skill_blessing':['check left command gauntlet','activate support pulse, left forearm raised','lower left arm with cloth follow-through','return to guard'],
- 'skill_blade':['raise saber to open capacitor output','downward saber release strike','absorb downward strike weight through knees and hips','recover saber and settle'],
+ 'skill_fan':['both hands grip the electromagnetic greatsword, prepare a short slash and brighten its cyan-white core','two-handed forward pressure-wave release slash; pressure wave is a separate asset','absorb torso and arm recoil while both hands control the greatsword','recover the greatsword to low guard'],
+ 'skill_blessing':['LOOK AT the command gauntlet on the raised left forearm; left fist is closed, RIGHT HAND REMAINS ON SWORD, do not touch the gauntlet with a second hand','activate support pulse with the left forearm raised and left fist closed; right hand stays gripping the sword','lower left arm with cloth follow-through, right hand continues supporting sword','return to one-handed low sword guard with left hand relaxed'],
+ 'skill_blade':['raise the electromagnetic greatsword with BOTH HANDS to open capacitor output, cyan-white core brightens','two-handed downward greatsword release strike; ground wave is a separate asset','absorb downward strike weight through knees and hips, both hands keep gripping the greatsword','recover the greatsword and settle'],
  'grab':['prepare restraint wire device behind shield','hold shield and forearm toward captured target, target is not drawn','recover restraint device and shield stance'],
  'grow':['torso briefly tenses','growth event reaction WITHOUT scaling up the body in the drawing','settle into original support stance'],
  'armor':['shoulder armor locking preparation','armor stack activation with EXACTLY the same armor plates','settle into original armored guard'],
@@ -43,7 +43,7 @@ EXTRAS={
 EFFECT_DESIGNS={
  'fx_fan':'A short WHITE/PALE-CYAN forward half-circle pressure arc sweeping RIGHT. Transparent interior; no ground crater, fire or weapon.',
  'fx_blessing':'A MINT/TEAL support pulse, soft clean elliptical rim and small upward support chevrons. Preserve visibility through its transparent center.',
- 'fx_saber_edge':'One SHORT WHITE/PALE-CYAN diagonal saber afterimage arc. No physical sword, no extra impact or ground ring.',
+ 'fx_saber_edge':'One SHORT WHITE/PALE-CYAN diagonal electromagnetic greatsword afterimage arc with a few thin localized electric branches. No physical sword, no extra impact or ground ring.',
  'fx_hammer_hit':'One compact GOLD/WHITE crushing contact burst with a few tiny metal fragments. A single-target hammer impact, no sustained fire, fireball or large area field.',
  'fx_defense_break':'One small AMBER cracked armor-plate/shield status mark with separated crack segments. No ground ring, explosion or character.',
  'fx_exosuit_repair':'One compact MINT/GOLD mechanical recovery pulse with two upward output chevrons. No armor suit, character, fire or damaging explosion.',
@@ -144,9 +144,10 @@ def execution_prompt(job, facts, units):
         locked='Use the first attached image as the approved character identity. Additional images are pose anchors only. Keep face, age, hairstyle, uniform, anatomy, equipment count and attachment points EXACTLY the same. Change ONLY the requested animation pose.' if refs else 'Create one new approved neutral character reference from the exact design below.'
         return (f'{style}\n\n{locked}\n\nEXACT DESIGN: {facts[key]}\n\n'
                 f'POSE FOR THIS SINGLE FRAME: {motion}. File {filename}.png.\n\n'
-                f'Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas {width}x{height}; normalized root {unit["origin"]}. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. '
+                +('SQUARE 1:1 composition with generous empty transparent margins on all four sides. ' if width==height else '')
+                +f'Whole body facing RIGHT in side view/slight 3/4 side view. Fixed camera, scale and root; target canvas {width}x{height}; normalized root {unit["origin"]}. Keep all limbs, hair, feet, cape and weapon/machine inside frame. No auto zoom or recentering. '
                 f'{morph} Hair roots and rigid armor stay attached; hair tips, neckties, coat/skirt ends and cables lag naturally and damp. '
-                'Actual transparent alpha background. ONE pose only. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. '
+                'Actual transparent alpha background. ONE pose only. Capture the complete silhouette within at most 80 percent of the canvas width AND height, with generous empty transparent padding on ALL four sides, including below both shoe soles. Never let fingers, face, antenna, wing, hair or weapon tips touch an image edge. Paint solid cel colors inside the character and leave every pixel outside the silhouette alpha zero: no soft dark gradient, rim haze, fog or backdrop of any color. Keep the complete silhouette and weapon tips inside the canvas with clear transparent padding; never crop hair or a barrel. '
                 'Muzzle flashes, emitted smoke, ejected casings, bullets, missiles and ALL expelled infection fluid/spit/droplets are separate VFX assets: do NOT draw them in this body frame, even at the firing moment. Keep the mouth area completely clear outside the jaw. '
                 'No scenery, ground shadow, separate projectile, large attack trail, aura, victim, extra person or sprite sheet. No hit-reaction flash, halo, white disc, cloud, backdrop patch, head glow or impact mark around the body; only the isolated character silhouette is drawn. '
                 +('Keep exactly one woman plus exactly THREE DRONES in the same airborne formation.' if key=='ally:samjokgo' else 'Do not add a companion drone or any other character.'))

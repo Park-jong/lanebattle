@@ -39,7 +39,7 @@ for unit in DATA['units']:
     checkpoint = 'all' if len(generated) == len(jobs) else 'required' if required_done else 'partial'
     manifest = ROOT/f'docs/art/military/generated/{group}/{ident}.json'
     old = json.loads(manifest.read_text(encoding='utf-8')) if manifest.exists() else {}
-    if args.ready and (checkpoint == 'partial' or old.get('checkpoint') == checkpoint):
+    if args.ready and checkpoint == 'partial':
         continue
     records = []
     for job in generated:
@@ -63,10 +63,15 @@ for unit in DATA['units']:
         'delivery_state': 'Raw generated assets; alignment and runtime integration pending',
         'items': records,
     }
+    same_checkpoint = old.get('checkpoint') == checkpoint
+    if args.ready and same_checkpoint and (checkpoint != 'all' or snapshot == old):
+        continue
     manifest.parent.mkdir(parents=True, exist_ok=True)
     manifest.write_text(json.dumps(snapshot, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
-    paths = [unit['source_concept'], f'docs/art/military/prompts/{group}/{ident}-prompts.md',
-             manifest.relative_to(ROOT).as_posix()] + [j['output'] for j in generated]
+    paths = [manifest.relative_to(ROOT).as_posix()] + [j['output'] for j in generated]
+    # An image correction must not pick up concurrent concept-document edits.
+    if not same_checkpoint:
+        paths = [unit['source_concept'], f'docs/art/military/prompts/{group}/{ident}-prompts.md'] + paths
     git('add', '-f', '--', *paths)
     if not git('diff', '--cached', '--quiet', '--', *paths, check=False).returncode:
         print(json.dumps({'unit': key, 'unchanged': True}), flush=True)
