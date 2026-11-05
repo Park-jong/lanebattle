@@ -20,6 +20,7 @@ import { builds, progress, summonOrder, wallet } from '../game/session';
 import { addTestBadge } from './testBadge';
 import { computeBuildEffects, parseUpgradeQuery } from '../game/buildEffects';
 import type { BattleModifiers } from '../battle/modifiers';
+import { CatchUp, VisibilityPolicy } from '../game/catchUp';
 import { ResultRecorder } from '../game/resultRecorder';
 import type { StageResult } from '../battle/result';
 import { ORIENTATION_KEY, type OrientationWatcher } from '../orientation';
@@ -128,6 +129,10 @@ export class BattleScene extends Phaser.Scene {
   /** 보스 등장 연출 남은 시간(초). 0이면 연출 없음 */
   private bossIntroLeft = 0;
   private bossSeen = false;
+  /** 탭이 숨겨진 동안 밀린 전투 시간을 따라잡는 계산 */
+  private catchUp = new CatchUp();
+  private visibility = new VisibilityPolicy(this.catchUp);
+  private catchUpText!: Phaser.GameObjects.Text;
   private bossIntroText!: Phaser.GameObjects.Text;
   private castleShieldText!: Phaser.GameObjects.Text;
 
@@ -149,6 +154,8 @@ export class BattleScene extends Phaser.Scene {
     this.recorder = new ResultRecorder(progress, wallet);
     this.bossIntroLeft = 0;
     this.bossSeen = false;
+    this.catchUp = new CatchUp();
+    this.visibility = new VisibilityPolicy(this.catchUp);
     this.paused = false;
     this.pauseShown = false;
     this.resultLaidOut = false;
@@ -237,6 +244,9 @@ export class BattleScene extends Phaser.Scene {
     this.bossIntroText = this.add
       .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 60, '', { ...style, fontSize: '64px', fontStyle: 'bold' })
       .setOrigin(0.5).setScrollFactor(0).setDepth(150).setVisible(false);
+    this.catchUpText = this.add
+      .text(GAME_WIDTH / 2, 70, '따라잡는 중…', { ...style, fontSize: '28px', fontStyle: 'bold' })
+      .setOrigin(0.5).setScrollFactor(0).setDepth(160).setVisible(false);
     this.castleShieldText = this.add
       .text(0, 0, '봉인', { ...style, fontSize: '15px', fontStyle: 'bold', color: '#ead7ff', backgroundColor: '#4c3654dd', padding: { x: 6, y: 2 } })
       .setOrigin(0.5, 1).setDepth(60).setVisible(false);
@@ -309,11 +319,16 @@ export class BattleScene extends Phaser.Scene {
   update(_time: number, delta: number): void {
     this.uiDelta = Math.min(delta / 1000, 0.06);
     const playing = this.battle.result === 'playing';
-    const active = playing && !this.paused;
-    if (active) {
-      this.battle.step(delta / 1000, { moveDir: this.moveDir() });
-      this.bossIntroLeft = Math.max(0, this.bossIntroLeft - delta / 1000);
+    // 숨김 복귀 후 따라잡는 시간이 있으면 delta 대신 그 몫을 진행한다
+    const stepSeconds = playing ? this.catchUp.frame(delta / 1000, this.paused) : 0;
+    // 탭이 숨겨진 동안은 루프가 돌아도 진행하지 않는다 (복귀 시 따라잡기로만 반영)
+    const active = playing && !this.paused && !this.catchUp.isHidden;
+    if (active && stepSeconds > 0) {
+      this.battle.step(stepSeconds, { moveDir: this.catchUp.active ? 0 : this.moveDir() });
+      this.bossIntroLeft = Math.max(0, this.bossIntroLeft - stepSeconds);
     }
+    if (this.battle.result !== 'playing') this.catchUp.cancel();
+    this.catchUpText.setVisible(this.catchUp.bannerVisible);
     this.watchBossAppearance();
     for (const view of this.baseViews) view.update(this.paused ? 0 : this.uiDelta);
     this.characters.update(active ? delta / 1000 : 0, [this.battle.hero, ...this.battle.allies, ...this.battle.enemies]);
@@ -454,14 +469,17 @@ export class BattleScene extends Phaser.Scene {
     this.keyInput = new KeyInput(window, (code) => this.onKeyDown(code));
     this.keyInput.attach();
 
-    // 창이 숨겨지면 자동 일시정지 (키 눌림도 풀어 둔다)
-    const onVisibility = () => {
-      if (!document.hidden) return;
-      this.keyInput.releaseAll();
-      this.setPaused(true);
-    };
-    const onBlur = () => { this.keyInput.releaseAll(); this.setPaused(true); };
+    // 포커스를 잃거나 창이 숨겨져도 일시정지하지 않는다. 눌림만 풀고, 숨김은 복귀 시 따라잡는다
     const releaseMovement = () => { this.moveLeftButton.release(); this.moveRightButton.release(); };
+    const releaseInput = () => { this.keyInput.releaseAll(); releaseMovement(); };
+    const onVisibility = () => {
+      if (document.hidden) {
+        if (this.visibility.onHidden(performance.now(), this.paused)) releaseInput();
+      } else if (this.battle.result === 'playing') {
+        this.visibility.onVisible(performance.now(), this.paused);
+      }
+    };
+    const onBlur = () => { if (this.visibility.onBlur()) releaseInput(); };
     window.addEventListener('pointercancel', releaseMovement);
     window.addEventListener('blur', onBlur);
     document.addEventListener('visibilitychange', onVisibility);
@@ -531,6 +549,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private onKeyDown(code: string): void {
+    if (this.catchUp.active) return; // 따라잡는 동안 입력 무시
     if (this.battle.result !== 'playing') {
       if (code === KEY_MAP.gatherOrRestart) this.restart();
       else if (code === KEY_MAP.nextStage) this.goNextStage();
@@ -575,7 +594,7 @@ export class BattleScene extends Phaser.Scene {
     this.moveRightButton.setTexts('▶', '');
     this.pauseButton = new HudButton(
       this, L.pause, { center: true, bigLabel: true, labelSize: 22, shape: 'round', compact: true, fill: 0x28483e, border: U.gold },
-      { onPress: () => this.setPaused(!this.paused) },
+      { onPress: () => { if (!this.catchUp.active) this.setPaused(!this.paused); } },
     );
     this.pauseButton.setTexts('Ⅱ', '');
     this.inspectButton = new HudButton(this, L.inspect, { command: 'inspect', labelSize: 14, border: U.teal },
@@ -588,7 +607,7 @@ export class BattleScene extends Phaser.Scene {
         this, L.summon[i], { fill: U.panel, border: colorForTags(def.tags), portraitTile: true },
         {
           onInspect: () => this.inspectCard('summon', i),
-          onPress: () => { if (!this.paused) this.battle.summon(allyIndex); },
+          onPress: () => { if (!this.paused && !this.catchUp.active) this.battle.summon(allyIndex); },
           onHover: () => { if (!this.inspecting) this.hover = { kind: 'summon', index: i }; },
           onHoverOut: () => { if (!this.inspecting && this.hover?.kind === 'summon' && this.hover.index === i) this.hover = null; },
         },
@@ -603,7 +622,7 @@ export class BattleScene extends Phaser.Scene {
           mark: (['fan', 'blessing', 'blade'] as const)[i] },
         {
           onInspect: () => this.inspectCard('skill', i),
-          onPress: () => { if (!this.paused) this.battle.castSkill(def.id); },
+          onPress: () => { if (!this.paused && !this.catchUp.active) this.battle.castSkill(def.id); },
           onHover: () => { if (!this.inspecting) this.hover = { kind: 'skill', index: i }; },
           onHoverOut: () => { if (!this.inspecting && this.hover?.kind === 'skill' && this.hover.index === i) this.hover = null; },
         },
@@ -613,7 +632,7 @@ export class BattleScene extends Phaser.Scene {
     });
     this.gatherButton = new HudButton(
       this, L.gather, { command: 'gather', labelSize: 14, border: U.gold },
-      { onPress: () => { if (!this.paused) this.battle.gather(); }, onInspect: () => this.inspecting },
+      { onPress: () => { if (!this.paused && !this.catchUp.active) this.battle.gather(); }, onInspect: () => this.inspecting },
     );
   }
 
