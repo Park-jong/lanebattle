@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ALLIES } from '../data/allies';
+import { COMBAT } from '../data/combat';
 import { HERO } from '../data/hero';
 import { computeBuildEffects } from '../game/buildEffects';
 import type { BuildLevels } from '../game/build';
@@ -52,7 +53,7 @@ describe('강림: 요괴 소환 불가', () => {
   });
 
   it('툴팁 상태 줄은 "강림 중에는 소환할 수 없습니다"', () => {
-    const ok = { allyCount: 0, maxAllies: 30, cooldown: 0, talisman: 200, cost: 30 };
+    const ok = { allyCount: 0, maxAllies: COMBAT.maxAllies, cooldown: 0, talisman: 200, cost: 30 };
     expect(summonStatus({ ...ok, descent: true })).toEqual({ text: '강림 중에는 소환할 수 없습니다', ok: false });
     expect(summonStatus(ok).ok).toBe(true);
   });
@@ -194,20 +195,20 @@ describe('강림: 피해 300%', () => {
 });
 
 describe('귀문개방: 소환 비용·쿨타임', () => {
-  it('모든 유닛 소환 비용 30 고정 (방망이병 ②여도 30, 해태도 30)', () => {
+  it('모든 유닛 소환 비용 10 고정 (방망이병 ②여도 10, 해태도 10)', () => {
     const b = newBattle({ ghostGate: 1, clubGoblinBasic: 1, clubGoblinCore: 1 });
-    for (let i = 0; i < ALLIES.length; i++) expect(b.allyDef(i).cost, ALLIES[i].id).toBe(30);
-    expect(b.allyDef(idx('clubGoblin')).cost).toBe(30);
-    expect(b.allyDef(idx('haetae')).cost).toBe(30);
+    for (let i = 0; i < ALLIES.length; i++) expect(b.allyDef(i).cost, ALLIES[i].id).toBe(10);
+    expect(b.allyDef(idx('clubGoblin')).cost).toBe(10);
+    expect(b.allyDef(idx('haetae')).cost).toBe(10);
     // 귀문개방이 없으면 방망이병 ②는 비용 -20%
     expect(newBattle({ clubGoblinBasic: 1, clubGoblinCore: 1 }).allyDef(idx('clubGoblin')).cost).toBeCloseTo(ALLIES[idx('clubGoblin')].cost * 0.8);
   });
 
-  it('실제 소환에서도 부적 30만 쓴다', () => {
+  it('실제 소환에서도 부적 10만 쓴다', () => {
     const b = newBattle({ ghostGate: 1 });
     b.resources.talisman = 200;
     expect(b.summon(idx('haetae'))).toBe('ok');
-    expect(b.resources.talisman).toBeCloseTo(170);
+    expect(b.resources.talisman).toBeCloseTo(190);
   });
 
   it('쿨타임: 방망이병 1.5 -> 0.75, ② 적용 1.05 -> 0.525, 해태 15 -> 7.5', () => {
@@ -225,9 +226,9 @@ describe('귀문개방: 소환 비용·쿨타임', () => {
     expect(plain.summonCooldown(idx('haetae'))).toBeCloseTo(7.5);
   });
 
-  it('소환 툴팁에 비용 30·쿨타임 절반·귀문개방 줄이 나온다', () => {
+  it('소환 툴팁에 비용 10·쿨타임 절반·귀문개방 줄이 나온다', () => {
     const text = describeUnit('haetae', computeBuildEffects({ ghostGate: 1 }), '7').lines.join('\n');
-    expect(text).toContain('부적 30 / 쿨타임 7.5초');
+    expect(text).toContain('부적 10 / 쿨타임 7.5초');
     expect(text).toContain('귀문개방');
     const normal = describeUnit('haetae', computeBuildEffects({}), '7').lines.join('\n');
     expect(normal).toContain('쿨타임 15초');

@@ -20,7 +20,7 @@ export function descentDamageMultiplier(mods: BattleModifiers): number {
   return mods.hero.descent ? DESCENT_TUNING.damageMultiplier : 1;
 }
 
-/** 귀문개방: 업그레이드가 반영된 소환 비용 30 고정, 쿨타임 절반. 아니면 그대로 */
+/** 귀문개방: 업그레이드가 반영된 소환 비용 10 고정, 쿨타임 절반. 아니면 그대로 */
 export function applyGhostGate(def: AllyDef, mods: BattleModifiers): AllyDef {
   if (!mods.ghostGate) return def;
   return { ...def, cost: GHOST_GATE_TUNING.summonCost, cooldown: def.cooldown * GHOST_GATE_TUNING.summonCooldownMultiplier };

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { COMBAT } from '../data/combat';
 import { NEAREST_REACH, POSSESSION_COMMON, POSSESSION_SKILLS, POSSESSION_SLOTS } from '../data/possession';
 import type { SkillId } from '../data/skills';
 import { possessionNodeId } from '../data/upgrades';
@@ -343,20 +344,20 @@ describe('유닛 1 방망이병 스킬', () => {
     expect(lost(ghost)).toBeCloseTo(41.25);
   });
 
-  it('뚝딱 소환: 방망이병 3마리를 부적 없이 소환, 아군 30 상한을 지킨다', () => {
+  it('뚝딱 소환: 방망이병 3마리를 부적 없이 소환, 아군 상한을 지킨다', () => {
     const b = possess('clubGoblin', { clubGoblinBasic: 1 });
     b.resources.talisman = 77;
     b.castSkill('blessing');
     expect(b.allies.map((a) => a.defId)).toEqual(['clubGoblin', 'clubGoblin', 'clubGoblin']);
     expect(b.resources.talisman).toBe(77);
     expect(b.allies[0].maxHp).toBeCloseTo(150); // 요괴 ① 강화를 반영
-    b.spawnFreeAllies('clubGoblin', 25); // 28마리
+    b.spawnFreeAllies('clubGoblin', COMBAT.maxAllies - 5); // 상한 - 2마리
     resetCooldown(b, 'blessing');
     b.castSkill('blessing');
-    expect(b.allies).toHaveLength(30);
+    expect(b.allies).toHaveLength(COMBAT.maxAllies);
     resetCooldown(b, 'blessing');
     b.castSkill('blessing');
-    expect(b.allies).toHaveLength(30);
+    expect(b.allies).toHaveLength(COMBAT.maxAllies);
   });
 
   it('도깨비 잔치: 10초간 도깨비 아군(어디에 있든)과 영웅 공격력 +50%, 공격 속도 +30%. 다른 태그는 제외', () => {
