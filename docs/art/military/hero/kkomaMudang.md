@@ -1,6 +1,6 @@
 # 시온 (シオン) — 밀리터리 스킨 컨셉
 
-작성일: 2026-11-05 · 상태: 개정 기준 원화 생성·검수, 후속 동작·게임 적용 전
+작성일: 2026-11-05 · 상태: 개정 디자인 74장 생성·패키지 검수, 실행 게임 미연결
 
 [26종 목록·공통 규격](../README.md) · [통합 설정·게임 적용 명세](../../military-allies-skin-concept.md)
 
@@ -10,7 +10,9 @@
 
 ## 개정 기준 원화
 
-2026-11-05 내장 `image_gen`으로 [새 기준 원화](../../../../output/art-generation/revisions/shion-electromagnetic-v2/idle_00.png)를 생성했다. 분홍색의 풀어 내린 긴 머리, 크롭 제복의 노출 부위, 전류 대검, 링 제외와 전신·칼끝 여백을 육안 확인했다. 원본은 1122×1402 RGBA이며 투명 알파를 보존했다. 게임용 768×1024 캔버스·기준점 정렬과 후속 동작 제작·게임 연결은 아직 진행하지 않았다.
+2026-11-05 내장 `image_gen`으로 [새 기준 원화](../../../../output/art-generation/revisions/shion-electromagnetic-v2/idle_00.png)를 생성했다. 분홍색의 풀어 내린 긴 머리, 크롭 제복의 노출 부위, 전류 대검, 링 제외와 전신·칼끝 여백을 육안 확인했다. 기준 원본은 1122×1402 RGBA이며 투명 알파를 보존했다. 후속 동작·효과·아이콘·타이틀까지 총 74장을 생성했고, 본체 정렬본은 대검 여백을 위해 2048×2048·피벗 `(0.5, 0.875)`로 패키징했다. 실행 게임 연결은 별도 단계다.
+
+[74장 생성·검수 기록](kkomaMudang-v2-generated.md) · [공격·걷기 등 모션 미리보기](../../../../output/art-generation/revisions/shion-electromagnetic-v2/package/preview.html) · [전체 패키지 ZIP](../../../../output/art-generation/revisions/shion-electromagnetic-v2/shion-electromagnetic-v2.zip)
 
 [생성 프롬프트](../../../../output/art-generation/revisions/shion-electromagnetic-v2/generation-prompt.txt) · [여백 보정 프롬프트](../../../../output/art-generation/revisions/shion-electromagnetic-v2/framing-edit-prompt.txt) · [생성·검수 기록](../../../../output/art-generation/revisions/shion-electromagnetic-v2/generation.json). 기존 원본 폴더의 자주색 포니테일·세이버 이미지는 보존하고 개정 원화는 별도 리비전 경로에 저장했다.
 
@@ -112,7 +114,7 @@ Q는 시온의 바라보는 방향을 따르고, W·E는 시온을 중심으로 
 | `mudangAwakening` | 전자기 대검 출력 개방 | 기본 공격 3번째마다 반경 80 충격파·공격력 1.5배 피해 |
 | `deepSpirit` | 예비 축전지 | 지휘 에너지 최대치 +50 |
 
-직접 통제는 기존 빙의 기능의 테마 표현이다. 해당 병과의 외형과 기본 공격·Q/W/E가 사용되는 동안 시온의 대검와 고유 스킬을 동시에 표시하거나 합산하지 않는다. 데이터링크는 설명용 장비이며 새 지원 개체·시온 분신·드론을 생성하지 않는다. 타이런트의 영웅 약점 판정도 기존 규칙을 유지한다.
+직접 통제는 기존 빙의 기능의 테마 표현이다. 해당 병과의 외형과 기본 공격·Q/W/E가 사용되는 동안 시온의 대검과 고유 스킬을 동시에 표시하거나 합산하지 않는다. 데이터링크는 설명용 장비이며 새 지원 개체·시온 분신·드론을 생성하지 않는다. 타이런트의 영웅 약점 판정도 기존 규칙을 유지한다.
 
 ### 영웅 전용 제작 파일
 
