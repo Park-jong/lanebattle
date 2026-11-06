@@ -11,7 +11,7 @@ import { isSynergyId, SYNERGY, type SynergyId } from '../data/synergy';
 import { Fighter, type Body } from '../battle/entities';
 import {
   BATTLEFIELD, BATTLE_LAYOUT as L, centeredRow, frontlineTrack, GAME_HEIGHT, GAME_WIDTH, GROUND_Y, HUD_FONT, minimapX,
-  PAUSE_BUTTON, RESULT_LAYOUT, type Rect,
+  FULLSCREEN_LAYOUT, PAUSE_BUTTON, PAUSE_PANEL, RESULT_LAYOUT, type Rect,
 } from './layout';
 import {
   colorForTags, ENEMY_COLOR, TAG_COLORS,
@@ -24,6 +24,7 @@ import { CatchUp, VisibilityPolicy } from '../game/catchUp';
 import { ResultRecorder } from '../game/resultRecorder';
 import type { StageResult } from '../battle/result';
 import { ORIENTATION_KEY, type OrientationWatcher } from '../orientation';
+import { FullscreenButton } from './FullscreenButton';
 import { bossChipSpecs } from './bossChips';
 import { DamageFloaters } from './DamageFloaters';
 import { floaterStyle } from './floaterStyle';
@@ -97,6 +98,7 @@ export class BattleScene extends Phaser.Scene {
   private pauseButton!: HudButton;
   private resumeButton!: HudButton;
   private pauseMapButton!: HudButton;
+  private pauseFullscreenButton!: FullscreenButton;
   private restartButton!: HudButton;
   private nextButton!: HudButton;
   private mapButton!: HudButton;
@@ -265,13 +267,13 @@ export class BattleScene extends Phaser.Scene {
   /** 일시정지 화면: 덮개, 제목, 계속·지도로 버튼 */
   private createPauseUi(): void {
     this.pauseDim = this.createDim(DEPTH.pauseDim, 0.65);
-    this.pausePanel = panel(this, 220, 160, 520, 230, true, DEPTH.pauseDim + 1).setScrollFactor(0).setVisible(false);
+    this.pausePanel = panel(this, PAUSE_PANEL.x, PAUSE_PANEL.y, PAUSE_PANEL.w, PAUSE_PANEL.h, true, DEPTH.pauseDim + 1).setScrollFactor(0).setVisible(false);
     const style = { fontFamily: HUD_FONT, color: '#ffffff' };
     this.pauseTitle = this.add
-      .text(GAME_WIDTH / 2, 200, '일시정지', { ...style, fontSize: '48px', fontStyle: 'bold' })
+      .text(GAME_WIDTH / 2, 170, '일시정지', { ...style, fontSize: '48px', fontStyle: 'bold' })
       .setOrigin(0.5).setScrollFactor(0).setDepth(DEPTH.popupText).setVisible(false);
     this.pauseHint = this.add
-      .text(GAME_WIDTH / 2, 262, '지도로 나가면 이번 전투는 기록되지 않습니다', { ...style, fontSize: '15px', color: '#cfd6ee' })
+      .text(GAME_WIDTH / 2, 226, '지도로 나가면 이번 전투는 기록되지 않습니다', { ...style, fontSize: '15px', color: '#cfd6ee' })
       .setOrigin(0.5).setScrollFactor(0).setDepth(DEPTH.popupText).setVisible(false);
     const [resume, toMap] = centeredRow(2, PAUSE_BUTTON.w, PAUSE_BUTTON.gap, PAUSE_BUTTON.y);
     const big = { center: true, bigLabel: true, labelSize: 18, depth: DEPTH.popupButton };
@@ -281,6 +283,9 @@ export class BattleScene extends Phaser.Scene {
     this.pauseMapButton.setTexts(`지도로 (${KEY_MAP.toMap.slice(3)})`, '');
     this.resumeButton.setVisible(false);
     this.pauseMapButton.setVisible(false);
+    // 전투 HUD에는 상시로 두지 않고 일시정지 패널 안에만 둔다
+    this.pauseFullscreenButton = new FullscreenButton(this, FULLSCREEN_LAYOUT.pause, 'label', DEPTH.popupButton);
+    this.pauseFullscreenButton.setVisible(false);
   }
 
   /** 결과 화면: 전체 덮개 위에 패널과 글자, 버튼 (처음엔 숨김) */
@@ -964,6 +969,7 @@ export class BattleScene extends Phaser.Scene {
     this.pauseHint.setVisible(shown);
     this.resumeButton.setVisible(shown);
     this.pauseMapButton.setVisible(shown);
+    this.pauseFullscreenButton.setVisible(shown);
   }
 
   /** 결과 패널 글자: 제목, 별, 걸린 시간·체력, 별 조건, 보상 */

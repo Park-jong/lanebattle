@@ -7,7 +7,8 @@ import { TEST_MODE } from '../data/testMode';
 import { builds, gameSave, isTestMode, progress } from '../game/session';
 import { drawNightSky } from './background';
 import { bossChipSpecs } from './bossChips';
-import { HUD_FONT, MAP_LAYOUT as L } from './layout';
+import { FULLSCREEN_LAYOUT, HUD_FONT, MAP_LAYOUT as L } from './layout';
+import { FullscreenButton } from './FullscreenButton';
 import { KEY_MAP, KeyInput, mapDirectionOf } from './input';
 import { MenuButton } from './MenuButton';
 import { chapterColor } from './palette';
@@ -51,6 +52,8 @@ export class MapScene extends Phaser.Scene {
     this.add.text(930, 30, '★ ' + total + ' / ' + STAGES.length * STAR_RULES.maxStars, {
       fontFamily: HUD_FONT, fontSize: '21px', fontStyle: 'bold', color: U.goldText,
     }).setOrigin(1, 0);
+
+    new FullscreenButton(this, FULLSCREEN_LAYOUT.map, 'icon');
 
     L.chapters.forEach((r, i) => {
       const cleared = STAGES.filter(stage => stage.chapter === i + 1).map(stage => progress.getBestStars(stage.number) > 0);
