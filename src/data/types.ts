@@ -55,6 +55,8 @@ export interface AllyDef extends CombatStats {
 }
 
 export interface EnemyDef extends CombatStats {
+  /** 투사체가 명중한 위치 주변에 주는 범위 피해 */
+  areaRadius?: number;
   id: string;
   name: string;
   traits: EnemyTrait[];

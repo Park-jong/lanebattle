@@ -199,6 +199,10 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
     return this.director.waveCount;
   }
 
+  get nextWave() {
+    return this.director.nextWave;
+  }
+
   /** 살아 있는 적 수 (보스 제외, 적 상한 계산용) */
   get enemyCount(): number {
     return this.enemies.filter((e) => e.alive && !e.isBoss).length;
@@ -620,6 +624,13 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
     };
     if (f.stats.attackType === 'melee') {
       const info: AttackInfo = { type: 'melee', tags: payload.tags, source: payload.source };
+      // 주 대상이 죽거나 밀려나도 이번 공격의 범위는 공격 순간 위치로 고정한다.
+      const cleaveX = target.x;
+      const cleaveVictims = ability.cleave
+        ? this.targetCandidates(f.team, ability.targeting).filter((b) =>
+          b !== target && b.alive && b.kind !== 'base' && !b.flying &&
+          Math.abs(b.x - cleaveX) - b.radius <= ability.cleave!.radius)
+        : [];
       this.strike(target, {
         attacker: f,
         base: f.attackPower,
@@ -628,6 +639,12 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
         burnPerSec: payload.burnPerSec,
         multiplier,
       });
+      for (const victim of cleaveVictims) {
+        this.strike(victim, {
+          attacker: f, base: f.attackPower, info, attackBonus: payload.attackBonus,
+          burnPerSec: payload.burnPerSec, multiplier: multiplier * ability.cleave!.damageMultiplier,
+        });
+      }
       if (charged && ability.pierce) this.pierceCharge(f, target, ability.pierce.pathExtra, payload);
       const nth = ability.nthStrike;
       if (nth && f.abilityState.countAttack(nth.every) && target.alive) {
@@ -723,7 +740,7 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
     }
   }
 
-  /** 투사체 도착: 마법은 대상 위치 기준 범위 안의 모두에게, 아니면 대상 하나에게. 영등 바람 범위 안이면 빗나갈 수 있다 */
+  /** 투사체 도착: 범위 반경이 있으면 대상 주변에도 피해. 영등 바람 범위 안이면 빗나갈 수 있다 */
   private resolveProjectile(p: Projectile): void {
     const outcome = this.missOutcome(p);
     if (outcome === 'reflect') this.reflectProjectile(p);
@@ -731,7 +748,7 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
     const { payload } = p;
     const info: AttackInfo = { type: p.attackType, tags: payload.tags, source: payload.source };
     const victims = new Set<Body>([p.target]);
-    if (p.attackType === 'magic' && payload.areaRadius > 0) {
+    if (payload.areaRadius > 0) {
       const pool = p.target.team === 'enemy' ? this.enemies : [...this.allies, ...(this.hero.alive ? [this.hero] : [])];
       for (const b of pool) {
         // 범위 피해는 비행 대상도 맞는다
@@ -978,13 +995,26 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
       }
     }
     this.auras = this.auras.filter((a) => a.owner.alive);
+    const received = new Map<Body, Map<string, BuffEffect>>();
     for (const { owner, def } of this.auras) {
       if (this.allyAurasSuppressed && owner.team === 'ally') continue;
       if (owner.status!.buffsDisabled) continue;
       const pool = owner.team === 'ally' ? [...this.allies, ...(this.hero.alive ? [this.hero] : [])] : this.enemies;
       for (const b of pool) {
-        if (b.alive && Math.abs(b.x - owner.x) <= def.radius) b.status!.addAuraEffect(def.effect);
+        if (!b.alive || Math.abs(b.x - owner.x) > def.radius) continue;
+        const effects = received.get(b) ?? new Map<string, BuffEffect>();
+        received.set(b, effects);
+        const key = owner instanceof Fighter ? owner.defId : owner.kind;
+        const strongest = effects.get(key) ?? {};
+        for (const stat of Object.keys(def.effect) as (keyof BuffEffect)[]) {
+          strongest[stat] = Math.max(strongest[stat] ?? 0, def.effect[stat] ?? 0);
+        }
+        effects.set(key, strongest);
       }
+    }
+    // 같은 유닛의 오라는 범위만 넓히고, 서로 다른 유닛의 오라는 함께 적용한다.
+    for (const [body, effects] of received) {
+      for (const effect of effects.values()) body.status!.addAuraEffect(effect);
     }
   }
 

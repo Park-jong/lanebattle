@@ -109,16 +109,16 @@ describe('아군 고유 능력', () => {
     expect(boss.status!.stunned).toBe(false);
   });
 
-  it('삼족오: 반경 150 안 아군(영웅 포함)만 공격력 +20%', () => {
+  it('삼족오: 반경 220 안 아군(영웅 포함)만 공격력 +20%', () => {
     const b = newBattle();
     withAlly(b, 'samjokgo', 500);
     const near = withAlly(b, 'clubGoblin', 600);
-    const far = withAlly(b, 'clubGoblin', 700);
-    const edge = withAlly(b, 'clubGoblin', 650);
+    const far = withAlly(b, 'clubGoblin', 750);
+    const edge = withAlly(b, 'clubGoblin', 720);
     b.hero.x = 620;
     b.step(0.05);
     expect(near.status!.attackBonus).toBeCloseTo(0.2);
-    expect(edge.status!.attackBonus).toBeCloseTo(0.2); // 정확히 150
+    expect(edge.status!.attackBonus).toBeCloseTo(0.2); // 정확히 220
     expect(far.status!.attackBonus).toBe(0);
     expect(b.hero.status!.attackBonus).toBeCloseTo(0.2);
   });

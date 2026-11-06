@@ -9,6 +9,33 @@ export interface SpawnRequest {
   elite: boolean;
 }
 
+export interface WavePreview {
+  number: number;
+  seconds: number;
+  label: string;
+  hint: string;
+  enemyId: string;
+}
+
+/** 순환 공세. 그 스테이지에 해금된 적 안에서만 중심 병종을 고른다. */
+export function waveFormation(stageNumber: number, waveIndex: number): Pick<WavePreview, 'label' | 'hint' | 'enemyId'> {
+  const ids = availableEnemyIds(stageNumber);
+  const choose = (...choices: string[]) => choices.find((id) => ids.includes(id)) ?? ids[0];
+  if (waveIndex % 3 === 0) return { label: '무리 공세', hint: '범위 공격으로 저지', enemyId: choose('eggGhost') };
+  if (waveIndex % 3 === 1) {
+    const enemyId = choose('gangcheol', 'jangseungSpirit', 'geuseundae', 'maidenGhost', 'waterGhostThrower');
+    const armor = getEnemyDef(enemyId).traits.includes('armor');
+    if (armor) return { label: '장갑 돌파', hint: '방어 파괴로 돌파', enemyId };
+    if (enemyId === 'geuseundae') return { label: '성장 공세', hint: '커지기 전에 집중 처치', enemyId };
+    if (enemyId === 'maidenGhost') return { label: '후방 돌격', hint: '후방 보호·불 공격 준비', enemyId };
+    return { label: '투척 공세', hint: '밀집 피해 주의·원거리 적 처치', enemyId };
+  }
+  const enemyId = choose('eodduksini', 'maidenGhost', 'waterGhostThrower');
+  if (enemyId === 'eodduksini') return { label: '공중 습격', hint: '대공 병력 준비', enemyId };
+  if (enemyId === 'maidenGhost') return { label: '후방 습격', hint: '후방 보호·불 공격 준비', enemyId };
+  return { label: '원거리 공세', hint: '원거리 적 우선 처치', enemyId };
+}
+
 /** 웨이브 예산 = 6 + 2*순서 + 3*(장-1) + (장 안 순서-1) */
 export function waveBudget(stageNumber: number, waveOrder: number): number {
   const info = getStageInfo(stageNumber);
@@ -46,6 +73,11 @@ export class WaveDirector {
   /** 아직 내보내지 않은 적 수 */
   get pendingCount(): number {
     return this.queue.length;
+  }
+
+  get nextWave(): WavePreview {
+    return { number: this.startedWaves + 1, seconds: Math.max(0, this.nextWaveTime - this.elapsed),
+      ...waveFormation(this.stageNumber, this.startedWaves) };
   }
 
   /**
@@ -92,6 +124,14 @@ export class WaveDirector {
     const theme = this.def.themeEnemyId;
     const picks: SpawnRequest[] = [];
     let budget = waveBudget(this.stageNumber, order);
+
+    // 예산의 40%까지 중심 병종을 먼저 배치하고 나머지는 기존 테마 가중 무작위로 채운다.
+    const formation = getEnemyDef(waveFormation(this.stageNumber, waveIndex).enemyId);
+    const formationCount = Math.max(1, Math.floor(budget * 0.4 / formation.waveScore));
+    for (let i = 0; i < formationCount && budget >= formation.waveScore; i++) {
+      picks.push({ enemyId: formation.id, elite: false });
+      budget -= formation.waveScore;
+    }
 
     for (;;) {
       const candidates = ids.filter((id) => getEnemyDef(id).waveScore <= budget);

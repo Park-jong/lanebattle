@@ -211,10 +211,10 @@ describe('귀문개방: 소환 비용·쿨타임', () => {
     expect(b.resources.talisman).toBeCloseTo(190);
   });
 
-  it('쿨타임: 방망이병 1.5 -> 0.75, ② 적용 1.05 -> 0.525, 해태 15 -> 7.5', () => {
+  it('쿨타임: 방망이병 1.5 -> 0.75, ② 적용 1.05 -> 0.525, 해태 12 -> 6', () => {
     const plain = newBattle({ ghostGate: 1 });
     expect(plain.allyDef(idx('clubGoblin')).cooldown).toBeCloseTo(0.75);
-    expect(plain.allyDef(idx('haetae')).cooldown).toBeCloseTo(7.5);
+    expect(plain.allyDef(idx('haetae')).cooldown).toBeCloseTo(6);
     const upgraded = newBattle({ ghostGate: 1, clubGoblinBasic: 1, clubGoblinCore: 1 });
     expect(upgraded.allyDef(idx('clubGoblin')).cooldown).toBeCloseTo(0.525);
     // 귀문개방이 없을 때의 기준값
@@ -223,15 +223,15 @@ describe('귀문개방: 소환 비용·쿨타임', () => {
     // 실제 소환 후 남는 쿨타임
     plain.resources.talisman = 200;
     plain.summon(idx('haetae'));
-    expect(plain.summonCooldown(idx('haetae'))).toBeCloseTo(7.5);
+    expect(plain.summonCooldown(idx('haetae'))).toBeCloseTo(6);
   });
 
   it('소환 툴팁에 비용 10·쿨타임 절반·귀문개방 줄이 나온다', () => {
     const text = describeUnit('haetae', computeBuildEffects({ ghostGate: 1 }), '7').lines.join('\n');
-    expect(text).toContain('부적 10 / 쿨타임 7.5초');
+    expect(text).toContain('부적 10 / 쿨타임 6초');
     expect(text).toContain('귀문개방');
     const normal = describeUnit('haetae', computeBuildEffects({}), '7').lines.join('\n');
-    expect(normal).toContain('쿨타임 15초');
+    expect(normal).toContain('쿨타임 12초');
     expect(normal).not.toContain('귀문개방');
   });
 

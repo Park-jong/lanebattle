@@ -11,6 +11,10 @@ export interface BuffValues {
 }
 
 export interface AbilityDef {
+  /** 타고난 방호. 버프 해제와 무관하게 적용 */
+  damageReduction?: number;
+  /** 근접 공격의 주 대상 주변 지상 적에게 주는 추가 피해 */
+  cleave?: { radius: number; damageMultiplier: number };
   /** 소환 후 첫 공격 피해 배율 */
   firstStrikeMultiplier?: number;
   /** every번째 공격마다 대상에게 넉백 + 기절 */
@@ -60,9 +64,9 @@ export const ABILITIES: Readonly<Record<string, AbilityDef>> = {
   // ----- 아군 -----
   oneLegGoblin: { firstStrikeMultiplier: 3 },
   sumoGoblin: { nthStrike: { every: 3, knockback: 60, stun: 0.5 } },
-  bulgasari: { onHit: { defenseBreak: true } },
-  haetae: { grab: { interval: 8, duration: 2 } },
-  samjokgo: { aura: { radius: 150, effect: { attack: 0.2 } } },
+  bulgasari: { onHit: { defenseBreak: true }, vsTrait: { trait: 'armor', multiplier: 1.5 } },
+  haetae: { damageReduction: 0.2, grab: { interval: 8, duration: 2 } },
+  samjokgo: { multiTarget: 2, aura: { radius: 220, effect: { attack: 0.2 } } },
   magpieFlock: { vsTrait: { trait: 'flying', multiplier: 2 } },
   yeongdeungWind: {
     aura: { radius: 180, effect: { moveSpeed: 0.15, attackSpeed: 0.15 } },
@@ -71,10 +75,11 @@ export const ABILITIES: Readonly<Record<string, AbilityDef>> = {
   // ----- 적 -----
   waterGhostThrower: { onHit: { slow: { ratio: 0.3, duration: 2 } } },
   maidenGhost: { targeting: 'rangedAndMagicFirst' },
+  jangseungSpirit: { cleave: { radius: 65, damageMultiplier: 0.75 } },
   geuseundae: { growth: { interval: 5, multiplier: 1.15, sizeMultiplier: 1.08, maxCount: 6 } },
   sonGakshi: { onHit: { healBlock: 4 } },
   grimReaper: { dispelPulse: { interval: 6, radius: 120, duration: 3 } },
-  gangcheol: { immuneTags: ['fire'] },
+  gangcheol: { immuneTags: ['fire'], cleave: { radius: 55, damageMultiplier: 0.75 } },
   dueoksini: { targeting: 'baseOnly', baseDamageMultiplier: 2 },
 };
 

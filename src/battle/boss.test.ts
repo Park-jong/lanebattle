@@ -158,14 +158,14 @@ describe('보스 상성', () => {
   it('거대 원귀: 불 약점 x2, 근접 저항 x0.2', () => {
     const { b, boss } = withBoss(1);
     expect(lost(b, 'foxfireArcher', boss)).toBeCloseTo(10 * 2); // 원거리 + 불
-    expect(lost(b, 'gumiho', boss)).toBeCloseTo(22 * 2); // 마법 + 불, 범위 하나
+    expect(lost(b, 'gumiho', boss)).toBeCloseTo(42 * 2); // 마법 + 불, 범위 하나
     expect(lost(b, 'clubGoblin', boss)).toBeCloseTo(14 * 0.2);
     expect(lost(b, 'magpieFlock', boss)).toBeCloseTo(7); // 상성 없음
   });
 
   it('철갑 장승왕: 근접·방어 파괴 약점은 x2 한 번, 원거리·마법 저항', () => {
     const { b, boss } = withBoss(2);
-    expect(lost(b, 'bulgasari', boss)).toBeCloseTo(20 * 2); // 근접 + 방어 파괴 = 한 번만
+    expect(lost(b, 'bulgasari', boss)).toBeCloseTo(38 * 2); // 근접 + 방어 파괴 = 한 번만
     boss.status!.clear();
     expect(lost(b, 'clubGoblin', boss)).toBeCloseTo(14 * 2);
     expect(lost(b, 'foxfireArcher', boss)).toBeCloseTo(10 * 0.2);
@@ -184,7 +184,7 @@ describe('보스 상성', () => {
     const { b, boss } = withBoss(4);
     expect(boss.flying).toBe(true);
     expect(lost(b, 'magpieFlock', boss)).toBeCloseTo(7 * 2 * 2); // 약점 x2 한 번 x 까치 비행 적 x2 (비행 중 대왕)
-    expect(lost(b, 'samjokgo', boss)).toBeCloseTo(14 * 2);
+    expect(lost(b, 'samjokgo', boss)).toBeCloseTo(28 * 2);
     expect(lost(b, 'yeongdeungWind', boss)).toBeCloseTo(8); // 마법은 상성 없음
     boss.setFlying(false); // 착지
     expect(lost(b, 'clubGoblin', boss)).toBeCloseTo(14 * 0.2);
@@ -417,6 +417,7 @@ describe('철갑 장승왕: 갑옷', () => {
 
   it('받는 피해 감소 상한 70%가 적용된다', () => {
     const { b, boss } = withBoss(2);
+    b.shrine.invulnerable = true; // 갑옷 누적을 기다리는 동안 전투가 종료되지 않게 한다.
     b.step(60); // 갑옷 6중첩 (48%)
     boss.status!.addBuff({ damageReduction: 0.5 }, 30);
     boss.hp = boss.maxHp;

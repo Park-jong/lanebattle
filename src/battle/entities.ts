@@ -220,7 +220,7 @@ export class Fighter extends Body {
   }
 
   override get innateDamageReduction(): number {
-    return this.patternReduction;
+    return this.patternReduction + (this.ability.damageReduction ?? 0);
   }
 
   setPatternReduction(value: number): void {

@@ -160,12 +160,12 @@ describe('빙의 기본 공격', () => {
     expect(b.projectiles[0].damage).toBeCloseTo(48.75);
   });
 
-  it('구미호: 마법, 사거리 160, 범위 60 (② 적용 시 84)와 화상 6, 범위 안 다른 적도 맞는다', () => {
+  it('구미호: 마법, 사거리 180, 범위 80 (② 적용 시 112)와 화상 6, 범위 안 다른 적도 맞는다', () => {
     const b = possess('gumiho');
-    expect(b.heroForm).toMatchObject({ attackType: 'magic', range: 160, areaRadius: 60, burnPerSec: 6 });
+    expect(b.heroForm).toMatchObject({ attackType: 'magic', range: 180, areaRadius: 80, burnPerSec: 6 });
     const main = foe(b, 'geuseundae', 100);
-    const near = foe(b, 'geuseundae', 150); // 주 대상에서 50 - 14 = 36 <= 60
-    const far = foe(b, 'geuseundae', 200); // 100 - 14 = 86 > 60
+    const near = foe(b, 'geuseundae', 150); // 주 대상에서 50 - 14 = 36 <= 80
+    const far = foe(b, 'geuseundae', 250); // 이동 후에도 범위 밖
     b.step(0.05);
     expect(b.projectiles[0].attackType).toBe('magic');
     advance(b, 0.5);
@@ -175,7 +175,7 @@ describe('빙의 기본 공격', () => {
     expect(main.status!.burnDps).toBe(6);
 
     const wide = possess('gumiho', { gumihoBasic: 1, gumihoCore: 1 });
-    expect(wide.heroForm!.areaRadius).toBeCloseTo(84);
+    expect(wide.heroForm!.areaRadius).toBeCloseTo(112);
   });
 
   it('불가사리: 근접(영웅 사거리 50)이고 맞을 때마다 방어 파괴 1중첩, ② 최대 8중첩', () => {

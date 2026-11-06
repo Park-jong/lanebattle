@@ -12,6 +12,18 @@ import { fmt, pct, type TooltipStatus, type TooltipText } from './tooltipText';
 const TAG_NAMES: Record<Tag, string> = { dokkaebi: '도깨비', fire: '불', divine: '신수', wind: '바람', hero: '영웅' };
 const TYPE_NAMES: Record<AttackType, string> = { melee: '근접', ranged: '원거리', magic: '마법' };
 const TRAIT_NAMES: Record<EnemyTrait, string> = { swarm: '무리', ghost: '영체', armor: '갑옷', flying: '비행' };
+const UNIT_ROLES: Record<string, string> = {
+  clubGoblin: '저렴한 전열 · 범위 공격 적 앞에서는 물량 주의',
+  oneLegGoblin: '빠른 합류 · 첫 타 돌격으로 순간 화력',
+  sumoGoblin: '넉백·기절로 돌격 저지',
+  foxfireArcher: '전열 뒤에서 화상 지원 · 영체 대응',
+  gumiho: '광역 주력 · 전열 뒤에서 무리 소탕',
+  bulgasari: '장갑 돌파 · 방어 파괴로 아군 화력 지원',
+  haetae: '전열 유지 · 집중 공격을 버티며 후방 보호',
+  samjokgo: '비행 화력 지원 · 두 대상 공격과 공격력 오라',
+  magpieFlock: '저렴한 대공 · 밀집하면 적 투척 공격에 취약',
+  yeongdeungWind: '공격 속도 지원 · 적 투사체 견제',
+};
 
 function buffText(effect: BuffValues): string {
   const parts: string[] = [];
@@ -25,6 +37,8 @@ function buffText(effect: BuffValues): string {
 /** 고유 능력 구조를 문구 줄로 바꾼다. 업그레이드가 반영된 AbilityDef를 넣으면 실제 값이 나온다 */
 export function abilityLines(def: AllyDef, a: AbilityDef): string[] {
   const out: string[] = [];
+  if (a.damageReduction) out.push(`철벽: 받는 피해 -${pct(a.damageReduction)} (버프 해제에 영향받지 않음)`);
+  if (a.cleave) out.push(`휩쓸기: 대상 주변 반경 ${fmt(a.cleave.radius)} 지상 적에게 ${pct(a.cleave.damageMultiplier)} 피해`);
   if (a.firstStrikeMultiplier) out.push(`돌격: 소환 후 첫 공격 피해 x${fmt(a.firstStrikeMultiplier)}`);
   if (a.pierce) out.push(`관통: 첫 공격이 길 위의 적 모두를 침 (대상 뒤 ${fmt(a.pierce.pathExtra)})`);
   if (a.nthStrike) {
@@ -33,7 +47,7 @@ export function abilityLines(def: AllyDef, a: AbilityDef): string[] {
     out.push(`메치기: ${n.every}번째 공격마다 넉백 ${fmt(n.knockback)} + 기절 ${fmt(n.stun)}초${hit}`);
   }
   if (a.grab) out.push(`붙잡기: ${fmt(a.grab.interval)}초마다 앞의 적 하나를 ${fmt(a.grab.duration)}초 붙잡음`);
-  if (a.aura) out.push(`오라(반경 ${fmt(a.aura.radius)}): 아군 ${buffText(a.aura.effect)}`);
+  if (a.aura) out.push(`오라(반경 ${fmt(a.aura.radius)}): 아군 ${buffText(a.aura.effect)} (동일 유닛끼리 중첩 안 됨)`);
   if (a.missAura) {
     const back = a.missAura.reflect ? ', 빗나간 투사체는 되돌아감' : '';
     out.push(`반경 ${fmt(a.missAura.radius)} 아군을 노리는 적 투사체 ${pct(a.missAura.chance)} 빗나감${back}`);
@@ -84,6 +98,7 @@ export function describeUnit(allyId: string, mods: BattleModifiers, key: string)
   const lines: string[] = [];
   const kind = [def.tags.map((t) => TAG_NAMES[t]).join('·'), TYPE_NAMES[def.attackType], def.flying ? '비행' : ''];
   lines.push(kind.filter(Boolean).join(' / '));
+  lines.push(`역할: ${UNIT_ROLES[allyId]}`);
   const group = def.summonCount && def.summonCount > 1 ? ` (한 번에 ${def.summonCount}무리)` : '';
   lines.push(`부적 ${def.cost} / 쿨타임 ${fmt(def.cooldown)}초${group}`);
   lines.push(`체력 ${fmt(def.maxHp)} / 공격력 ${fmt(def.attack)} / 공격 간격 ${fmt(def.attackInterval)}초`);

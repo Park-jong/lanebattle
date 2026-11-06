@@ -124,6 +124,7 @@ export class BattleScene extends Phaser.Scene {
   private shrineText!: Phaser.GameObjects.Text;
   private castleText!: Phaser.GameObjects.Text;
   private infoText!: Phaser.GameObjects.Text;
+  private waveText!: Phaser.GameObjects.Text;
   /** 영웅 머리 위 "빙의: ○○" 이름표 (빙의했을 때만 만든다) */
   private possessionLabel?: Phaser.GameObjects.Text;
   /** 이번 전투에 적용하는 빌드 효과 (사용 중인 빌드 또는 ?upg=) */
@@ -236,6 +237,8 @@ export class BattleScene extends Phaser.Scene {
       .setOrigin(1, 0).setFontStyle('bold');
     const r = L.infoText;
     this.infoText = small({ ...r, x: r.x + r.w - 9, y: r.y + 7 }, 12, U.text).setOrigin(1, 0).setFontStyle('bold');
+    this.waveText = small({ x: 480, y: 61, w: 0, h: 0 }, 13, U.goldText)
+      .setOrigin(0.5, 0).setBackgroundColor('#172721').setPadding(9, 4);
   }
 
   /** 빙의·강림 중이면 영웅 머리 위에 금색 이름표를 둔다 */
@@ -906,6 +909,9 @@ export class BattleScene extends Phaser.Scene {
 
     const def = getStageDef(b.stage);
     this.infoText.setText(`${def.code}  ${def.name}`);
+    const next = b.nextWave;
+    this.waveText.setText(skinText(`다음 ${next.number}차 · ${next.label} ${Math.ceil(next.seconds)}초  |  ${next.hint}`));
+    this.waveText.setColor(next.seconds <= 5 ? '#ffb49a' : U.goldText);
   }
 
   /** 체력이 채워진 같은 띠 위에 전장 거리·개체·현재 카메라 범위를 표시한다. */

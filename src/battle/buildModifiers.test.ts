@@ -364,12 +364,12 @@ describe('요괴 여우불 사수', () => {
 });
 
 describe('요괴 구미호', () => {
-  it('② 핵심: 범위 반경 60 -> 84', () => {
+  it('② 핵심: 범위 반경 80 -> 112', () => {
     const near = (levels: BuildLevels) => {
       const b = newBattle(levels);
       ally(b, 'gumiho', 500);
       foe(b, 'grimReaper', 600);
-      const splash = foe(b, 'grimReaper', 690); // 대상에서 90 (몸 반지름 12 -> 78)
+      const splash = foe(b, 'grimReaper', 710); // 대상에서 110 (몸 반지름 12 -> 98)
       b.step(0.5);
       return splash.hp < BIG_HP;
     };
@@ -385,8 +385,8 @@ describe('요괴 구미호', () => {
       b.step(1.0);
       return b.drainDamageEvents().filter((e) => e.kind !== 'burn' && !e.friendly).map((e) => e.amount);
     };
-    expect(hits({ gumihoAwaken: 1 })).toEqual([22, 22, 22]);
-    expect(hits({})).toEqual([22]);
+    expect(hits({ gumihoAwaken: 1 })).toEqual([42, 42, 42]);
+    expect(hits({})).toEqual([42]);
   });
 
   it('③ 연발 중 대상이 죽으면 남은 발은 나가지 않는다', () => {
@@ -419,9 +419,9 @@ describe('요괴 불가사리', () => {
     foe(b, 'jangseungSpirit', 510, true, 1);
     const next = foe(b, 'eggGhost', 515);
     b.step(0.05);
-    expect(bul.hp).toBeCloseTo(100 + 300 * 0.3);
-    b.step(1.4); // 두 번째 공격: 20 x 1.05
-    expect(lost(next)).toBeCloseTo(21);
+    expect(bul.hp).toBeCloseTo(100 + 480 * 0.3);
+    b.step(1.4); // 두 번째 공격: 38 x 1.05
+    expect(lost(next)).toBeCloseTo(39.9);
   });
 
   it('③ 갑옷이 아닌 적을 잡으면 효과 없음', () => {
@@ -432,7 +432,7 @@ describe('요괴 불가사리', () => {
     const next = foe(b, 'eggGhost', 515);
     b.step(1.5);
     expect(bul.hp).toBe(100);
-    expect(lost(next)).toBeCloseTo(20);
+    expect(lost(next)).toBeCloseTo(38);
   });
 });
 
@@ -483,6 +483,7 @@ describe('요괴 삼족오', () => {
   it('③ 태양 불꽃: 10초마다 반경 480 안 적 전체에 화상', () => {
     const b = newBattle({ samjokgoAwaken: 1 });
     const sam = ally(b, 'samjokgo', 500);
+    sam.attackCooldown = 100; // 기본 공격 화상과 주기 능력을 분리한다.
     const e1 = foe(b, 'eggGhost', 700);
     const e2 = foe(b, 'eggGhost', 900);
     const out = foe(b, 'eggGhost', 1100);

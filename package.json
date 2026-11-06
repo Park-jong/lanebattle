@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "balance": "node scripts/balance-report.mjs",
     "deploy": "npm test && npm run build && gh-pages -d dist --nojekyll -m \"deploy: local\""
   },
   "dependencies": {

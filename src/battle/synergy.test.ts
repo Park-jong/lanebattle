@@ -174,7 +174,7 @@ describe('연계 효과 14종', () => {
     near.hp = far.hp = blocked.hp = 60;
     b.blockHeal(blocked, 10);
     b.step(1);
-    expect(g.hp).toBeCloseTo(600 + 700 * 0.02); // 614
+    expect(g.hp).toBeCloseTo(600 + 1000 * 0.02); // 620
     expect(near.hp).toBeCloseTo(60 + 120 * 0.02); // 62.4
     expect(far.hp).toBe(60);
     expect(blocked.hp).toBe(60);
