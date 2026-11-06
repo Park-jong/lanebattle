@@ -1,0 +1,2373 @@
+{
+  "version": 2,
+  "scope": "default",
+  "rendererIntegration": true,
+  "characters": [
+    {
+      "subjectKey": "hero:kkomaMudang",
+      "skinId": "default",
+      "texture": "hero-kkomaMudang",
+      "image": "runtime/hero-kkomaMudang-mounted-haetae.png",
+      "atlas": "runtime/hero-kkomaMudang-mounted-haetae.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 129,
+      "bodyWidth": 156,
+      "canvas": {
+        "width": 192,
+        "height": 192
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "skill_fan": {
+          "frames": [
+            "skill_fan_00",
+            "skill_fan_01",
+            "skill_fan_02",
+            "skill_fan_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "skill_blessing": {
+          "frames": [
+            "skill_blessing_00",
+            "skill_blessing_01",
+            "skill_blessing_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "skill_blade": {
+          "frames": [
+            "skill_blade_00",
+            "skill_blade_01",
+            "skill_blade_02",
+            "skill_blade_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_bell": {
+          "frames": [
+            "fx_bell_00",
+            "fx_bell_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_fan": {
+          "frames": [
+            "fx_fan_00",
+            "fx_fan_01",
+            "fx_fan_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_blessing": {
+          "frames": [
+            "fx_blessing_00",
+            "fx_blessing_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_blade": {
+          "frames": [
+            "fx_blade_00",
+            "fx_blade_01",
+            "fx_blade_02"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      },
+      "displayHeight": 64,
+      "displayTop": 78
+    },
+    {
+      "subjectKey": "ally:clubGoblin",
+      "skinId": "default",
+      "texture": "ally-clubGoblin",
+      "image": "runtime/ally-clubGoblin.png",
+      "atlas": "runtime/ally-clubGoblin.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 67,
+      "bodyWidth": 61,
+      "canvas": {
+        "width": 77,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_club_swing": {
+          "frames": [
+            "fx_club_swing_00",
+            "fx_club_swing_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "enemy:eggGhost",
+      "skinId": "default",
+      "texture": "enemy-eggGhost",
+      "image": "runtime/enemy-eggGhost.png",
+      "atlas": "runtime/enemy-eggGhost.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 59,
+      "bodyWidth": 61,
+      "canvas": {
+        "width": 77,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_egg_puff": {
+          "frames": [
+            "fx_egg_puff_00",
+            "fx_egg_puff_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "ally:samjokgo",
+      "skinId": "default",
+      "texture": "ally-samjokgo",
+      "image": "runtime/ally-samjokgo.png",
+      "atlas": "runtime/ally-samjokgo.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "bodyHeight": 58,
+      "bodyWidth": 76,
+      "canvas": {
+        "width": 96,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "projectile_sun": {
+          "frames": [
+            "projectile_sun_00",
+            "projectile_sun_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_sun_aura": {
+          "frames": [
+            "fx_sun_aura_00",
+            "fx_sun_aura_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "ally:bulgasari",
+      "skinId": "default",
+      "texture": "ally-bulgasari",
+      "image": "runtime/ally-bulgasari.png",
+      "atlas": "runtime/ally-bulgasari.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 57,
+      "bodyWidth": 76,
+      "canvas": {
+        "width": 96,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_armor_chip": {
+          "frames": [
+            "fx_armor_chip_00",
+            "fx_armor_chip_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "ally:foxfireArcher",
+      "skinId": "default",
+      "texture": "ally-foxfireArcher",
+      "image": "runtime/ally-foxfireArcher.png",
+      "atlas": "runtime/ally-foxfireArcher.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 69,
+      "bodyWidth": 55,
+      "canvas": {
+        "width": 77,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "projectile_foxfire": {
+          "frames": [
+            "projectile_foxfire_00",
+            "projectile_foxfire_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_foxfire_hit": {
+          "frames": [
+            "fx_foxfire_hit_00",
+            "fx_foxfire_hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "ally:gumiho",
+      "skinId": "default",
+      "texture": "ally-gumiho",
+      "image": "runtime/ally-gumiho.png",
+      "atlas": "runtime/ally-gumiho.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 58,
+      "bodyWidth": 58,
+      "canvas": {
+        "width": 96,
+        "height": 80
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "projectile_orb": {
+          "frames": [
+            "projectile_orb_00",
+            "projectile_orb_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_foxfire_burst": {
+          "frames": [
+            "fx_foxfire_burst_00",
+            "fx_foxfire_burst_01",
+            "fx_foxfire_burst_02"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "ally:haetae",
+      "skinId": "default",
+      "texture": "ally-haetae",
+      "image": "runtime/ally-haetae.png",
+      "atlas": "runtime/ally-haetae.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 58,
+      "bodyWidth": 60,
+      "canvas": {
+        "width": 96,
+        "height": 80
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "grab_start": {
+          "frames": [
+            "grab_start_00",
+            "grab_start_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "grab_hold": {
+          "frames": [
+            "grab_hold_00",
+            "grab_hold_01"
+          ],
+          "fps": 6,
+          "loop": true
+        }
+      }
+    },
+    {
+      "subjectKey": "ally:magpieFlock",
+      "skinId": "default",
+      "texture": "ally-magpieFlock",
+      "image": "runtime/ally-magpieFlock.png",
+      "atlas": "runtime/ally-magpieFlock.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "bodyHeight": 66,
+      "bodyWidth": 75,
+      "canvas": {
+        "width": 96,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "projectile_feather": {
+          "frames": [
+            "projectile_feather_00",
+            "projectile_feather_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "ally:oneLegGoblin",
+      "skinId": "default",
+      "texture": "ally-oneLegGoblin",
+      "image": "runtime/ally-oneLegGoblin.png",
+      "atlas": "runtime/ally-oneLegGoblin.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 59,
+      "bodyWidth": 61,
+      "canvas": {
+        "width": 77,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "charge": {
+          "frames": [
+            "charge_00",
+            "charge_01",
+            "charge_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_charge": {
+          "frames": [
+            "fx_charge_00",
+            "fx_charge_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "ally:sumoGoblin",
+      "skinId": "default",
+      "texture": "ally-sumoGoblin",
+      "image": "runtime/ally-sumoGoblin.png",
+      "atlas": "runtime/ally-sumoGoblin.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 68,
+      "bodyWidth": 76,
+      "canvas": {
+        "width": 96,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "throw": {
+          "frames": [
+            "throw_00",
+            "throw_01",
+            "throw_02",
+            "throw_03"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "ally:yeongdeungWind",
+      "skinId": "default",
+      "texture": "ally-yeongdeungWind",
+      "image": "runtime/ally-yeongdeungWind.png",
+      "atlas": "runtime/ally-yeongdeungWind.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 60,
+      "bodyWidth": 61,
+      "canvas": {
+        "width": 77,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "projectile_wind": {
+          "frames": [
+            "projectile_wind_00",
+            "projectile_wind_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_wind_aura": {
+          "frames": [
+            "fx_wind_aura_00",
+            "fx_wind_aura_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "enemy:dueoksini",
+      "skinId": "default",
+      "texture": "enemy-dueoksini",
+      "image": "runtime/enemy-dueoksini.png",
+      "atlas": "runtime/enemy-dueoksini.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 58,
+      "bodyWidth": 62,
+      "canvas": {
+        "width": 80,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_gate_bump": {
+          "frames": [
+            "fx_gate_bump_00",
+            "fx_gate_bump_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "enemy:eodduksini",
+      "skinId": "default",
+      "texture": "enemy-eodduksini",
+      "image": "runtime/enemy-eodduksini.png",
+      "atlas": "runtime/enemy-eodduksini.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "bodyHeight": 55,
+      "bodyWidth": 76,
+      "canvas": {
+        "width": 96,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "projectile_shadow": {
+          "frames": [
+            "projectile_shadow_00",
+            "projectile_shadow_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "enemy:gangcheol",
+      "skinId": "default",
+      "texture": "enemy-gangcheol",
+      "image": "runtime/enemy-gangcheol.png",
+      "atlas": "runtime/enemy-gangcheol.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 46,
+      "bodyWidth": 63,
+      "canvas": {
+        "width": 80,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_fire_immune": {
+          "frames": [
+            "fx_fire_immune_00",
+            "fx_fire_immune_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "enemy:geuseundae",
+      "skinId": "default",
+      "texture": "enemy-geuseundae",
+      "image": "runtime/enemy-geuseundae.png",
+      "atlas": "runtime/enemy-geuseundae.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 68,
+      "bodyWidth": 62,
+      "canvas": {
+        "width": 80,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "grow": {
+          "frames": [
+            "grow_00",
+            "grow_01",
+            "grow_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_growth": {
+          "frames": [
+            "fx_growth_00",
+            "fx_growth_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "enemy:grimReaper",
+      "skinId": "default",
+      "texture": "enemy-grimReaper",
+      "image": "runtime/enemy-grimReaper.png",
+      "atlas": "runtime/enemy-grimReaper.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 48,
+      "bodyWidth": 50,
+      "canvas": {
+        "width": 64,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "dispel": {
+          "frames": [
+            "dispel_00",
+            "dispel_01",
+            "dispel_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_dispel_ring": {
+          "frames": [
+            "fx_dispel_ring_00",
+            "fx_dispel_ring_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "enemy:jangseungSpirit",
+      "skinId": "default",
+      "texture": "enemy-jangseungSpirit",
+      "image": "runtime/enemy-jangseungSpirit.png",
+      "atlas": "runtime/enemy-jangseungSpirit.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 69,
+      "bodyWidth": 48,
+      "canvas": {
+        "width": 80,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_wood_guard": {
+          "frames": [
+            "fx_wood_guard_00",
+            "fx_wood_guard_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "enemy:maidenGhost",
+      "skinId": "default",
+      "texture": "enemy-maidenGhost",
+      "image": "runtime/enemy-maidenGhost.png",
+      "atlas": "runtime/enemy-maidenGhost.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 69,
+      "bodyWidth": 51,
+      "canvas": {
+        "width": 77,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_phase": {
+          "frames": [
+            "fx_phase_00",
+            "fx_phase_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "enemy:sonGakshi",
+      "skinId": "default",
+      "texture": "enemy-sonGakshi",
+      "image": "runtime/enemy-sonGakshi.png",
+      "atlas": "runtime/enemy-sonGakshi.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 64,
+      "bodyWidth": 61,
+      "canvas": {
+        "width": 77,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "projectile_seal": {
+          "frames": [
+            "projectile_seal_00",
+            "projectile_seal_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_heal_block": {
+          "frames": [
+            "fx_heal_block_00",
+            "fx_heal_block_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "enemy:waterGhostThrower",
+      "skinId": "default",
+      "texture": "enemy-waterGhostThrower",
+      "image": "runtime/enemy-waterGhostThrower.png",
+      "atlas": "runtime/enemy-waterGhostThrower.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 62,
+      "bodyWidth": 61,
+      "canvas": {
+        "width": 77,
+        "height": 96
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "projectile_water": {
+          "frames": [
+            "projectile_water_00",
+            "projectile_water_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_water_splash": {
+          "frames": [
+            "fx_water_splash_00",
+            "fx_water_splash_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "boss:chasaKing",
+      "skinId": "default",
+      "texture": "boss-chasaKing",
+      "image": "runtime/boss-chasaKing.png",
+      "atlas": "runtime/boss-chasaKing.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 139,
+      "bodyWidth": 120,
+      "canvas": {
+        "width": 160,
+        "height": 192
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "suppress": {
+          "frames": [
+            "suppress_00",
+            "suppress_01",
+            "suppress_02",
+            "suppress_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_suppress": {
+          "frames": [
+            "fx_suppress_00",
+            "fx_suppress_01",
+            "fx_suppress_02"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "boss:eodduksiniKing",
+      "skinId": "default",
+      "texture": "boss-eodduksiniKing",
+      "image": "runtime/boss-eodduksiniKing.png",
+      "atlas": "runtime/boss-eodduksiniKing.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "bodyHeight": 134,
+      "bodyWidth": 150,
+      "canvas": {
+        "width": 192,
+        "height": 192
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "descend": {
+          "frames": [
+            "descend_00",
+            "descend_01",
+            "descend_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "ground_idle": {
+          "frames": [
+            "ground_idle_00",
+            "ground_idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "ascend": {
+          "frames": [
+            "ascend_00",
+            "ascend_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "projectile_king_shadow": {
+          "frames": [
+            "projectile_king_shadow_00",
+            "projectile_king_shadow_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_land_ring": {
+          "frames": [
+            "fx_land_ring_00",
+            "fx_land_ring_01",
+            "fx_land_ring_02"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "boss:giantWonGwi",
+      "skinId": "default",
+      "texture": "boss-giantWonGwi",
+      "image": "runtime/boss-giantWonGwi.png",
+      "atlas": "runtime/boss-giantWonGwi.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 138,
+      "bodyWidth": 150,
+      "canvas": {
+        "width": 192,
+        "height": 192
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "summon": {
+          "frames": [
+            "summon_00",
+            "summon_01",
+            "summon_02",
+            "summon_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_summon": {
+          "frames": [
+            "fx_summon_00",
+            "fx_summon_01",
+            "fx_summon_02"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "boss:imugiGangcheol",
+      "skinId": "default",
+      "texture": "boss-imugiGangcheol",
+      "image": "runtime/boss-imugiGangcheol.png",
+      "atlas": "runtime/boss-imugiGangcheol.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 115,
+      "bodyWidth": 136,
+      "canvas": {
+        "width": 192,
+        "height": 160
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "tail": {
+          "frames": [
+            "tail_00",
+            "tail_01",
+            "tail_02",
+            "tail_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "absorb": {
+          "frames": [
+            "absorb_00",
+            "absorb_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_heat_absorb": {
+          "frames": [
+            "fx_heat_absorb_00",
+            "fx_heat_absorb_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_drought": {
+          "frames": [
+            "fx_drought_00",
+            "fx_drought_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    },
+    {
+      "subjectKey": "boss:ironJangseung",
+      "skinId": "default",
+      "texture": "boss-ironJangseung",
+      "image": "runtime/boss-ironJangseung.png",
+      "atlas": "runtime/boss-ironJangseung.json",
+      "origin": {
+        "x": 0.5,
+        "y": 0.875
+      },
+      "bodyHeight": 138,
+      "bodyWidth": 100,
+      "canvas": {
+        "width": 192,
+        "height": 192
+      },
+      "clips": {
+        "idle": {
+          "frames": [
+            "idle_00",
+            "idle_01"
+          ],
+          "fps": 6,
+          "loop": true
+        },
+        "walk": {
+          "frames": [
+            "walk_00",
+            "walk_01",
+            "walk_02",
+            "walk_03"
+          ],
+          "fps": 8,
+          "loop": true
+        },
+        "attack": {
+          "frames": [
+            "attack_00",
+            "attack_01",
+            "attack_02",
+            "attack_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "hit": {
+          "frames": [
+            "hit_00",
+            "hit_01"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "spawn": {
+          "frames": [
+            "spawn_00",
+            "spawn_01",
+            "spawn_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "death": {
+          "frames": [
+            "death_00",
+            "death_01",
+            "death_02",
+            "death_03"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "armor": {
+          "frames": [
+            "armor_00",
+            "armor_01",
+            "armor_02"
+          ],
+          "fps": 6,
+          "loop": false
+        },
+        "fx_armor_stack": {
+          "frames": [
+            "fx_armor_stack_00",
+            "fx_armor_stack_01"
+          ],
+          "fps": 6,
+          "loop": false
+        }
+      }
+    }
+  ]
+}
