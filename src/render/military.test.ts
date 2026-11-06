@@ -34,8 +34,11 @@ describe('playable military assets', () => {
     const frames = read(shion.atlas).frames;
     for (const key of ['hero-kkomaMudang-q', 'hero-kkomaMudang-w', 'hero-kkomaMudang-e']) expect(frames[key]).toBeTruthy();
     expect(clipFrame(shion, 'attack', 0)).toBe('attack_00');
-    expect(clipFrame(shion, 'attack', 1 / 18)).toBe('attack_01');
-    expect(shion.clips.walk.frames.slice(0, 4)).toEqual(['walk_00', 'walk_04', 'walk_01', 'walk_05']);
+    expect(clipFrame(shion, 'attack', 1 / shion.clips.attack.fps)).toBe('attack_01');
+    expect(shion.clips.attack.frames).toHaveLength(14);
+    expect(shion.clips.attack.contactFrame).toBe(5);
+    expect(shion.clips.walk.frames).toEqual(Array.from({ length: 12 }, (_, i) => `walk_${String(i).padStart(2, '0')}`));
+    expect(shion.clips.walk.strideLength).toBeGreaterThan(0);
   });
   it('uses movement transitions, freezes on pause, and tolerates original skins without transitions', () => {
     const movement = new Locomotion(1);

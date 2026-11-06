@@ -8,6 +8,10 @@
 
 시온의 이 표·기본 원본 폴더는 자주색 포니테일·세이버를 사용한 이전 디자인 이력이다. 분홍 장발·전류 대검 리비전은 `output/art-generation/revisions/shion-electromagnetic-v2/`에서 별도 관리하며, 아래 수량에 합산하지 않는다.
 
+2026-11-06: [시온 기본 공격 2dimg2motion 시험 적용](shion-2dimg2motion.md). 핵심 포즈 4장과 중간 프레임 8장을 내장 image_gen으로 생성하고 기준 프레임 2장을 합쳐 14프레임으로 연결했다. 원본은 `output/art-generation/revisions/shion-2dimg2motion-attack/`에 보관하며 아래 기존 생성 수에 합산하지 않는다.
+
+같은 날 걷기도 핵심 포즈 4장과 중간 프레임 8장의 12프레임 반복으로 교체했다. 원본·납품·비교 GIF는 `output/art-generation/revisions/shion-2dimg2motion-walk/`, 실제 프롬프트는 [걷기 프롬프트 기록](prompts/shion-2dimg2motion-walk.json)에 보관한다. 게임은 공격과 걷기를 합친 motion-v2 아틀라스를 사용한다.
+
 ## 종류별 생성 상태
 
 | 이름 | 대상 키 | 생성 수 | 기준 원화 검수 |

@@ -7,6 +7,7 @@ import { ART_MANIFEST_KEY, artFor, clipFrame, clipSeconds, type CharacterArt } f
 import { BattlefieldProjection } from './battlefield';
 import { gameSkin } from '../game/skin';
 import { Locomotion } from './locomotion';
+import { anticipationFrame, attackDuration, attackFrameAge } from './attackPresentation';
 
 export function subjectOf(body: Body): string {
   if (body instanceof Hero) return body.possessedId ? `ally:${body.possessedId}` : 'hero:kkomaMudang';
@@ -70,11 +71,13 @@ class CharacterView {
     }
   }
 
-  update(dt: number, present: boolean, field: BattlefieldProjection): void {
+  update(dt: number, present: boolean, field: BattlefieldProjection, targets: readonly Body[]): void {
     const body = this.body;
+    let distance = Math.abs(body.x - this.lastX);
     const ground = field.ground(body), lift = field.elevation(body);
     this.sprite.setDepth(field.depth(body));
     if (body.alive && !this.wasAlive) {
+      distance = 0;
       this.dead = false;
       this.deathAge = 0;
       this.action = 'spawn';
@@ -94,7 +97,7 @@ class CharacterView {
         this.action = 'attack';
         this.actionAge = 0;
         const interval = body instanceof Fighter ? body.stats.attackInterval : HERO.attack.interval;
-        this.actionLength = Math.max(0.1, Math.min(0.35, interval / (1 + (body.status?.attackSpeedBonus ?? 0)) * 0.75));
+        this.actionLength = attackDuration(this.art, interval / (1 + (body.status?.attackSpeedBonus ?? 0)));
         this.facing = body.visualTargetX < body.x ? -1 : 1;
       } else if (body instanceof Hero && body.visualMoving && this.actionAge >= this.actionLength) this.facing = body.facing;
       else if (body instanceof Fighter && body.visualMoving && this.actionAge >= this.actionLength) this.facing = body.direction;
@@ -104,17 +107,23 @@ class CharacterView {
       // 비행 유닛 그림(중심 기준)으로 빙의한 영웅도 땅 위에 서 있도록 몸 절반만큼 올린다
       this.lastY = ground - lift - ((body.flying || body instanceof Hero) && this.art.origin.y === 0.5 ? height / 2 : 0);
     }
-    const movement = this.locomotion.update(this.art, dt, body.visualMoving, this.facing);
+    const movement = this.locomotion.update(this.art, dt, body.visualMoving, this.facing,
+      { distance, displayScale: field.height(body) / this.art.bodyHeight });
     let clip = movement.clip;
     if (body instanceof Fighter && body.defId === 'eodduksiniKing' && !body.flying && this.art.clips.ground_idle) clip = 'ground_idle';
-    let frameAge = ['start', 'stop', 'turn'].includes(clip) ? movement.age : this.age;
+    let frameAge = ['start', 'stop', 'turn'].includes(clip) || clip === 'walk' && this.art.clips.walk?.strideLength
+      ? movement.age : this.age;
     if (body.status?.stunned && !this.dead) { clip = 'idle'; frameAge = 0; }
     else if (this.actionAge < this.actionLength) {
       clip = this.action;
       const count = this.art.clips[clip]?.frames.length ?? 1;
-      const start = clip === 'attack' ? 1 : 0;
-      frameAge = (start + (count - start) * this.actionAge / Math.max(0.01, this.actionLength)) / (this.art.clips[clip]?.fps ?? 6);
+      frameAge = clip === 'attack' ? attackFrameAge(this.art, this.actionAge, this.actionLength)
+        : count * this.actionAge / Math.max(0.01, this.actionLength) / (this.art.clips[clip]?.fps ?? 6);
     } else if (this.hitLeft > 0) { clip = 'hit'; frameAge = (0.12 - this.hitLeft) * 2; }
+    else {
+      const preparation = anticipationFrame(this.art, body, targets);
+      if (preparation !== undefined) { clip = 'attack'; frameAge = preparation / this.art.clips.attack.fps; }
+    }
     if (this.dead) { clip = 'death'; frameAge = this.deathAge * clipSeconds(this.art, 'death') / 0.5; }
     const frame = clipFrame(this.art, clip, frameAge);
     this.drawn = !!frame && this.sprite.texture.has(frame);
@@ -143,7 +152,7 @@ export class CharacterRenderer {
 
   constructor(private readonly scene: Phaser.Scene, private readonly field: BattlefieldProjection) {}
 
-  update(dt: number, bodies: Body[]): void {
+  update(dt: number, bodies: Body[], targets: readonly Body[] = bodies): void {
     const present = new Set(bodies);
     for (const [body, view] of this.views) {
       if (view.art.subjectKey !== subjectOf(body)) { view.destroy(); this.views.delete(body); }
@@ -154,7 +163,7 @@ export class CharacterRenderer {
       if (art && this.scene.textures.get(art.texture).has('idle_00')) this.views.set(body, new CharacterView(body, art, this.scene));
     }
     for (const [body, view] of this.views) {
-      view.update(dt, present.has(body), this.field);
+      view.update(dt, present.has(body), this.field, targets);
       if (view.finished && body.kind !== 'hero') { view.destroy(); this.views.delete(body); }
     }
     for (const fx of this.effects) {

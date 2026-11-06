@@ -2,6 +2,13 @@ export interface ArtClip {
   frames: string[];
   fps: number;
   loop: boolean;
+  /** Optional presentation timing; damage still resolves in the simulation. */
+  contactFrame?: number;
+  contactHoldSeconds?: number;
+  recoverySeconds?: number;
+  anticipationSeconds?: number;
+  /** Ground distance per full walk cycle in unscaled source pixels. */
+  strideLength?: number;
 }
 
 export interface CharacterArt {

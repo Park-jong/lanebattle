@@ -350,7 +350,8 @@ export class BattleScene extends Phaser.Scene {
     this.catchUpText.setVisible(this.catchUp.bannerVisible);
     this.watchBossAppearance();
     for (const view of this.baseViews) view.update(this.paused ? 0 : this.uiDelta);
-    this.characters.update(active ? delta / 1000 : 0, [this.battle.hero, ...this.battle.allies, ...this.battle.enemies]);
+    this.characters.update(active ? delta / 1000 : 0,
+      [this.battle.hero, ...this.battle.allies, ...this.battle.enemies], [...this.battle.enemies, this.battle.castle]);
     this.characters.pruneProjectiles(this.battle.projectiles);
     if (!playing) this.resultElapsed += delta / 1000;
     this.updateCastFx(delta / 1000, active);

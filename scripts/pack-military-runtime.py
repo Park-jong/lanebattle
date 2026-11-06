@@ -13,6 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / 'public/assets/characters'
 THEME = ROOT / 'public/assets/military'
 REV = ROOT / 'output/art-generation/revisions/shion-electromagnetic-v2/package'
+MOTION_REV = ROOT / 'output/art-generation/revisions/shion-2dimg2motion-attack/package'
+WALK_REV = ROOT / 'output/art-generation/revisions/shion-2dimg2motion-walk/package'
 HEIGHTS = dict(clubGoblin=153, oneLegGoblin=167, sumoGoblin=174, foxfireArcher=163,
                gumiho=170, bulgasari=169, haetae=176, samjokgo=168,
                magpieFlock=152, yeongdeungWind=165)
@@ -121,11 +123,12 @@ def main():
     characters = []
     for unit in jobs['units']:
         if unit['subject_key'] == 'hero:kkomaMudang':
-            art = json.loads((REV / 'manifest.json').read_text(encoding='utf-8'))['characters'][0]
+            revision = WALK_REV if (WALK_REV / 'manifest.json').is_file() else MOTION_REV if (MOTION_REV / 'manifest.json').is_file() else REV
+            art = json.loads((revision / 'manifest.json').read_text(encoding='utf-8'))['characters'][0]
             destination = PUBLIC / 'runtime/military'
             destination.mkdir(parents=True, exist_ok=True)
             for ext in ['png', 'json']:
-                shutil.copyfile(REV / f'runtime/{art["texture"]}.{ext}', destination / f'{art["texture"]}.{ext}')
+                shutil.copyfile(revision / f'runtime/{art["texture"]}.{ext}', destination / f'{art["texture"]}.{ext}')
             art.update(image=f'runtime/military/{art["texture"]}.png',
                        atlas=f'runtime/military/{art["texture"]}.json',
                        displayHeight=round(110*172/169, 3), displayTop=round(110*172/169, 3))
@@ -153,7 +156,7 @@ def main():
                 contain(im.crop(box), (320, 256)).save(THEME / f'base-{chapter}-{team}-{phase}.png', optimize=True)
     with Image.open(REV / 'frames/title_shion_keyart.png') as raw:
         contain(raw.convert('RGBA'), (768, 512)).save(THEME / 'shion-title.png', optimize=True)
-    print('Published 26 military characters, Shion v2, five chapters and 40 base states.')
+    print('Published 26 military characters, latest packaged Shion, five chapters and 40 base states.')
 
 
 if __name__ == '__main__':
