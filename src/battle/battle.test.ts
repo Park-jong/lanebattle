@@ -376,9 +376,9 @@ describe('적 수치 성장', () => {
     expect(e.radius).toBe((base.width * 1.5) / 2);
   });
 
-  it('원귀의 성 체력은 1200 + 150 x 스테이지', () => {
-    expect(newBattle(0).castle.maxHp).toBe(1200);
-    expect(newBattle(24).castle.maxHp).toBe(4800);
+  it('원귀의 성 체력은 6000 + 750 x 스테이지', () => {
+    expect(newBattle(0).castle.maxHp).toBe(6000);
+    expect(newBattle(24).castle.maxHp).toBe(24000);
   });
 });
 

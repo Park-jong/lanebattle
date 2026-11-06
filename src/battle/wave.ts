@@ -7,6 +7,8 @@ import { getStageDef, getStageInfo } from './stage';
 export interface SpawnRequest {
   enemyId: string;
   elite: boolean;
+  /** raid 묶음 안 순번(0~). 일반 적은 없음 */
+  groupIndex?: number;
 }
 
 export interface WavePreview {
@@ -49,11 +51,6 @@ export function raidBudget(stageNumber: number, raidIndex: number): number {
   return Math.round((b.base + b.perStage * stageNumber) * (1 + b.perRaid * raidIndex));
 }
 
-interface QueuedSpawn {
-  request: SpawnRequest;
-  raid: boolean;
-}
-
 /** 그 스테이지에 등장 가능한 적 id 목록 */
 export function availableEnemyIds(stageNumber: number): string[] {
   return [...getStageDef(stageNumber).enemyIds];
@@ -65,7 +62,9 @@ export class WaveDirector {
   private nextWaveTime: number;
   private readonly def: StageDef;
   private spawnCooldown = 0;
-  private queue: QueuedSpawn[] = [];
+  private queue: SpawnRequest[] = [];
+  private raidQueue: SpawnRequest[] = [];
+  private raidCooldown = 0;
   private startedWaves = 0;
   private startedRaids = 0;
 
@@ -87,9 +86,14 @@ export class WaveDirector {
     return this.startedRaids;
   }
 
-  /** 아직 내보내지 않은 적 수 */
+  /** 아직 내보내지 않은 일반 대기열 적 수 */
   get pendingCount(): number {
     return this.queue.length;
+  }
+
+  /** 아직 내보내지 않은 raid 적 수 */
+  get raidPendingCount(): number {
+    return this.raidQueue.length;
   }
 
   get nextWave(): WavePreview {
@@ -104,16 +108,15 @@ export class WaveDirector {
   update(dt: number, capacity = Infinity): SpawnRequest[] {
     this.elapsed += dt;
     while (this.elapsed >= this.nextWaveTime) {
-      this.enqueue(this.composeWave(this.startedWaves).map((request) => ({ request, raid: false })));
+      this.enqueue(this.composeWave(this.startedWaves));
       this.startedWaves += 1;
       this.nextWaveTime += this.def.waveInterval;
     }
+    const out = this.releaseRaidGroup(dt, capacity);
     this.spawnCooldown -= dt;
-    const out: SpawnRequest[] = [];
     while (this.queue.length > 0 && this.spawnCooldown <= 0 && out.length < capacity) {
-      const next = this.queue.shift()!;
-      out.push(next.request);
-      this.spawnCooldown += next.raid ? RAID_RULES.spawnInterval : WAVE_RULES.spawnInterval;
+      out.push(this.queue.shift()!);
+      this.spawnCooldown += WAVE_RULES.spawnInterval;
     }
     // 대기열이 비었거나 자리가 없어 막힌 동안은 간격이 쌓이지 않게 한다 (자리가 나도 한 번에 쏟아내지 않음)
     if (this.spawnCooldown < 0) this.spawnCooldown = 0;
@@ -121,11 +124,11 @@ export class WaveDirector {
   }
 
   /** 대기열 최대 길이까지만 담고 넘치는 적은 버린다. 정예는 자리가 없으면 대기 중인 일반 적 하나를 밀어내고 들어간다 */
-  private enqueue(requests: QueuedSpawn[]): void {
+  private enqueue(requests: SpawnRequest[]): void {
     for (const r of requests) {
       if (this.queue.length >= WAVE_RULES.maxQueue) {
-        if (!r.request.elite) continue;
-        const evict = this.queue.map((q) => q.request.elite).lastIndexOf(false);
+        if (!r.elite) continue;
+        const evict = this.queue.map((q) => q.elite).lastIndexOf(false);
         if (evict < 0) continue;
         this.queue.splice(evict, 1);
       }
@@ -133,14 +136,25 @@ export class WaveDirector {
     }
   }
 
-  /** raid를 시작한다: 구성한 적을 대기열 맨 앞에 넣고, 넘치면 뒤쪽 일반 적부터 밀어낸다 */
-  startRaid(raidIndex: number): void {
-    const raid = this.composeRaid(raidIndex).map((request) => ({ request, raid: true }));
-    this.queue = [...raid, ...this.queue];
-    while (this.queue.length > WAVE_RULES.maxQueue) {
-      const evict = this.queue.map((q) => q.request.elite).lastIndexOf(false);
-      this.queue.splice(evict < 0 ? this.queue.length - 1 : evict, 1);
+  /**
+   * raid 묶음 하나를 내보낸다. 간격이 찼고 자리가 있으면 최대 groupSize마리가 동시에 나온다.
+   * 자리가 모자라면 나올 수 있는 만큼만 나오고 나머지는 다음 묶음 시점까지 대기한다.
+   */
+  private releaseRaidGroup(dt: number, capacity: number): SpawnRequest[] {
+    this.raidCooldown -= dt;
+    const out: SpawnRequest[] = [];
+    const count = Math.min(RAID_RULES.groupSize, this.raidQueue.length, capacity);
+    if (count > 0 && this.raidCooldown <= 0) {
+      this.raidQueue.splice(0, count).forEach((r, i) => out.push({ ...r, groupIndex: i }));
+      this.raidCooldown += RAID_RULES.groupInterval;
     }
+    if (this.raidCooldown < 0) this.raidCooldown = 0;
+    return out;
+  }
+
+  /** raid를 시작한다: 구성한 적을 일반 대기열과 별개인 raid 대기 뒤에 이어 붙인다 */
+  startRaid(raidIndex: number): void {
+    this.raidQueue.push(...this.composeRaid(raidIndex));
     this.startedRaids += 1;
   }
 

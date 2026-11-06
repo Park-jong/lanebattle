@@ -3,7 +3,7 @@ import { getEnemyDef } from '../data/enemies';
 import { RAID_RULES, WAVE_RULES } from '../data/waves';
 import { Battle } from './battle';
 import { SeededRng } from './rng';
-import { raidBudget, WaveDirector } from './wave';
+import { raidBudget, WaveDirector, type SpawnRequest } from './wave';
 
 const T = RAID_RULES.thresholds;
 const setCastleRatio = (b: Battle, ratio: number) => { b.castle.hp = b.castle.maxHp * ratio; };
@@ -83,54 +83,154 @@ describe('raid 예산·구성', () => {
   });
 });
 
-describe('raid 대기열', () => {
-  it('raid 적이 기존 일반 대기 적보다 먼저 나온다', () => {
-    const make = () => {
-      const dir = new WaveDirector(0, new SeededRng(3));
-      dir.update(100, 0); // 자리가 없어 일반 적이 대기열에 쌓인다
-      return dir;
-    };
-    const dir = make();
-    const before = dir.pendingCount;
-    expect(before).toBeGreaterThan(0);
-    const expected = make().composeRaid(0); // 같은 rng 상태에서 같은 구성
-    dir.startRaid(0);
-    expect(dir.raidCount).toBe(1);
-    const out = [];
-    for (let i = 0; i < expected.length * 40 && out.length < expected.length; i++) out.push(...dir.update(0.05));
-    expect(out).toEqual(expected);
+describe('raid 묶음 생산', () => {
+  const G = RAID_RULES.groupSize;
+  const GI = RAID_RULES.groupInterval;
+  const dir = () => new WaveDirector(0, new SeededRng(3));
+  const total = (i: number) => dir().composeRaid(i).length;
+
+  it('발동 즉시 같은 update에서 첫 묶음이 동시에 나온다', () => {
+    const d = dir();
+    d.startRaid(0);
+    const out = d.update(0.05);
+    expect(total(0)).toBeGreaterThan(G);
+    expect(out).toHaveLength(G);
+    expect(d.raidPendingCount).toBe(total(0) - G);
   });
 
-  it('raid 적 사이 간격은 raid 간격, 일반 적은 일반 간격이다', () => {
-    const dir = new WaveDirector(0, new SeededRng(3));
-    dir.startRaid(0);
-    const times: number[] = [];
+  it('raid 적은 일반 대기열에 들어가지 않는다', () => {
+    const d = dir();
+    d.startRaid(0);
+    expect(d.pendingCount).toBe(0);
+    expect(d.raidPendingCount).toBe(total(0));
+  });
+
+  it('간격마다 다음 묶음이 나오고 마지막 묶음은 나머지만 나온다', () => {
+    const d = dir();
+    d.startRaid(0);
+    const expected = dir().composeRaid(0);
+    const sizes: number[] = [];
+    const all: SpawnRequest[] = [];
     const dt = 0.05;
-    let t = 0;
-    for (let i = 0; i < 400 && dir.pendingCount > 0; i++) {
-      t += dt;
-      for (let k = dir.update(dt).length; k > 0; k--) times.push(t);
+    for (let t = 0; t < expected.length * GI + 3; t += dt) {
+      const out = d.update(dt).filter((r) => r.groupIndex !== undefined); // 일반 웨이브 제외
+      if (out.length > 0) { sizes.push(out.length); all.push(...out); }
     }
-    expect(times.length).toBeGreaterThan(2);
-    expect(times[2] - times[1]).toBeCloseTo(RAID_RULES.spawnInterval, 1);
-    expect(RAID_RULES.spawnInterval).toBeLessThan(WAVE_RULES.spawnInterval);
+    const groups = Math.ceil(expected.length / G);
+    expect(sizes).toHaveLength(groups);
+    sizes.slice(0, -1).forEach((n) => expect(n).toBe(G));
+    expect(sizes[groups - 1]).toBe(expected.length - G * (groups - 1));
+    expect(all.map(({ enemyId, elite }) => ({ enemyId, elite }))).toEqual(expected);
   });
 
-  it('대기열은 최대 길이를 넘지 않고 정예는 버려지지 않는다', () => {
-    const dir = new WaveDirector(24, new SeededRng(3));
-    dir.update(0.01, 0);
-    for (let i = 0; i < T.length; i++) dir.startRaid(i);
-    expect(dir.pendingCount).toBeLessThanOrEqual(WAVE_RULES.maxQueue);
-    const out = dir.update(0.01, Infinity);
-    expect(out.length).toBeGreaterThan(0);
+  it('묶음 사이 시간은 groupInterval이다', () => {
+    const d = dir();
+    d.startRaid(0);
+    expect(d.update(0.05)).toHaveLength(G);
+    let t = 0;
+    let second = 0;
+    while (second === 0 && t < GI * 3) { t += 0.05; second = d.update(0.05).length; }
+    expect(second).toBeGreaterThan(0);
+    expect(t).toBeGreaterThanOrEqual(GI - 0.05);
+    expect(t).toBeLessThanOrEqual(GI + 0.1);
   });
 
-  it('발동 직후 raid 적이 먼저 전장에 나온다', () => {
+  it('raid가 겹치면 순서대로 이어 붙어 같은 묶음 규칙으로 나온다', () => {
+    const d = dir();
+    d.startRaid(0);
+    d.startRaid(1);
+    const expected = [...dir().composeRaid(0), ...(() => { const x = dir(); x.composeRaid(0); return x.composeRaid(1); })()];
+    expect(d.raidPendingCount).toBe(expected.length);
+    expect(d.raidCount).toBe(2);
+    const out = d.update(0.05);
+    expect(out).toHaveLength(G);
+  });
+
+  it('일반 대기열은 raid와 상관없이 일반 간격을 유지한다', () => {
+    const d = dir();
+    d.update(100, 0); // 자리가 없어 일반 적이 쌓인다
+    const pending = d.pendingCount;
+    expect(pending).toBeGreaterThan(2);
+    d.startRaid(0);
+    expect(d.pendingCount).toBe(pending);
+    const times: number[] = [];
+    let t = 0;
+    for (let i = 0; i < 400 && times.length < 3; i++) {
+      t += 0.05;
+      // 일반 적만 센다: raid 적은 groupIndex가 있다
+      const normal = d.update(0.05).filter((r) => r.groupIndex === undefined);
+      for (let k = normal.length; k > 0; k--) times.push(t);
+    }
+    expect(times[2] - times[1]).toBeCloseTo(WAVE_RULES.spawnInterval, 1);
+  });
+
+  it('일반 대기열은 최대 길이를 넘지 않고 raid 대기는 버리지 않는다', () => {
+    const d = new WaveDirector(24, new SeededRng(3));
+    d.update(0.01, 0);
+    let sum = 0;
+    for (let i = 0; i < T.length; i++) { sum += d.composeRaid(i).length; }
+    const e = new WaveDirector(24, new SeededRng(3));
+    e.update(0.01, 0);
+    for (let i = 0; i < T.length; i++) e.startRaid(i);
+    expect(e.pendingCount).toBeLessThanOrEqual(WAVE_RULES.maxQueue);
+    expect(e.raidPendingCount).toBeGreaterThan(0);
+    expect(sum).toBeGreaterThan(0);
+  });
+
+  it('자리가 모자라면 나올 수 있는 만큼만 나오고 나머지는 다음 묶음에 나온다', () => {
+    const d = dir();
+    d.startRaid(0);
+    const n = total(0);
+    const first = d.update(0.05, 2);
+    expect(first).toHaveLength(2);
+    expect(d.raidPendingCount).toBe(n - 2);
+    expect(d.update(0.05, 100)).toHaveLength(0); // 아직 다음 묶음 시점 전
+    let second = 0;
+    for (let t = 0; t < GI * 2 && second === 0; t += 0.05) second = d.update(0.05, 100).length;
+    expect(second).toBe(G);
+  });
+
+  it('한 틱에 raid와 일반을 합쳐 capacity를 넘지 않고 raid가 먼저 쓴다', () => {
+    const d = dir();
+    d.update(100, 0);
+    d.startRaid(0);
+    const out = d.update(0.05, 3);
+    expect(out).toHaveLength(3);
+    expect(out.every((r) => r.groupIndex !== undefined)).toBe(true);
+  });
+
+  it('마지막 raid의 정예는 버려지지 않고 끝내 나온다', () => {
+    const d = new WaveDirector(5, new SeededRng(3));
+    d.startRaid(T.length - 1);
+    let elites = 0;
+    for (let i = 0; i < 4000 && d.raidPendingCount > 0; i++) elites += d.update(0.05, 1).filter((r) => r.elite).length;
+    expect(d.raidPendingCount).toBe(0);
+    expect(elites).toBe(RAID_RULES.eliteOnLast ? 1 : 0);
+  });
+});
+
+describe('raid 전장 반영', () => {
+  it('발동 직후 첫 묶음이 전장에 나오고 x 위치가 서로 다르다', () => {
+    const b = new Battle({ stage: 0 });
+    b.step(0.01); // 일반 웨이브 전
+    expect(b.enemies).toHaveLength(0);
+    setCastleRatio(b, T[0] - 0.01);
+    b.step(0.05); // 발동 후 다음 틱에 첫 묶음
+    b.step(0.05);
+    const xs = b.enemies.map((e) => e.x);
+    expect(xs.length).toBe(RAID_RULES.groupSize);
+    expect(new Set(xs).size).toBe(xs.length);
+    const sorted = [...xs].sort((a, c) => c - a);
+    // 스폰 직후 한 틱 이동이 있어 간격은 대략 groupSpreadX
+    expect(sorted[0] - sorted[1]).toBeGreaterThan(RAID_RULES.groupSpreadX / 2);
+  });
+
+  it('남은 raid 적은 시간이 지나며 나온다', () => {
     const b = new Battle({ stage: 0 });
     setCastleRatio(b, T[0] - 0.01);
     b.step(0.05);
-    expect(b.pendingSpawns).toBeGreaterThan(0);
     const total = b.pendingSpawns;
+    expect(total).toBeGreaterThan(0);
     b.step(2);
     expect(b.enemies.length).toBeGreaterThan(0);
     expect(b.pendingSpawns).toBeLessThan(total);

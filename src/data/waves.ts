@@ -21,8 +21,12 @@ export const RAID_RULES = {
   thresholds: [0.8, 0.6, 0.4, 0.2, 0.05],
   /** 예산 = (base + perStage * 스테이지 번호) * (1 + perRaid * raidIndex), 반올림 */
   budget: { base: 16, perStage: 2, perRaid: 0.15 },
-  /** raid 적을 내보내는 간격 */
-  spawnInterval: 0.4,
+  /** raid 적은 일반 대기열과 별개로 이 수만큼 묶어 동시에 내보낸다 */
+  groupSize: 5,
+  /** 묶음과 묶음 사이 간격(초) */
+  groupInterval: 1,
+  /** 같은 묶음 안에서 순번마다 성 반대쪽으로 벌리는 거리(px) */
+  groupSpreadX: 16,
   /** 마지막 문턱 raid에는 정예 1마리를 예산과 별개로 추가 */
   eliteOnLast: true,
 } as const;

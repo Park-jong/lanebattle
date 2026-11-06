@@ -22,7 +22,7 @@ describe('스테이지 표 25개', () => {
     expect(s.chapter).toBe(chapter);
     expect(s.order).toBe(order);
     expect(s.code).toBe(`${chapter}-${order}`);
-    expect(s.castleHp).toBe(1200 + 150 * n);
+    expect(s.castleHp).toBe(6000 + 750 * n);
     expect(s.isBossStage).toBe(boss);
     expect(s.bossId).toBe(boss ? getBossDef(chapter).id : undefined);
     expect(s.waveCount).toBe(9);

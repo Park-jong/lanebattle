@@ -2,7 +2,7 @@
 export const COMBAT = {
   battlefieldLength: 2400,
   shrine: { x: 80, maxHp: 1000, width: 50, height: 90 },
-  castle: { x: 2320, baseHp: 1200, hpPerStage: 150, width: 70, height: 130 },
+  castle: { x: 2320, baseHp: 6000, hpPerStage: 750, width: 70, height: 130 },
   maxAllies: 100,
   /** 동시에 살아 있는 적 상한 (보스 제외) */
   maxEnemies: 60,

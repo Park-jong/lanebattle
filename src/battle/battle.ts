@@ -28,7 +28,7 @@ import { getStageDef } from './stage';
 import { evaluateStage, type StageResult } from './result';
 import { SynergyEngine } from './synergy';
 import { upgradeAbility, upgradeAllyDef } from './unitUpgrades';
-import { WaveDirector } from './wave';
+import { WaveDirector, type SpawnRequest } from './wave';
 
 export type BattleResult = 'playing' | 'victory' | 'defeat';
 export type SummonResult = 'ok' | 'ended' | 'invalidIndex' | 'full' | 'cooldown' | 'noTalisman' | 'descent';
@@ -221,7 +221,7 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
 
   /** 상한 때문에 대기 중인 적 수 */
   get pendingSpawns(): number {
-    return this.director.pendingCount;
+    return this.director.pendingCount + this.director.raidPendingCount;
   }
 
   /** 결과 계산 (진행 중이면 null). 이전 최고 별은 저장 연결 전이라 기본 0 */
@@ -445,6 +445,11 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
     return this.result === 'playing' && this.resources.gather();
   }
 
+  /** 출발 x: raid 묶음 안 순번마다 성 반대쪽으로 벌려 한 점에 겹치지 않게 한다 */
+  private spawnX(req: SpawnRequest): number {
+    return this.castle.x - COMBAT.enemySpawnOffset - (req.groupIndex ?? 0) * RAID_RULES.groupSpreadX;
+  }
+
   /** 적 한 마리를 내보낸다 (웨이브 및 테스트용). 적 상한은 웨이브 쪽에서 지키므로 여기서는 검사하지 않는다 */
   spawnEnemy(enemyId: string, elite = false, x = this.castle.x - COMBAT.enemySpawnOffset): Fighter {
     const enemy = createEnemy(enemyId, this.stage, elite, x);
@@ -480,7 +485,7 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
     this.tickSkillDots(dt);
     this.heroAttack();
 
-    for (const req of this.director.update(dt, this.freeEnemySlots)) this.spawnEnemy(req.enemyId, req.elite);
+    for (const req of this.director.update(dt, this.freeEnemySlots)) this.spawnEnemy(req.enemyId, req.elite, this.spawnX(req));
 
     for (const f of [...this.allies, ...this.enemies]) this.actFighter(f, dt);
     this.runDelayed(dt);

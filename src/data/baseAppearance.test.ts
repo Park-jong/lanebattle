@@ -42,6 +42,6 @@ describe('stage base presentation', () => {
       expect(Math.abs(center - combat.x)).toBeLessThan(style.width / 2);
     }
     expect(COMBAT.shrine).toEqual({ x: 80, maxHp: 1000, width: 50, height: 90 });
-    expect(COMBAT.castle).toEqual({ x: 2320, baseHp: 1200, hpPerStage: 150, width: 70, height: 130 });
+    expect(COMBAT.castle).toEqual({ x: 2320, baseHp: 6000, hpPerStage: 750, width: 70, height: 130 });
   });
 });
