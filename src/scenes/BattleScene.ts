@@ -34,6 +34,9 @@ import { describePossessionSkill, describeSkill, skillStatus } from '../game/ski
 import { describeUnit, summonStatus } from '../game/unitText';
 import { Tooltip } from './Tooltip';
 import { artInScene, CharacterRenderer, subjectOf } from '../render/CharacterRenderer';
+import { drawMilitaryBattlefield } from '../render/military';
+import { gameSkin } from '../game/skin';
+import { skinText } from '../game/skinText';
 import { DEFAULT_UI as U, skillShortName, unitShortName } from '../ui/default/tokens';
 import { festivalNight, panel } from '../ui/default/decor';
 import { frontlineMeter, meterFill, resourceMeter } from '../ui/default/meters';
@@ -177,12 +180,19 @@ export class BattleScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, COMBAT.battlefieldLength, GAME_HEIGHT);
     this.cameras.main.setBackgroundColor(U.night);
     this.cameras.main.fadeIn(180, 17, 26, 43);
-    festivalNight(this, COMBAT.battlefieldLength, BATTLEFIELD.backY - 12, 0);
-    drawBattlefield(this);
-    drawBattleScenery(this);
+    if (!drawMilitaryBattlefield(this, this.battle.stage)) {
+      festivalNight(this, COMBAT.battlefieldLength, BATTLEFIELD.backY - 12, 0);
+      drawBattlefield(this);
+      drawBattleScenery(this);
+    }
     this.field = new BattlefieldProjection((body) => body instanceof Fighter ? this.liftOf(body) : 0, (body) => {
-      if (body.kind !== 'hero') return undefined;
       const art = artInScene(this, subjectOf(body));
+      if (art?.skinId === 'military' && art.displayHeight) {
+        const ratio = (body instanceof Fighter ? body.sizeScale : 1) / this.field.scale(body);
+        return { height: art.displayHeight * ratio, top: (art.displayTop ?? art.displayHeight) * ratio,
+          width: art.bodyWidth / art.bodyHeight * art.displayHeight * ratio };
+      }
+      if (body.kind !== 'hero') return undefined;
       return art?.displayHeight ? { height: art.displayHeight, top: art.displayTop ?? art.displayHeight,
         width: art.bodyWidth / art.bodyHeight * art.displayHeight } : undefined;
     });
@@ -214,7 +224,7 @@ export class BattleScene extends Phaser.Scene {
         .setScrollFactor(0)
         .setDepth(95);
     const inBar = (r: Rect, label: string, size: number) => {
-      small({ ...r, x: r.x + 43, y: r.y + 3 }, 13, U.goldText).setText(label).setFontStyle('bold');
+      small({ ...r, x: r.x + 43, y: r.y + 3 }, 13, U.goldText).setText(skinText(label)).setFontStyle('bold');
       return small({ ...r, x: r.x + r.w - 9, y: r.y + 1 }, size, U.text)
         .setOrigin(1, 0).setFontStyle('bold');
     };
@@ -452,7 +462,7 @@ export class BattleScene extends Phaser.Scene {
     if (!enc || this.bossSeen || enc.state === 'pending') return;
     this.bossSeen = true;
     this.bossIntroLeft = BOSS_INTRO_SECONDS;
-    this.bossIntroText.setText(enc.def.name);
+    this.bossIntroText.setText(skinText(enc.def.name));
   }
 
   /** 보스 등장 연출. 보스 체력도 상단의 한 막대에 통합한다. */
@@ -660,6 +670,8 @@ export class BattleScene extends Phaser.Scene {
       const enabled = b.result === 'playing' && cd <= 0 && b.hero.alive && !b.hero.status?.stunned && b.resources.spirit >= cost;
       const reason = !b.hero.alive ? '부활 중' : b.hero.status?.stunned ? '기절 중' : cd > 0 ? `${cd.toFixed(1)}초` : b.resources.spirit < cost ? '신력 부족' : '준비';
       this.skillButtons[i].setTexts(skillShortName(b.skillName(def.id)), `신력 ${cost}`);
+      if (gameSkin.current === 'military') this.skillButtons[i].setPortrait(subjectOf(b.hero),
+        b.hero.possessedId ? 'icon' : ['hero-kkomaMudang-q', 'hero-kkomaMudang-w', 'hero-kkomaMudang-e'][i]);
       this.skillButtons[i].setState(cd / b.skillCooldownMax(def.id), enabled, reason);
     });
     const gatherCost = b.resources.nextGatherCost;
@@ -888,8 +900,8 @@ export class BattleScene extends Phaser.Scene {
     const shielded = !bossAlive && b.castle.invulnerable;
     frontlineMeter(g, L.frontline, this.meterRatio('shrine', b.shrine.hp / b.shrine.maxHp),
       this.meterRatio(bossAlive ? 'boss' : 'castle', target.hp / target.maxHp), shielded);
-    this.shrineText.setText(`굿당 ${Math.ceil(b.shrine.hp)}`);
-    this.castleText.setText(`${bossAlive ? b.encounter!.def.name : this.baseViews[1].appearance.shortName} ${shielded ? '봉인' : Math.ceil(target.hp)}`);
+    this.shrineText.setText(skinText(`굿당 ${Math.ceil(b.shrine.hp)}`));
+    this.castleText.setText(skinText(`${bossAlive ? b.encounter!.def.name : this.baseViews[1].appearance.shortName} ${shielded ? '봉인' : Math.ceil(target.hp)}`));
     this.drawFrontline(g);
 
     const def = getStageDef(b.stage);

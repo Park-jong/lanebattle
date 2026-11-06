@@ -3,6 +3,7 @@ import { placeTooltip } from '../game/tooltipPlacement';
 import type { TooltipStatus, TooltipText } from '../game/tooltipText';
 import { BATTLE_LAYOUT, GAME_HEIGHT, GAME_WIDTH, HUD_FONT, TOOLTIP_LAYOUT as T, type Rect } from './layout';
 import { DEFAULT_UI as U } from '../ui/default/tokens';
+import { skinText } from '../game/skinText';
 
 /** Scrollable detail panel. Status remains visible even for long awakened abilities. */
 export class Tooltip {
@@ -55,8 +56,8 @@ export class Tooltip {
   show(anchor: Rect, content: TooltipText, status: TooltipStatus): void {
     const p = T.padding;
     this.offset = 0;
-    this.title.setText(content.title);
-    this.body.setText(content.lines.join('\n'));
+    this.title.setText(skinText(content.title));
+    this.body.setText(skinText(content.lines.join('\n')));
     const footer = 76;
     // Keep every summon row and the close button exposed, including lower-row details.
     const anchorTop = Math.min(anchor.y, BATTLE_LAYOUT.summonFlange.y);
@@ -85,7 +86,7 @@ export class Tooltip {
   }
 
   setStatus(status: TooltipStatus): void {
-    const message = (status.ok ? '✓ ' : '• ') + status.text;
+    const message = (status.ok ? '✓ ' : '• ') + skinText(status.text);
     const color = status.ok ? U.goodText : U.dangerText;
     if (this.status.text !== message) this.status.setText(message);
     if (this.status.style.color !== color) this.status.setColor(color);

@@ -3,6 +3,7 @@ import type { Base } from '../battle/entities';
 import { baseAppearance, baseDamagePhase, baseVisualCenter, type BaseAppearance, type DamagePhase } from '../data/baseAppearance';
 import { HUD_FONT } from '../scenes/layout';
 import type { BattlefieldProjection } from './battlefield';
+import { gameSkin } from '../game/skin';
 
 const FIVE = [0xe9c76d, 0x5d9db9, 0xc56149, 0xe8e0c4, 0x293941];
 
@@ -20,9 +21,16 @@ export class BaseRenderer {
   private previousHp: number;
   private clock = 0;
   private hitLeft = 0;
+  private readonly militaryImage?: Phaser.GameObjects.Image;
+  private readonly militaryKey: string;
 
   constructor(scene: Phaser.Scene, readonly base: Base, field: BattlefieldProjection, stage: number) {
     this.appearance = baseAppearance(stage, base.team);
+    this.militaryKey = `military-base-${this.appearance.chapter}-${base.team}-`;
+    if (gameSkin.current === 'military') {
+      this.appearance = { ...this.appearance, name: base.team === 'ally' ? '전진 지휘소' : '감염 거점',
+        shortName: base.team === 'ally' ? '지휘소' : '감염 거점', glow: base.team === 'ally' ? 0x8edce8 : 0xf08c7b };
+    }
     this.centerX = baseVisualCenter(base.x, this.appearance.width);
     this.groundY = field.ground(base);
     this.top = this.groundY - this.appearance.height;
@@ -30,6 +38,10 @@ export class BaseRenderer {
     // 출입하는 소환 개체가 큰 정면 벽에 가려지지 않게 건축물은 뒤에 둔다.
     this.structure = scene.add.graphics().setPosition(this.centerX, this.groundY).setDepth(field.depth(base) - 4);
     this.effects = scene.add.graphics().setPosition(this.centerX, this.groundY).setDepth(field.depth(base) + 0.1);
+    if (gameSkin.current === 'military' && scene.textures.exists(this.militaryKey + '0')) {
+      this.militaryImage = scene.add.image(this.centerX, this.groundY, this.militaryKey + '0')
+        .setOrigin(0.5, 1).setDisplaySize(this.appearance.width, this.appearance.height).setDepth(field.depth(base) - 4);
+    }
     this.nameplate = scene.add.text(this.centerX, this.top - 12, this.appearance.name, {
       fontFamily: HUD_FONT, fontSize: '13px', fontStyle: 'bold', color: base.team === 'ally' ? '#f6d58b' : '#e2c5ec',
       stroke: '#10201b', strokeThickness: 3, backgroundColor: '#16231dd9', padding: { x: 6, y: 2 },
@@ -47,6 +59,7 @@ export class BaseRenderer {
       this.phase = next; this.shielded = this.base.invulnerable; this.redraw();
     }
     this.structure.setX(this.centerX + Math.sin(this.clock * 70) * this.hitLeft * 12);
+    this.militaryImage?.setX(this.structure.x);
     this.nameplate.setAlpha(this.phase === 3 ? 0.55 : 1);
     this.drawEffects();
   }
@@ -61,6 +74,7 @@ export class BaseRenderer {
 
   private redraw(): void {
     this.structure.clear();
+    if (this.militaryImage) { this.militaryImage.setTexture(this.militaryKey + this.phase); return; }
     if (this.phase === 3) { this.rubble(); return; }
     if (this.appearance.kind === 'gutdang') this.gutdang();
     else if (this.appearance.kind === 'ghostTree') this.ghostTree();

@@ -4,8 +4,8 @@ import { STAGES } from '../data/stages';
 import { getBossById } from '../data/bosses';
 import { getUpgradeNode, nodesOfTree, TIER_UNLOCK_SPENT, UPGRADE_NODES, YOGOE_UNIT_IDS, yogoeNodeIds, type TreeId, type UpgradeNode } from '../data/upgrades';
 import { allocateFailureText, BUILD_TABS, deallocateFailureText, HIDDEN_NODE_NAME, HIDDEN_NODE_TEXT, hiddenNodeDetailText, nodeStatus, purchaseButtonText, purchaseText, type BuildTab } from '../game/buildText';
-import { builds, gameMode, summonOrder, wallet } from '../game/session';
-import { browserStorage } from '../game/save';
+import { builds, summonOrder, wallet } from '../game/session';
+import { gameSkin } from '../game/skin';
 import { HUD_FONT, type Rect } from './layout';
 import { KEY_MAP, KeyInput } from './input';
 import { addTestBadge } from './testBadge';
@@ -38,14 +38,13 @@ export class BuildScene extends Phaser.Scene {
 
   constructor() { super('Build'); }
   private get theme(): BuildTheme { return BUILD_THEMES[this.skin]; }
-  private get skinKey(): string { return `lane-defense.build-ui.${gameMode}`; }
 
   init(data: { stage?: number } = {}): void {
     this.stage = Math.max(0, Math.min(STAGES.length - 1, Math.floor(data.stage ?? 0) || 0));
     this.tab = 'mudang'; this.selectedNode = null; this.selectedUnit = YOGOE_UNIT_IDS[0];
     this.orderUnit = null; this.dialog = null; this.message = ''; this.dirty = true;
     this.objects = []; this.upgradeFlash = null;
-    try { this.skin = browserStorage()?.getItem(this.skinKey) === 'military' ? 'military' : 'default'; } catch { this.skin = 'default'; }
+    this.skin = gameSkin.current;
   }
 
   preload(): void { loadBuildPortraits(this); }
@@ -155,9 +154,9 @@ export class BuildScene extends Phaser.Scene {
       builds.selectSlot(i); this.message = `빌드 ${i + 1} 적용`; this.dirty = true;
     }, { active: i === builds.activeIndex, size: 12 }));
     this.button(L.menu, '빌드\n관리 ≡', () => { this.dialog = 'manage'; this.dirty = true; }, { size: 13 });
-    this.button(L.skin, `UI 스킨\n${t.name} ⇄`, () => {
+    this.button(L.skin, `게임 스킨\n${t.name} ⇄`, () => {
       this.skin = this.skin === 'default' ? 'military' : 'default';
-      try { browserStorage()?.setItem(this.skinKey, this.skin); } catch { /* In-memory choice still works. */ }
+      gameSkin.set(this.skin);
       this.message = ''; this.dirty = true;
     }, { size: 13 });
   }

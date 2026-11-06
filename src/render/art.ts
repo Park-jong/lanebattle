@@ -5,6 +5,7 @@ export interface ArtClip {
 }
 
 export interface CharacterArt {
+  skinId?: 'default' | 'military';
   subjectKey: string;
   texture: string;
   image: string;
@@ -20,6 +21,7 @@ export interface CharacterArt {
 }
 
 export const ART_MANIFEST_KEY = 'character-art-manifest';
+export const MILITARY_MANIFEST_KEY = 'military-art-manifest';
 
 /** Manifest is optional: a failed asset request keeps the original shapes usable. */
 export function artList(raw: unknown): CharacterArt[] {
@@ -38,8 +40,10 @@ export function artAssetUrl(path: string, base: string): string {
   return `${base}assets/characters/${path}`;
 }
 
-export function artFor(raw: unknown, subject: string): CharacterArt | undefined {
-  return artList(raw).find((a) => a.subjectKey === subject);
+export function artFor(raw: unknown, subject: string, skin = 'default'): CharacterArt | undefined {
+  const entries = artList(raw).filter((a) => a.subjectKey === subject);
+  return entries.find(a => (a.skinId ?? 'default') === skin)
+    ?? entries.find(a => (a.skinId ?? 'default') === 'default');
 }
 
 export function clipFrame(art: CharacterArt, name: string, age: number): string | undefined {

@@ -80,7 +80,7 @@
         "plan": "output/art-generation/revisions/shion-electromagnetic-v2/animation-jobs.json",
         "package": "output/art-generation/revisions/shion-electromagnetic-v2/package/manifest.json",
         "legacy_source_outputs_preserved": true,
-        "live_game_integrated": false
+        "live_game_integrated": true
       }
     },
     {

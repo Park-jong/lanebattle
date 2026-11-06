@@ -8,6 +8,8 @@ import { isBlockedByOverlay, openSettings } from './openSettings';
 import { addTestBadge } from './testBadge';
 import { addArtImage } from '../render/CharacterRenderer';
 import { DEFAULT_UI as U } from '../ui/default/tokens';
+import { gameSkin } from '../game/skin';
+import { MenuButton } from './MenuButton';
 
 const TITLE_ART = 'midnight-title-art-v1';
 
@@ -24,7 +26,15 @@ export class TitleScene extends Phaser.Scene {
 
   create(): void {
     this.launching = false;
-    if (this.textures.exists(TITLE_ART)) {
+    if (gameSkin.current === 'military') {
+      this.cameras.main.setBackgroundColor('#101b2d');
+      if (this.textures.exists('military-chapter-1')) {
+        this.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, 'military-chapter-1').setDisplaySize(GAME_WIDTH, GAME_HEIGHT).setAlpha(0.35);
+      }
+      if (this.textures.exists('military-shion-title')) {
+        this.add.image(620, 300, 'military-shion-title').setDisplaySize(768, 512);
+      } else addArtImage(this, 'hero:kkomaMudang', 'preview', 716, 304, 440, 440);
+    } else if (this.textures.exists(TITLE_ART)) {
       this.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, TITLE_ART).setDisplaySize(GAME_WIDTH, GAME_HEIGHT);
     } else {
       drawNightSky(this);
@@ -38,6 +48,10 @@ export class TitleScene extends Phaser.Scene {
     this.drawLogo();
     this.drawStartButton();
     this.drawSettings();
+    new MenuButton(this, 625, 51, 236, 66, `게임 스킨: ${gameSkin.current === 'military' ? '밀리터리' : '기본'} ⇄`, () => {
+      if (this.launching || isBlockedByOverlay(this)) return;
+      gameSkin.toggle(); this.scene.restart();
+    }, { fontSize: 15 });
     new FullscreenButton(this, FULLSCREEN_LAYOUT.title, 'icon');
     this.drawMotes();
     addTestBadge(this);
@@ -48,18 +62,18 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private drawLogo(): void {
-    this.add.text(67, 92, '오늘 밤, 요괴들이 깨어난다', {
+    this.add.text(67, 92, gameSkin.current === 'military' ? '시온과 함께, 감염 구역을 돌파하라' : '오늘 밤, 요괴들이 깨어난다', {
       fontFamily: HUD_FONT, fontSize: '15px', fontStyle: 'bold', color: '#b1c8bd', letterSpacing: 1,
     });
     const logo = this.add.container(59, 133).setAngle(-4);
     const textStyle = { fontFamily: U.displayFont, stroke: '#09191e', strokeThickness: 10,
       padding: { x: 5, y: 5 } };
-    const small = this.add.text(0, 0, '꼬마 무당', { ...textStyle, fontSize: '64px', color: '#fff1cb',
+    const small = this.add.text(0, 0, gameSkin.current === 'military' ? '시온' : '꼬마 무당', { ...textStyle, fontSize: '64px', color: '#fff1cb',
       shadow: { offsetX: 3, offsetY: 5, color: '#b6572e', blur: 0, fill: true, stroke: true } });
-    const big = this.add.text(0, 67, '대소동!', { ...textStyle, fontSize: '96px', color: '#ffcb63',
+    const big = this.add.text(0, 67, gameSkin.current === 'military' ? '전선 돌파!' : '대소동!', { ...textStyle, fontSize: gameSkin.current === 'military' ? '72px' : '96px', color: '#ffcb63',
       shadow: { offsetX: 4, offsetY: 6, color: '#9e3529', blur: 0, fill: true, stroke: true } });
     logo.add([small, big]);
-    this.add.text(70, 324, '부적 날리고, 요괴 부르고. 한바탕 퇴마!', {
+    this.add.text(70, 324, gameSkin.current === 'military' ? '병과를 배치하고, 전류 대검으로 전진!' : '부적 날리고, 요괴 부르고. 한바탕 퇴마!', {
       fontFamily: HUD_FONT, fontSize: '16px', color: '#d0d4c0',
     });
     const seal = this.add.container(394, 215).setAngle(8);

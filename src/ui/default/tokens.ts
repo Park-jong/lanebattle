@@ -1,4 +1,6 @@
-/** Presentation tokens for the original mudang / folklore skin only. */
+import { skinText } from '../../game/skinText';
+import { gameSkin } from '../../game/skin';
+/** Shared layout tokens; cosmetic text follows the selected game skin. */
 export const DEFAULT_UI = {
   font: '"Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif',
   displayFont: '"MidnightDisplay", "Malgun Gothic", system-ui, sans-serif',
@@ -27,11 +29,12 @@ const UNIT_NAMES: Record<string, string> = {
 };
 
 export function unitShortName(id: string, fallback: string): string {
-  return UNIT_NAMES[id] ?? fallback;
+  return gameSkin.current === 'military' ? skinText(fallback) : UNIT_NAMES[id] ?? fallback;
 }
 
 /** Keep legible type; full skill names remain available in the detail panel. */
 export function skillShortName(name: string): string {
+  name = skinText(name);
   const short = name.length > 8 ? `${name.slice(0, 7)}…` : name;
   if (short.length <= 4) return short;
   const space = short.lastIndexOf(' ', 4);

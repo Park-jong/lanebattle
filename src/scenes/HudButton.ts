@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { HUD_FONT, type Rect } from './layout';
 import { addArtImage } from '../render/CharacterRenderer';
 import { DEFAULT_UI as U } from '../ui/default/tokens';
+import { skinText } from '../game/skinText';
 import { commandFace, summonTile, type CommandKind, type SkillMark } from '../ui/default/commandDock';
 
 export interface HudButtonStyle {
@@ -51,6 +52,7 @@ export class HudButton {
   private readonly overlay: Phaser.GameObjects.Graphics;
   private level = -1;
   private maxLevel = 5;
+  private portraitKey = '';
 
   constructor(scene: Phaser.Scene, rect: Rect, private readonly style: HudButtonStyle, private readonly handlers: HudButtonHandlers) {
     this.rect = { ...rect };
@@ -115,14 +117,18 @@ export class HudButton {
     this.layout(); this.redraw();
   }
   setTexts(label: string, sub: string): void {
+    label = skinText(label); sub = skinText(sub).replace('지휘 에너지', '에너지');
     if (this.style.portraitTile) label = this.portrait ? '' : label.slice(0, 2);
     if (this.label.text !== label) this.label.setText(label);
     if (this.sub.text !== sub) this.sub.setText(sub);
   }
-  setPortrait(subject: string): void {
+  setPortrait(subject: string, frame = 'icon'): void {
+    const key = subject + ':' + frame;
+    if (key === this.portraitKey) return;
+    this.portraitKey = key;
     this.portrait?.destroy();
-    const size = this.style.portraitTile ? Math.min(this.rect.w - 8, this.rect.h - 2) : 34;
-    this.portrait = addArtImage(this.gfx.scene, subject, 'icon', 0, 0, size, size)
+    const size = this.style.portraitTile ? Math.min(this.rect.w - 8, this.rect.h - 2) : this.style.command === 'skill' ? 40 : 34;
+    this.portrait = addArtImage(this.gfx.scene, subject, frame, 0, 0, size, size)
       ?.setScrollFactor(0).setDepth((this.style.depth ?? 100) + 0.5);
     if (this.style.portraitTile && this.portrait) this.label.setText('');
     this.layout();
@@ -136,6 +142,7 @@ export class HudButton {
     else this.redraw();
   }
   setState(cooldownRatio: number, enabled: boolean, reason = ''): void {
+    reason = skinText(reason).replace('지휘 에너지', '에너지');
     const ratio = Math.max(0, Math.min(1, cooldownRatio));
     if (ratio === this.cooldown && enabled === this.enabled && reason === this.reason) return;
     this.cooldown = ratio; this.enabled = enabled; this.reason = reason;
@@ -171,6 +178,7 @@ export class HudButton {
         this.label.setOrigin(0.5).setPosition(x + w / 2 + 12, y + 26).setWordWrapWidth(w - 52, true);
         this.stateText.setOrigin(0.5).setPosition(x + w / 2 + 12, y + 49).setFontSize(11);
       } else {
+        this.portrait?.setPosition(x + w / 2, y + 30);
         this.label.setOrigin(0.5, 0).setPosition(x + w / 2, y + (s.command === 'skill' ? 58 : 63))
           .setWordWrapWidth(w - 14, true);
         this.sub.setOrigin(0.5).setPosition(x + w / 2, y + 106).setFontSize(14);

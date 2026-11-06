@@ -1,6 +1,8 @@
 # 시온 전류 대검 리비전 — 생성·패키지 기록
 
-2026-11-05 · 내장 `image_gen` · 새 디자인 74장 생성, 16개 클립 패키징 완료 · 실행 게임 미연결.
+2026-11-05 · 내장 `image_gen` · 새 디자인 74장 생성, 16개 클립 패키징 완료.
+
+2026-11-06: 실행 게임 밀리터리 스킨에 연결했다. 타이틀·지도·빌드의 게임 스킨 버튼으로 선택하며, 배포 자산은 `public/assets/characters/runtime/military/`와 `public/assets/military/`에 보관한다. 아래는 최초 생성 당시의 기록이며 현재 연결 방식은 [게임 스킨 구조](../../../skins-and-animation.md)를 따른다.
 
 [시온 컨셉](kkomaMudang.md) · [모션 미리보기](../../../../output/art-generation/revisions/shion-electromagnetic-v2/package/preview.html) · [전체 패키지 ZIP](../../../../output/art-generation/revisions/shion-electromagnetic-v2/shion-electromagnetic-v2.zip)
 

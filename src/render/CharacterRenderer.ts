@@ -5,6 +5,8 @@ import { HERO } from '../data/hero';
 import type { SkillCastEvent } from '../battle/skills';
 import { ART_MANIFEST_KEY, artFor, clipFrame, clipSeconds, type CharacterArt } from './art';
 import { BattlefieldProjection } from './battlefield';
+import { gameSkin } from '../game/skin';
+import { Locomotion } from './locomotion';
 
 export function subjectOf(body: Body): string {
   if (body instanceof Hero) return body.possessedId ? `ally:${body.possessedId}` : 'hero:kkomaMudang';
@@ -13,8 +15,11 @@ export function subjectOf(body: Body): string {
 }
 
 export function artInScene(scene: Phaser.Scene, subject: string): CharacterArt | undefined {
-  const art = artFor(scene.cache.json.get(ART_MANIFEST_KEY), subject);
-  return art && scene.textures.exists(art.texture) ? art : undefined;
+  const manifest = scene.cache.json.get(ART_MANIFEST_KEY);
+  const art = artFor(manifest, subject, gameSkin.current);
+  if (art && scene.textures.exists(art.texture)) return art;
+  const fallback = artFor(manifest, subject);
+  return fallback && scene.textures.exists(fallback.texture) ? fallback : undefined;
 }
 
 export function addArtImage(scene: Phaser.Scene, subject: string, frame: string, x: number, y: number,
@@ -40,6 +45,7 @@ class CharacterView {
   private facing: 1 | -1;
   private drawn = true;
   private jitter = 0;
+  private readonly locomotion: Locomotion;
 
   constructor(private readonly body: Body, readonly art: CharacterArt, scene: Phaser.Scene) {
     this.sprite = scene.add.image(0, 0, art.texture, 'idle_00').setDepth(20);
@@ -48,6 +54,7 @@ class CharacterView {
     this.attackSerial = body.visualAttack;
     this.lastX = body.x;
     this.facing = body.team === 'ally' ? 1 : -1;
+    this.locomotion = new Locomotion(this.facing);
   }
 
   get isDrawn(): boolean { return this.drawn; }
@@ -97,9 +104,10 @@ class CharacterView {
       // 비행 유닛 그림(중심 기준)으로 빙의한 영웅도 땅 위에 서 있도록 몸 절반만큼 올린다
       this.lastY = ground - lift - ((body.flying || body instanceof Hero) && this.art.origin.y === 0.5 ? height / 2 : 0);
     }
-    let clip = body.visualMoving ? 'walk' : 'idle';
+    const movement = this.locomotion.update(this.art, dt, body.visualMoving, this.facing);
+    let clip = movement.clip;
     if (body instanceof Fighter && body.defId === 'eodduksiniKing' && !body.flying && this.art.clips.ground_idle) clip = 'ground_idle';
-    let frameAge = this.age;
+    let frameAge = ['start', 'stop', 'turn'].includes(clip) ? movement.age : this.age;
     if (body.status?.stunned && !this.dead) { clip = 'idle'; frameAge = 0; }
     else if (this.actionAge < this.actionLength) {
       clip = this.action;
@@ -137,6 +145,9 @@ export class CharacterRenderer {
 
   update(dt: number, bodies: Body[]): void {
     const present = new Set(bodies);
+    for (const [body, view] of this.views) {
+      if (view.art.subjectKey !== subjectOf(body)) { view.destroy(); this.views.delete(body); }
+    }
     for (const body of bodies) {
       if (this.views.has(body) || !body.alive) continue;
       const art = artInScene(this.scene, subjectOf(body));
@@ -170,6 +181,12 @@ export class CharacterRenderer {
     if (!this.scene.textures.get(art.texture).has(frame)) return;
     const image = this.scene.add.image(event.x, this.field.ground(hero) - 20, art.texture, frame).setDepth(55)
       .setDisplaySize(Math.min(420, event.range * 1.6), Math.min(100, event.range * 0.45)).setFlipX(event.facing < 0);
+    if (art.skinId === 'military') {
+      const radius = event.range;
+      image.setOrigin(event.shape === 'fan' ? (event.facing > 0 ? 0 : 1) : 0.5, 0.5)
+        .setPosition(event.x, this.field.ground(hero))
+        .setDisplaySize(event.shape === 'fan' ? radius : radius * 2, radius * 2 * 0.28);
+    }
     this.effects.push({ image, art, clip: fx, age: 0, duration: 0.35 });
   }
 

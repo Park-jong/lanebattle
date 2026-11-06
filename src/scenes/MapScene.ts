@@ -19,6 +19,7 @@ import { addArtImage } from '../render/CharacterRenderer';
 import { addTestBadge } from './testBadge';
 import { ChapterSelector } from '../ui/default/ChapterSelector';
 import { isBlockedByOverlay, openSettings } from './openSettings';
+import { gameSkin } from '../game/skin';
 
 /** One chapter and five large gates, with the selected destination always in view. */
 export class MapScene extends Phaser.Scene {
@@ -46,8 +47,7 @@ export class MapScene extends Phaser.Scene {
     const journey = this.add.graphics().setDepth(-1);
     journey.fillStyle(0x0c1c24, 0.82).fillRoundedRect(18, 70, 924, 78, 10);
     journey.lineStyle(1, U.gold, 0.16).lineBetween(36, 148, 924, 148);
-    this.add.text(24, 19, '축제의 여정', { fontFamily: HUD_FONT, fontSize: '30px', fontStyle: 'bold', color: U.text });
-    this.add.text(214, 32, '오늘은 어느 밤을 지킬까요?', { fontFamily: HUD_FONT, fontSize: '16px', color: U.muted });
+    this.add.text(24, 19, gameSkin.current === 'military' ? '작전 지도' : '축제의 여정', { fontFamily: HUD_FONT, fontSize: '30px', fontStyle: 'bold', color: U.text });
     const total = STAGES.reduce((sum, s) => sum + progress.getBestStars(s.number), 0);
     this.add.text(930, 30, '★ ' + total + ' / ' + STAGES.length * STAR_RULES.maxStars, {
       fontFamily: HUD_FONT, fontSize: '21px', fontStyle: 'bold', color: U.goldText,
@@ -70,6 +70,10 @@ export class MapScene extends Phaser.Scene {
     new MenuButton(this, 284, 490, 160, 66, '설정 (O)', () => { if (!this.launching) openSettings(this); }, { fontSize: 16 });
     if (isTestMode) new MenuButton(this, 460, 490, 160, 66, TEST_MODE.resetButton, () => this.resetTestData(), { fontSize: 14 });
     addTestBadge(this);
+    new MenuButton(this, 460, 35, 260, 66, `게임 스킨: ${gameSkin.current === 'military' ? '밀리터리' : '기본'} ⇄`, () => {
+      if (this.launching || isBlockedByOverlay(this)) return;
+      gameSkin.toggle(); this.scene.restart({ stage: this.selected });
+    }, { fontSize: 15 });
     this.refresh();
     this.keyInput = new KeyInput(window, code => this.onKeyDown(code));
     this.keyInput.attach();
@@ -155,7 +159,7 @@ export class MapScene extends Phaser.Scene {
     track(this.add.text(x + 4, p.y + 26, 'STAGE ' + def.code, {
       fontFamily: HUD_FONT, fontSize: '18px', fontStyle: 'bold', color: U.goldText,
     }));
-    track(this.add.text(x + 4, p.y + 62, def.isBossStage ? '보스와의 한판' : '마을의 등불 지키기', {
+    track(this.add.text(x + 4, p.y + 62, gameSkin.current === 'military' ? def.isBossStage ? '감염 지휘 개체 격파' : '지휘소 방어 · 감염 거점 돌파' : def.isBossStage ? '보스와의 한판' : '마을의 등불 지키기', {
       fontFamily: HUD_FONT, fontSize: '15px', color: U.text,
     }));
     const portrait = addArtImage(this, def.bossId ? 'boss:' + def.bossId : 'hero:kkomaMudang', 'icon',
@@ -181,7 +185,7 @@ export class MapScene extends Phaser.Scene {
         if (chipX + chip.width > p.x + p.w - 20) { chipX = x; chipY += 25; }
         chip.setPosition(chipX, chipY); chipX += chip.width + 5;
       }
-    } else track(this.add.text(x, p.y + 249, '요괴 친구들과 함께 도전하세요.', {
+    } else track(this.add.text(x, p.y + 249, gameSkin.current === 'military' ? '병과를 배치하고 작전에 도전하세요.' : '요괴 친구들과 함께 도전하세요.', {
       fontFamily: HUD_FONT, fontSize: '15px', color: '#77623b',
     }));
   }

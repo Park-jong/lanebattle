@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
-import { ART_MANIFEST_KEY, artAssetUrl, artList } from '../render/art';
+import { ART_MANIFEST_KEY, MILITARY_MANIFEST_KEY, artAssetUrl, artList } from '../render/art';
+import { loadMilitaryScenery } from '../render/military';
 import { GAME_HEIGHT, GAME_WIDTH, HUD_FONT } from './layout';
 import { DEFAULT_UI as U } from '../ui/default/tokens';
 import { festivalNight, panel } from '../ui/default/decor';
@@ -27,8 +28,12 @@ export class BootScene extends Phaser.Scene {
     drawMeter(0);
     this.load.binary('title-display-font', `${import.meta.env.BASE_URL}assets/fonts/black-han-title.ttf`);
     this.load.json(ART_MANIFEST_KEY, artAssetUrl('manifest.json', import.meta.env.BASE_URL));
+    this.load.json(MILITARY_MANIFEST_KEY, artAssetUrl('military-manifest.json', import.meta.env.BASE_URL));
+    loadMilitaryScenery(this);
     this.load.once('complete', () => {
-      const entries = artList(this.cache.json.get(ART_MANIFEST_KEY));
+      const entries = [...artList(this.cache.json.get(ART_MANIFEST_KEY)), ...artList(this.cache.json.get(MILITARY_MANIFEST_KEY))];
+      this.cache.json.remove(ART_MANIFEST_KEY);
+      this.cache.json.add(ART_MANIFEST_KEY, { characters: entries });
       for (const art of entries) this.load.atlas(art.texture,
         artAssetUrl(art.image, import.meta.env.BASE_URL), artAssetUrl(art.atlas, import.meta.env.BASE_URL));
       if (entries.length) {
