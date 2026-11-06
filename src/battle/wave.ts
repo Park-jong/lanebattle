@@ -1,4 +1,4 @@
-import { WAVE_RULES } from '../data/waves';
+import { RAID_RULES, WAVE_RULES } from '../data/waves';
 import { getEnemyDef } from '../data/enemies';
 import type { StageDef } from '../data/stages';
 import type { Rng } from './rng';
@@ -43,6 +43,17 @@ export function waveBudget(stageNumber: number, waveOrder: number): number {
   return b.base + b.perWave * waveOrder + b.perChapter * (info.chapter - 1) + b.perOrder * (info.order - 1);
 }
 
+/** raid 예산 = (16 + 2*스테이지) * (1 + 0.15*raidIndex), 반올림 */
+export function raidBudget(stageNumber: number, raidIndex: number): number {
+  const b = RAID_RULES.budget;
+  return Math.round((b.base + b.perStage * stageNumber) * (1 + b.perRaid * raidIndex));
+}
+
+interface QueuedSpawn {
+  request: SpawnRequest;
+  raid: boolean;
+}
+
 /** 그 스테이지에 등장 가능한 적 id 목록 */
 export function availableEnemyIds(stageNumber: number): string[] {
   return [...getStageDef(stageNumber).enemyIds];
@@ -54,8 +65,9 @@ export class WaveDirector {
   private nextWaveTime: number;
   private readonly def: StageDef;
   private spawnCooldown = 0;
-  private queue: SpawnRequest[] = [];
+  private queue: QueuedSpawn[] = [];
   private startedWaves = 0;
+  private startedRaids = 0;
 
   constructor(
     private readonly stageNumber: number,
@@ -68,6 +80,11 @@ export class WaveDirector {
   /** 지금까지 시작된 웨이브 수 */
   get waveCount(): number {
     return this.startedWaves;
+  }
+
+  /** 지금까지 발동된 raid 수 */
+  get raidCount(): number {
+    return this.startedRaids;
   }
 
   /** 아직 내보내지 않은 적 수 */
@@ -87,15 +104,16 @@ export class WaveDirector {
   update(dt: number, capacity = Infinity): SpawnRequest[] {
     this.elapsed += dt;
     while (this.elapsed >= this.nextWaveTime) {
-      this.enqueue(this.composeWave(this.startedWaves));
+      this.enqueue(this.composeWave(this.startedWaves).map((request) => ({ request, raid: false })));
       this.startedWaves += 1;
       this.nextWaveTime += this.def.waveInterval;
     }
     this.spawnCooldown -= dt;
     const out: SpawnRequest[] = [];
     while (this.queue.length > 0 && this.spawnCooldown <= 0 && out.length < capacity) {
-      out.push(this.queue.shift()!);
-      this.spawnCooldown += WAVE_RULES.spawnInterval;
+      const next = this.queue.shift()!;
+      out.push(next.request);
+      this.spawnCooldown += next.raid ? RAID_RULES.spawnInterval : WAVE_RULES.spawnInterval;
     }
     // 대기열이 비었거나 자리가 없어 막힌 동안은 간격이 쌓이지 않게 한다 (자리가 나도 한 번에 쏟아내지 않음)
     if (this.spawnCooldown < 0) this.spawnCooldown = 0;
@@ -103,16 +121,51 @@ export class WaveDirector {
   }
 
   /** 대기열 최대 길이까지만 담고 넘치는 적은 버린다. 정예는 자리가 없으면 대기 중인 일반 적 하나를 밀어내고 들어간다 */
-  private enqueue(requests: SpawnRequest[]): void {
+  private enqueue(requests: QueuedSpawn[]): void {
     for (const r of requests) {
       if (this.queue.length >= WAVE_RULES.maxQueue) {
-        if (!r.elite) continue;
-        const evict = this.queue.map((q) => q.elite).lastIndexOf(false);
+        if (!r.request.elite) continue;
+        const evict = this.queue.map((q) => q.request.elite).lastIndexOf(false);
         if (evict < 0) continue;
         this.queue.splice(evict, 1);
       }
       this.queue.push(r);
     }
+  }
+
+  /** raid를 시작한다: 구성한 적을 대기열 맨 앞에 넣고, 넘치면 뒤쪽 일반 적부터 밀어낸다 */
+  startRaid(raidIndex: number): void {
+    const raid = this.composeRaid(raidIndex).map((request) => ({ request, raid: true }));
+    this.queue = [...raid, ...this.queue];
+    while (this.queue.length > WAVE_RULES.maxQueue) {
+      const evict = this.queue.map((q) => q.request.elite).lastIndexOf(false);
+      this.queue.splice(evict < 0 ? this.queue.length - 1 : evict, 1);
+    }
+    this.startedRaids += 1;
+  }
+
+  /** raid 구성: raid 예산으로 고르고, 마지막 문턱이면 정예 1마리 추가 (공개: 테스트용) */
+  composeRaid(raidIndex: number): SpawnRequest[] {
+    const ids = availableEnemyIds(this.stageNumber);
+    const picks = this.pickWithinBudget(ids, raidBudget(this.stageNumber, raidIndex));
+    if (RAID_RULES.eliteOnLast && raidIndex === RAID_RULES.thresholds.length - 1) {
+      picks.push({ enemyId: this.pickEnemy(ids, this.def.themeEnemyId), elite: true });
+    }
+    return picks;
+  }
+
+  /** 예산 안에서 테마 가중 무작위로 일반 적을 고른다 */
+  private pickWithinBudget(ids: string[], budget: number): SpawnRequest[] {
+    const theme = this.def.themeEnemyId;
+    const picks: SpawnRequest[] = [];
+    for (;;) {
+      const candidates = ids.filter((id) => getEnemyDef(id).waveScore <= budget);
+      if (candidates.length === 0) break;
+      const id = this.pickEnemy(candidates, theme);
+      picks.push({ enemyId: id, elite: false });
+      budget -= getEnemyDef(id).waveScore;
+    }
+    return picks;
   }
 
   /** 웨이브 구성: 예산 안에서 가중 무작위로 고른다 (공개: 테스트용) */
@@ -133,13 +186,7 @@ export class WaveDirector {
       budget -= formation.waveScore;
     }
 
-    for (;;) {
-      const candidates = ids.filter((id) => getEnemyDef(id).waveScore <= budget);
-      if (candidates.length === 0) break;
-      const id = this.pickEnemy(candidates, theme);
-      picks.push({ enemyId: id, elite: false });
-      budget -= getEnemyDef(id).waveScore;
-    }
+    picks.push(...this.pickWithinBudget(ids, budget));
 
     // 정예: 일반 스테이지의 9번째 웨이브에만 1마리 추가 (예산과 별개, 테마 적 가중치 적용)
     if (waveIndex === lastIndex && !info.isBossStage) {

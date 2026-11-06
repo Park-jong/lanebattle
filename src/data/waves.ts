@@ -15,6 +15,18 @@ export const WAVE_RULES = {
   stagesPerChapter: 5,
 } as const;
 
+/** 성 체력이 문턱 비율 이하로 처음 내려갈 때 나오는 대규모 웨이브(raid) 규칙 */
+export const RAID_RULES = {
+  /** 성 체력 비율 문턱. 인덱스가 raidIndex */
+  thresholds: [0.8, 0.6, 0.4, 0.2, 0.05],
+  /** 예산 = (base + perStage * 스테이지 번호) * (1 + perRaid * raidIndex), 반올림 */
+  budget: { base: 16, perStage: 2, perRaid: 0.15 },
+  /** raid 적을 내보내는 간격 */
+  spawnInterval: 0.4,
+  /** 마지막 문턱 raid에는 정예 1마리를 예산과 별개로 추가 */
+  eliteOnLast: true,
+} as const;
+
 export interface ChapterEnemyEntry {
   enemyId: string;
   /** 장 안에서 처음 나오는 스테이지 순서(1~5) */

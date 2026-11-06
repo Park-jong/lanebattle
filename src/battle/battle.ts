@@ -6,6 +6,7 @@ import { HERO } from '../data/hero';
 import { getSkill, SKILL_EFFECTS, type SkillId } from '../data/skills';
 import { POSSESSION_COMMON, POSSESSION_TUNING, possessionSkillsOf, type PossessionSkillSet } from '../data/possession';
 import { RESOURCES } from '../data/resources';
+import { RAID_RULES } from '../data/waves';
 import { getAbility, type AbilityDef } from '../data/abilities';
 import type { AllyDef, AttackType, EnemyTrait, Tag } from '../data/types';
 import { ALL_SYNERGY_IDS, type SynergyId } from '../data/synergy';
@@ -201,6 +202,11 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
 
   get nextWave() {
     return this.director.nextWave;
+  }
+
+  /** 지금까지 발동된 대규모 웨이브(raid) 수 (씬이 알림을 띄울 때 본다) */
+  get raidCount(): number {
+    return this.director.raidCount;
   }
 
   /** 살아 있는 적 수 (보스 제외, 적 상한 계산용) */
@@ -485,6 +491,16 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
     this.projectiles = this.projectiles.filter((p) => p.alive);
     this.damageFeed.step(dt);
     this.checkResult();
+    if (this.result !== 'victory') this.checkRaids();
+  }
+
+  /** 성 체력 비율이 문턱 이하로 처음 내려가면 문턱마다 raid를 발동한다 (한 틱에 여러 개도 순서대로) */
+  private checkRaids(): void {
+    const ratio = this.castle.hp / this.castle.maxHp;
+    const { thresholds } = RAID_RULES;
+    while (this.director.raidCount < thresholds.length && ratio <= thresholds[this.director.raidCount]) {
+      this.director.startRaid(this.director.raidCount);
+    }
   }
 
   // ----- 내부 -----

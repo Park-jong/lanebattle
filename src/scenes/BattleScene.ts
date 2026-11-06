@@ -49,6 +49,8 @@ import { BaseRenderer } from '../render/BaseRenderer';
 
 /** 보스 등장 연출 길이(초): 화면이 어두워지고 이름이 나타났다 사라진다 */
 const BOSS_INTRO_SECONDS = 1.6;
+/** 대규모 웨이브 알림을 보이는 시간(초) */
+const RAID_NOTICE_SECONDS = 2;
 /** 일반 비행 유닛이 떠 있는 높이 */
 const FLY_LIFT = 40;
 /** 스킬 이펙트가 퍼지는 시간(초) */
@@ -135,6 +137,10 @@ export class BattleScene extends Phaser.Scene {
   /** 보스 등장 연출 남은 시간(초). 0이면 연출 없음 */
   private bossIntroLeft = 0;
   private bossSeen = false;
+  /** 대규모 웨이브 알림 남은 시간(초)과 마지막으로 본 발동 수 */
+  private raidNoticeLeft = 0;
+  private raidSeen = 0;
+  private raidNoticeText!: Phaser.GameObjects.Text;
   /** 탭이 숨겨진 동안 밀린 전투 시간을 따라잡는 계산 */
   private catchUp = new CatchUp();
   private visibility = new VisibilityPolicy(this.catchUp);
@@ -160,6 +166,8 @@ export class BattleScene extends Phaser.Scene {
     this.recorder = new ResultRecorder(progress, wallet);
     this.bossIntroLeft = 0;
     this.bossSeen = false;
+    this.raidNoticeLeft = 0;
+    this.raidSeen = 0;
     this.catchUp = new CatchUp();
     this.visibility = new VisibilityPolicy(this.catchUp);
     this.paused = false;
@@ -260,6 +268,9 @@ export class BattleScene extends Phaser.Scene {
     this.bossIntroText = this.add
       .text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 60, '', { ...style, fontSize: '64px', fontStyle: 'bold' })
       .setOrigin(0.5).setScrollFactor(0).setDepth(150).setVisible(false);
+    this.raidNoticeText = this.add
+      .text(GAME_WIDTH / 2, 110, skinText('대규모 웨이브!'), { ...style, fontSize: '40px', fontStyle: 'bold', color: '#ffd9a0', stroke: '#5a1e1e', strokeThickness: 6 })
+      .setOrigin(0.5).setScrollFactor(0).setDepth(155).setVisible(false);
     this.catchUpText = this.add
       .text(GAME_WIDTH / 2, 70, '따라잡는 중…', { ...style, fontSize: '28px', fontStyle: 'bold' })
       .setOrigin(0.5).setScrollFactor(0).setDepth(160).setVisible(false);
@@ -345,10 +356,12 @@ export class BattleScene extends Phaser.Scene {
     if (active && stepSeconds > 0) {
       this.battle.step(stepSeconds, { moveDir: this.catchUp.active ? 0 : this.moveDir() });
       this.bossIntroLeft = Math.max(0, this.bossIntroLeft - stepSeconds);
+      this.raidNoticeLeft = Math.max(0, this.raidNoticeLeft - stepSeconds);
     }
     if (this.battle.result !== 'playing') this.catchUp.cancel();
     this.catchUpText.setVisible(this.catchUp.bannerVisible);
     this.watchBossAppearance();
+    this.watchRaid();
     for (const view of this.baseViews) view.update(this.paused ? 0 : this.uiDelta);
     this.characters.update(active ? delta / 1000 : 0,
       [this.battle.hero, ...this.battle.allies, ...this.battle.enemies], [...this.battle.enemies, this.battle.castle]);
@@ -467,6 +480,15 @@ export class BattleScene extends Phaser.Scene {
     this.bossSeen = true;
     this.bossIntroLeft = BOSS_INTRO_SECONDS;
     this.bossIntroText.setText(skinText(enc.def.name));
+  }
+
+  /** raid 발동 수가 늘었으면 알림을 띄우고, 남은 시간에 따라 페이드 아웃한다 */
+  private watchRaid(): void {
+    const count = this.battle.raidCount;
+    if (count > this.raidSeen) this.raidNoticeLeft = RAID_NOTICE_SECONDS;
+    this.raidSeen = count;
+    const t = this.raidNoticeLeft / RAID_NOTICE_SECONDS;
+    this.raidNoticeText.setVisible(t > 0).setAlpha(Math.min(1, t * 2));
   }
 
   /** 보스 등장 연출. 보스 체력도 상단의 한 막대에 통합한다. */
