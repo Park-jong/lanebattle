@@ -46,6 +46,8 @@ import { BattlefieldProjection } from '../render/battlefield';
 import { drawBattlefield } from './battlefieldDecor';
 import { drawBattleScenery } from './battleScenery';
 import { BaseRenderer } from '../render/BaseRenderer';
+import { EffectRenderer } from '../render/EffectRenderer';
+import { loadEffectAssets } from '../render/effectAssets';
 
 /** 보스 등장 연출 길이(초): 화면이 어두워지고 이름이 나타났다 사라진다 */
 const BOSS_INTRO_SECONDS = 1.6;
@@ -82,6 +84,7 @@ export class BattleScene extends Phaser.Scene {
   private field!: BattlefieldProjection;
   private baseViews: BaseRenderer[] = [];
   private characters!: CharacterRenderer;
+  private effects!: EffectRenderer;
   private hud!: Phaser.GameObjects.Graphics;
   private summonButtons: HudButton[] = [];
   private skillButtons: HudButton[] = [];
@@ -185,6 +188,8 @@ export class BattleScene extends Phaser.Scene {
     this.baseViews = [];
   }
 
+  preload(): void { loadEffectAssets(this); }
+
   create(): void {
     this.cameras.main.setBounds(0, 0, COMBAT.battlefieldLength, GAME_HEIGHT);
     this.cameras.main.setBackgroundColor(U.night);
@@ -210,7 +215,8 @@ export class BattleScene extends Phaser.Scene {
     this.baseViews = [this.battle.shrine, this.battle.castle]
       .map((base) => new BaseRenderer(this, base, this.field, this.battle.stage));
     this.characters = new CharacterRenderer(this, this.field);
-    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.characters.destroy());
+    this.effects = new EffectRenderer(this, this.field);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => { this.characters.destroy(); this.effects.destroy(); });
     this.hud = this.add.graphics().setScrollFactor(0).setDepth(90);
     battleHudFrame(this);
     this.floaters = new DamageFloaters(this);
@@ -349,6 +355,7 @@ export class BattleScene extends Phaser.Scene {
   update(_time: number, delta: number): void {
     this.uiDelta = Math.min(delta / 1000, 0.06);
     const playing = this.battle.result === 'playing';
+    const catchingUp = this.catchUp.active;
     // 숨김 복귀 후 따라잡는 시간이 있으면 delta 대신 그 몫을 진행한다
     const stepSeconds = playing ? this.catchUp.frame(delta / 1000, this.paused) : 0;
     // 탭이 숨겨진 동안은 루프가 돌아도 진행하지 않는다 (복귀 시 따라잡기로만 반영)
@@ -366,10 +373,14 @@ export class BattleScene extends Phaser.Scene {
     this.characters.update(active ? delta / 1000 : 0,
       [this.battle.hero, ...this.battle.allies, ...this.battle.enemies], [...this.battle.enemies, this.battle.castle]);
     this.characters.pruneProjectiles(this.battle.projectiles);
+    const suppressFx = catchingUp || this.catchUp.isHidden;
+    this.effects.beginFrame(active ? Math.min(delta / 1000, .1) : 0,
+      [this.battle.hero, ...this.battle.allies, ...this.battle.enemies], this.battle.projectiles, suppressFx, active);
     if (!playing) this.resultElapsed += delta / 1000;
-    this.updateCastFx(delta / 1000, active);
-    this.updateFloaters(delta / 1000, active);
+    this.updateCastFx(delta / 1000, active, suppressFx);
+    this.updateFloaters(delta / 1000, active, suppressFx);
     this.followHero();
+    this.effects.render();
     this.drawWorld();
     this.drawHud();
     this.updateButtons();
@@ -456,10 +467,12 @@ export class BattleScene extends Phaser.Scene {
   // ----- 데미지 숫자 -----
 
   /** 피해 기록을 숫자로 바꿔 띄우고, 이미 떠 있는 숫자는 움직인다 */
-  private updateFloaters(dt: number, advance: boolean): void {
+  private updateFloaters(dt: number, advance: boolean, suppress = false): void {
     for (const e of this.battle.drainDamageEvents()) {
+      if (suppress) continue;
       this.spawnFloater(e);
       if (e.amount > 0 && e.kind !== 'burn' && e.kind !== 'immune') this.characters.hit(e.target);
+      this.effects.hit(e);
     }
     this.floaters.update(advance ? dt : 0);
   }
@@ -744,15 +757,19 @@ export class BattleScene extends Phaser.Scene {
   private followHero(): void {
     const cam = this.cameras.main;
     const target = this.battle.hero.x - GAME_WIDTH / 2;
-    cam.scrollX = Math.max(0, Math.min(COMBAT.battlefieldLength - GAME_WIDTH, target));
+    const shake = this.effects.cameraOffset;
+    cam.scrollX = Math.max(0, Math.min(COMBAT.battlefieldLength - GAME_WIDTH, target + shake.x));
+    cam.scrollY = shake.y;
   }
 
   /** 시전 기록을 받아 이펙트를 만들고, 일시정지 중이 아니면 나이를 먹인다 */
-  private updateCastFx(dt: number, advance: boolean): void {
+  private updateCastFx(dt: number, advance: boolean, suppress = false): void {
     for (const e of this.battle.drainCastEvents()) {
+      if (suppress) continue;
       this.castFx.push({ id: e.id, x: e.x, y: this.field.ground(this.battle.hero), facing: e.facing,
         range: e.range, shape: e.shape, tint: e.possessed?.tint, age: 0 });
       this.characters.cast(this.battle.hero, e);
+      this.effects.cast(this.battle.hero, e);
     }
     if (advance) for (const fx of this.castFx) fx.age += dt;
     this.castFx = this.castFx.filter((fx) => fx.age < CAST_FX_SECONDS);
@@ -763,7 +780,7 @@ export class BattleScene extends Phaser.Scene {
     const g = this.groundFx;
     for (const fx of this.castFx) {
       const t = fx.age / CAST_FX_SECONDS;
-      const alpha = 0.5 * (1 - t);
+      const alpha = 0.18 * (1 - t);
       if (fx.shape === 'fan') {
         const r = fx.range * t;
         const points = [new Phaser.Math.Vector2(fx.x, fx.y)];

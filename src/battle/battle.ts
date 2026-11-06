@@ -54,6 +54,7 @@ interface Strike {
   burnPerSec: number;
   /** 공격 시점에 확정된 피해 배율 (외다리 첫 타) */
   multiplier?: number;
+  impactRadius?: number;
 }
 
 export { ALL_SYNERGY_IDS };
@@ -784,6 +785,7 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
         attackBonus: payload.attackBonus,
         burnPerSec: payload.burnPerSec,
         multiplier: payload.multiplier,
+        impactRadius: payload.areaRadius,
       });
     }
   }
@@ -849,7 +851,7 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
     multiplier *= this.synergy.hitMultiplier(info, dispelled, targetBurning);
 
     const wasAlive = target.alive;
-    this.resolveHit(target, s.base, info, { attackBonus: s.attackBonus, multiplier });
+    this.resolveHit(target, s.base, info, { attackBonus: s.attackBonus, multiplier }, attacker, s.impactRadius);
     if (wasAlive && !target.alive && attacker instanceof Fighter) this.onKill(attacker, target);
 
     const burn = this.synergy.burnModifier(info, dispelled);
@@ -923,13 +925,14 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
    * 저항 적용 전 피해량만큼 회복한다 (회복 차단의 영향을 받음).
    * 최소 피해는 지속 피해(dot)가 아니면 1, 면역(피해 0)이면 0.
    */
-  private resolveHit(target: Body, base: number, info: AttackInfo, options: DamageOptions): void {
+  private resolveHit(target: Body, base: number, info: AttackInfo, options: DamageOptions,
+    attacker: Body | null = info.source === 'hero' ? this.hero : null, impactRadius = 0): void {
     // 강림: 영웅이 주는 모든 피해는 상성 계산 전 고정 피해 단계에서 배율을 곱한다
     if (info.source === 'hero') base *= descentDamageMultiplier(this.mods);
     const wasAlive = target.alive;
     const damage = calcDamage(base, info, target.damageTarget, options);
     this.applyDamage(target, damage, damage === 0 || options.dot ? 0 : undefined);
-    if (wasAlive) this.recordHit(target, damage, info, options.dot ?? false);
+    if (wasAlive) this.recordHit(target, damage, info, options.dot ?? false, attacker, impactRadius);
     const healTags = target instanceof Fighter ? target.stats.healFromTags : undefined;
     if (!target.alive || !healTags?.some((t) => info.tags.includes(t))) return;
     const raw = calcDamage(base, info, { ...target.damageTarget, resistance: undefined }, options);
@@ -937,7 +940,7 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
   }
 
   /** 피해 기록: 면역(0)·화상(묶음)·약점·저항·보통으로 나눈다. 무적 기지가 맞은 것은 기록하지 않는다 */
-  private recordHit(target: Body, damage: number, info: AttackInfo, dot: boolean): void {
+  private recordHit(target: Body, damage: number, info: AttackInfo, dot: boolean, attacker: Body | null, impactRadius: number): void {
     if (target instanceof Base && target.invulnerable) return;
     if (dot) {
       if (damage > 0) this.damageFeed.addBurn(target, damage);
@@ -950,12 +953,18 @@ export class Battle implements AbilityHost, BossHost, PossessionHost {
       amount: damage === 0 ? 0 : Math.max(1, Math.round(damage)),
       kind,
       friendly: target.team === 'ally',
+      attack: { ...info, tags: [...info.tags] },
+      attacker,
+      attackerX: attacker?.x,
+      impactRadius,
+      killed: !target.alive,
     });
   }
 
   /** 고정 피해 (보스 패턴용): 공격력 버프 없이 피해 계산 함수만 거친다 */
   dealFixedDamage(target: Body, base: number, info: AttackInfo): void {
-    this.resolveHit(target, base, info, {});
+    const attacker = info.source === 'hero' ? this.hero : info.source === 'enemy' ? this.encounter?.boss ?? null : null;
+    this.resolveHit(target, base, info, {}, attacker);
   }
 
   addEnemy(enemy: Fighter): void {

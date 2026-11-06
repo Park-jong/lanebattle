@@ -13,6 +13,8 @@ export abstract class Body {
   visualMoving = false;
   visualAttack = 0;
   visualTargetX = 0;
+  /** Actual healing only; renderers ignore tiny regeneration increments. */
+  visualHealing = 0;
 
   markAttack(targetX: number): void {
     this.visualAttack += 1;
@@ -109,6 +111,7 @@ export abstract class Body {
     if (!this.alive || this.status?.healBlocked) return 0;
     const healed = Math.min(amount, this.maxHp - this.hp);
     this.hp += healed;
+    if (healed > 0) this.visualHealing += healed;
     return healed;
   }
 

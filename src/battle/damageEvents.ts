@@ -1,5 +1,6 @@
 import { COMBAT } from '../data/combat';
 import type { Body } from './entities';
+import type { AttackInfo } from './damage';
 
 /** 피해 숫자 분류: 약점 적중 / 저항 적중 / 보통 / 면역(피해 0) / 화상 지속 피해 */
 export type HitKind = 'weak' | 'resist' | 'normal' | 'immune' | 'burn';
@@ -14,6 +15,12 @@ export interface DamageEvent {
   kind: HitKind;
   /** 아군·영웅·서낭당이 받은 피해인지 */
   friendly: boolean;
+  /** Snapshot of the hit, before knockback/death changes the target. Display only. */
+  attack?: AttackInfo;
+  attacker?: Body | null;
+  attackerX?: number;
+  impactRadius?: number;
+  killed?: boolean;
 }
 
 /** 쌓아 둘 수 있는 기록 수 (화면이 비우지 않아도 끝없이 늘지 않게) */

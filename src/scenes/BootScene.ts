@@ -4,6 +4,7 @@ import { loadMilitaryScenery } from '../render/military';
 import { GAME_HEIGHT, GAME_WIDTH, HUD_FONT } from './layout';
 import { DEFAULT_UI as U } from '../ui/default/tokens';
 import { festivalNight, panel } from '../ui/default/decor';
+import { loadEffectAssets } from '../render/effectAssets';
 
 /** 기본 캐릭터 아틀라스를 읽는다. 로딩 실패 시 전투의 도형 표시로 대체한다. */
 export class BootScene extends Phaser.Scene {
@@ -30,6 +31,7 @@ export class BootScene extends Phaser.Scene {
     this.load.json(ART_MANIFEST_KEY, artAssetUrl('manifest.json', import.meta.env.BASE_URL));
     this.load.json(MILITARY_MANIFEST_KEY, artAssetUrl('military-manifest.json', import.meta.env.BASE_URL));
     loadMilitaryScenery(this);
+    loadEffectAssets(this);
     this.load.once('complete', () => {
       const entries = [...artList(this.cache.json.get(ART_MANIFEST_KEY)), ...artList(this.cache.json.get(MILITARY_MANIFEST_KEY))];
       this.cache.json.remove(ART_MANIFEST_KEY);

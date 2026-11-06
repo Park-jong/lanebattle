@@ -142,13 +142,10 @@ class CharacterView {
   destroy(): void { this.sprite.destroy(); }
 }
 
-interface Fx { image: Phaser.GameObjects.Image; art: CharacterArt; clip: string; age: number; duration: number; }
-
 /** All display clocks are advanced manually, so pause/result overlays freeze them together. */
 export class CharacterRenderer {
   private readonly views = new Map<Body, CharacterView>();
   private readonly shots = new Map<Projectile, Phaser.GameObjects.Image>();
-  private effects: Fx[] = [];
 
   constructor(private readonly scene: Phaser.Scene, private readonly field: BattlefieldProjection) {}
 
@@ -166,13 +163,6 @@ export class CharacterRenderer {
       view.update(dt, present.has(body), this.field, targets);
       if (view.finished && body.kind !== 'hero') { view.destroy(); this.views.delete(body); }
     }
-    for (const fx of this.effects) {
-      fx.age += dt;
-      const frame = clipFrame(fx.art, fx.clip, fx.age / fx.duration * clipSeconds(fx.art, fx.clip));
-      if (frame && fx.image.texture.has(frame)) fx.image.setFrame(frame);
-      fx.image.setAlpha(Math.max(0, 1 - fx.age / fx.duration));
-    }
-    this.effects = this.effects.filter((fx) => { if (fx.age < fx.duration) return true; fx.image.destroy(); return false; });
   }
 
   shows(body: Body): boolean { return this.views.get(body)?.isDrawn ?? false; }
@@ -182,21 +172,6 @@ export class CharacterRenderer {
     // 빙의 스킬은 그 유닛의 공격 동작을 보여 준다
     const clip = event.possessed ? 'attack' : { fanWind: 'skill_fan', blessing: 'skill_blessing', bladeDance: 'skill_blade' }[event.id];
     this.views.get(hero)?.special(clip);
-    if (event.possessed) return;
-    const fx = { fanWind: 'fx_fan', blessing: 'fx_blessing', bladeDance: 'fx_blade' }[event.id];
-    const art = artInScene(this.scene, subjectOf(hero));
-    if (!art?.clips[fx]) return;
-    const frame = art.clips[fx].frames[0];
-    if (!this.scene.textures.get(art.texture).has(frame)) return;
-    const image = this.scene.add.image(event.x, this.field.ground(hero) - 20, art.texture, frame).setDepth(55)
-      .setDisplaySize(Math.min(420, event.range * 1.6), Math.min(100, event.range * 0.45)).setFlipX(event.facing < 0);
-    if (art.skinId === 'military') {
-      const radius = event.range;
-      image.setOrigin(event.shape === 'fan' ? (event.facing > 0 ? 0 : 1) : 0.5, 0.5)
-        .setPosition(event.x, this.field.ground(hero))
-        .setDisplaySize(event.shape === 'fan' ? radius : radius * 2, radius * 2 * 0.28);
-    }
-    this.effects.push({ image, art, clip: fx, age: 0, duration: 0.35 });
   }
 
   projectile(p: Projectile, clock: number): boolean {
@@ -224,7 +199,6 @@ export class CharacterRenderer {
   destroy(): void {
     for (const view of this.views.values()) view.destroy();
     for (const image of this.shots.values()) image.destroy();
-    for (const fx of this.effects) fx.image.destroy();
-    this.views.clear(); this.shots.clear(); this.effects = [];
+    this.views.clear(); this.shots.clear();
   }
 }
