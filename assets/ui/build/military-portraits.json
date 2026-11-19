@@ -1,0 +1,257 @@
+{
+  "frames": {
+    "clubGoblin": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 96,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "oneLegGoblin": {
+      "frame": {
+        "x": 102,
+        "y": 2,
+        "w": 96,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "sumoGoblin": {
+      "frame": {
+        "x": 202,
+        "y": 2,
+        "w": 96,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "foxfireArcher": {
+      "frame": {
+        "x": 302,
+        "y": 2,
+        "w": 96,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "gumiho": {
+      "frame": {
+        "x": 402,
+        "y": 2,
+        "w": 96,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "bulgasari": {
+      "frame": {
+        "x": 2,
+        "y": 102,
+        "w": 96,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "haetae": {
+      "frame": {
+        "x": 102,
+        "y": 102,
+        "w": 96,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "samjokgo": {
+      "frame": {
+        "x": 202,
+        "y": 102,
+        "w": 96,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "magpieFlock": {
+      "frame": {
+        "x": 302,
+        "y": 102,
+        "w": 96,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    },
+    "yeongdeungWind": {
+      "frame": {
+        "x": 402,
+        "y": 102,
+        "w": 96,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      }
+    }
+  },
+  "meta": {
+    "image": "military-portraits.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 500,
+      "h": 200
+    },
+    "scale": "1",
+    "skinId": "military",
+    "scope": "build-ui-only",
+    "sources": {
+      "clubGoblin": {
+        "path": "output/art-generation/source-assets/ally/clubGoblin/military/icon.png",
+        "sha256": "5fe28afaea10a9df5c7ef0478ff95adf227b5e569928084c7e6b68b45e6c94f8"
+      },
+      "oneLegGoblin": {
+        "path": "output/art-generation/source-assets/ally/oneLegGoblin/military/icon.png",
+        "sha256": "9d8f24303cf64a6b239f7809c552ff8b02d922b1084d5333c2780ac246075cd1"
+      },
+      "sumoGoblin": {
+        "path": "output/art-generation/source-assets/ally/sumoGoblin/military/icon.png",
+        "sha256": "7fa9c954c17f6e963a659876bce317e3fd8b57f22b877c678290aa898b08d89a"
+      },
+      "foxfireArcher": {
+        "path": "output/art-generation/source-assets/ally/foxfireArcher/military/icon.png",
+        "sha256": "61fb9078dedbc7a68f31d1752507bc328c0db9170755a17a795c3661e2ac5e43"
+      },
+      "gumiho": {
+        "path": "output/art-generation/source-assets/ally/gumiho/military/icon.png",
+        "sha256": "028b8ca9e955a231a0c5e38d0582be46bda2ea782393f0c261447199b8b58f29"
+      },
+      "bulgasari": {
+        "path": "output/art-generation/source-assets/ally/bulgasari/military/icon.png",
+        "sha256": "5b6c429e46eecf54ad1b3ef1a8e1ed3e031be359a20f3f20ca2ac33a0b81526e"
+      },
+      "haetae": {
+        "path": "output/art-generation/source-assets/ally/haetae/military/icon.png",
+        "sha256": "5c6b250bb3a59388c2e9c547b7ab3f2492b16d078e97b00f15b062ed5c22ea48"
+      },
+      "samjokgo": {
+        "path": "output/art-generation/source-assets/ally/samjokgo/military/icon.png",
+        "sha256": "3b5ad1589219e2a218b5e53ca9086cea46c8c258abb2bd5ef105ad8458fb7c7a"
+      },
+      "magpieFlock": {
+        "path": "output/art-generation/source-assets/ally/magpieFlock/military/icon.png",
+        "sha256": "b65cb89b2f87a34d12ae4bb28d4520ad22a5752eb13875e92119f488eb65f440"
+      },
+      "yeongdeungWind": {
+        "path": "output/art-generation/source-assets/ally/yeongdeungWind/military/icon.png",
+        "sha256": "cfe4caabac2768a8031f08654ead83c06bc636a1b0cdf6f7979d9cc02b76ec6f"
+      }
+    }
+  }
+}

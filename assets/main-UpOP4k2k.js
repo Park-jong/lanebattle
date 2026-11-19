@@ -1,0 +1,1 @@
+import{t as e}from"./startGame-D2AtiBie.js";e();
